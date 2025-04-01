@@ -26,7 +26,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/intel/infra-core/inventory/v2/pkg/logging"
+	"github.com/open-edge-platform/infra-core/inventory/v2/pkg/logging"
 	orgActiveWatcherv1 "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/orgactivewatcher.edge-orchestrator.intel.com/v1"
 	orgwatcherv1 "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/orgwatcher.edge-orchestrator.intel.com/v1"
 	projectActiveWatcherv1 "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/projectactivewatcher.edge-orchestrator.intel.com/v1"
