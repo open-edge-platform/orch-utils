@@ -28,7 +28,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/open-edge-platform/infra-core/inventory/v2 v2.19.1
 	github.com/open-edge-platform/orch-library/go v0.5.25
-	github.com/open-edge-platform/orch-utils/tenancy-datamodel v0.0.0-20250312092029-03efe20707b0
+	github.com/open-edge-platform/orch-utils/tenancy-datamodel v0.0.0-20250401180309-9c2571c45857
 	github.com/open-policy-agent/opa v0.69.0
 	github.com/rs/zerolog v1.28.0
 	github.com/stretchr/testify v1.10.0

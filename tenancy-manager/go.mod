@@ -10,7 +10,7 @@ require (
 	github.com/intel/infra-core/inventory/v2 v2.16.1
 	github.com/onsi/ginkgo/v2 v2.22.2
 	github.com/onsi/gomega v1.36.2
-	github.com/open-edge-platform/orch-utils/tenancy-datamodel v0.0.0-20250312092029-03efe20707b0
+	github.com/open-edge-platform/orch-utils/tenancy-datamodel v0.0.0-20250401180309-9c2571c45857
 	github.com/rs/zerolog v1.28.0
 	gopkg.in/yaml.v2 v2.4.0
 	k8s.io/apimachinery v0.32.1
