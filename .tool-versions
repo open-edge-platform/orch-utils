@@ -1,5 +1,5 @@
 ginkgo 2.22.0
-golang 1.24.0
+golang 1.24.1
 golangci-lint 1.64.5
 hadolint 2.12.0
 helm 3.11.1
