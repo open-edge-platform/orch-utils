@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+---
 
 {{- range .Values.namespaces }}
 ---
@@ -22,7 +23,7 @@ rules:
   verbs:
   - get
   - list
-  - watch 
+  - watch
 - apiGroups:
   - authorization.k8s.io
   resources:
@@ -59,7 +60,7 @@ spec:
         caProvider:
           type: ConfigMap
           name: kube-root-ca.crt
-          key: ca.crt      
+          key: ca.crt
       auth:
         serviceAccount:
           name: {{ $.Release.Name }}-for-{{ . }}

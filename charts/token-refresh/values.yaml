@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+---
 
 # -- AzureAD endpoint to login with creds from one secret and generate a new secret containing jwt.
 authEndpoint: "https://login.microsoftonline.com"
