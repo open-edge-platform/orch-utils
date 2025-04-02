@@ -2,8 +2,6 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 ---
-
----
 {{- $registry := .Values.global.registry -}}
 {{ if .Values.image.registry }}
   {{- $registry = .Values.image.registry -}}
