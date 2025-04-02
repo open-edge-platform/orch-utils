@@ -4,4 +4,4 @@
 ---
 
 remoteNamespace: orch-secret
-ociUrl: ""
+ociUrl: "default-oci-url"
