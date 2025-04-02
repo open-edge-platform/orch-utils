@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
----
 
 {{- $keycloakJwksUrlPortPath := printf "%s:%s%s" (required "A valid keycloakJwksUrl required!" .Values.keycloakJwksUrl )  (required "A valid keycloakServicePort required!" .Values.keycloakServicePort | toString )  (required "A valid keycloakJwksPath required!" .Values.keycloakJwksPath) -}}
 ---
