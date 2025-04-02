@@ -23,7 +23,7 @@ require (
 	github.com/onsi/gomega v1.19.0
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.7.1
-	google.golang.org/protobuf v1.28.0
+	google.golang.org/protobuf v1.33.0
 	gopkg.in/yaml.v2 v2.4.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/gengo v0.0.0-20220307231824-4627b89bbf1b

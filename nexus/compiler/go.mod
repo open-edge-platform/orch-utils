@@ -4,7 +4,6 @@
 module github.com/vmware-tanzu/graph-framework-for-microservices/compiler
 
 go 1.23.2
-
 require (
 	github.com/fatih/structtag v1.2.0
 	github.com/ghodss/yaml v1.0.0
@@ -61,7 +60,7 @@ require (
 	golang.org/x/sync v0.3.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/term v0.13.0 // indirect
-	google.golang.org/protobuf v1.31.0 // indirect
+	google.golang.org/protobuf v1.33.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20200902074654-038fdea0a05b // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
