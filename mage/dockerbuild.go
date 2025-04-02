@@ -220,7 +220,6 @@ func squidProxyBuild() error {
 		"docker",
 		"build",
 		"--load",
-		"--no-cache",
 		"--progress=plain",
 		"--build-arg", strings.Trim(gitarg, ""),
 		"--build-arg", "HTTPS_PROXY="+os.Getenv("HTTPS_PROXY"),
