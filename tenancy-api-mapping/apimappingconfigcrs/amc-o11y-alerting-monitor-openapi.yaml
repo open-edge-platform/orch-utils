@@ -12,7 +12,7 @@ spec:
   specGenEnabled: true
   repoConf:
     url: "https://github.com/open-edge-platform/o11y-alerting-monitor.git"
-    tag: "v1.6.29"
+    tag: "main"
     specFilePath: "api/v1/openapi.yaml"
   mappings:
     - externalURI: /v1/projects/{projectName}/alerts
