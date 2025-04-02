@@ -93,7 +93,7 @@ jobs:
       - name: Setup asdf and install dependencies
         uses: ./.github/actions/setup-asdf
 
-      - name: Lint Dockerfiles using hadolint action
+      - name: Lint Dockerfiles using hadolint
         run: mage lint:dockerfiles
 
   check-license:

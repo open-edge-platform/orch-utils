@@ -32,7 +32,7 @@ RUN go get github.com/aws/aws-sdk-go-v2/service/route53/types
 
 ARG GIT_COMMIT
 RUN echo "Using commitid $GIT_COMMIT"
-RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -ldflags="-X main.Commit=${GIT_COMMIT}" -tags RELEASE ./cmd/main.go 
+RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -ldflags="-X main.Commit=${GIT_COMMIT}" -tags RELEASE ./cmd/main.go
 
 
 #FROM gcr.io/distroless/base-debian12

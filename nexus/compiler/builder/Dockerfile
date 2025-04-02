@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 #graphql's and compiler's builder/Dockerfile should be in sync
-FROM --platform=linux/amd64 golang:1.24.0
+FROM golang:1.24.0
 
 # Set environment variables
 ENV GOPATH /go
@@ -12,6 +12,8 @@ ENV GOPROXY=""
 ENV GOFLAGS="-buildvcs=false"
 
 # Configure git and install necessary packages
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+# hadolint ignore=DL3008
 RUN git config --global --add safe.directory '*' \
     && echo "deb http://deb.debian.org/debian unstable main" | tee -a /etc/apt/sources.list.d/unstable.list \
     && apt-get update \
@@ -20,8 +22,8 @@ RUN git config --global --add safe.directory '*' \
         make=4.3-4.1 \
         coreutils=9.1-1 \
         openssh-client=1:9.2p1-2+deb12u5 \
-    && wget -O /usr/local/bin/jq https://github.com/stedolan/jq/releases/latest/download/jq-linux-amd64 \
-    && chmod +x /usr/local/bin/jq \ 
+    && curl -o /usr/local/bin/jq https://github.com/stedolan/jq/releases/latest/download/jq-linux-amd64 \
+    && chmod +x /usr/local/bin/jq \
     && go install github.com/onsi/ginkgo/ginkgo@v1.16.0 \
     && go install github.com/onsi/gomega/...@v1.18.0 \
     && go install golang.org/x/tools/cmd/goimports@latest \
