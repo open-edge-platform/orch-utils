@@ -12,7 +12,7 @@ spec:
   specGenEnabled: true
   repoConf:
     url: "https://github.com/open-edge-platform/orch-metadata-broker.git"
-    tag: "main"
+    tag: "v0.4.1"
     specFilePath: "api/spec/openapi.yaml"
   mappings:
     - externalURI: /v1/projects/{projectName}/metadata
