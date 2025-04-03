@@ -1,9 +1,9 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+---
 
 # define your template in a config map
-
 apiVersion: v1
 kind: ConfigMap
 metadata:

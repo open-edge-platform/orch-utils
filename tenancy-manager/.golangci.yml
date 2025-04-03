@@ -188,7 +188,7 @@ linters-settings:
           - github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/runtimefolder.edge-orchestrator.intel.com/v1
           - github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/runtimeorg.edge-orchestrator.intel.com/v1
           - github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/runtimeproject.edge-orchestrator.intel.com/v1
-          - github.com/intel/infra-core/inventory/v2/pkg/logging
+          - github.com/open-edge-platform/infra-core/inventory/v2/pkg/logging
           - gopkg.in/yaml.v2
         deny:
       Test:
@@ -228,7 +228,7 @@ linters-settings:
           - github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/config.edge-orchestrator.intel.com/v1
           - github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/runtimeproject.edge-orchestrator.intel.com/v1
           - github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/runtimeorg.edge-orchestrator.intel.com/v1
-          - github.com/intel/infra-core/inventory/v2/pkg/logging
+          - github.com/open-edge-platform/infra-core/inventory/v2/pkg/logging
           - gopkg.in/yaml.v2
         deny:
 

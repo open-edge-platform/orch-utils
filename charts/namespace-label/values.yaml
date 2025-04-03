@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+---
 
 # Dictionary of namespaces with a special value indicating if they should be labeled.
 # - name: "ns-one"
