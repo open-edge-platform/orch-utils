@@ -1,9 +1,10 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+---
 
 apiVersion: v2
 name: oci-secret
 type: application
-version: 2.0.0
+version: 2.0.3
 appVersion: "1.0.0"

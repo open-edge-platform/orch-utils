@@ -188,7 +188,7 @@ metadata:
 spec:
     specGenEnabled: true
     repoConf:
-        url: "https://github.com/intel/infra-core.git"
+        url: "https://github.com/open-edge-platform/infra-core.git"
         tag: "main"
         specFilePath: ` + specFilePath + `
     mappings:

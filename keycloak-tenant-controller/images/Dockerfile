@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-FROM golang:1.23 AS builder
+FROM golang:1.24.1 AS builder
 ARG KTC_GIT_COMMIT
 
 # Set environment variables to allow fetching from private repositories

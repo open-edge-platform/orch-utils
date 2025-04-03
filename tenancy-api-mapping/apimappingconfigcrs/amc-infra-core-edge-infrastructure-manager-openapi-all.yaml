@@ -12,7 +12,7 @@ spec:
   specGenEnabled: true
   repoConf:
     url: "https://github.com/open-edge-platform/infra-core.git"
-    tag: "api/v1.26.2"
+    tag: "api/v1.32.0"
     specFilePath: "api/api/openapi/edge-infrastructure-manager-openapi-all.yaml"
   mappings:
     - externalURI: /v1/projects/{projectName}/regions

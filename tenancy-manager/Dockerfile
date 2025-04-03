@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-FROM golang:1.23.2-bullseye AS builder
+FROM golang:1.24.1-bullseye AS builder
 
 ENV GO111MODULE=on
 ARG MAKE_TARGET=go-build
@@ -28,7 +28,7 @@ WORKDIR /app
 ENV GOPRIVATE=github.com/open-edge-platform/*
 ENV http_proxy=${HTTP_PROXY}
 ENV https_proxy=${HTTPS_PROXY}
-RUN apt-get update -y && apt-get -y install netcat-openbsd --no-install-recommends
+RUN apt-get update -y && apt-get -y install netcat-openbsd=1.217-3 --no-install-recommends
 RUN CGO_ENABLED=0 DOCKER_LABEL_REPO_URL=${REPO_URL} DOCKER_LABEL_VERSION=${VERSION} DOCKER_LABEL_REVISION=${REVISION} DOCKER_LABEL_BUILD_DATE=${BUILD_DATE} make ${MAKE_TARGET}
 
 FROM gcr.io/distroless/static-debian12:nonroot

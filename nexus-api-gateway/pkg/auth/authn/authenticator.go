@@ -260,7 +260,7 @@ func VerifyJWT(c echo.Context, tenancyNC *tenancy_nexus_client.Clientset, backen
 
 	claims, err := validateJWT(authToken)
 	if err != nil {
-		log.Error().Msgf("Given JWT token is invalid or expired")
+		log.Error().Msgf("Given JWT token is invalid or expired: error=%s", err.Error())
 		return jwtData, newHTTPError(http.StatusUnauthorized, "JWT token is invalid or expired")
 	}
 
