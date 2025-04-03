@@ -38,7 +38,7 @@ rateLimit:
   burst: 1
   ipStrategyDepth: 0
   excludedIps: []
-RequestBodyBytesLimit: 21474836480 # 20GB in bytes
+RequestBodyBytesLimit: 21474836480  # 20 GB in bytes
 tlsOption: "gateway-tls"
 cors:
   enabled: false
