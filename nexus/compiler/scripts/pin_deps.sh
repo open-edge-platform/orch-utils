@@ -14,6 +14,8 @@ DEFAULT_CLIENT_VERSION_TAG=$(printf "%s" $(yq eval -o=json .k8s_clients.versione
   fi
 done
 ))
+echo "DEFAULT_CLIENT_NAME: $DEFAULT_CLIENT_NAME"
+echo "DEFAULT_CLIENT_VERSION_TAG: $DEFAULT_CLIENT_VERSION_TAG"
 if [[ -z $DEFAULT_CLIENT_VERSION_TAG ]]; then
   echo "Could not determine default k8s client, exiting..."
   exit 1
