@@ -63,6 +63,8 @@ spec:
             - "ingress*"
             - "etcd*"
             - "rke2*"
+            # rs-proxy needs to be able to write to the filesystem to store the certificates it generates.
+            - "rs-proxy*"
 
 
     match:
