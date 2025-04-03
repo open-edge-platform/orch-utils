@@ -1,14 +1,13 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
-
 ---
 apiVersion: v2
 name: nexus-api-gw
 description: Multi Tenancy HTTP API GW
 type: application
-version: 0.1.8
-appVersion: "1.1.3"
+version: 0.1.11
+appVersion: "1.1.4"
 annotations: {}
 home: tenancy-iam.intel.com
 maintainers:

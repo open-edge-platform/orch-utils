@@ -1,13 +1,12 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
-
 ---
 apiVersion: v2
 name: tenancy-manager
 description: Multi Tenancy Manager
 type: application
-version: 0.1.5
+version: 0.1.6
 appVersion: "1.1.2"
 annotations: {}
 home: tenancy-iam.intel.com

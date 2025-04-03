@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+---
 
 # ## TODO: add policy for policy exceptions
 # ## https://kyverno.io/policies/other/policy-for-exceptions/policy-for-exceptions/

@@ -25,7 +25,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/intel/infra-core/inventory/v2/pkg/logging"
+	"github.com/open-edge-platform/infra-core/inventory/v2/pkg/logging"
 	nexus_client "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/nexus-client"
 	config_helper "github.com/open-edge-platform/orch-utils/tenancy-manager/pkg/config"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/pkg/tenancy"

@@ -12,7 +12,7 @@ spec:
   specGenEnabled: true
   repoConf:
     url: "https://github.com/open-edge-platform/app-orch-catalog.git"
-    tag: "v0.11.5"
+    tag: "v0.11.21"
     specFilePath: "api/spec/openapi.yaml"
   mappings:
     - externalURI: /v3/projects/{projectName}/catalog/applications
