@@ -194,6 +194,9 @@ jobs:
       - name: Run tests
         run: mage test:golang
 
+      - name: Convert coverage to human readable format
+        run: go tool cover -func=coverprofile.out -o=coverprofile.out
+
       - name: Upload coverage report
         uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
