@@ -13,7 +13,7 @@ require (
 	github.com/hashicorp/vault/api v1.12.2
 	github.com/lestrrat-go/jwx/v2 v2.0.21
 	github.com/magefile/mage v1.15.0
-	github.com/onsi/ginkgo/v2 v2.17.0
+	github.com/onsi/ginkgo/v2 v2.23.3
 	github.com/onsi/gomega v1.32.0
 	github.com/stretchr/testify v1.9.0
 	github.com/tidwall/gjson v1.17.1

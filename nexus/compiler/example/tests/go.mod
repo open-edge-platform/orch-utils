@@ -7,7 +7,7 @@ go 1.23.2
 replace github.com/vmware-tanzu/graph-framework-for-microservices/compiler/example/output/generated => ../output/generated
 
 require (
-	github.com/onsi/ginkgo v1.16.5
+	github.com/onsi/ginkgo v2.23.3
 	github.com/onsi/gomega v1.24.2
 	github.com/vmware-tanzu/graph-framework-for-microservices/compiler/example/output/generated v0.0.0-20220519084951-f419a2aaa2be
 	k8s.io/apimachinery v0.26.3

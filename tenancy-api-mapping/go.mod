@@ -8,7 +8,7 @@ go 1.23.1
 
 require (
 	github.com/getkin/kin-openapi v0.128.0
-	github.com/onsi/ginkgo/v2 v2.22.0
+	github.com/onsi/ginkgo/v2 v2.23.3
 	github.com/onsi/gomega v1.35.1
 	github.com/spf13/afero v1.11.0
 	github.com/urfave/cli/v2 v2.27.5

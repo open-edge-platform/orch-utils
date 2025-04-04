@@ -13,7 +13,7 @@ require (
 	github.com/go-openapi/runtime v0.24.1
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/labstack/echo/v4 v4.13.3
-	github.com/onsi/ginkgo/v2 v2.22.0
+	github.com/onsi/ginkgo/v2 v2.23.3
 	github.com/onsi/gomega v1.35.1
 	github.com/sirupsen/logrus v1.9.3
 	golang.org/x/oauth2 v0.25.0 // indirect
