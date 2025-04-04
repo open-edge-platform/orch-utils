@@ -1,3 +1,0 @@
-# github.com/vmware-tanzu/graph-framework-for-microservices/nexus v0.0.0-20221212164212-819bb2b13a73
-## explicit; go 1.17
-github.com/vmware-tanzu/graph-framework-for-microservices/nexus/nexus
