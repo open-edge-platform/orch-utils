@@ -27,8 +27,8 @@ keycloakAdmin:
   user: admin
   client: system-client
   passwordSecret:
-    name: platform-keycloak # name of the secret
-    key: admin-password # key of the secret
+    name: platform-keycloak  # name of the secret
+    key: admin-password  # key of the secret
 keycloak_realm: "master"
 keycloak_si_groups: |-
   {
