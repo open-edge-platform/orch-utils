@@ -5,20 +5,29 @@
 version: 2
 enable-beta-ecosystems: true
 updates:
-  # Maintain Go modules
+  # Enable version updates for Go modules
   - package-ecosystem: "gomod"
-    directories: 
+    directories:
+      - "/"
       - "/auth-service"
+      - "/aws-sm-proxy"
     schedule:
       interval: "daily"
-  # Maintain Helm version
+  # Enable version updates for Helm version
   - package-ecosystem: "helm"
     directory: "/"
     schedule:
       interval: "daily"
-  # Maintain GitHub Actions
+  # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
+    schedule:
+      interval: "weekly"
+  # Enable version updates for Docker
+  - package-ecosystem: "docker"
+    directories:
+      - "/auth-service"
+      - "/aws-sm-proxy"
     schedule:
       interval: "weekly"
     reviewers:
