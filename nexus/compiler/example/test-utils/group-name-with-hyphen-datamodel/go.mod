@@ -1,5 +1,7 @@
 // SPDX-FileCopyrightText: 2025 Intel Corporation
+//
 // SPDX-License-Identifier: Apache-2.0
+
 module github.com/vmware-tanzu/graph-framework-for-microservices/compiler/example/test-utils/group-name-with-hyphen-datamodel
 
 go 1.23.2

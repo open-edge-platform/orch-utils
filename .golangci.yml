@@ -2,12 +2,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+version: "2"
 run:
-  timeout: 5m
   tests: true
-
 linters:
-  disable-all: true
+  default: none
   enable:
     - asciicheck
     - bodyclose
@@ -22,11 +21,8 @@ linters:
     - goconst
     - gocritic
     - godot
-    - gofmt
-    - goimports
     - goprintffuncname
     - gosec
-    - gosimple
     - govet
     - ineffassign
     - lll
@@ -38,55 +34,68 @@ linters:
     - rowserrcheck
     - sqlclosecheck
     - staticcheck
-    - stylecheck
     - testpackage
-    - typecheck
     - unconvert
     - unparam
     - unused
     - whitespace
-
-linters-settings:
-  cyclop:
-    # SDL requirements dictate a maximum cyclomatic complexity of 10
-    max-complexity: 10
-  misspell:
-    locale: US
-    ignore-words:
-      - mosquitto
-  lll:
-    line-length: 120
-    tab-width: 4
-  funlen:
-    lines: 100
-    statements: 50
-  exhaustive:
-    default-signifies-exhaustive: true
-  depguard:
+  settings:
+    cyclop:
+      max-complexity: 10
+    depguard:
+      rules:
+        prevent_unmaintained_packages:
+          list-mode: lax
+          files:
+            - $all
+            - '!$test'
+          allow:
+            - $gostd
+          deny:
+            - pkg: io/ioutil
+              desc: 'replaced by io and os packages since Go 1.16: https://tip.golang.org/doc/go1.16#ioutil'
+    exhaustive:
+      default-signifies-exhaustive: true
+    funlen:
+      lines: 100
+      statements: 50
+    lll:
+      line-length: 120
+      tab-width: 4
+    misspell:
+      locale: US
+      ignore-rules:
+        - mosquitto
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
     rules:
-      prevent_unmaintained_packages:
-        list-mode: lax # allow unless explicitly denied
-        files:
-          - $all
-          - "!$test"
-        allow:
-          - $gostd
-        deny:
-          - pkg: io/ioutil
-            desc: "replaced by io and os packages since Go 1.16: https://tip.golang.org/doc/go1.16#ioutil"
-
-issues:
-  exclude-dirs:
-    - .github
-    - charts
-  exclude-use-default: true
-  exclude-rules:
-    # Allow shadowing err/ctx values for idiomatic code
-    - linters:
-        - govet
-      text: 'declaration of "(err|ctx)" shadows declaration at'
-    # Allow dot imports for ginkgo and gomega
-    - source: ginkgo|gomega
-      linters:
-        - revive
-      text: "should not use dot imports"
+      - linters:
+          - govet
+        text: declaration of "(err|ctx)" shadows declaration at
+      - linters:
+          - revive
+        text: should not use dot imports
+        source: ginkgo|gomega
+    paths:
+      - .github
+      - charts
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - .github
+      - charts
+      - third_party$
+      - builtin$
+      - examples$
