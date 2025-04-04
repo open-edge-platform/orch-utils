@@ -1,7 +1,3 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
-#
-# SPDX-License-Identifier: Apache-2.0
-
 .PHONY: lint test vendor clean
 
 export GO111MODULE=on
