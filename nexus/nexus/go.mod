@@ -1,5 +1,7 @@
 // SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+//
 // SPDX-License-Identifier: Apache-2.0
+
 module github.com/open-edge-platform/orch-utils/nexus/nexus
 
 go 1.17

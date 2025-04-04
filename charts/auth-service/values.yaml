@@ -36,7 +36,7 @@ jwksURL: "http://platform-keycloak.orch-platform.svc:8080/realms/master/protocol
 podAnnotations: {}
 
 podSecurityContext: {}
-  # fsGroup: 2000
+# fsGroup: 2000
 
 securityContext:
   capabilities:
