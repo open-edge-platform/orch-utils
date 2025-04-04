@@ -7,16 +7,20 @@ enable-beta-ecosystems: true
 updates:
   # Maintain Go modules
   - package-ecosystem: "gomod"
-    directory: "/"
+    directories: 
+      - "/auth-service"
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 2
   # Maintain Helm version
   - package-ecosystem: "helm"
     directory: "/"
     schedule:
+      interval: "daily"
+  # Maintain GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
       interval: "weekly"
-    open-pull-requests-limit: 2
     reviewers:
       - "se-chris-thach"
       - "dmytroye"
