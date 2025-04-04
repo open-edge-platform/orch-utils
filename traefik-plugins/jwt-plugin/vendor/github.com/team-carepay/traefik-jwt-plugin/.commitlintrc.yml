@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
+extends:
+  - '@commitlint/config-conventional'
+
+rules:
+  body-max-line-length:
+    - 1
+    - always
+    - 120
+  type-enum:
+    - 2
+    - always
+    -
+      - chore
+      - feat
+      - fix
