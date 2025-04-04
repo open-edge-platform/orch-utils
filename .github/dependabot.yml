@@ -10,7 +10,13 @@ updates:
     directories:
       - "/"
       - "/auth-service"
-      - "/aws-sm-proxy"
+      - "/cert-synchronizer"
+      - "/keycloak-tenant-controller"
+      - "nexus-api-gateway"
+      - "tenancy-api-mapping"
+      - "tenancy-datamodel"
+      - "tenancy-manager"
+      - "traefik-plugins"
     schedule:
       interval: "daily"
   # Enable version updates for Helm version
@@ -22,14 +28,16 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "daily"
   # Enable version updates for Docker
   - package-ecosystem: "docker"
     directories:
       - "/auth-service"
       - "/aws-sm-proxy"
+      - "cert-synchronizer"
+      - "/keycloak-tenant-controller/images"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     reviewers:
       - "se-chris-thach"
       - "dmytroye"
