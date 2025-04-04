@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+---
 
 repo: https://github.com/open-edge-platform/orch-utils
 filter: "*.*.*"

@@ -1,10 +1,11 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+---
 
 apiVersion: v2
 name: job-wait
 description: A Helm chart for waiting until a k8s job is completed.
 type: application
-version: 1.1.1
+version: 1.1.2
 appVersion: "1.1.0"
