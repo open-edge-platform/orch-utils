@@ -46,6 +46,11 @@ updates:
       - "/tenancy-datamodel"
     schedule:
       interval: "daily"
+    commit-message:
+      prefix: "go.mod"
+    reviewers:
+      - "se-chris-thach"
+      - "dmytroye"
 
   # Enable version updates for Helm version
   - package-ecosystem: "helm"
@@ -92,6 +97,11 @@ updates:
       - "/charts/oci-secret"
     schedule:
       interval: "daily"
+    commit-message:
+      prefix: "Helm charts"
+    reviewers:
+      - "se-chris-thach"
+      - "dmytroye"
 
   # Enable version updates for Docker
   - package-ecosystem: "docker"
@@ -112,12 +122,19 @@ updates:
       - "/squid-proxy"
     schedule:
       interval: "daily"
+    commit-message:
+      prefix: "Dockerfile"
+    reviewers:
+      - "se-chris-thach"
+      - "dmytroye"
 
   # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
+    commit-message:
+      prefix: "Github Actions"
     reviewers:
       - "se-chris-thach"
       - "dmytroye"
