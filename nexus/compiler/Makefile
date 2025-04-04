@@ -126,7 +126,7 @@ docker.publish:
 
 .PHONY: tools
 tools:
-	go install github.com/onsi/ginkgo/ginkgo@v2.23.3
+	go install github.com/onsi/ginkgo/ginkgo@v1.16.0
 	go install github.com/onsi/gomega/...@v1.18.0
 	go install golang.org/x/tools/cmd/goimports@latest
 	go install github.com/mikefarah/yq/v4@latest

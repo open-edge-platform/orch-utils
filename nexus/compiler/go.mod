@@ -9,7 +9,7 @@ require (
 	github.com/fatih/structtag v1.2.0
 	github.com/ghodss/yaml v1.0.0
 	github.com/gogo/protobuf v1.3.2
-	github.com/onsi/ginkgo v2.23.3
+	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.23.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/vmware-tanzu/graph-framework-for-microservices/common-library v0.0.0-20221129104902-06818e531062

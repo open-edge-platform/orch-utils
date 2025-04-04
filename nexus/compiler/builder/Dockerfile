@@ -24,7 +24,7 @@ RUN git config --global --add safe.directory '*' \
         openssh-client=1:9.2p1-2+deb12u5 \
     && curl -o /usr/local/bin/jq https://github.com/stedolan/jq/releases/latest/download/jq-linux-amd64 \
     && chmod +x /usr/local/bin/jq \
-    && go install github.com/onsi/ginkgo/ginkgo@v2.23.3 \
+    && go install github.com/onsi/ginkgo/ginkgo@v1.16.0 \
     && go install github.com/onsi/gomega/...@v1.18.0 \
     && go install golang.org/x/tools/cmd/goimports@latest \
     && go install github.com/mikefarah/yq/v4@v4.45.1 \
