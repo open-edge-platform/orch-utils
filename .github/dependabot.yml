@@ -52,7 +52,7 @@ updates:
       - "se-chris-thach"
       - "dmytroye"
 
-  # Enable version updates for Helm version
+  # Enable version updates for Helm charts
   - package-ecosystem: "helm"
     directories:
       - "/charts/secrets-config"
