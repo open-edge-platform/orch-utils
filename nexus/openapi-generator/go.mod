@@ -4,6 +4,7 @@
 module nexus/openapi-generator
 
 go 1.23.2
+
 toolchain go1.24.1
 
 require (
