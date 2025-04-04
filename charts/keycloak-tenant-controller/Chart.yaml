@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+---
 
 apiVersion: v2
 name: keycloak-tenant-controller
@@ -19,7 +20,7 @@ type: application
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
 
 
-version: 1.0.10
+version: 1.0.11
 
 
 # This is the version number of the application being deployed. This version number should be

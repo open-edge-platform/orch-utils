@@ -81,6 +81,8 @@ spec:
     accessControlAllowCredentials: true
     accessControlMaxAge: 100
     addVaryHeader: true
+    stsSeconds: 31536000
+    stsIncludeSubdomains: true
 {{- end }}
 ---
 

@@ -7,7 +7,7 @@ FROM debian:trixie as build-stage
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y --fix-missing \
-    squid
+    squid=6.13-1
 
 # show squid version
 RUN echo "Squid version:" && squid -v
@@ -25,6 +25,7 @@ RUN echo "Squid version:" && squid -v
 
 # Find and store the dynamic dependencies of Squid
 RUN mkdir /deps
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN ldd /usr/sbin/squid | tr -s '[:space:]' '\n' | grep '^/' | \
     xargs -I {} cp -v --parents {} /deps
 

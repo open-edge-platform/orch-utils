@@ -3,6 +3,7 @@
 
 ARG BUILDER_TAG
 
+# hadolint ignore=DL3006
 FROM $BUILDER_TAG
 ADD compiler.tar /go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler
 COPY cmd/nexus-openapi-gen /go/bin/nexus-openapi-gen
@@ -15,8 +16,9 @@ RUN make init_submodules
 
 ENV GOCACHE=/root/.cache/go-build
 
-WORKDIR /go/src/
-RUN --mount=type=cache,target="/root/.cache/go-build" mkdir nexustmp && cd nexustmp && go mod init && \
+RUN mkdir /go/src/nexustmp
+WORKDIR /go/src/nexustmp
+RUN --mount=type=cache,target="/root/.cache/go-build" go mod init && \
     /go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler/scripts/pin_deps.sh && \
     /go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler/scripts/pin_graphql_build_version.sh && \
     go mod download || go mod download
@@ -30,4 +32,4 @@ RUN --mount=type=cache,target="/root/.cache/go-build"  CGO_ENABLED=0 go build --
 WORKDIR /go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler
 RUN --mount=type=cache,target="/root/.cache/go-build" go mod download  || go mod download
 
-CMD make preparser
+CMD ["make", "preparser"]

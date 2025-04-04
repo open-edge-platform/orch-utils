@@ -3,6 +3,7 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+---
 
 {{- $registry := .Values.global.registry -}}
 {{ if .Values.image.registry }}
@@ -52,4 +53,4 @@ spec:
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
         image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}   
+        imagePullPolicy: {{ .Values.image.pullPolicy }}

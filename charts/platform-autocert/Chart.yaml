@@ -1,9 +1,10 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+---
 
 apiVersion: v2
 name: platform-autocert
 type: application
-version: 1.0.1
+version: 1.0.2
 appVersion: "0.0.1"

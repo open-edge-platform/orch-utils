@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+---
 
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
@@ -18,7 +19,7 @@ metadata:
   name: restricted-policy-orch
 spec:
   admission: true
-  validationFailureAction: Audit  
+  validationFailureAction: Audit
   background: true
   failurePolicy: Fail
   rules:
