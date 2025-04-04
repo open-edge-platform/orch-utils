@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+---
 
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
@@ -62,6 +63,8 @@ spec:
             - "ingress*"
             - "etcd*"
             - "rke2*"
+            # rs-proxy needs to be able to write to the filesystem to store the certificates it generates.
+            - "rs-proxy*"
 
 
     match:

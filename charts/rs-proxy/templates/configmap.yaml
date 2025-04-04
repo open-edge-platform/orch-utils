@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+---
 
 # When release service requires a token, a ConfigMap is generated.
 # ExternalSecret will consume the ConfigMap, combine it with release service token to further generate the Secret.

@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+---
 
 apiVersion: v1
 kind: ConfigMap
@@ -13,11 +14,11 @@ data:
     logfile_rotate 0
     access_log stdio:/proc/self/fd/1
     cache_log stdio:/proc/self/fd/1
-    
+
     pid_filename none
     visible_hostname squid-proxy
 
-    # Define ACLs for pre-approved URLs 
+    # Define ACLs for pre-approved URLs
     acl allowed_domains dstdomain {{ .Values.allowedDomains }}
     http_access allow allowed_domains
 
@@ -63,7 +64,7 @@ data:
     # Allow direct access to the excluded domain
     always_direct allow no_peer_domain
     {{- end }}
-    
+
     # Never direct - always use the parent proxy
     never_direct allow all
     {{- end }}

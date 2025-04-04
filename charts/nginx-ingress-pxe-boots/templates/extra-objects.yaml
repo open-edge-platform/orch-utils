@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+---
 
 # nginx-ingress-boots uses a self-signed TLS server certificate managed by cert-manager
 apiVersion: cert-manager.io/v1
