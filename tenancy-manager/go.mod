@@ -9,7 +9,7 @@ go 1.24.1
 toolchain go1.24.2
 
 require (
-	github.com/onsi/ginkgo/v2 v2.22.2
+	github.com/onsi/ginkgo/v2 v2.23.3
 	github.com/onsi/gomega v1.36.2
 	github.com/open-edge-platform/infra-core/inventory/v2 v2.23.0
 	github.com/open-edge-platform/orch-utils/tenancy-datamodel v0.0.0-20250401180309-9c2571c45857
