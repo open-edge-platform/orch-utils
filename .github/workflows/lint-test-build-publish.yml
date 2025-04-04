@@ -245,7 +245,7 @@ jobs:
         run: find . -name "go.mod" -execdir go mod download -x \;
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3.9.0
+        uses: docker/setup-buildx-action@v3.10.0
         with:
           install: true
 
