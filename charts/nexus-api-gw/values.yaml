@@ -122,6 +122,19 @@ affinity: {}
 authz:
   disabled: false
 
+oidc:
+  name: "keycloak-api"
+  oidc_env_name: "OIDC_SERVER_URL"
+  oidc_server_url: "http://platform-keycloak.orch-platform.svc/realms/master"
+  oidc_tls_insecure_skip_verify_env_name: "OIDC_TLS_INSECURE_SKIP_VERIFY"
+  oidc_tls_insecure_skip_verify_value: "true"
+  clients:
+    # REST clients should set the "User-Agent" header to be the client name (e.g. for webhook-monitor)
+    bypass:
+      - common-metric-query-metrics
+      - ecm-api
+      - eim-config
+
 # -- traefikReverseProxy defines params for external access to services in a cluster using Traefik reverse proxy.
 traefikReverseProxy:
   host:

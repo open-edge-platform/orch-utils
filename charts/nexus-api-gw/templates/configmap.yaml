@@ -17,3 +17,14 @@ data:
     enableNexusRuntime: true
     tenancyService: true
     disableAuthz: {{ .Values.authz.disabled }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "keycloak-api"
+  namespace: {{ default  .Release.Namespace .Values.global.namespace }}
+data:
+  oidc_env_name: {{ .Values.oidc.oidc_env_name }}
+  oidc_server_url: {{ .Values.oidc.oidc_server_url }}
+  oidc_tls_insecure_skip_verify_env_name: {{ .Values.oidc.oidc_tls_insecure_skip_verify_env_name }}
+  oidc_tls_insecure_skip_verify_value: "true"
