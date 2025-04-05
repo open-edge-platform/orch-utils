@@ -40,7 +40,7 @@ jobs:
       - name: Setup asdf and install dependencies
         uses: ./.github/actions/setup-asdf
 
-      - uses: actions/cache@v4.2.0
+      - uses: actions/cache@v4.2.3
         with:
           path: |
             ~/.cache/go-build
@@ -172,7 +172,7 @@ jobs:
       - name: Setup asdf and install dependencies
         uses: ./.github/actions/setup-asdf
 
-      - uses: actions/cache@v4.2.0
+      - uses: actions/cache@v4.2.3
         with:
           path: |
             ~/.cache/go-build
@@ -225,7 +225,7 @@ jobs:
       - name: Setup asdf and install dependencies
         uses: ./.github/actions/setup-asdf
 
-      - uses: actions/cache@v4.2.0
+      - uses: actions/cache@v4.2.3
         with:
           path: |
             ~/.cache/go-build
