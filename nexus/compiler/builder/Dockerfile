@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 #graphql's and compiler's builder/Dockerfile should be in sync
-FROM golang:1.24.0
+FROM golang:1.24.2
 
 # Set environment variables
 ENV GOPATH /go
