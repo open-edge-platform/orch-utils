@@ -7,7 +7,7 @@ module github.com/vmware-tanzu/graph-framework-for-microservices/common-library
 go 1.18
 
 require (
-	github.com/elliotchance/orderedmap v1.5.0
+	github.com/elliotchance/orderedmap v1.8.0
 	github.com/gonvenience/bunt v1.3.4
 	github.com/gonvenience/neat v1.3.11
 	github.com/gonvenience/term v1.0.2
