@@ -1,5 +1,7 @@
 // SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+//
 // SPDX-License-Identifier: Apache-2.0
+
 module github.com/vmware-tanzu/graph-framework-for-microservices/kube-openapi
 
 go 1.17

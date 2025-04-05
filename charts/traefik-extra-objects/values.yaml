@@ -38,11 +38,11 @@ rateLimit:
   burst: 1
   ipStrategyDepth: 0
   excludedIps: []
-RequestBodyBytesLimit: 21474836480 # 20 GB in bytes
+RequestBodyBytesLimit: 21474836480  # 20 GB in bytes
 tlsOption: "gateway-tls"
 cors:
   enabled: false
   allowedOrigins: []
-    # - "http://localhost:8080"
-    # - "http://localhost:8082"
-    # - "http://web-ui.kind.internal"
+  # - "http://localhost:8080"
+  # - "http://localhost:8082"
+  # - "http://web-ui.kind.internal"
