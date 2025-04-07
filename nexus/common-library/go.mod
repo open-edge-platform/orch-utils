@@ -30,6 +30,7 @@ require (
 	github.com/go-logr/logr v0.2.0 // indirect
 	github.com/gonvenience/wrap v1.1.2 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
+	github.com/kr/pretty v0.2.0 // indirect
 	github.com/mattn/go-ciede2000 v0.0.0-20170301095244-782e8c62fec3 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
 	github.com/mitchellh/go-ps v1.0.0 // indirect
