@@ -6,9 +6,14 @@
 set -e
 
 DEFAULT_CLIENT_NAME="$(yq eval .k8s_clients.default $( dirname "$0" )/../manifest.yaml)"
-DEFAULT_CLIENT_VERSION_TAG=$(yq eval -o=json .k8s_clients.versioned $(dirname "$0")/../manifest.yaml | jq -r ".[] | select(.name == \"$DEFAULT_CLIENT_NAME\") | .k8s_code_generator_git_tag")
-echo "DEFAULT_CLIENT_NAME: $DEFAULT_CLIENT_NAME"
-echo "DEFAULT_CLIENT_VERSION_TAG: $DEFAULT_CLIENT_VERSION_TAG"
+DEFAULT_CLIENT_VERSION_TAG=$(printf "%s" $(yq eval -o=json .k8s_clients.versioned $( dirname "$0" )/../manifest.yaml | jq -c  '.[]' | while read i; do
+  NAME=$( jq -r  '.name' <<< "${i}" )
+  if [ $NAME = $DEFAULT_CLIENT_NAME ]; then
+    echo $( jq -r  '.k8s_code_generator_git_tag' <<< "${i}" )
+    break
+  fi
+done
+))
 if [[ -z $DEFAULT_CLIENT_VERSION_TAG ]]; then
   echo "Could not determine default k8s client, exiting..."
   exit 1
