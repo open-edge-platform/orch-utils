@@ -4,9 +4,12 @@
 
 module github.com/vmware-tanzu/graph-framework-for-microservices/kube-openapi
 
-go 1.17
+go 1.23.0
+
+toolchain go1.24.1
 
 require (
+	golang.org/x/net v0.38.0
 	github.com/NYTimes/gziphandler v1.1.1
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d
 	github.com/davecgh/go-spew v1.1.1
@@ -16,7 +19,7 @@ require (
 	github.com/go-openapi/swag v0.21.1
 	github.com/golang/protobuf v1.5.2
 	github.com/google/gnostic v0.6.9
-	github.com/google/go-cmp v0.5.8
+	github.com/google/go-cmp v0.6.0
 	github.com/google/gofuzz v1.2.0
 	github.com/google/uuid v1.3.0
 	github.com/mitchellh/mapstructure v1.5.0
@@ -47,10 +50,10 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/nxadm/tail v1.4.8 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
-	golang.org/x/net v0.7.0 // indirect
-	golang.org/x/sys v0.5.0 // indirect
-	golang.org/x/text v0.7.0 // indirect
-	golang.org/x/tools v0.1.12 // indirect
+	golang.org/x/mod v0.17.0 // indirect
+	golang.org/x/net v0.36.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
+	golang.org/x/text v0.22.0 // indirect
+	golang.org/x/tools v0.21.1-0.20240508182429-e35e4ccd0d2d // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 )
