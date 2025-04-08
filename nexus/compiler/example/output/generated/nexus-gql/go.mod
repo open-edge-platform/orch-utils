@@ -88,6 +88,8 @@ require (
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
 
+replace github.com/vmware-tanzu/graph-framework-for-microservices/gqlgen => /go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler/../gqlgen
+
 replace github.com/vmware-tanzu/graph-framework-for-microservices/kube-openapi => /go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler/../kube-openapi
 
 replace github.com/vmware-tanzu/graph-framework-for-microservices/nexus => /go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler/../nexus
