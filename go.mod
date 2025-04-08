@@ -11,7 +11,7 @@ toolchain go1.24.1
 require (
 	github.com/aws/aws-sdk-go v1.51.27
 	github.com/bitfield/script v0.22.0
-	github.com/golang-jwt/jwt/v5 v5.2.1
+	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/hashicorp/vault/api v1.12.2
 	github.com/lestrrat-go/jwx/v2 v2.0.21
 	github.com/magefile/mage v1.15.0

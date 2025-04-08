@@ -92,7 +92,7 @@ var (
 func (b *Binder) DefaultUserObject(name string) (types.Type, error) {
 	models := b.cfg.Models[name].Model
 	if len(models) == 0 {
-		return nil, fmt.Errorf(name + " not found in typemap")
+		return nil, fmt.Errorf("%s", name+" not found in typemap")
 	}
 
 	if models[0] == "map[string]interface{}" {
