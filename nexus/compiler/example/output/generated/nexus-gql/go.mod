@@ -61,7 +61,7 @@ require (
 	github.com/vmware-tanzu/cartographer v0.3.0 // indirect
 	github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1 // indirect
 	golang.org/x/mod v0.22.0 // indirect
-	golang.org/x/net v0.32.0 // indirect
+	golang.org/x/net v0.39.0 // indirect
 	golang.org/x/oauth2 v0.11.0 // indirect
 	golang.org/x/sync v0.10.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
@@ -87,8 +87,6 @@ require (
 	sigs.k8s.io/structured-merge-diff/v4 v4.2.3 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
-
-replace github.com/vmware-tanzu/graph-framework-for-microservices/gqlgen => /go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler/../gqlgen
 
 replace github.com/vmware-tanzu/graph-framework-for-microservices/kube-openapi => /go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler/../kube-openapi
 
