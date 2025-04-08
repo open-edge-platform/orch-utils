@@ -1,0 +1,140 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
+version: 2
+enable-beta-ecosystems: true
+updates:
+
+  # Enable version updates for Go modules
+  - package-ecosystem: "gomod"
+    directories:
+      - "/"
+      - "/tenancy-api-mapping"
+      - "/traefik-plugins/jwt-plugin"
+      - "/auth-service"
+      - "/nexus/gqlgen"
+      - "/nexus/openapi-generator"
+      - "/nexus/install-validator"
+      - "/nexus/compiler"
+      - "/nexus/compiler/example/test-utils/invalid-singleton-child"
+      - "/nexus/compiler/example/test-utils/global-package"
+      - "/nexus/compiler/example/test-utils/pointer-type-datamodel"
+      - "/nexus/compiler/example/test-utils/duplicated-uris-datamodel"
+      - "/nexus/compiler/example/test-utils/invalid-type-name-datamodel"
+      - "/nexus/compiler/example/test-utils/group-name-with-hyphen-datamodel"
+      - "/nexus/compiler/example/test-utils/map-type-child"
+      - "/nexus/compiler/example/test-utils/output-group-name-with-hyphen-datamodel"
+      - "/nexus/compiler/example/test-utils/array-type-child"
+      - "/nexus/compiler/example/test-utils/invalid-pkg-name-datamodel"
+      - "/nexus/compiler/example/test-utils/nexus-rest-api-gen-wrong-name"
+      - "/nexus/compiler/example/test-utils/non-singleton-root"
+      - "/nexus/compiler/example/output/generated"
+      - "/nexus/compiler/example/output/generated/nexus-gql"
+      - "/nexus/compiler/example/tests"
+      - "/nexus/compiler/example/tests/custom_query_grpc_server"
+      - "/nexus/compiler/example/datamodel/build/nexus-gql"
+      - "/nexus/compiler/example/datamodel"
+      - "/nexus/common-library"
+      - "/nexus/nexus"
+      - "/nexus/kube-openapi"
+      - "/nexus-api-gateway"
+      - "/cert-synchronizer"
+      - "/keycloak-tenant-controller"
+      - "/tenancy-manager"
+      - "/tenancy-datamodel/test"
+      - "/tenancy-datamodel"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "go.mod"
+    reviewers:
+      - "se-chris-thach"
+      - "dmytroye"
+
+  # Enable version updates for Helm charts
+  - package-ecosystem: "helm"
+    directories:
+      - "/charts/secrets-config"
+      - "/charts/kyverno-traefik-policy"
+      - "/charts/traefik-pre"
+      - "/charts/token-refresh"
+      - "/charts/job-wait"
+      - "/charts/statefulset-wait"
+      - "/charts/postgresql-secrets"
+      - "/charts/kyverno-extra-policies"
+      - "/charts/rs-proxy"
+      - "/charts/rs-image-pull-secrets"
+      - "/charts/auth-service"
+      - "/charts/secret-wait"
+      - "/charts/aws-sm-proxy"
+      - "/charts/certificate-file-server"
+      - "/charts/namespace-label"
+      - "/charts/tenancy-api-remapping"
+      - "/charts/fleet-rs-secret"
+      - "/charts/aws-lb-tgb"
+      - "/charts/self-signed-cert"
+      - "/charts/tenancy-datamodel-init"
+      - "/charts/kyverno-istio-policy"
+      - "/charts/nexus-api-gw"
+      - "/charts/k8s-metrics-server"
+      - "/charts/metallb-config"
+      - "/charts/platform-autocert"
+      - "/charts/capi-operator-pre"
+      - "/charts/adm-secret"
+      - "/charts/aws-sm-get-rs-token"
+      - "/charts/vertical-pod-autoscaler"
+      - "/charts/cert-synchronizer"
+      - "/charts/nginx-ingress-pxe-boots"
+      - "/charts/keycloak-tenant-controller"
+      - "/charts/istio-policy"
+      - "/charts/token-file-server"
+      - "/charts/tenancy-manager"
+      - "/charts/traefik-extra-objects"
+      - "/charts/deployment-wait"
+      - "/charts/copy-secret"
+      - "/charts/squid-proxy"
+      - "/charts/oci-secret"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "Helm charts"
+    reviewers:
+      - "se-chris-thach"
+      - "dmytroye"
+
+  # Enable version updates for Docker
+  - package-ecosystem: "docker"
+    directories:
+      - "/tenancy-api-mapping"
+      - "/auth-service"
+      - "/aws-sm-proxy"
+      - "/nexus/openapi-generator"
+      - "/nexus/compiler/builder"
+      - "/nexus/compiler"
+      - "/token-fs"
+      - "/nexus-api-gateway"
+      - "/secrets"
+      - "/cert-synchronizer"
+      - "/keycloak-tenant-controller/images"
+      - "/tenancy-manager"
+      - "/tenancy-datamodel"
+      - "/squid-proxy"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "Dockerfile"
+    reviewers:
+      - "se-chris-thach"
+      - "dmytroye"
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "Github Actions"
+    reviewers:
+      - "se-chris-thach"
+      - "dmytroye"
