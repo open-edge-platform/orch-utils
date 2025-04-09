@@ -259,7 +259,7 @@ func (t Test) Golang() error {
 	return t.golang("")
 }
 
-// Test Go source files. (only use it inside CI)
+// Test Go source files (only use it inside CI).
 func (t Test) GolangCI() error {
 	return t.golang("--github-output")
 }
