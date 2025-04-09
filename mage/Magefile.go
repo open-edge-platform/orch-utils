@@ -256,7 +256,12 @@ type Test mg.Namespace
 
 // Test Go source files.
 func (t Test) Golang() error {
-	return t.golang()
+	return t.golang("")
+}
+
+// Test Go source files. (only use it inside CI)
+func (t Test) GolangCI() error {
+	return t.golang("--github-output")
 }
 
 // Namespace contains clean targets.

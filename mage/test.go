@@ -11,7 +11,7 @@ import (
 	"github.com/magefile/mage/sh"
 )
 
-func (Test) golang() error {
+func (Test) golang(additionalParams string) error {
 	_ = sh.RunV(
 		"ginkgo",
 		"version",
@@ -61,5 +61,6 @@ func (Test) golang() error {
 		"--cover",
 		"-coverpkg="+strings.Join(skippedPackages, ","),
 		"--skip-package="+strings.Join(skippedPackages, ","),
+		additionalParams,
 	)
 }
