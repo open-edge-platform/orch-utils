@@ -33,7 +33,7 @@ updates:
       - "/nexus/compiler/example/output/generated/nexus-gql"
       - "/nexus/compiler/example/tests"
       - "/nexus/compiler/example/tests/custom_query_grpc_server"
-      - "/nexus/compil er/example/datamodel/build/nexus-gql"
+      - "/nexus/compiler/example/datamodel/build/nexus-gql"
       - "/nexus/compiler/example/datamodel"
       - "/nexus/common-library"
       - "/nexus/nexus"
