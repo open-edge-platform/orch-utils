@@ -57,7 +57,7 @@ func (Test) golang() error {
 		"-randomize-suites",
 		"--keep-going",
 		"--cover",
-		"-coverpkg=./...",
+		"-coverpkg="+strings.Join(skippedPackages, ","),
 		"--skip-package="+strings.Join(skippedPackages, ","),
 	)
 }
