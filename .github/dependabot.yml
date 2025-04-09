@@ -33,7 +33,7 @@ updates:
       - "/nexus/compiler/example/output/generated/nexus-gql"
       - "/nexus/compiler/example/tests"
       - "/nexus/compiler/example/tests/custom_query_grpc_server"
-      - "/nexus/compiler/example/datamodel/build/nexus-gql"
+      - "/nexus/compil er/example/datamodel/build/nexus-gql"
       - "/nexus/compiler/example/datamodel"
       - "/nexus/common-library"
       - "/nexus/nexus"
@@ -45,7 +45,7 @@ updates:
       - "/tenancy-datamodel/test"
       - "/tenancy-datamodel"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     commit-message:
       prefix: "go.mod"
     reviewers:
@@ -96,7 +96,7 @@ updates:
       - "/charts/squid-proxy"
       - "/charts/oci-secret"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     commit-message:
       prefix: "Helm charts"
     reviewers:
@@ -121,7 +121,7 @@ updates:
       - "/tenancy-datamodel"
       - "/squid-proxy"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     commit-message:
       prefix: "Dockerfile"
     reviewers:
@@ -132,7 +132,7 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     commit-message:
       prefix: "Github Actions"
     reviewers:
