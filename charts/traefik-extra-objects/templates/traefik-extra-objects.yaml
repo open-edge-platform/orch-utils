@@ -105,6 +105,9 @@ spec:
   headers:
     customRequestHeaders:
       Host: harbor-oci-core.orch-harbor.svc
+    customResponseHeaders:
+      X-Content-Type-Options: nosniff
+      X-Frame-Options: DENY
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
