@@ -55,6 +55,7 @@ func (Test) golang() error {
 		"--race",
 		"-randomize-all",
 		"-randomize-suites",
+		"--keep-going",
 		// "--cover",
 		// "-coverpkg=./...",
 		// "--keep-separate-coverprofiles",
