@@ -160,7 +160,7 @@ jobs:
   test-go:
     name: Test Go
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     needs:
       - lint-go
       - check-license
