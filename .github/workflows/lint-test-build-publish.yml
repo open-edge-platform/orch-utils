@@ -192,7 +192,7 @@ jobs:
         run: find . -name "go.mod" -execdir go mod download -x \;
 
       - name: Run tests
-        run: mage test:golangCI
+        run: mage test:golang
 
       - name: Copy all coverage reports to single directory
         if: always()
