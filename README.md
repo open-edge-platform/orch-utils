@@ -83,7 +83,7 @@ To build the project, run the [build](#build) command.
 
 ## Contribute
 
-To learn how to contribute to the project, see the [Contributor's Guide](/CONTRIBUTING.md).
+To learn how to contribute to the project, see the [Contributor's Guide](https://docs.openedgeplatform.intel.com/edge-manage-docs/main/developer_guide/contributor_guide/index.html).
 
 ## Community and Support
 
