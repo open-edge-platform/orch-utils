@@ -180,7 +180,6 @@ data:
     - tinkerbell-server.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - onboarding-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - onboarding-stream.{{ required "A valid certDomain entry required!" .Values.certDomain }}
-    - orchestrator-license.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - alerting-monitor.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - connect-gateway.{{ required "A valid certDomain entry required!" .Values.certDomain }}
 ---
