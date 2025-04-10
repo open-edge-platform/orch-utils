@@ -58,7 +58,7 @@ func (Test) golang() error {
 		// "--fail-on-pending",
 		// "--fail-on-empty",
 		// "--keep-going",
-		// "--cover",
+		"--cover",
 		// "-coverpkg="+strings.Join(skippedPackages, ","),
 		"--skip-package="+strings.Join(skippedPackages, ","),
 	)
