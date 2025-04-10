@@ -45,7 +45,7 @@ updates:
       - "/tenancy-datamodel/test"
       - "/tenancy-datamodel"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     commit-message:
       prefix: "go.mod"
     reviewers:
@@ -96,7 +96,7 @@ updates:
       - "/charts/squid-proxy"
       - "/charts/oci-secret"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     commit-message:
       prefix: "Helm charts"
     reviewers:
@@ -121,7 +121,7 @@ updates:
       - "/tenancy-datamodel"
       - "/squid-proxy"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     commit-message:
       prefix: "Dockerfile"
     reviewers:
@@ -132,7 +132,7 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     commit-message:
       prefix: "Github Actions"
     reviewers:
