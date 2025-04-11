@@ -418,7 +418,7 @@ spec:
         script-src 'self' ;
         frame-src 'self' ;
         style-src 'self'; img-src 'self' data:;
-        connect-src 'self' https://{{ required "A valid keycloak domain entry required!" .Values.keycloakMatchHost }};
+        connect-src 'self' {{ required "A valid connectCSP entry required!" (join " " .Values.connectCSPsAppOrch) }};
         upgrade-insecure-requests; block-all-mixed-content"
       Cross-Origin-Embedder-Policy: unsafe-none
       Cross-Origin-Opener-Policy: same-origin
