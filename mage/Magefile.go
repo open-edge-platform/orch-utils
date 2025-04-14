@@ -281,3 +281,8 @@ func (Clean) NexusAPIGateway() error {
 func (Build) OpenAPIGenerator() error {
 	return openAPIGeneratorBuild()
 }
+
+// Builds the OpenAPI-Generator container image.
+func ListContainers() error {
+	return listContainers()
+}

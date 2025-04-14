@@ -20,17 +20,48 @@ helm-list: ## List helm charts, tag format, and versions in YAML format
 helm-build: ## build all helm charts
 	mage chartsBuild
 
-DOCKER_DIRS=auth-service aws-sm-proxy cert-synchronizer keycloak-tenant-controller/images nexus/openapi-generator nexus/compiler nexus/compiler/builder nexus-api-gateway secrets squid-proxy tenancy-api-mapping tenancy-datamodel tenancy-manager token-fs
-
 docker-list: ## list all docker containers built by this repo
-	@echo "images:"
-	@for d in $(DOCKER_DIRS); do \
-		echo "  $$d:" ;\
-	  echo "    name: '$$d'" ;\
-	  echo "    version: ''" ;\
-	  echo "    gitTagPrefix: ''" ;\
-	  echo "    buildTarget: 'docker-build'" ;\
-	done
+	@mage listContainers
+
+# map container name to the mage build:... invocations
+docker-build-auth-service:
+	mage build:authService
+
+docker-build-aws-sm-proxy:
+	mage build:awsSmProxy
+
+docker-build-cert-synchronizer:
+	mage build:certSynchronizer
+
+docker-build-keycloak-tenant-controller:
+	mage build:keycloakTenantController
+
+docker-build-nexus-api-gw:
+	mage build:nexusAPIGateway
+
+docker-build-nexus/compiler:
+	mage build:nexusCompiler
+
+docker-build-nexus/openapi-generator:
+	mage build:openAPIGenerator
+
+docker-build-secrets-config:
+	mage build:secretsConfig
+
+docker-build-squid-proxy:
+	mage build:build:squidProxy
+
+docker-build-tenancy-api-remapping:
+	mage build:tenancyAPIMapping
+
+docker-build-tenancy-datamodel-init:
+	mage build:tenancyDatamodel
+
+docker-build-tenancy-manager:
+	mage build:tenancyManager
+
+docker-build-token-file-server:
+	mage build:tokenFS
 
 #### Help Target ####
 help: ## print help for each target
