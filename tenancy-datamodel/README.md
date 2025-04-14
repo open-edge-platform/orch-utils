@@ -18,7 +18,7 @@
 
 # Tenancy Datamodel Overview
 
-The structure of multitenancy datamodel is illustrated in the diagram below:
+The structure of the multitenancy datamodel is illustrated in the diagram below:
 
 ![Multi Tenancy Datamodel](image.png)
 
@@ -28,23 +28,30 @@ Note: This image is subject to change as updates to the tenancy datamodel may oc
 
 ## Get Started
 
-To define the datamodel, **Nexus** is used. Nexus is a powerful framework that simplifies the declaration of datamodel nodes and types using Golang syntax. It provides a clear and intuitive way to define how different entities within the multitenancy model are connected and interact with one another.
+To define the datamodel, **Nexus** is used. Nexus is a powerful framework that simplifies the declaration of
+datamodel nodes and types using Golang syntax. It provides a clear and intuitive way to define how different entities
+within the multitenancy model are connected and interact with one another.
 
 ## Develop
 
 - For detailed guidance on defining the DSL and understanding the purpose of each Nexus annotation, refer to the [DSL documentation](DSL_README.md).
 
-- Tenancy-Datamodel is developed in the **Go** language and is built as a Docker image, through a `Dockerfile` which is in `tenancy-datamodel` folder.
+- Tenancy-Datamodel is developed in the **Go** language and is built as a Docker image through a `Dockerfile` in
+  the `tenancy-datamodel` folder.
 
-- Tenancy-Datamodel has a corresponding Helm chart in `charts/tenancy-datamodel-init` folder. The CI integration for this repository will publish this Helm charts to the Edge Orchestrator Release Service OCI registry upon merge to `main` branch.
+- Tenancy-Datamodel has a corresponding Helm chart in the `charts/tenancy-datamodel-init` folder.
+  The CI integration for this repository will publish these Helm charts to
+  the Edge Orchestrator Release Service OCI registry upon merging to the `main` branch.
 
-- Tenancy-Datamodel-Init, when deployed to the Edge Orchestrator using this Helm chart, runs as a job to install the CRDs whose lifecycle is in turn managed by Argo CD.
+- Tenancy-Datamodel-Init, when deployed to the Edge Orchestrator using this Helm chart,
+  runs as a job to install the CRDs whose lifecycle is managed by Argo CD.
 
 ## Build
 
 Once the DSL has been defined, follow these steps to generate the necessary components of the datamodel:
 
 1. Run the following command in your terminal:
+
    ```bash
    make datamodel_build
    ```
@@ -54,17 +61,19 @@ Once the DSL has been defined, follow these steps to generate the necessary comp
    - [**CRD YAML files**](build/crds) with OpenAPI schema definitions for Kubernetes CRDs.
    - [**Go type definitions**](build/apis) for the CRDs.
    - [**Go client libraries**](build/nexus-client) for interacting with the CRDs.
-   - [**ClusterRoles**](build/clusterroles), which define the permissions required for managing the resources in a Kubernetes cluster.
+   - [**ClusterRoles**](build/clusterroles), which define the permissions required for managing the resources
+     in a Kubernetes cluster.
 
-2. Once the datamodel is built, review the generated files for changes. These may include updates to CRD definitions, Go type files, and other artifacts.
+2. Once the datamodel is built, review the generated files for changes.
+   These may include updates to CRD definitions, Go type files, and other artifacts.
 
-3. Commit the updated DSL and the build/* directory with the generated changes.
+3. Commit the updated DSL and the `build/*` directory with the generated changes.
 
 ## Upgrade
 
-Follow the below-given steps to upgrade the datamodel in the cluster:
+Follow the steps below to upgrade the datamodel in the cluster:
 
-1. Bring down the components dependent on the tenancy-datamodel.
+1. Scale down the components dependent on the tenancy-datamodel.
 
    For example:
 
@@ -72,7 +81,8 @@ Follow the below-given steps to upgrade the datamodel in the cluster:
    kubectl scale deploy nexus-api-gw -n orch-infra --replicas=0
    ```
 
-2. Delete the CRDs: If the CRDs are [backward incompatible](#backward-incompatibility), it is essential to complete this step before proceeding to Step 3 to avoid potential conflicts and ensure a clean update process.
+2. Delete the CRDs: If the CRDs are [backward incompatible](#backward-incompatibility), it is essential to complete
+   this step before proceeding to Step 3 to avoid potential conflicts and ensure a clean update process.
 
    Run the following command to delete the CRDs:
 
@@ -80,24 +90,25 @@ Follow the below-given steps to upgrade the datamodel in the cluster:
    kubectl get crds -o name | grep edge-orchestrator.intel.com | xargs kubectl delete
    ```
 
-3. Copy the desired manifest of the `tenancy-datamodel-init` job from Argo UI.
+3. Copy the desired manifest of the `tenancy-datamodel-init` job from the Argo UI.
 
    ![Datamodel Init Job](image-1.png)
 
-4. Update the image tag to the desired image version and kube apply the updated job.
+4. Update the image tag to the desired image version and apply the updated job.
 
    ```bash
    kubectl apply -f dm-job.yaml
    ```
 
-5. Follow the steps to retrigger the API remapping job in the argo UI.
-   - Navigate to the Applications tab in Argo UI.
+5. Follow the steps to retrigger the API remapping job in the Argo UI.
+   - Navigate to the Applications tab in the Argo UI.
    - Locate the tenancy-api-remapping job.
    - Click on Sync to retrigger the job.
 
-   Note: This step is crucial because both tenancy-datamodel-init and tenancy-api-remapping jobs are essential for the API Gateway to return to a running state.
+   Note: This step is crucial because both tenancy-datamodel-init and tenancy-api-remapping jobs are essential
+   for the API Gateway to return to a running state.
 
-6. Bring back the components.
+6. Scale up the components.
 
    For example:
 
@@ -109,21 +120,24 @@ By following these steps, you can ensure a smooth and efficient datamodel upgrad
 
 ### Backward Incompatibility
 
-Backward incompatibility happens when changes to the datamodel make it incompatible with previous versions. This can cause errors or failures in services that depend on the datamodel if they are not updated accordingly. Examples of backward-incompatible changes include:
+Backward incompatibility occurs when changes to the datamodel make it incompatible with previous versions.
+This can cause errors or failures in services that depend on the datamodel if they are not updated accordingly.
+Examples of backward-incompatible changes include:
 
-   - Removing existing fields or nodes.
-   - Changing the data type of a field.
-   - Renaming fields or nodes.
+- Removing existing fields or nodes.
+- Changing the data type of field.
+- Renaming fields or nodes.
 
-One way to detect backward incompatibility is to scan for the below-given log:
+One way to detect backward incompatibility is to scan for the following log:
 
-```
+```log
 time="2025-01-29T18:09:39Z" level=warning msg="CRD \"orgs.org.edge-orchestrator.intel.com\" is incompatible with the previous version"
 ```
 
 ## Contribute
 
-We welcome contributions from the community! To contribute, please open a pull request to have your changes reviewed and merged into the main.
+We welcome contributions from the community!
+To contribute, please open a pull request to have your changes reviewed and merged into the `main` branch.
 
 Additionally, ensure the following commands are successful:
 

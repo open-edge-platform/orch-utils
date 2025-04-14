@@ -16,9 +16,11 @@
  SPDX-License-Identifier: Apache-2.0
 -->
 
+# Overview
+
 Nexus DSL provides the framework and syntax for declaring Nexus datamodel nodes and types using Golang syntax.
 
-```
+```go
 /*  Section 1: Group Declaration */
 
 package gns                                                                       <--- API / Node group name
