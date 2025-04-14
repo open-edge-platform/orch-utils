@@ -482,7 +482,6 @@ func openAPIGeneratorBuild() error {
 }
 
 func listContainers() error {
-
 	fmt.Print("images:\n")
 
 	// images that use getChartAppVersion()
@@ -501,7 +500,6 @@ func listContainers() error {
 	}
 
 	for _, image := range images {
-
 		imagever, err := getChartAppVersion(image)
 		if err != nil {
 			return err
