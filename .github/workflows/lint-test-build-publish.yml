@@ -155,7 +155,17 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         shell: bash
         run: |
-          ./ci/scripts/version-tag.sh
+          pushd charts
+          for chart in *; do
+            echo $chart
+            if [ -d "$chart" ]; then
+              pushd "$chart"
+              name=$(yq .name Chart.yaml)
+              "$GITHUB_WORKSPACE"/ci/scripts/version-tag-param.sh "${name}/v"
+              popd
+            fi
+          done
+          popd
 
   test-go:
     name: Test Go
