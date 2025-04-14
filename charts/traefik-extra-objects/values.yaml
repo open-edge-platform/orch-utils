@@ -26,6 +26,8 @@ connectCSPs:
 # list of locations where the UI can load scripts from (required for UI extensions)
 scriptSources:
   - "https://app-service-proxy.domain"
+connectCSPsAppOrch:
+  - "https://keycloak.domain"
 clusterOrchNodeMatchHost: "cluster-orch-node.domain"
 logsNodeMatchHost: "logs-node.domain"
 metricsNodeMatchHost: "metrics-node.domain"

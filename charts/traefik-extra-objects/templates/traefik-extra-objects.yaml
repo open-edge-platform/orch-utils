@@ -400,6 +400,7 @@ spec:
       X-dtInjectedServlet: ""
       X-ruxit-JS-Agent: ""
 ---
+# Middleware for AppOrch App Service Proxy and VNC Proxy
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
@@ -416,10 +417,11 @@ spec:
         default-src 'self'; form-action 'self';
         object-src 'none'; frame-ancestors 'none';
         script-src 'self' ;
-        frame-src 'self' ;
+        frame-src 'self' {{ required "A valid connectCSPsAppOrch entry required!" (join " " .Values.connectCSPsAppOrch) }};
         style-src 'self'; img-src 'self' data:;
-        connect-src 'self' https://{{ required "A valid keycloak domain entry required!" .Values.keycloakMatchHost }};
+        connect-src 'self' {{ required "A valid connectCSPsAppOrch entry required!" (join " " .Values.connectCSPsAppOrch) }};
         upgrade-insecure-requests; block-all-mixed-content"
+      # Using unsafe-none for COEP until Keycloak supports CORP in 3.1
       Cross-Origin-Embedder-Policy: unsafe-none
       Cross-Origin-Opener-Policy: same-origin
       Cross-Origin-Resource-Policy: same-origin
