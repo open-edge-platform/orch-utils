@@ -155,7 +155,7 @@ jobs:
           token: ${{ secrets.SYS_ORCH_GITHUB }}
 
       - name: Run Version Tag
-        #if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           GITHUB_TOKEN: ${{ secrets.SYS_ORCH_GITHUB }}
         shell: bash
