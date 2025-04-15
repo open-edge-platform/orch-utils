@@ -39,11 +39,11 @@ within the multitenancy model are connected and interact with one another.
 - Tenancy-Datamodel is developed in the **Go** language and is built as a Docker image through a `Dockerfile` in
   the `tenancy-datamodel` folder.
 
-- Tenancy-Datamodel has a corresponding Helm chart in the `charts/tenancy-datamodel-init` folder.
+- Tenancy-Datamodel has a corresponding Helm chart in the `charts/tenancy-datamodel` folder.
   The CI integration for this repository will publish these Helm charts to
   the Edge Orchestrator Release Service OCI registry upon merging to the `main` branch.
 
-- Tenancy-Datamodel-Init, when deployed to the Edge Orchestrator using this Helm chart,
+- Tenancy-Datamodel, when deployed to the Edge Orchestrator using this Helm chart,
   runs as a job to install the CRDs whose lifecycle is managed by Argo CD.
 
 ## Build
@@ -90,7 +90,7 @@ Follow the steps below to upgrade the datamodel in the cluster:
    kubectl get crds -o name | grep edge-orchestrator.intel.com | xargs kubectl delete
    ```
 
-3. Copy the desired manifest of the `tenancy-datamodel-init` job from the Argo UI.
+3. Copy the desired manifest of the `tenancy-datamodel` job from the Argo UI.
 
    ![Datamodel Init Job](image-1.png)
 
@@ -100,12 +100,12 @@ Follow the steps below to upgrade the datamodel in the cluster:
    kubectl apply -f dm-job.yaml
    ```
 
-5. Follow the steps to retrigger the API remapping job in the Argo UI.
+5. Follow the steps to retrigger the API mapping job in the Argo UI.
    - Navigate to the Applications tab in the Argo UI.
-   - Locate the tenancy-api-remapping job.
+   - Locate the tenancy-api-mapping job.
    - Click on Sync to retrigger the job.
 
-   Note: This step is crucial because both tenancy-datamodel-init and tenancy-api-remapping jobs are essential
+   Note: This step is crucial because both tenancy-datamodel and tenancy-api-mapping jobs are essential
    for the API Gateway to return to a running state.
 
 6. Scale up the components.
