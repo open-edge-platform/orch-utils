@@ -13,8 +13,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/cache"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/common"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/cache"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/common"
 	baseconfigtenancycomv1 "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/config.edge-orchestrator.intel.com/v1"
 	baseruntimetenancycomv1 "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/runtime.edge-orchestrator.intel.com/v1"
 	basetenancytenancycomv1 "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/tenancy.edge-orchestrator.intel.com/v1"

@@ -8,7 +8,7 @@ package controllers
 import (
 	"context"
 
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/model"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/model"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"

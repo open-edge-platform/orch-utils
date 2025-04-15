@@ -11,8 +11,8 @@ import (
 
 	ginkgo "github.com/onsi/ginkgo/v2"
 	gomega "github.com/onsi/gomega"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/auth/authn"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/auth/authz"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/auth/authn"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/auth/authz"
 )
 
 var _ = ginkgo.Describe("Authorization", func() {

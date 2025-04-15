@@ -42,9 +42,9 @@ func tenancyManagerClean() error {
 
 func nexusAPIGatewayClean() error {
 	filesToDelete := []string{
-		"nexus-api-gateway/.gitconfig",
-		"nexus-api-gateway/.netrc",
-		"nexus-api-gateway/.ssh/",
+		"nexus-api-gw/.gitconfig",
+		"nexus-api-gw/.netrc",
+		"nexus-api-gw/.ssh/",
 	}
 
 	return deleteFiles(filesToDelete)

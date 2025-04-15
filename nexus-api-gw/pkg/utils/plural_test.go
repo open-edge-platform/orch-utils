@@ -8,7 +8,7 @@ package utils_test
 import (
 	"testing"
 
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/utils"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/utils"
 )
 
 func TestPlural(t *testing.T) {

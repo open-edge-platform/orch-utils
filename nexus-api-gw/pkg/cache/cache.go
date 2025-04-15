@@ -8,7 +8,7 @@ package cache
 import (
 	"sync"
 
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/common"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/common"
 	amcV1 "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/apimappingconfig.edge-orchestrator.intel.com/v1"
 )
 

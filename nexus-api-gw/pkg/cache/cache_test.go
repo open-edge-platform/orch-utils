@@ -8,8 +8,8 @@ package cache_test
 import (
 	ginkgo "github.com/onsi/ginkgo/v2"
 	gomega "github.com/onsi/gomega"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/cache"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/common"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/cache"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/common"
 	amcV1 "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/apimappingconfig.edge-orchestrator.intel.com/v1"
 )
 

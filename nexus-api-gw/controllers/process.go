@@ -8,7 +8,7 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/model"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/model"
 	"github.com/vmware-tanzu/graph-framework-for-microservices/nexus/nexus"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	"k8s.io/apimachinery/pkg/util/json"

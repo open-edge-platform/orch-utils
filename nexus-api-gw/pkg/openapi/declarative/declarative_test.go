@@ -11,9 +11,9 @@ import (
 
 	ginkgo "github.com/onsi/ginkgo/v2"
 	gomega "github.com/onsi/gomega"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/config"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/openapi/declarative"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/server/echoserver"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/config"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/openapi/declarative"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/server/echoserver"
 	nexusClient "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/nexus-client"
 	"k8s.io/client-go/kubernetes"
 )

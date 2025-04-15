@@ -90,7 +90,7 @@ Another way to try out Nexus API Gateway is by using the Open Edge Platform depl
 ## Develop
 
 Nexus API Gateway is developed in the **Go** language and is built as a Docker image through a `Dockerfile` in
-the `nexus-api-gateway` folder. The CI integration for this repository will publish the container image to
+the `nexus-api-gw` folder. The CI integration for this repository will publish the container image to
 the Edge Orchestrator Release Service OCI registry upon merging to the `main` branch.
 
 Nexus API Gateway has a corresponding Helm chart in the `charts/nexus-api-gw` folder.
@@ -155,7 +155,7 @@ The following is a list of makefile targets that support developer activities:
 - `coverage` to run the unit test coverage
 - `build` to build the Nexus API Gateway Docker container
 - `release` to publish the built Nexus API Gateway Docker container to a pre-defined Docker container registry.
-  This registry is set in an environment variable (`API_GW_DOCKER_IMAGE_OEP`) in `nexus-api-gateway/Makefile`.
+  This registry is set in an environment variable (`API_GW_DOCKER_IMAGE_OEP`) in `nexus-api-gw/Makefile`.
 
 ## Community and Support
 

@@ -12,7 +12,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/server/echoserver"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/server/echoserver"
 )
 
 var _ = ginkgo.Describe("Swagger handler tests", ginkgo.Ordered, func() {

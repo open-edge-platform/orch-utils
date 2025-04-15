@@ -9,9 +9,9 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/auth/authn"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/auth/authz"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/common"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/auth/authn"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/auth/authz"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/common"
 	tenancy_nexus_client "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/nexus-client"
 	"github.com/rs/zerolog/log"
 )

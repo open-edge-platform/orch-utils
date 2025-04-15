@@ -17,8 +17,8 @@ import (
 	"testing"
 
 	"github.com/labstack/echo/v4"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/apiremap"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/proxy"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/apiremap"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/proxy"
 	"github.com/stretchr/testify/assert"
 )
 

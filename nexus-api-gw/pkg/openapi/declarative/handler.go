@@ -15,7 +15,7 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/config"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/config"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 

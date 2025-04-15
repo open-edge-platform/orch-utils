@@ -12,8 +12,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/cache"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/common"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/cache"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/common"
 	amcV1 "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/apimappingconfig.edge-orchestrator.intel.com/v1"
 	tenancy_nexus_client "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/nexus-client"
 

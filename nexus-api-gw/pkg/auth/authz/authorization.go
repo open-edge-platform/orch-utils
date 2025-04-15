@@ -17,7 +17,7 @@ import (
 	"testing"
 
 	"github.com/labstack/echo/v4"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/auth/authn"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/auth/authn"
 	"github.com/open-policy-agent/opa/rego"
 
 	"github.com/open-edge-platform/infra-core/inventory/v2/pkg/logging"

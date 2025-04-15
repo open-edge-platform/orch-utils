@@ -8,7 +8,7 @@ package model_test
 import (
 	ginkgo "github.com/onsi/ginkgo/v2"
 	gomega "github.com/onsi/gomega"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/model"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/model"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 

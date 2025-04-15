@@ -16,8 +16,8 @@ import (
 
 	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/cache"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/reconciler"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/cache"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/reconciler"
 	tenancy_nexus_client "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/nexus-client"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-module github.com/open-edge-platform/orch-utils/nexus-api-gateway
+module github.com/open-edge-platform/orch-utils/nexus-api-gw
 
 go 1.24.1
 

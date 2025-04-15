@@ -271,7 +271,7 @@ api-gw.publish:
 publishall: api-gw.publish
 
 .PHONY: release
-release: docker.publish.oep ## Publishes the built docker container to pre-defined docker container registry. This registry is set in a env variable (API_GW_DOCKER_IMAGE_OEP) in nexus-api-gateway/Makefile
+release: docker.publish.oep ## Publishes the built docker container to pre-defined docker container registry. This registry is set in a env variable (API_GW_DOCKER_IMAGE_OEP) in nexus-api-gw/Makefile
 
 .PHONY: docker.publish.oep
 docker.publish.oep:## tag and push Docker image

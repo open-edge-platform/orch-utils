@@ -189,27 +189,27 @@ linters-settings:
           - github.com/open-edge-platform/infra-core/inventory/v2/pkg/auditing
           - gopkg.in/yaml.v2
           - golang.org/x/crypto/sha3
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/model
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/controllers
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/cache
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/client
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/common
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/config
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/openapi/api
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/server/echoserver
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/model
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/controllers
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/cache
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/client
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/common
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/config
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/openapi/api
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/server/echoserver
           - github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/nexus-client
           - github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/apimappingconfig.edge-orchestrator.intel.com/v1
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/auth/authn
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/auth/authz
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/reconciler
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/auth/authn
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/auth/authz
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/reconciler
           - github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/nexus-client
           - github.com/open-edge-platform/orch-library/go/pkg/auth
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/utils
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/openapi/declarative
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/apiremap
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/utils
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/openapi/declarative
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/apiremap
           - github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/config.edge-orchestrator.intel.com/v1
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/auth
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/proxy
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/auth
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/proxy
           - github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/runtime.edge-orchestrator.intel.com/v1
           - github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/tenancy.edge-orchestrator.intel.com/v1
           - github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/org.edge-orchestrator.intel.com/v1
@@ -255,23 +255,23 @@ linters-settings:
           - github.com/open-edge-platform/infra-core/inventory/v2/pkg/auditing
           - gopkg.in/yaml.v2
           - golang.org/x/crypto/sha3
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/model
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/controllers
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/cache
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/apiremap
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/model
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/controllers
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/cache
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/apiremap
           - github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/apimappingconfig.edge-orchestrator.intel.com/v1
           - github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/nexus-client
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/auth/authn
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/auth/authz
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/common
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/config
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/openapi/api
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/openapi/combined
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/openapi/declarative
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/server/echoserver
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/proxy
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/client
-          - github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/utils
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/auth/authn
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/auth/authz
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/common
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/config
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/openapi/api
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/openapi/combined
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/openapi/declarative
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/server/echoserver
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/proxy
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/client
+          - github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/utils
         deny:
 issues:
   max-issues-per-linter: 0

@@ -10,7 +10,7 @@ import (
 
 	ginkgo "github.com/onsi/ginkgo/v2"
 	gomega "github.com/onsi/gomega"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/cache"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/cache"
 )
 
 func TestApiremap(t *testing.T) {

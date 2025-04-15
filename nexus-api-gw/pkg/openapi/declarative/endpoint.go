@@ -13,7 +13,7 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/labstack/echo/v4"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/utils"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/utils"
 )
 
 type EndpointContext struct {

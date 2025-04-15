@@ -57,29 +57,29 @@ tenancy-manager/.idea/
 tenancy-manager/build/
 tenancy-manager/venv*
 
-# nexus-api-gateway
-nexus-api-gateway/build/
-nexus-api-gateway/.gitconfig
-nexus-api-gateway/.netrc
-nexus-api-gateway/.ssh
-nexus-api-gateway/api/
-nexus-api-gateway/coverage.out
-nexus-api-gateway/report.json
-nexus-api-gateway/vendor/
-nexus-api-gateway/.idea/
-nexus-api-gateway/.idea
-nexus-api-gateway/.vscode
-nexus-api-gateway/.vscode/*
+# nexus-api-gw
+nexus-api-gw/build/
+nexus-api-gw/.gitconfig
+nexus-api-gw/.netrc
+nexus-api-gw/.ssh
+nexus-api-gw/api/
+nexus-api-gw/coverage.out
+nexus-api-gw/report.json
+nexus-api-gw/vendor/
+nexus-api-gw/.idea/
+nexus-api-gw/.idea
+nexus-api-gw/.vscode
+nexus-api-gw/.vscode/*
 # Ignore the symlink to build directory used in helm workflow
-nexus-api-gateway/helm-chart/crds
-nexus-api-gateway/.history/
-nexus-api-gateway/.gitignore
-nexus-api-gateway/venv_*
-nexus-api-gateway/.vscode/settings.json
-nexus-api-gateway/bin/api-gw
-nexus-api-gateway/applications.development.nexus.api-gw
-nexus-api-gateway/*.coverprofile
-nexus-api-gateway/pkg/openapi/api/api.coverprofile
-nexus-api-gateway/*venv
+nexus-api-gw/helm-chart/crds
+nexus-api-gw/.history/
+nexus-api-gw/.gitignore
+nexus-api-gw/venv_*
+nexus-api-gw/.vscode/settings.json
+nexus-api-gw/bin/api-gw
+nexus-api-gw/applications.development.nexus.api-gw
+nexus-api-gw/*.coverprofile
+nexus-api-gw/pkg/openapi/api/api.coverprofile
+nexus-api-gw/*venv
 
 *.test

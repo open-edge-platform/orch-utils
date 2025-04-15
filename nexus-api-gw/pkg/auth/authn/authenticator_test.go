@@ -16,7 +16,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
-	"github.com/open-edge-platform/orch-utils/nexus-api-gateway/pkg/auth/authn"
+	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/auth/authn"
 	tenancy_nexus_client "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/nexus-client"
 	"github.com/stretchr/testify/assert"
 )
