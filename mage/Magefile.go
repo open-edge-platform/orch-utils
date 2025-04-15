@@ -179,7 +179,7 @@ func (Push) AwsSmProxy() error {
 
 // Push the aws-sm-proxy container image to the registry.
 func (Push) TokenFs() error {
-	return pushImage("token-fs", "token-file-server")
+	return pushImage("token-fs", "token-fs")
 }
 
 // Push the auth-service container image to the registry.

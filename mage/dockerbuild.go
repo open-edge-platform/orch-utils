@@ -77,7 +77,7 @@ func tokenFSBuild() error {
 		return fmt.Errorf("GITHUB_TOKEN must be set")
 	}
 
-	appVersion, err := getChartAppVersion("token-file-server")
+	appVersion, err := getChartAppVersion("token-fs")
 	if err != nil {
 		return err
 	}
@@ -496,7 +496,7 @@ func listContainers() error {
 		"tenancy-api-mapping",
 		"tenancy-datamodel",
 		"tenancy-manager",
-		"token-file-server",
+		"token-fs",
 	}
 
 	for _, image := range images {
