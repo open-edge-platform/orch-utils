@@ -493,8 +493,8 @@ func listContainers() error {
 		"nexus-api-gw",
 		"secrets-config",
 		"squid-proxy",
-		"tenancy-api-remapping",
-		"tenancy-datamodel-init",
+		"tenancy-api-mapping",
+		"tenancy-datamodel",
 		"tenancy-manager",
 		"token-file-server",
 	}
