@@ -18,7 +18,7 @@ spec:
         - name: validate-jwt
       priority: 20
       services:
-        - name: token-file-server
+        - name: {{ include "token-file-server.fullname" . }}
           port: 8080
           scheme: http
           namespace: orch-secret
