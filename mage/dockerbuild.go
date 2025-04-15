@@ -480,3 +480,55 @@ func openAPIGeneratorBuild() error {
 		"./nexus",
 	)
 }
+
+func listContainers() error {
+	fmt.Print("images:\n")
+
+	// images that use getChartAppVersion()
+	images := []string{
+		"auth-service",
+		"aws-sm-proxy",
+		"cert-synchronizer",
+		"keycloak-tenant-controller",
+		"nexus-api-gw",
+		"secrets-config",
+		"squid-proxy",
+		"tenancy-api-remapping",
+		"tenancy-datamodel-init",
+		"tenancy-manager",
+		"token-file-server",
+	}
+
+	for _, image := range images {
+		imagever, err := getChartAppVersion(image)
+		if err != nil {
+			return err
+		}
+
+		fmt.Printf("  %s:\n", image)
+		fmt.Printf("    tag: '%s'\n", OpenEdgePlatformContainerRegistry+"/"+image+":"+imagever)
+		fmt.Printf("    version: '%s'\n", imagever)
+		fmt.Printf("    gitTagPrefix: '%s/v'\n", image)
+		fmt.Printf("    buildTarget: 'docker-build-%s'\n", image)
+	}
+
+	// nexus images, which use a getNexusCompilerTag() for versioning
+
+	nver := getNexusCompilerTag()
+
+	nimages := []string{
+		"nexus-compiler",
+		"nexus-compiler/builder",
+		"nexus/openapi-generator",
+	}
+
+	for _, nimage := range nimages {
+		fmt.Printf("  %s:\n", nimage)
+		fmt.Printf("    tag: '%s'\n", OpenEdgePlatformContainerRegistry+"/"+nimage+":"+nver)
+		fmt.Printf("    version: '%s'\n", nver)
+		fmt.Printf("    gitTagPrefix: '%s/v'\n", nimage)
+		fmt.Printf("    buildTarget: 'docker-build-%s'\n", nimage)
+	}
+
+	return nil
+}
