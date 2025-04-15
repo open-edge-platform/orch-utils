@@ -9,8 +9,8 @@
 
 rootFolder: "/data/"
 secretName: "release-service-token"
-releaseMatchHost:
-orchSecretName:
+releaseMatchHost: "release.kind.internal"
+orchSecretName: "tls-orch"
 jwksURL: "http://platform-keycloak.orch-platform.svc:8080/realms/master/protocol/openid-connect/certs"
 emptyReleaseServiceToken: "false"
 
