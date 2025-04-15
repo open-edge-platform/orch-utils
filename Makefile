@@ -51,16 +51,16 @@ docker-build-secrets-config:
 docker-build-squid-proxy:
 	mage build:build:squidProxy
 
-docker-build-tenancy-api-remapping:
+docker-build-tenancy-api-mapping:
 	mage build:tenancyAPIMapping
 
-docker-build-tenancy-datamodel-init:
+docker-build-tenancy-datamodel:
 	mage build:tenancyDatamodel
 
 docker-build-tenancy-manager:
 	mage build:tenancyManager
 
-docker-build-token-file-server:
+docker-build-token-fs:
 	mage build:tokenFS
 
 #### Help Target ####
