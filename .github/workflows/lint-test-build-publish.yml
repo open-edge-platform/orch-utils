@@ -142,7 +142,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
-        fetch-tags: true
+        with:
+          fetch-tags: true
 
       - name: Checkout action repository
         uses: actions/checkout@v4.2.2
