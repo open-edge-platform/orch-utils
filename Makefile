@@ -49,7 +49,7 @@ docker-build-secrets-config:
 	mage build:secretsConfig
 
 docker-build-squid-proxy:
-	mage build:build:squidProxy
+	mage build:squidProxy
 
 docker-build-tenancy-api-mapping:
 	mage build:tenancyAPIMapping
