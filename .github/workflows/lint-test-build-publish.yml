@@ -157,7 +157,7 @@ jobs:
       # TODO: This is a temporary solution for buildall script
       # We need to find a long term solution that leverages orch-ci workflow
       - name: Run Version Tag
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           GITHUB_TOKEN: ${{ secrets.SYS_ORCH_GITHUB }}
         shell: bash
