@@ -23,8 +23,6 @@ Key features include:
 
 See the [Documentation](https://docs.openedgeplatform.intel.com/edge-manage-docs/main/index.html) to get started using orch-utils.
 
-TODO: Use Make targets before releasing source code.
-
 ### Lint
 
 ```sh
