@@ -115,4 +115,4 @@ For support, start with [Troubleshooting](https://github.com/intel) or [contact 
 
 ## License
 
-Edge Manageability Framework is licensed under [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+Edge Manageability Framework is licensed under [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0).
