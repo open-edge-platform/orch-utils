@@ -482,9 +482,18 @@ func openAPIGeneratorBuild() error {
 }
 
 func listContainers() error {
+	if err := listTaggedContainers(); err != nil {
+		return err
+	}
+	if err := listNexusContainers(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func listTaggedContainers() error {
 	fmt.Print("images:\n")
 
-	// images that use getChartAppVersion()
 	images := []string{
 		"auth-service",
 		"aws-sm-proxy",
@@ -512,8 +521,10 @@ func listContainers() error {
 		fmt.Printf("    buildTarget: 'docker-build-%s'\n", image)
 	}
 
-	// nexus images, which use a getNexusCompilerTag() for versioning
+	return nil
+}
 
+func listNexusContainers() error {
 	nver := getNexusCompilerTag()
 
 	nimages := []string{
