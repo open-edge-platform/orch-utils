@@ -13,7 +13,7 @@ helm-list: ## List helm charts, tag format, and versions in YAML format
     cname=$$(grep "^name:" "charts/$$d/Chart.yaml" | cut -d " " -f 2) ;\
     echo "  $$cname:" ;\
     echo -n "    "; grep "^version" "charts/$$d/Chart.yaml"  ;\
-    echo "    gitTagPrefix: '$$d/v'" ;\
+    echo "    gitTagPrefix: 'chart/$$d/v'" ;\
     echo "    outDir: 'charts/$$d/build'" ;\
   done
 
