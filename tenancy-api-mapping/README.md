@@ -39,7 +39,7 @@ These CRs are expected to be created/updated only at the time of install or upgr
 Install Tenancy API Mapping.
 
 ```shell
-helm install -n orch-iam --create-namespace charts/tenancy-api-remapping
+helm install -n orch-iam --create-namespace charts/tenancy-api-mapping
 ```
 
 Another way to try out Tenancy API Mapping is by using the Open Edge Platform Deployment.
@@ -50,7 +50,7 @@ Tenancy API Mapping is developed in the **Go** language and is built as a Docker
 in the `tenancy-api-mapping` folder. The CI integration for this repository will publish the container
 image to the Edge Orchestrator Release Service OCI registry upon merging to the `main` branch.
 
-Tenancy API Mapping has a corresponding Helm chart in the `charts/tenancy-api-remapping` folder. The CI integration for
+Tenancy API Mapping has a corresponding Helm chart in the `charts/tenancy-api-mapping` folder. The CI integration for
 this repository will publish this Helm chart to the Edge Orchestrator Release Service OCI registry upon
 merging to the `main` branch. Tenancy API Mapping is deployed to the Edge Orchestrator using this Helm chart,
 whose lifecycle is managed by Argo CD (see [Foundational Platform]).
@@ -322,12 +322,12 @@ Commit the following changes to the tool's Git repository:
 
 To propagate the changes:
 
-1. Update the relevant version in the `Chart.yaml` file in the 'orch-utils/tenancy-api-mapping' folder for 'tenancy-api-remapping'.
-   <https://github.com/open-edge-platform/orch-utils/blob/ae194035d5e607c7a8d3ee9e6329ce4a01e8b73b/charts/tenancy-api-remapping/Chart.yaml#L10>
-2. Increment the version for the 'orch-utils/tenancy-api-remapping' Helm chart.
-   <https://github.com/open-edge-platform/orch-utils/blob/ae194035d5e607c7a8d3ee9e6329ce4a01e8b73b/charts/tenancy-api-remapping/Chart.yaml#L09>
+1. Update the relevant version in the `Chart.yaml` file in the 'orch-utils/tenancy-api-mapping' folder for 'tenancy-api-mapping'.
+   <https://github.com/open-edge-platform/orch-utils/blob/main/charts/tenancy-api-mapping/Chart.yaml#L10>
+2. Increment the version for the 'orch-utils/tenancy-api-mapping' Helm chart.
+   <https://github.com/open-edge-platform/orch-utils/blob/main/charts/tenancy-api-mapping/Chart.yaml#L09>
 
-3. After merging, use this 'orch-utils/tenancy-api-remapping' chart version in the Open Edge Platform installation.
+3. After merging, use this 'orch-utils/tenancy-api-mapping' chart version in the Open Edge Platform installation.
 
 ### Next Steps
 

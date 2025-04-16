@@ -77,7 +77,7 @@ func tokenFSBuild() error {
 		return fmt.Errorf("GITHUB_TOKEN must be set")
 	}
 
-	appVersion, err := getChartAppVersion("token-file-server")
+	appVersion, err := getChartAppVersion("token-fs")
 	if err != nil {
 		return err
 	}
@@ -306,7 +306,7 @@ func tenancyDatamodelBuild() error {
 		return err
 	}
 
-	appVersion, err := getChartAppVersion("tenancy-datamodel-init")
+	appVersion, err := getChartAppVersion(projectDir)
 	if err != nil {
 		return err
 	}
@@ -349,7 +349,7 @@ func tenancyAPIMappingBuild() error {
 		_ = sh.RunV("cp", "-r", filepath.Join(homeDir, dir), filepath.Join(projectDir, dir))
 	}
 
-	appVersion, err := getChartAppVersion("tenancy-api-remapping")
+	appVersion, err := getChartAppVersion(projectDir)
 	if err != nil {
 		return err
 	}
@@ -390,7 +390,7 @@ func tenancyManagerBuild() error {
 		_ = sh.RunV("cp", "-r", filepath.Join(homeDir, dir), filepath.Join(projectDir, dir))
 	}
 
-	appVersion, err := getChartAppVersion("tenancy-manager")
+	appVersion, err := getChartAppVersion(projectDir)
 	if err != nil {
 		return err
 	}
@@ -411,7 +411,7 @@ func nexusAPIGatewayBuild() error {
 	// some errors below are deliberately ignored to suppress “file already/doesn’t” exist errors
 	// Mage uses %v when formatting errors, so they cannot be unwrapped and handled on a case by case
 
-	projectDir := "nexus-api-gateway"
+	projectDir := "nexus-api-gw"
 	componentName := "api-gw"
 	homeDir := os.Getenv("HOME")
 
@@ -420,7 +420,7 @@ func nexusAPIGatewayBuild() error {
 
 	mg.Deps(nexusAPIGatewayClean)
 
-	appVersion, err := getChartAppVersion("nexus-api-gw")
+	appVersion, err := getChartAppVersion(projectDir)
 	if err != nil {
 		return err
 	}
@@ -479,4 +479,56 @@ func openAPIGeneratorBuild() error {
 		"--file", filepath.Join("nexus", "openapi-generator", "Dockerfile"),
 		"./nexus",
 	)
+}
+
+func listContainers() error {
+	fmt.Print("images:\n")
+
+	// images that use getChartAppVersion()
+	images := []string{
+		"auth-service",
+		"aws-sm-proxy",
+		"cert-synchronizer",
+		"keycloak-tenant-controller",
+		"nexus-api-gw",
+		"secrets-config",
+		"squid-proxy",
+		"tenancy-api-mapping",
+		"tenancy-datamodel",
+		"tenancy-manager",
+		"token-fs",
+	}
+
+	for _, image := range images {
+		imagever, err := getChartAppVersion(image)
+		if err != nil {
+			return err
+		}
+
+		fmt.Printf("  %s:\n", image)
+		fmt.Printf("    tag: '%s'\n", OpenEdgePlatformContainerRegistry+"/"+image+":"+imagever)
+		fmt.Printf("    version: '%s'\n", imagever)
+		fmt.Printf("    gitTagPrefix: '%s/v'\n", image)
+		fmt.Printf("    buildTarget: 'docker-build-%s'\n", image)
+	}
+
+	// nexus images, which use a getNexusCompilerTag() for versioning
+
+	nver := getNexusCompilerTag()
+
+	nimages := []string{
+		"nexus-compiler",
+		"nexus-compiler/builder",
+		"nexus/openapi-generator",
+	}
+
+	for _, nimage := range nimages {
+		fmt.Printf("  %s:\n", nimage)
+		fmt.Printf("    tag: '%s'\n", OpenEdgePlatformContainerRegistry+"/"+nimage+":"+nver)
+		fmt.Printf("    version: '%s'\n", nver)
+		fmt.Printf("    gitTagPrefix: '%s/v'\n", nimage)
+		fmt.Printf("    buildTarget: 'docker-build-%s'\n", nimage)
+	}
+
+	return nil
 }

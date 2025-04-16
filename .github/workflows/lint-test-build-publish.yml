@@ -142,6 +142,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
+        with:
+          fetch-tags: true
+          fetch-depth: 0
 
       - name: Checkout action repository
         uses: actions/checkout@v4.2.2
@@ -153,9 +156,21 @@ jobs:
 
       - name: Run Version Tag
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GITHUB_TOKEN: ${{ secrets.SYS_ORCH_GITHUB }}
         shell: bash
         run: |
-          ./ci/scripts/version-tag.sh
+          pushd charts
+          for chart in *; do
+            echo $chart
+            if [ -d "$chart" ]; then
+              pushd "$chart"
+              name=$(yq .name Chart.yaml)
+              "$GITHUB_WORKSPACE"/ci/scripts/version-tag-param.sh "${name}/v"
+              popd
+            fi
+          done
+          popd
 
   test-go:
     name: Test Go
