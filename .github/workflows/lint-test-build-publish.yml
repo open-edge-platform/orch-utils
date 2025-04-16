@@ -176,19 +176,7 @@ jobs:
           popd
 
           # Tag the containers
-          containers=(
-            auth-service
-            aws-sm-proxy
-            cert-synchronizer
-            keycloak-tenant-controller
-            nexus-api-gw
-            secrets-config
-            squid-proxy
-            tenancy-api-mapping
-            tenancy-manager
-            tenancy-datamodel
-            token-fs
-          )
+          containers=( $(mage listTaggedContainers | grep -E '^  [^ ]+' | tr -d ' :') )
           for container in "${containers[@]}"; do
             version=$(yq .appVersion charts/${container}/Chart.yaml)
             git tag "${container}/v${version}"
