@@ -184,7 +184,7 @@ jobs:
             version=$(yq .appVersion charts/${container}/Chart.yaml)
             tag="${container}/v${version}"
             if git ls-remote --exit-code --tags origin $tag > /dev/null; then
-              echo "Tag ${container}/v${version} already exists in remote, skipping."
+              echo "Tag $tag already exists in remote, skipping."
             else
               git tag $tag
               git push origin $tag
