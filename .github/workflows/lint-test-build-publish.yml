@@ -154,6 +154,9 @@ jobs:
           ref: main
           token: ${{ secrets.SYS_ORCH_GITHUB }}
 
+      - name: Setup asdf and install dependencies
+        uses: ./.github/actions/setup-asdf
+
       # TODO: This is a temporary solution for buildall script
       # We need to find a long term solution that leverages orch-ci workflow
       - name: Run Version Tag
