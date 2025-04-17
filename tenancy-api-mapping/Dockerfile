@@ -6,8 +6,6 @@ FROM golang:1.24.2-bullseye AS builder
 
 COPY cmd/jobapp /app
 COPY go.mod /app/go.mod
-COPY .gitconfig .netrc .ssh /root/
-COPY .netrc /root
 
 RUN mkdir -p /mnt/shared/openapispecs
 
@@ -23,6 +21,7 @@ FROM gcr.io/distroless/static-debian12:nonroot
 USER nobody
 COPY apimappingconfigcrs /apimappingconfigcrs
 COPY openapispecs /openapispecs
+COPY vendor/ /go/src/github.com/open-edge-platform/orch-utils/tenancy-api-mapping/vendor/
 
 COPY --from=builder /app/bin/jobapp /usr/local/bin/jobapp
 COPY --from=builder /mnt/shared/openapispecs /mnt/shared/openapispecs

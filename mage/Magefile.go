@@ -258,21 +258,6 @@ func (t Test) Golang() error {
 // Namespace contains clean targets.
 type Clean mg.Namespace
 
-// Cleans the Tenancy API Mapping build environment.
-func (Clean) TenancyAPIMapping() error {
-	return tenancyAPIMappingClean()
-}
-
-// Cleans the Tenancy Manager build environment.
-func (Clean) TenancyManager() error {
-	return tenancyManagerClean()
-}
-
-// Cleans the Nexus API Gateway build environment.
-func (Clean) NexusAPIGateway() error {
-	return nexusAPIGatewayClean()
-}
-
 // Builds the OpenAPI-Generator container image.
 func (Build) OpenAPIGenerator() error {
 	return openAPIGeneratorBuild()
