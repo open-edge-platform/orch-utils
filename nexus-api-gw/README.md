@@ -118,7 +118,7 @@ The basic workflow to make changes to the code, verify those changes, and create
 
 1. Run linters with the `make lint` command.
 
-   NOTE: As of now, `make lint` command return errors. This will be fixed soon.
+   NOTE: As of now, `make lint` command returns errors. This will be fixed soon.
 
 2. Run the unit tests with the `make test` command.
 
