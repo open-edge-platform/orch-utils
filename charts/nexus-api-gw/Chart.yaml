@@ -6,8 +6,8 @@ apiVersion: v2
 name: nexus-api-gw
 description: Multi Tenancy HTTP API GW
 type: application
-version: 0.1.11
-appVersion: "1.1.4"
+version: 0.1.12
+appVersion: "1.1.5"
 annotations: {}
 home: tenancy-iam.intel.com
 maintainers:
