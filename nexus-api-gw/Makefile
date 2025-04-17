@@ -227,19 +227,6 @@ coverage: test ## Runs unit test coverage
 	${GOCMD_TEST} tool cover -html=${BUILD_DIR}/coverage.out -o ${BUILD_DIR}/coverage.html
 	${GOCMD_TEST} tool cover -func ${BUILD_DIR}/coverage.out -o ${BUILD_DIR}/function_coverage.log
 
-.PHONY: cleanbuildflag 
-cleanbuildflag:
-	@rm -f .gitconfig
-	@rm -f .netrc
-	@rm -rf .ssh
-
-.PHONY: linkbuildflag 
-linkbuildflag:
-	touch .gitconfig .netrc
-	mkdir -p .ssh
-	cp ${HOME}/.gitconfig . || true
-	cp ${HOME}/.netrc . || true
-	cp -r ${HOME}/.ssh .ssh || true
 
 ##@ Build
 #
@@ -249,7 +236,8 @@ linkbuildflag:
 # Example: DOCKER_REGISTRY=822995803632.dkr.ecr.us-west-2.amazonaws.com TAG=letstest make api-gw.build
 #
 .PHONY: api-gw.build
-api-gw.build: cleanbuildflag linkbuildflag
+api-gw.build:
+	go mod vendor
 	docker build --build-arg API_GW_COMPONENT_NAME=${API_GW_COMPONENT_NAME} --build-arg HTTP_PROXY=${http_proxy} --build-arg HTTPS_PROXY=${https_proxy} --build-arg FTP_PROXY=${ftp_proxy} --build-arg SOCKS_PROXY=${socks_proxy} --build-arg NO_PROXY=${no_proxy} -t ${API_GW_DOCKER_IMAGE} -f Dockerfile .
 
 .PHONY: buildall
@@ -259,7 +247,8 @@ buildall: api-gw.build
 build: go-build api-gw.build-oep  ## Creates the docker container
 
 .PHONY: api-gw.build-oep
-api-gw.build-oep: cleanbuildflag linkbuildflag
+api-gw.build-oep:
+	go mod vendor
 	docker build --build-arg API_GW_COMPONENT_NAME=${API_GW_COMPONENT_NAME} --build-arg HTTP_PROXY=${http_proxy} --build-arg HTTPS_PROXY=${https_proxy} --build-arg FTP_PROXY=${ftp_proxy} --build-arg SOCKS_PROXY=${socks_proxy} --build-arg NO_PROXY=${no_proxy} -t ${API_GW_DOCKER_IMAGE_OEP} -f Dockerfile .
 
 ##@ Publish
