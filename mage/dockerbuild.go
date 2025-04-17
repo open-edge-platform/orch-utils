@@ -354,6 +354,11 @@ func tenancyAPIMappingBuild() error {
 		return err
 	}
 
+	// run go mod vendor in project directory
+	if err := sh.RunV("sh", "-c", fmt.Sprintf("cd %s && go mod vendor", projectDir)); err != nil {
+		return err
+	}
+
 	return sh.RunV(
 		"docker",
 		"build",
@@ -392,6 +397,11 @@ func tenancyManagerBuild() error {
 
 	appVersion, err := getChartAppVersion(projectDir)
 	if err != nil {
+		return err
+	}
+
+	// run go mod vendor in project directory
+	if err := sh.RunV("sh", "-c", fmt.Sprintf("cd %s && go mod vendor", projectDir)); err != nil {
 		return err
 	}
 
@@ -435,6 +445,11 @@ func nexusAPIGatewayBuild() error {
 		// deliberately ignored errors
 		_ = sh.RunV("mkdir", "-p", filepath.Join(projectDir, dir))
 		_ = sh.RunV("cp", "-r", filepath.Join(homeDir, dir), filepath.Join(projectDir, dir))
+	}
+
+	// run go mod vendor in project directory
+	if err := sh.RunV("sh", "-c", fmt.Sprintf("cd %s && go mod vendor", projectDir)); err != nil {
+		return err
 	}
 
 	return sh.RunV(
