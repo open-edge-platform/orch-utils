@@ -102,7 +102,7 @@ make lint
 make license
 make build
 ```
-NOTE: As of now, `make lint` command return errors. This will be fixed soon.
+NOTE: As of now, `make lint` command returns errors. This will be fixed soon.
 
 You can use `help` to see a list of makefile targets.
 The following is a list of makefile targets that support developer activities:
