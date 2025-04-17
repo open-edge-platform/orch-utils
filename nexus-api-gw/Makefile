@@ -248,6 +248,7 @@ build: go-build api-gw.build-oep  ## Creates the docker container
 
 .PHONY: api-gw.build-oep
 api-gw.build-oep:
+	go mod vendor
 	docker build --build-arg API_GW_COMPONENT_NAME=${API_GW_COMPONENT_NAME} --build-arg HTTP_PROXY=${http_proxy} --build-arg HTTPS_PROXY=${https_proxy} --build-arg FTP_PROXY=${ftp_proxy} --build-arg SOCKS_PROXY=${socks_proxy} --build-arg NO_PROXY=${no_proxy} -t ${API_GW_DOCKER_IMAGE_OEP} -f Dockerfile .
 
 ##@ Publish
