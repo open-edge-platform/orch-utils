@@ -31,6 +31,7 @@ tenancy-api-mapping/tests/openapispecs/*
 tenancy-api-mapping/node_modules/*
 tenancy-api-mapping/venv_apimapping/*
 tenancy-api-mapping/build/*
+tenancy-api-mapping/vendor/
 
 # tenancy-datamodel
 tenancy-datamodel/build/install-validator/
@@ -43,7 +44,7 @@ tenancy-datamodel/venv*
 tenancy-datamodel/.history/*
 tenancy-datamodel/IMAGE
 tenancy-datamodel/NAME
-tenancy-datamodel/vendor
+tenancy-datamodel/vendor/
 
 # tenancy-manager
 tenancy-manager/bin/

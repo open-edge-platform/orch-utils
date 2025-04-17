@@ -6,8 +6,8 @@ apiVersion: v2
 name: tenancy-datamodel
 description: Tenancy Datamodel
 type: application
-version: 0.2.0
-appVersion: "1.1.4"
+version: 0.2.1
+appVersion: "1.1.5"
 annotations: {}
 home: tenancy-iam.intel.com
 maintainers:

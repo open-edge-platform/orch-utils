@@ -11,7 +11,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
 	"gopkg.in/yaml.v3"
 )
@@ -328,26 +327,7 @@ func tenancyDatamodelBuild() error {
 func tenancyAPIMappingBuild() error {
 	// some errors below are deliberately ignored to suppress “file already/doesn’t” exist errors
 	// Mage uses %v when formatting errors, so they cannot be unwrapped and handled on a case by case
-
 	projectDir := "tenancy-api-mapping"
-	homeDir := os.Getenv("HOME")
-
-	linkFiles := []string{".gitconfig", ".netrc"}
-	linkDirs := []string{".ssh"}
-
-	mg.Deps(tenancyAPIMappingClean)
-
-	for _, file := range linkFiles {
-		// deliberately ignored errors
-		_ = sh.RunV("touch", filepath.Join(projectDir, file))
-		_ = sh.Copy(filepath.Join(projectDir, file), filepath.Join(homeDir, file))
-	}
-
-	for _, dir := range linkDirs {
-		// deliberately ignored errors
-		_ = sh.RunV("mkdir", "-p", filepath.Join(projectDir, dir))
-		_ = sh.RunV("cp", "-r", filepath.Join(homeDir, dir), filepath.Join(projectDir, dir))
-	}
 
 	appVersion, err := getChartAppVersion(projectDir)
 	if err != nil {
@@ -376,24 +356,6 @@ func tenancyManagerBuild() error {
 
 	projectDir := "tenancy-manager"
 	componentName := "tenancy-manager"
-	homeDir := os.Getenv("HOME")
-
-	linkFiles := []string{".gitconfig", ".netrc"}
-	linkDirs := []string{".ssh"}
-
-	mg.Deps(tenancyManagerClean)
-
-	for _, file := range linkFiles {
-		// deliberately ignored errors
-		_ = sh.RunV("touch", filepath.Join(projectDir, file))
-		_ = sh.Copy(filepath.Join(projectDir, file), filepath.Join(homeDir, file))
-	}
-
-	for _, dir := range linkDirs {
-		// deliberately ignored errors
-		_ = sh.RunV("mkdir", "-p", filepath.Join(projectDir, dir))
-		_ = sh.RunV("cp", "-r", filepath.Join(homeDir, dir), filepath.Join(projectDir, dir))
-	}
 
 	appVersion, err := getChartAppVersion(projectDir)
 	if err != nil {
@@ -423,28 +385,10 @@ func nexusAPIGatewayBuild() error {
 
 	projectDir := "nexus-api-gw"
 	componentName := "api-gw"
-	homeDir := os.Getenv("HOME")
-
-	linkFiles := []string{".gitconfig", ".netrc"}
-	linkDirs := []string{".ssh"}
-
-	mg.Deps(nexusAPIGatewayClean)
 
 	appVersion, err := getChartAppVersion(projectDir)
 	if err != nil {
 		return err
-	}
-
-	for _, file := range linkFiles {
-		// deliberately ignored errors
-		_ = sh.RunV("touch", filepath.Join(projectDir, file))
-		_ = sh.Copy(filepath.Join(projectDir, file), filepath.Join(homeDir, file))
-	}
-
-	for _, dir := range linkDirs {
-		// deliberately ignored errors
-		_ = sh.RunV("mkdir", "-p", filepath.Join(projectDir, dir))
-		_ = sh.RunV("cp", "-r", filepath.Join(homeDir, dir), filepath.Join(projectDir, dir))
 	}
 
 	// run go mod vendor in project directory
