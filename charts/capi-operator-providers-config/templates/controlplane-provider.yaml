@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: operator.cluster.x-k8s.io/v1alpha2
+kind: ControlPlaneProvider
+metadata:
+  name: {{ .Values.controlplane.name }}
+  namespace: {{ .Values.controlplane.namespace }}
+spec:
+  {{- toYaml .Values.controlplane.spec | nindent 2 }}

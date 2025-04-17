@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: operator.cluster.x-k8s.io/v1alpha2
+kind: CoreProvider
+metadata:
+  name: {{ .Values.core.name }}
+  namespace: {{ .Values.core.namespace }}
+spec:
+  {{- toYaml .Values.core.spec | nindent 2 }}

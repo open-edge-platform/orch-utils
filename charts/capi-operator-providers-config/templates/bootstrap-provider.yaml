@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: operator.cluster.x-k8s.io/v1alpha2
+kind: BootstrapProvider
+metadata:
+  name: {{ .Values.bootstrap.name }}
+  namespace: {{ .Values.bootstrap.namespace }}
+spec:
+  {{- toYaml .Values.bootstrap.spec | nindent 2 }}
