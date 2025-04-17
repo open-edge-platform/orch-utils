@@ -154,23 +154,42 @@ jobs:
           ref: main
           token: ${{ secrets.SYS_ORCH_GITHUB }}
 
+      - name: Setup asdf and install dependencies
+        uses: ./.github/actions/setup-asdf
+
+      # TODO: This is a temporary solution for buildall script
+      # We need to find a long term solution that leverages orch-ci workflow
       - name: Run Version Tag
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           GITHUB_TOKEN: ${{ secrets.SYS_ORCH_GITHUB }}
         shell: bash
         run: |
+          # Tag the helm charts
           pushd charts
           for chart in *; do
             echo $chart
             if [ -d "$chart" ]; then
               pushd "$chart"
               name=$(yq .name Chart.yaml)
-              "$GITHUB_WORKSPACE"/ci/scripts/version-tag-param.sh "${name}/v"
+              "$GITHUB_WORKSPACE"/ci/scripts/version-tag-param.sh "chart/${name}/v"
               popd
             fi
           done
           popd
+
+          # Tag the containers
+          containers=( $(mage listTaggedContainers | yq -r '.images | keys | .[]') )
+          for container in "${containers[@]}"; do
+            version=$(yq .appVersion charts/${container}/Chart.yaml)
+            tag="${container}/v${version}"
+            if git ls-remote --exit-code --tags origin $tag > /dev/null; then
+              echo "Tag $tag already exists in remote, skipping."
+            else
+              git tag $tag
+              git push origin $tag
+            fi
+          done
 
   test-go:
     name: Test Go
