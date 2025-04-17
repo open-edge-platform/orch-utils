@@ -13,7 +13,7 @@ helm-list: ## List helm charts, tag format, and versions in YAML format
     cname=$$(grep "^name:" "charts/$$d/Chart.yaml" | cut -d " " -f 2) ;\
     echo "  $$cname:" ;\
     echo -n "    "; grep "^version" "charts/$$d/Chart.yaml"  ;\
-    echo "    gitTagPrefix: '$$d/v'" ;\
+    echo "    gitTagPrefix: 'chart/$$d/v'" ;\
     echo "    outDir: 'charts/$$d/build'" ;\
   done
 
@@ -49,7 +49,7 @@ docker-build-secrets-config:
 	mage build:secretsConfig
 
 docker-build-squid-proxy:
-	mage build:build:squidProxy
+	mage build:squidProxy
 
 docker-build-tenancy-api-mapping:
 	mage build:tenancyAPIMapping

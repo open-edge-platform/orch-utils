@@ -282,3 +282,7 @@ func (Build) OpenAPIGenerator() error {
 func ListContainers() error {
 	return listContainers()
 }
+
+func ListTaggedContainers() error {
+	return listTaggedContainers()
+}
