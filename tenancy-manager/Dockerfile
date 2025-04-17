@@ -21,8 +21,7 @@ ARG NO_PROXY
 ARG USER_HOME
 
 COPY . /app
-COPY .gitconfig .netrc .ssh /root/
-COPY .netrc /root
+COPY vendor/ /go/src/github.com/open-edge-platform/orch-utils/tenancy-manager/vendor/
 
 WORKDIR /app
 ENV GOPRIVATE=github.com/open-edge-platform/*
