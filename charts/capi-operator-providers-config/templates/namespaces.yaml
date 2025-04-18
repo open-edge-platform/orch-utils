@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+---
+{{- $namespaces := list .Values.core.namespace .Values.bootstrap.namespace .Values.controlplane.namespace | uniq }}
+{{- range $namespace := $namespaces }}
+{{- if $namespace }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ $namespace }}
+---
+{{- end }}
+{{- end }}
