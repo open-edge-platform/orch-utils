@@ -79,7 +79,7 @@ Nexus API Gateway is responsible for five primary functions:
 
 ## Get Started
 
-Nexus API Gateway gets deployed as a k8s pod along with the deployment of Edge Manageability Framework deployment. But user can also install Nexus API Gateway uisng the helm chart on their own k8s cluster using following command.
+Nexus API Gateway gets deployed as a k8s pod along with the deployment of Edge Manageability Framework deployment. But user can also install Nexus API Gateway using the helm chart on their own k8s cluster using following command.
 
 ```shell
 helm install -n orch-iam --create-namespace nexus-api-gw charts/nexus-api-gw

@@ -42,7 +42,7 @@ The status is represented using well-defined enums that are consistently used ac
 
 ## Get Started
 
-Tenancy Manager gets deployed as a k8s pod along with the deployment of Edge Manageability Framework deployment. But user can also install Tenancy Manager uisng the helm chart on their own k8s cluster using following command.
+Tenancy Manager gets deployed as a k8s pod along with the deployment of Edge Manageability Framework deployment. But user can also install Tenancy Manager using the helm chart on their own k8s cluster using following command.
 
 ```shell
 helm install -n orch-iam --create-namespace tenancy-manager charts/tenancy-manager

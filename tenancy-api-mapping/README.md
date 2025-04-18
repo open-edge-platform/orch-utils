@@ -36,7 +36,7 @@ These CRs are expected to be created/updated only at the time of install or upgr
 
 ## Get Started
 
-Tenancy API Mapping gets deployed as a k8s job along with the deployment of Edge Manageability Framework deployment. But user can also install Tenancy API Mapping uisng the helm chart on their own k8s cluster using following command.
+Tenancy API Mapping gets deployed as a k8s job along with the deployment of Edge Manageability Framework deployment. But user can also install Tenancy API Mapping using the helm chart on their own k8s cluster using following command.
 
 ```shell
 helm install -n orch-iam --create-namespace tenancy-api-mapping charts/tenancy-api-mapping
