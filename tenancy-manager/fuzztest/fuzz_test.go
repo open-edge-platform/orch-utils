@@ -24,13 +24,17 @@ import (
 	"testing"
 	"time"
 
+	configv1 "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/config.edge-orchestrator.intel.com/v1"
 	orgv1 "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/org.edge-orchestrator.intel.com/v1"
 	projectv1 "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/project.edge-orchestrator.intel.com/v1"
+	tenancyv1 "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/tenancy.edge-orchestrator.intel.com/v1"
 	nexus_client "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/nexus-client"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/pkg/tenancy"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/client-go/dynamic/fake"
 )
 
 const (
@@ -108,6 +112,48 @@ func constructProjectObj(name string) *projectv1.Project {
 }
 
 func FuzzTenancyOrgProjectCreate(f *testing.F) {
+	f.Add("foo", "bar")
+	f.Add("f@0", "b@r")
+	f.Add("F00", "B4R")
+
+	nexusClient := nexus_client.NewFakeClient()
+	nexusClient.DynamicClient = fake.NewSimpleDynamicClient(runtime.NewScheme())
+
+	tenancy.Testing = true
+	tenancyReconciler = tenancy.NewReconciler(nexusClient, nil)
+
+	tenancyClient, err := nexusClient.AddTenancyMultiTenancy(context.Background(), &tenancyv1.MultiTenancy{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: defaultName,
+		},
+	})
+	if err != nil {
+		f.Fatalf("unexpected error: %v", err)
+	}
+	configClient, err = tenancyClient.AddConfig(context.Background(), &configv1.Config{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: defaultName,
+		},
+	})
+	if err != nil {
+		f.Fatalf("unexpected error: %v", err)
+	}
+
+	config := nexusClient.TenancyMultiTenancy().Config()
+	_, err = config.Orgs("*").RegisterAddCallback(tenancyReconciler.ProcessOrgsAdd)
+	if err != nil {
+		f.Fatalf("unexpected error: %v", err)
+	}
+	_, err = config.Orgs("*").Folders("*").Projects("*").
+		RegisterAddCallback(tenancyReconciler.ProcessProjectsAdd)
+	if err != nil {
+		f.Fatalf("unexpected error: %v", err)
+	}
+
+	f.Fuzz(func(t *testing.T, org, project string) {
+		createOrg(t, nexusClient, org)
+		createProject(t, nexusClient, org, project)
+	})
 }
 
 func createOrg(t *testing.T, nexusClient *nexus_client.Clientset, org string) {
