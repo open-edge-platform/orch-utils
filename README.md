@@ -21,9 +21,7 @@ Key features include:
 
 ## Get Started
 
-See the [Documentation](https://github.com/intel) to get started using orch-utils.
-
-TODO: Use Make targets before releasing source code.
+See the [Documentation](https://docs.openedgeplatform.intel.com/edge-manage-docs/main/index.html) to get started using orch-utils.
 
 ### Lint
 
@@ -109,10 +107,10 @@ To learn how to contribute to the project, see the [Contributor's Guide](https:/
 ## Community and Support
 
 To learn more about the project, its community, and governance, visit the [Edge Orchestrator
-Community](https://github.com/intel).
+Community](https://github.com/open-edge-platform).
 
-For support, start with [Troubleshooting](https://github.com/intel) or [contact us](https://github.com/intel).
+For support, start with [Troubleshooting](https://github.com/open-edge-platform) or [contact us](https://github.com/open-edge-platform).
 
 ## License
 
-Edge Manageability Framework is licensed under [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+Edge Manageability Framework is licensed under [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0).
