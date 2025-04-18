@@ -366,6 +366,4 @@ For support, start with [Troubleshooting](https://github.com/open-edge-platform)
 
 ## License
 
-Tenancy API Mapping is licensed under Apache 2.0.
-
-[Foundational Platform]: https://literate-adventure-7vjeyem.pages.github.io/developer_guide/foundational_platform/foundational_platform_main.html
+Tenancy API Mapping is licensed under [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0).
