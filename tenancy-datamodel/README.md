@@ -142,7 +142,9 @@ To contribute, please open a pull request to have your changes reviewed and merg
 Additionally, ensure the following commands are successful:
 
 ```shell
+make datamodel_build
 make lint
 make license
-make datamodel_build
+make build
 ```
+NOTE: Please note that `make build` command is for generating the docker image of Tenancy Datamodel.

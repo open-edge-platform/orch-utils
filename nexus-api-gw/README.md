@@ -79,13 +79,11 @@ Nexus API Gateway is responsible for five primary functions:
 
 ## Get Started
 
-Install Nexus API Gateway.
+Nexus API Gateway gets deployed as a k8s pod along with the deployment of Edge Manageability Framework deployment. But user can also install Nexus API Gateway using the helm chart on their own k8s cluster using following command.
 
 ```shell
-helm install -n orch-iam --create-namespace charts/nexus-api-gw
+helm install -n orch-iam --create-namespace nexus-api-gw charts/nexus-api-gw
 ```
-
-Another way to try out Nexus API Gateway is by using the Open Edge Platform deployment.
 
 ## Develop
 
@@ -120,9 +118,11 @@ The basic workflow to make changes to the code, verify those changes, and create
 
 1. Run linters with the `make lint` command.
 
+   NOTE: As of now, `make lint` command returns errors. This will be fixed soon.
+
 2. Run the unit tests with the `make test` command.
 
-3. Build the code with the `make build` command.
+3. Build the code with the `make build` command to create the docker image.
 
 ## Contribute
 
@@ -138,6 +138,7 @@ make lint
 make license
 make build
 ```
+NOTE: As of now, `make lint` command return errors. This will be fixed soon.
 
 You can use `help` to see a list of makefile targets.
 The following is a list of makefile targets that support developer activities:
@@ -153,7 +154,7 @@ The following is a list of makefile targets that support developer activities:
 - `go-build` to build the Go source code files
 - `test` to run the unit tests
 - `coverage` to run the unit test coverage
-- `build` to build the Nexus API Gateway Docker container
+- `build` to build the Nexus API Gateway Docker image
 - `release` to publish the built Nexus API Gateway Docker container to a pre-defined Docker container registry.
   This registry is set in an environment variable (`API_GW_DOCKER_IMAGE_OEP`) in `nexus-api-gw/Makefile`.
 

@@ -36,13 +36,11 @@ These CRs are expected to be created/updated only at the time of install or upgr
 
 ## Get Started
 
-Install Tenancy API Mapping.
+Tenancy API Mapping gets deployed as a k8s job along with the deployment of Edge Manageability Framework deployment. But user can also install Tenancy API Mapping using the helm chart on their own k8s cluster using following command.
 
 ```shell
-helm install -n orch-iam --create-namespace charts/tenancy-api-mapping
+helm install -n orch-iam --create-namespace tenancy-api-mapping charts/tenancy-api-mapping
 ```
-
-Another way to try out Tenancy API Mapping is by using the Open Edge Platform Deployment.
 
 ## Develop
 
@@ -75,11 +73,17 @@ This code requires the following tools to be installed on your development machi
 
 The basic workflow to make changes to the code, verify those changes, and create a GitHub pull request (PR) is:
 
-0. Edit and build the code with the `make build` command.
+0. Edit and build the code with the `make build` command. This command creates the docker image.
 
 1. Run linters with the `make lint` command.
 
-2. Run the unit tests with the `make test` command.
+2. Run the unit tests with following sequence of commands.
+
+    ```shell
+    make lint
+    make test
+    git restore --staged cmd/specgen/tests/gitsubmodules/*
+    ```
 
 ## Contribute
 
@@ -90,10 +94,10 @@ a new feature. See the [CONTRIBUTING.md](../CONTRIBUTING.md) file for more infor
 Additionally, ensure the following commands are successful:
 
 ```shell
-make test
 make lint
 make license
 make build
+make test
 ```
 
 You can use `help` to see a list of makefile targets.
@@ -106,7 +110,7 @@ The following is a list of makefile targets that support developer activities:
 - `yamllint` - lint all YAML files
 - `test` - run Go tests
 - `coverage` - run coverage
-- `build` - run the build stage
+- `build` - run the build stage 
 - `all` - run build, lint, and test stages
 - `release` - publish the built Tenancy API Mapping Docker container to a predefined Docker container registry. This
    registry is set in an environment variable (TENANCY_API_MAPPING_DOCKER_IMAGE_OEP) in `tenancy-api-mapping/Makefile`.
@@ -262,7 +266,7 @@ For Example:
 - Update the tag.
 
   ```shell
-    yq eval '.spec.repoConf.tag = "v0.3.1"' --inplace "apimappingconfigcrs/amc-orch-metadata-broker-openapi.yaml"
+    yq eval '.spec.repoConf.tag = "v0.4.1"' --inplace "apimappingconfigcrs/amc-orch-metadata-broker-openapi.yaml"
   ```
 
 - Verify the version.
@@ -341,7 +345,12 @@ the Multi-Tenancy OpenAPI Specification Generator tool, covering all necessary s
 
 ### To Generate the Combined Open API Spec
 
-`make gen-convert-combine-all`
+```shell
+make specgen
+make convert-and-combine
+make clean-intermediate
+git restore --staged gitsubmodules/*
+```
 
 This target generates the unified OpenAPI spec for all the service API specs and the Datamodel API spec.
 
