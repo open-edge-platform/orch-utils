@@ -215,13 +215,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
-      - name: Set up Go environment
-        shell: bash
-        run: |
-          echo "Setting up Go environment"
-          echo "GOPRIVATE=github.com/open-edge-platform" >> $GITHUB_ENV
-          git config --global url."https://${{ secrets.SYS_ORCH_GITHUB }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
-
       - name: Download Go modules recursively
         run: find . -name "go.mod" -execdir go mod download -x \;
 
@@ -267,13 +260,6 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
-
-      - name: Set up Go environment
-        shell: bash
-        run: |
-          echo "Setting up Go environment"
-          echo "GOPRIVATE=github.com/open-edge-platform" >> $GITHUB_ENV
-          git config --global url."https://${{ secrets.SYS_ORCH_GITHUB }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
       - name: Download Go modules recursively
         run: find . -name "go.mod" -execdir go mod download -x \;
