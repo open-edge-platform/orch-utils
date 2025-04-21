@@ -6,16 +6,6 @@ FROM golang:1.24.2 AS build
 
 WORKDIR /workspace
 
-# Set environment variables to allow fetching from private repositories
-ENV GONOSUMDB=*
-ENV GOPRIVATE=github.com/open-edge-platform/*
-ENV GOPROXY=direct
-
-# Configure git to use the GitHub token
-# Use build secret for GITHUB_TOKEN
-RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
-    git config --global url."https://${GITHUB_TOKEN}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
-
 # Copy go.mod, go.sum files and download deps
 COPY ./go.mod ./go.sum ./
 RUN go mod download -x

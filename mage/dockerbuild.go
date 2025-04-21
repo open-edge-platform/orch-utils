@@ -17,10 +17,6 @@ import (
 
 // Builds the secrets-config container image.
 func secretsConfigBuild() error {
-	if os.Getenv("GITHUB_TOKEN") == "" {
-		return fmt.Errorf("GITHUB_TOKEN must be set")
-	}
-
 	appVersion, err := getChartAppVersion("secrets-config")
 	if err != nil {
 		return err
@@ -30,7 +26,6 @@ func secretsConfigBuild() error {
 		"docker",
 		"build",
 		"--load",
-		"--secret", "id=GITHUB_TOKEN,env=GITHUB_TOKEN",
 		"--build-arg", "HTTPS_PROXY="+os.Getenv("HTTPS_PROXY"),
 		"--build-arg", "HTTP_PROXY="+os.Getenv("HTTP_PROXY"),
 		"--build-arg", "NO_PROXY="+os.Getenv("NO_PROXY"),
@@ -45,10 +40,6 @@ func secretsConfigBuild() error {
 
 // Builds the aws-sm-proxy container image.
 func awsSmProxyBuild() error {
-	if os.Getenv("GITHUB_TOKEN") == "" {
-		return fmt.Errorf("GITHUB_TOKEN must be set")
-	}
-
 	appVersion, err := getChartAppVersion("aws-sm-proxy")
 	if err != nil {
 		return err
@@ -58,7 +49,6 @@ func awsSmProxyBuild() error {
 		"docker",
 		"build",
 		"--load",
-		"--secret", "id=GITHUB_TOKEN,env=GITHUB_TOKEN",
 		"--build-arg", "HTTPS_PROXY="+os.Getenv("HTTPS_PROXY"),
 		"--build-arg", "HTTP_PROXY="+os.Getenv("HTTP_PROXY"),
 		"--build-arg", "NO_PROXY="+os.Getenv("NO_PROXY"),
@@ -72,10 +62,6 @@ func awsSmProxyBuild() error {
 }
 
 func tokenFSBuild() error {
-	if os.Getenv("GITHUB_TOKEN") == "" {
-		return fmt.Errorf("GITHUB_TOKEN must be set")
-	}
-
 	appVersion, err := getChartAppVersion("token-fs")
 	if err != nil {
 		return err
@@ -85,7 +71,6 @@ func tokenFSBuild() error {
 		"docker",
 		"build",
 		"--load",
-		"--secret", "id=GITHUB_TOKEN,env=GITHUB_TOKEN",
 		"--build-arg", "HTTPS_PROXY="+os.Getenv("HTTPS_PROXY"),
 		"--build-arg", "HTTP_PROXY="+os.Getenv("HTTP_PROXY"),
 		"--build-arg", "NO_PROXY="+os.Getenv("NO_PROXY"),
@@ -99,10 +84,6 @@ func tokenFSBuild() error {
 }
 
 func authServiceBuild() error {
-	if os.Getenv("GITHUB_TOKEN") == "" {
-		return fmt.Errorf("GITHUB_TOKEN must be set")
-	}
-
 	appVersion, err := getChartAppVersion("auth-service")
 	if err != nil {
 		return err
@@ -120,7 +101,6 @@ func authServiceBuild() error {
 		"docker",
 		"build",
 		"--load",
-		"--secret", "id=GITHUB_TOKEN,env=GITHUB_TOKEN",
 		"--build-arg", strings.Trim(gitarg, ""),
 		"--build-arg", "HTTPS_PROXY="+os.Getenv("HTTPS_PROXY"),
 		"--build-arg", "HTTP_PROXY="+os.Getenv("HTTP_PROXY"),
@@ -235,10 +215,6 @@ func squidProxyBuild() error {
 
 // Builds the Keycloak Tenant Controller container image.
 func keycloakTenantControllerBuild() error {
-	if os.Getenv("GITHUB_TOKEN") == "" {
-		return fmt.Errorf("GITHUB_TOKEN must be set")
-	}
-
 	appVersion, err := getChartAppVersion("keycloak-tenant-controller")
 	if err != nil {
 		return err
@@ -255,7 +231,6 @@ func keycloakTenantControllerBuild() error {
 		"docker",
 		"build",
 		"--load",
-		"--secret", "id=GITHUB_TOKEN,env=GITHUB_TOKEN",
 		"--build-arg", strings.Trim(gitarg, ""),
 		"--build-arg", "HTTPS_PROXY="+os.Getenv("HTTPS_PROXY"),
 		"--build-arg", "HTTP_PROXY="+os.Getenv("HTTP_PROXY"),
@@ -409,10 +384,6 @@ func nexusAPIGatewayBuild() error {
 
 // Builds the openapi-generator container image.
 func openAPIGeneratorBuild() error {
-	if os.Getenv("GITHUB_TOKEN") == "" {
-		return fmt.Errorf("GITHUB_TOKEN must be set")
-	}
-
 	TAG := getNexusCompilerTag()
 
 	g0 := sh.OutCmd("git")
@@ -426,7 +397,6 @@ func openAPIGeneratorBuild() error {
 		"docker",
 		"build",
 		"--load",
-		"--secret", "id=GITHUB_TOKEN,env=GITHUB_TOKEN",
 		"--build-arg", strings.Trim(gitarg, ""),
 		"--build-arg", "HTTPS_PROXY="+os.Getenv("HTTPS_PROXY"),
 		"--build-arg", "HTTP_PROXY="+os.Getenv("HTTP_PROXY"),
