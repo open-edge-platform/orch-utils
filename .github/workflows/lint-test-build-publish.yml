@@ -270,8 +270,6 @@ jobs:
           install: true
 
       - name: Build container artifacts
-        env:
-          GITHUB_TOKEN: ${{ secrets.SYS_ORCH_GITHUB }}
         run: |
           mage build:${{ matrix.version }}
 
