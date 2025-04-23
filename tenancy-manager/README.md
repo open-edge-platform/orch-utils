@@ -42,13 +42,11 @@ The status is represented using well-defined enums that are consistently used ac
 
 ## Get Started
 
-Install Tenancy Manager.
+Tenancy Manager gets deployed as a k8s pod along with the deployment of Edge Manageability Framework deployment. But user can also install Tenancy Manager using the helm chart on their own k8s cluster using following command.
 
 ```shell
-helm install -n orch-iam --create-namespace charts/tenancy-manager
+helm install -n orch-iam --create-namespace tenancy-manager charts/tenancy-manager
 ```
-
-Another way to try out Tenancy API Mapping is by using the Open Edge Platform Deployment.
 
 ## Develop
 
@@ -84,9 +82,11 @@ The basic workflow to make changes to the code, verify those changes, and create
 
 2. Run linters with the `make lint` command.
 
+   NOTE: As of now, `make lint` command returns errors. This will be fixed soon.
+
 3. Run the unit tests with the `make test` command.
 
-4. Build the code with the `make build` command.
+4. Build the code with the `make build` command to create the docker image.
 
 ## Contribute
 
@@ -102,6 +102,7 @@ make lint
 make license
 make build
 ```
+NOTE: As of now, `make lint` command returns errors. This will be fixed soon.
 
 You can use `help` to see a list of makefile targets.
 The following is a list of makefile targets that support developer activities:
@@ -117,6 +118,6 @@ The following is a list of makefile targets that support developer activities:
 - `go-build` to build the Go source code files
 - `test` to run the unit tests
 - `coverage` to run the unit test coverage
-- `build` to build the tenancy-manager Docker container
+- `build` to build the tenancy-manager Docker image
 - `release` to publish the built tenancy-manager Docker container to a pre-defined Docker container registry.
   This registry is set in an environment variable (`TENANCY_MANAGER_DOCKER_IMAGE_OEP`) in `tenancy-manager/Makefile`
