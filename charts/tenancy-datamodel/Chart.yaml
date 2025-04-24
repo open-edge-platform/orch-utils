@@ -9,8 +9,4 @@ type: application
 version: 0.2.1
 appVersion: "1.1.5"
 annotations: {}
-home: tenancy-iam.intel.com
-maintainers:
-  - name: Tenancy-IAM Team
-    email: tenancy-iam@intel.com
 
