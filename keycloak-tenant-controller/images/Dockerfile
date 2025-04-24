@@ -9,10 +9,14 @@ ARG KTC_GIT_COMMIT
 ARG http_proxy
 ARG https_proxy
 ARG no_proxy
+ARG ftp_proxy
+ARG socks_proxy
 
 ENV HTTP_PROXY $http_proxy
 ENV HTTPS_PROXY $http_proxy
 ENV NO_PROXY $http_proxy
+ENV FTP_PROXY $ftp_proxy
+ENV SOCKS_PROXY $socks_proxy
 
 COPY . /usr/src/keycloak-tenant-controller/
 WORKDIR /usr/src/keycloak-tenant-controller/
