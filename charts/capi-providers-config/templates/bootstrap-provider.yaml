@@ -9,3 +9,14 @@ metadata:
   namespace: {{ .Values.bootstrap.namespace }}
 spec:
   {{- toYaml .Values.bootstrap.spec | nindent 2 }}
+---
+{{- if .Values.bootstrap.additionalManifests }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.bootstrap.additionalManifests.name }}
+  namespace: {{ .Values.bootstrap.additionalManifests.namespace | default .Values.bootstrap.namespace }}
+data:
+  manifests: {{- toYaml .Values.bootstrap.additionalManifests.manifests | nindent 2 }}
+{{- end }}
+

@@ -9,3 +9,14 @@ metadata:
   namespace: {{ .Values.controlplane.namespace }}
 spec:
   {{- toYaml .Values.controlplane.spec | nindent 2 }}
+---
+{{- if .Values.controlplane.additionalManifests }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.controlplane.additionalManifests.name }}
+  namespace: {{ .Values.controlplane.additionalManifests.namespace | default .Values.controlplane.namespace }}
+data:
+  manifests: {{- toYaml .Values.controlplane.additionalManifests.manifests | nindent 2 }}
+{{- end }}
+

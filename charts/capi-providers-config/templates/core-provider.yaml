@@ -9,3 +9,13 @@ metadata:
   namespace: {{ .Values.core.namespace }}
 spec:
   {{- toYaml .Values.core.spec | nindent 2 }}
+---
+{{- if .Values.core.additionalManifests }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.core.additionalManifests.name }}
+  namespace: {{ .Values.core.additionalManifests.namespace | default .Values.core.namespace }}
+data:
+  manifests: {{- toYaml .Values.core.additionalManifests.manifests | nindent 2 }}
+{{- end }}
