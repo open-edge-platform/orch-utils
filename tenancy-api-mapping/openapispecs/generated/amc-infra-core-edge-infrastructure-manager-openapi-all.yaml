@@ -1,7 +1,3 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
-#
-# SPDX-License-Identifier: Apache-2.0
-
 openapi: 3.0.2
 info:
   title: Edge Infrastructure Manager
@@ -5009,15 +5005,6 @@ components:
       minLength: 1
       pattern: ^[0-9]+$
       type: string
-    EventKind:
-      description: The type of event.
-      enum:
-      - EVENT_KIND_UNSPECIFIED
-      - EVENT_KIND_CREATED
-      - EVENT_KIND_UPDATED
-      - EVENT_KIND_DELETED
-      format: enum
-      type: string
     Host:
       description: A host resource.
       properties:
@@ -5209,13 +5196,6 @@ components:
           type: string
       required:
       - name
-    HostEvent:
-      description: Event for a host.
-      properties:
-        eventKind:
-          $ref: '#/components/schemas/EventKind'
-        host:
-          $ref: '#/components/schemas/Host'
     HostOperationWithNote:
       description: A freeform field associated with the host invalidate or delete
         operations to store the reason for change.
@@ -5409,7 +5389,6 @@ components:
       description: State of the host.
       enum:
       - HOST_STATE_UNSPECIFIED
-      - HOST_STATE_ERROR
       - HOST_STATE_DELETING
       - HOST_STATE_DELETED
       - HOST_STATE_ONBOARDED
@@ -5636,13 +5615,6 @@ components:
             $ref: '#/components/schemas/WorkloadMember'
           readOnly: true
           type: array
-    InstanceEvent:
-      description: Event for an instance.
-      properties:
-        eventKind:
-          $ref: '#/components/schemas/EventKind'
-        instance:
-          $ref: '#/components/schemas/Instance'
     InstanceKind:
       description: Type of the instance.
       enum:
@@ -5678,7 +5650,6 @@ components:
       description: State of the instance.
       enum:
       - INSTANCE_STATE_UNSPECIFIED
-      - INSTANCE_STATE_ERROR
       - INSTANCE_STATE_RUNNING
       - INSTANCE_STATE_UNTRUSTED
       - INSTANCE_STATE_DELETED

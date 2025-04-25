@@ -42,7 +42,7 @@ tags:
 security:
 - BearerAuth: []
 paths:
-  /v1/projects/{projectName}/compute/hosts/{resourceId}:
+  /v2/projects/{projectName}/compute/hosts/{resourceId}:
     delete:
       description: Delete a host.
       operationId: HostService_DeleteHost
@@ -189,7 +189,7 @@ paths:
       summary: UpdateHost
       tags:
       - HostService
-  /v1/projects/{projectName}/compute/hosts/{resourceId}/invalidate:
+  /v2/projects/{projectName}/compute/hosts/{resourceId}/invalidate:
     put:
       description: Invalidate a host.
       operationId: HostService_InvalidateHost
@@ -228,7 +228,7 @@ paths:
       summary: InvalidateHost
       tags:
       - HostService
-  /v1/projects/{projectName}/compute/hosts/{resourceId}/onboard:
+  /v2/projects/{projectName}/compute/hosts/{resourceId}/onboard:
     patch:
       description: Onboard a host.
       operationId: HostService_OnboardHost
@@ -260,7 +260,7 @@ paths:
       summary: OnboardHost
       tags:
       - HostService
-  /v1/projects/{projectName}/compute/hosts/{resourceId}/register:
+  /v2/projects/{projectName}/compute/hosts/{resourceId}/register:
     patch:
       description: Update a host register.
       operationId: HostService_RegisterUpdateHost
@@ -298,7 +298,7 @@ paths:
       summary: RegisterUpdateHost
       tags:
       - HostService
-  /v1/projects/{projectName}/compute/hosts/register:
+  /v2/projects/{projectName}/compute/hosts/register:
     post:
       description: Register a host.
       operationId: HostService_RegisterHost
@@ -336,7 +336,7 @@ paths:
       summary: RegisterHost
       tags:
       - HostService
-  /v1/projects/{projectName}/compute/instances:
+  /v2/projects/{projectName}/compute/instances:
     get:
       description: Get a list of instances.
       operationId: InstanceService_ListInstances
@@ -427,7 +427,7 @@ paths:
       summary: CreateInstance
       tags:
       - InstanceService
-  /v1/projects/{projectName}/compute/instances/{resourceId}:
+  /v2/projects/{projectName}/compute/instances/{resourceId}:
     delete:
       description: Delete a instance.
       operationId: InstanceService_DeleteInstance
@@ -574,7 +574,7 @@ paths:
       summary: UpdateInstance
       tags:
       - InstanceService
-  /v1/projects/{projectName}/compute/instances/{resourceId}/invalidate:
+  /v2/projects/{projectName}/compute/instances/{resourceId}/invalidate:
     put:
       description: Invalidate a instance.
       operationId: InstanceService_InvalidateInstance
@@ -606,7 +606,7 @@ paths:
       summary: InvalidateInstance
       tags:
       - InstanceService
-  /v1/projects/{projectName}/compute/os:
+  /v2/projects/{projectName}/compute/os:
     get:
       description: Get a list of OSs.
       operationId: OperatingSystemService_ListOperatingSystems
@@ -697,7 +697,7 @@ paths:
       summary: CreateOperatingSystem
       tags:
       - OperatingSystemService
-  /v1/projects/{projectName}/compute/os/{resourceId}:
+  /v2/projects/{projectName}/compute/os/{resourceId}:
     delete:
       description: Delete an OS.
       operationId: OperatingSystemService_DeleteOperatingSystem
@@ -844,7 +844,7 @@ paths:
       summary: UpdateOperatingSystem
       tags:
       - OperatingSystemService
-  /v1/projects/{projectName}/compute/schedules:
+  /v2/projects/{projectName}/compute/schedules:
     get:
       description: Get a list of schedules (single/repeated).
       operationId: ScheduleService_ListSchedules
@@ -924,7 +924,7 @@ paths:
       summary: ListSchedules
       tags:
       - ScheduleService
-  /v1/projects/{projectName}/compute/workloads:
+  /v2/projects/{projectName}/compute/workloads:
     get:
       description: Get a list of workloads.
       operationId: WorkloadService_ListWorkloads
@@ -1015,7 +1015,7 @@ paths:
       summary: CreateWorkload
       tags:
       - WorkloadService
-  /v1/projects/{projectName}/compute/workloads/{resourceId}:
+  /v2/projects/{projectName}/compute/workloads/{resourceId}:
     delete:
       description: Delete a workload.
       operationId: WorkloadService_DeleteWorkload
@@ -1162,7 +1162,7 @@ paths:
       summary: UpdateWorkload
       tags:
       - WorkloadService
-  /v1/projects/{projectName}/compute/workloads/{resourceId}/members:
+  /v2/projects/{projectName}/compute/workloads/{resourceId}/members:
     get:
       description: Get a list of workload_members.
       operationId: WorkloadMemberService_ListWorkloadMembers
@@ -1265,7 +1265,7 @@ paths:
       summary: CreateWorkloadMember
       tags:
       - WorkloadMemberService
-  /v1/projects/{projectName}/compute/workloads/{resourceId}/members/{resourceId}:
+  /v2/projects/{projectName}/compute/workloads/{resourceId}/members/{resourceId}:
     delete:
       description: Delete a workload_member.
       operationId: WorkloadMemberService_DeleteWorkloadMember
@@ -1412,7 +1412,7 @@ paths:
       summary: UpdateWorkloadMember
       tags:
       - WorkloadMemberService
-  /v1/projects/{projectName}/localAccounts:
+  /v2/projects/{projectName}/localAccounts:
     get:
       description: Get a list of providers.
       operationId: LocalAccountService_ListLocalAccounts
@@ -1503,7 +1503,7 @@ paths:
       summary: CreateLocalAccount
       tags:
       - LocalAccountService
-  /v1/projects/{projectName}/localAccounts/{resourceId}:
+  /v2/projects/{projectName}/localAccounts/{resourceId}:
     delete:
       description: Delete a provider.
       operationId: LocalAccountService_DeleteLocalAccount
@@ -1568,7 +1568,7 @@ paths:
       summary: GetLocalAccount
       tags:
       - LocalAccountService
-  /v1/projects/{projectName}/locations:
+  /v2/projects/{projectName}/locations:
     get:
       description: Get a list of locations.
       operationId: LocationService_ListLocations
@@ -1610,7 +1610,7 @@ paths:
       summary: ListLocations
       tags:
       - LocationService
-  /v1/projects/{projectName}/providers:
+  /v2/projects/{projectName}/providers:
     get:
       description: Get a list of providers.
       operationId: ProviderService_ListProviders
@@ -1701,7 +1701,7 @@ paths:
       summary: CreateProvider
       tags:
       - ProviderService
-  /v1/projects/{projectName}/providers/{resourceId}:
+  /v2/projects/{projectName}/providers/{resourceId}:
     delete:
       description: Delete a provider.
       operationId: ProviderService_DeleteProvider
@@ -1848,7 +1848,7 @@ paths:
       summary: UpdateProvider
       tags:
       - ProviderService
-  /v1/projects/{projectName}/regions:
+  /v2/projects/{projectName}/regions:
     get:
       description: Get a list of regions.
       operationId: RegionService_ListRegions
@@ -1945,7 +1945,7 @@ paths:
       summary: CreateRegion
       tags:
       - RegionService
-  /v1/projects/{projectName}/regions/{resourceId}:
+  /v2/projects/{projectName}/regions/{resourceId}:
     delete:
       description: Delete a region.
       operationId: RegionService_DeleteRegion
@@ -2092,7 +2092,7 @@ paths:
       summary: UpdateRegion
       tags:
       - RegionService
-  /v1/projects/{projectName}/regions/{resourceId}/sites:
+  /v2/projects/{projectName}/regions/{resourceId}/sites:
     get:
       description: Get a list of sites.
       operationId: SiteService_ListSites
@@ -2195,7 +2195,7 @@ paths:
       summary: CreateSite
       tags:
       - SiteService
-  /v1/projects/{projectName}/regions/{resourceId}/sites/{resourceId}:
+  /v2/projects/{projectName}/regions/{resourceId}/sites/{resourceId}:
     delete:
       description: Delete a site.
       operationId: SiteService_DeleteSite
@@ -2342,7 +2342,7 @@ paths:
       summary: UpdateSite
       tags:
       - SiteService
-  /v1/projects/{projectName}/schedules/repeated:
+  /v2/projects/{projectName}/schedules/repeated:
     get:
       description: Get a list of repeatedSchedules.
       operationId: ScheduleService_ListRepeatedSchedules
@@ -2454,7 +2454,7 @@ paths:
       summary: CreateRepeatedSchedule
       tags:
       - ScheduleService
-  /v1/projects/{projectName}/schedules/repeated/{resourceId}:
+  /v2/projects/{projectName}/schedules/repeated/{resourceId}:
     delete:
       description: Delete a repeated_schedule.
       operationId: ScheduleService_DeleteRepeatedSchedule
@@ -2601,7 +2601,7 @@ paths:
       summary: UpdateRepeatedSchedule
       tags:
       - ScheduleService
-  /v1/projects/{projectName}/schedules/single:
+  /v2/projects/{projectName}/schedules/single:
     get:
       description: Get a list of singleSchedules.
       operationId: ScheduleService_ListSingleSchedules
@@ -2713,7 +2713,7 @@ paths:
       summary: CreateSingleSchedule
       tags:
       - ScheduleService
-  /v1/projects/{projectName}/schedules/single/{resourceId}:
+  /v2/projects/{projectName}/schedules/single/{resourceId}:
     delete:
       description: Delete a single_schedule.
       operationId: ScheduleService_DeleteSingleSchedule
@@ -2860,7 +2860,7 @@ paths:
       summary: UpdateSingleSchedule
       tags:
       - ScheduleService
-  /v1/projects/{projectName}/telemetry/loggroups:
+  /v2/projects/{projectName}/telemetry/loggroups:
     get:
       description: Get a list of telemetry_logs_groups.
       operationId: TelemetryLogsGroupService_ListTelemetryLogsGroups
@@ -2943,7 +2943,7 @@ paths:
       summary: CreateTelemetryLogsGroup
       tags:
       - TelemetryLogsGroupService
-  /v1/projects/{projectName}/telemetry/loggroups/{resourceId}:
+  /v2/projects/{projectName}/telemetry/loggroups/{resourceId}:
     delete:
       description: Delete a telemetry_logs_group.
       operationId: TelemetryLogsGroupService_DeleteTelemetryLogsGroup
@@ -3008,7 +3008,7 @@ paths:
       summary: GetTelemetryLogsGroup
       tags:
       - TelemetryLogsGroupService
-  /v1/projects/{projectName}/telemetry/loggroups/{resourceId}/logprofiles:
+  /v2/projects/{projectName}/telemetry/loggroups/{resourceId}/logprofiles:
     get:
       description: Get a list of telemetryLogsProfiles.
       operationId: TelemetryLogsProfileService_ListTelemetryLogsProfiles
@@ -3132,7 +3132,7 @@ paths:
       summary: CreateTelemetryLogsProfile
       tags:
       - TelemetryLogsProfileService
-  /v1/projects/{projectName}/telemetry/loggroups/{resourceId}/logprofiles/{resourceId}:
+  /v2/projects/{projectName}/telemetry/loggroups/{resourceId}/logprofiles/{resourceId}:
     delete:
       description: Delete a telemetry_logs_profile.
       operationId: TelemetryLogsProfileService_DeleteTelemetryLogsProfile
@@ -3281,7 +3281,7 @@ paths:
       summary: UpdateTelemetryLogsProfile
       tags:
       - TelemetryLogsProfileService
-  /v1/projects/{projectName}/telemetry/metricgroups:
+  /v2/projects/{projectName}/telemetry/metricgroups:
     get:
       description: Get a list of telemetryMetricsGroups.
       operationId: TelemetryMetricsGroupService_ListTelemetryMetricsGroups
@@ -3364,7 +3364,7 @@ paths:
       summary: CreateTelemetryMetricsGroup
       tags:
       - TelemetryMetricsGroupService
-  /v1/projects/{projectName}/telemetry/metricgroups/{resourceId}:
+  /v2/projects/{projectName}/telemetry/metricgroups/{resourceId}:
     delete:
       description: Delete a telemetry_metrics_group.
       operationId: TelemetryMetricsGroupService_DeleteTelemetryMetricsGroup
@@ -3430,7 +3430,7 @@ paths:
       summary: GetTelemetryMetricsGroup
       tags:
       - TelemetryMetricsGroupService
-  /v1/projects/{projectName}/telemetry/metricgroups/{resourceId}/metricprofiles:
+  /v2/projects/{projectName}/telemetry/metricgroups/{resourceId}/metricprofiles:
     get:
       description: Get a list of telemetryMetricsProfiles.
       operationId: TelemetryMetricsProfileService_ListTelemetryMetricsProfiles
@@ -3554,7 +3554,7 @@ paths:
       summary: CreateTelemetryMetricsProfile
       tags:
       - TelemetryMetricsProfileService
-  /v1/projects/{projectName}/telemetry/metricgroups/{resourceId}/metricprofiles/{resourceId}:
+  /v2/projects/{projectName}/telemetry/metricgroups/{resourceId}/metricprofiles/{resourceId}:
     delete:
       description: Delete a telemetry_metrics_profile.
       operationId: TelemetryMetricsProfileService_DeleteTelemetryMetricsProfile

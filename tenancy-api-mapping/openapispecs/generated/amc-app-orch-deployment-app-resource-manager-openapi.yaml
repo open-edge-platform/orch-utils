@@ -1,7 +1,3 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
-#
-# SPDX-License-Identifier: Apache-2.0
-
 openapi: 3.0.3
 info:
   title: App Resource Manager API
@@ -57,7 +53,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ListAppEndpointsResponse'
           description: OK
-      summary: ListAppEndpoints
       tags:
       - EndpointsService
   /v1/projects/{projectName}/resource/workloads/applications/{appId}/clusters/{clusterId}:
@@ -91,7 +86,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ListAppWorkloadsResponse'
           description: OK
-      summary: ListAppWorkloads
       tags:
       - AppWorkloadService
   ? /v1/projects/{projectName}/resource/workloads/applications/{appId}/clusters/{clusterId}/virtual-machines/{virtualMachineId}/restart
@@ -131,7 +125,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/RestartVirtualMachineResponse'
           description: OK
-      summary: RestartVirtualMachine
       tags:
       - VirtualMachineService
   ? /v1/projects/{projectName}/resource/workloads/applications/{appId}/clusters/{clusterId}/virtual-machines/{virtualMachineId}/start
@@ -171,7 +164,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/StartVirtualMachineResponse'
           description: OK
-      summary: StartVirtualMachine
       tags:
       - VirtualMachineService
   /v1/projects/{projectName}/resource/workloads/applications/{appId}/clusters/{clusterId}/virtual-machines/{virtualMachineId}/stop:
@@ -211,7 +203,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/StopVirtualMachineResponse'
           description: OK
-      summary: StopVirtualMachine
       tags:
       - VirtualMachineService
   /v1/projects/{projectName}/resource/workloads/applications/{appId}/clusters/{clusterId}/virtual-machines/{virtualMachineId}/vnc:
@@ -250,7 +241,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetVNCResponse'
           description: OK
-      summary: GetVNC
       tags:
       - VirtualMachineService
   /v1/projects/{projectName}/resource/workloads/pods/clusters/{clusterId}/namespaces/{namespace}/pods/{podName}/delete:
@@ -289,7 +279,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeletePodResponse'
           description: OK
-      summary: DeletePod
       tags:
       - PodService
 components:
@@ -301,6 +290,7 @@ components:
         state:
           description: State information
           enum:
+          - STATE_UNSPECIFIED
           - STATE_UP
           - STATE_DOWN
           format: enum
@@ -320,14 +310,10 @@ components:
           type: array
         id:
           description: Endpoint object UID (e.g. service or ingress UID)
-          format: uuid
           readOnly: true
           type: string
         name:
           description: Endpoint name
-          maxLength: 40
-          minLength: 1
-          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
           readOnly: true
           type: string
         ports:
@@ -349,13 +335,9 @@ components:
           type: string
         id:
           description: Workload UUID
-          format: uuid
           type: string
         name:
           description: Workload name
-          maxLength: 253
-          minLength: 1
-          pattern: ^[a-z0-9]([-a-z0-9-]*[a-z0-9])?$
           type: string
         namespace:
           description: Namespace where the workload is created.
@@ -366,6 +348,7 @@ components:
         type:
           description: Application workload type, e.g. virtual machine and pod.
           enum:
+          - TYPE_UNSPECIFIED
           - TYPE_VIRTUAL_MACHINE
           - TYPE_POD
           format: enum
@@ -390,9 +373,6 @@ components:
           type: string
         name:
           description: Container name
-          maxLength: 63
-          minLength: 1
-          pattern: ^[a-z0-9]([-a-z0-9-]*[a-z0-9])?$
           type: string
         restartCount:
           description: Number of times that a container is restarted.
@@ -455,6 +435,7 @@ components:
         state:
           description: Endpoint state, either Ready or NotReady.
           enum:
+          - STATE_UNSPECIFIED
           - STATE_READY
           - STATE_NOT_READY
           format: enum
@@ -465,7 +446,6 @@ components:
       description: Fully qualified domain name.
       properties:
         fqdn:
-          format: hostname
           type: string
       type: object
     GetVNCResponse:
@@ -512,6 +492,7 @@ components:
         state:
           description: State information
           enum:
+          - STATE_UNSPECIFIED
           - STATE_PENDING
           - STATE_RUNNING
           - STATE_SUCCEEDED
@@ -524,9 +505,6 @@ components:
       properties:
         name:
           description: Port name
-          maxLength: 40
-          minLength: 1
-          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
           readOnly: true
           type: string
         protocol:
@@ -566,6 +544,7 @@ components:
         state:
           description: Virtual machine state
           enum:
+          - STATE_UNSPECIFIED
           - STATE_STOPPED
           - STATE_PROVISIONING
           - STATE_STARTING

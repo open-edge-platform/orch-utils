@@ -1,7 +1,3 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
-#
-# SPDX-License-Identifier: Apache-2.0
-
 openapi: 3.0.3
 info:
   title: Application Catalog API
@@ -1591,7 +1587,7 @@ components:
         authToken:
           description: Optional authentication token or password for accessing the
             registry.
-          maxLength: 1000
+          maxLength: 4500
           pattern: ^\PC*$
           type: string
         cacerts:
