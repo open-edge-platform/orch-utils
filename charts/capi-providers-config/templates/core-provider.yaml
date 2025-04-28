@@ -10,12 +10,23 @@ metadata:
 spec:
   {{- toYaml .Values.core.spec | nindent 2 }}
 ---
-{{- if .Values.core.additionalManifests }}
+{{- if .Values.core.spec.additionalManifests }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.core.additionalManifests.name }}
-  namespace: {{ .Values.core.additionalManifests.namespace | default .Values.core.namespace }}
+  name: {{ .Values.core.spec.additionalManifests.name }}
+  namespace: {{ .Values.core.spec.additionalManifests.namespace | default .Values.core.namespace }}
 data:
-  manifests: {{- toYaml .Values.core.additionalManifests.manifests | nindent 2 }}
+  manifests: |
+    {{- if .Values.core.additionalManifests }}
+    {{- toYaml .Values.core.additionalManifests.manifests | nindent 4 }}
+    {{- end }}
+    {{- if .Values.metrics.enabled }}
+    ---
+    {{- include "metricsservicetemplate" (dict "name" (printf "%s-%s" "core" .Values.core.name) "namespace" .Values.core.namespace ) | nindent 4 }}
+        selector:
+          cluster.x-k8s.io/provider: cluster-api
+    ---
+    {{- include "metricsservicemonitortemplate" (dict "name" (printf "%s-%s" "core" .Values.core.name) "namespace" .Values.core.namespace) | nindent 4 }}
+    {{- end }}
 {{- end }}

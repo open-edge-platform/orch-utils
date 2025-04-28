@@ -10,13 +10,24 @@ metadata:
 spec:
   {{- toYaml .Values.controlplane.spec | nindent 2 }}
 ---
-{{- if .Values.controlplane.additionalManifests }}
+{{- if .Values.controlplane.spec.additionalManifests }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.controlplane.additionalManifests.name }}
-  namespace: {{ .Values.controlplane.additionalManifests.namespace | default .Values.controlplane.namespace }}
+  name: {{ .Values.controlplane.spec.additionalManifests.name }}
+  namespace: {{ .Values.controlplane.spec.additionalManifests.namespace | default .Values.controlplane.namespace }}
 data:
-  manifests: {{- toYaml .Values.controlplane.additionalManifests.manifests | nindent 2 }}
+  manifests: |
+    {{- if .Values.controlplane.additionalManifests }}
+    {{- toYaml .Values.controlplane.additionalManifests.manifests | nindent 4 }}
+    {{- end }}
+    {{- if .Values.metrics.enabled }}
+    ---
+    {{- include "metricsservicetemplate" (dict "name" (printf "%s-%s" "controlplane" .Values.controlplane.name) "namespace" .Values.controlplane.namespace ) | nindent 4 }}
+        selector:
+          cluster.x-k8s.io/provider: control-plane-{{ .Values.bootstrap.name }}
+    ---
+    {{- include "metricsservicemonitortemplate" (dict "name" (printf "%s-%s" "controlplane" .Values.controlplane.name) "namespace" .Values.controlplane.namespace) | nindent 4 }}
+    {{- end }}
 {{- end }}
 
