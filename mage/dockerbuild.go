@@ -11,17 +11,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
 	"gopkg.in/yaml.v3"
 )
 
 // Builds the secrets-config container image.
 func secretsConfigBuild() error {
-	if os.Getenv("GITHUB_TOKEN") == "" {
-		return fmt.Errorf("GITHUB_TOKEN must be set")
-	}
-
 	appVersion, err := getChartAppVersion("secrets-config")
 	if err != nil {
 		return err
@@ -31,7 +26,6 @@ func secretsConfigBuild() error {
 		"docker",
 		"build",
 		"--load",
-		"--secret", "id=GITHUB_TOKEN,env=GITHUB_TOKEN",
 		"--build-arg", "HTTPS_PROXY="+os.Getenv("HTTPS_PROXY"),
 		"--build-arg", "HTTP_PROXY="+os.Getenv("HTTP_PROXY"),
 		"--build-arg", "NO_PROXY="+os.Getenv("NO_PROXY"),
@@ -46,10 +40,6 @@ func secretsConfigBuild() error {
 
 // Builds the aws-sm-proxy container image.
 func awsSmProxyBuild() error {
-	if os.Getenv("GITHUB_TOKEN") == "" {
-		return fmt.Errorf("GITHUB_TOKEN must be set")
-	}
-
 	appVersion, err := getChartAppVersion("aws-sm-proxy")
 	if err != nil {
 		return err
@@ -59,7 +49,6 @@ func awsSmProxyBuild() error {
 		"docker",
 		"build",
 		"--load",
-		"--secret", "id=GITHUB_TOKEN,env=GITHUB_TOKEN",
 		"--build-arg", "HTTPS_PROXY="+os.Getenv("HTTPS_PROXY"),
 		"--build-arg", "HTTP_PROXY="+os.Getenv("HTTP_PROXY"),
 		"--build-arg", "NO_PROXY="+os.Getenv("NO_PROXY"),
@@ -73,10 +62,6 @@ func awsSmProxyBuild() error {
 }
 
 func tokenFSBuild() error {
-	if os.Getenv("GITHUB_TOKEN") == "" {
-		return fmt.Errorf("GITHUB_TOKEN must be set")
-	}
-
 	appVersion, err := getChartAppVersion("token-fs")
 	if err != nil {
 		return err
@@ -86,7 +71,6 @@ func tokenFSBuild() error {
 		"docker",
 		"build",
 		"--load",
-		"--secret", "id=GITHUB_TOKEN,env=GITHUB_TOKEN",
 		"--build-arg", "HTTPS_PROXY="+os.Getenv("HTTPS_PROXY"),
 		"--build-arg", "HTTP_PROXY="+os.Getenv("HTTP_PROXY"),
 		"--build-arg", "NO_PROXY="+os.Getenv("NO_PROXY"),
@@ -100,10 +84,6 @@ func tokenFSBuild() error {
 }
 
 func authServiceBuild() error {
-	if os.Getenv("GITHUB_TOKEN") == "" {
-		return fmt.Errorf("GITHUB_TOKEN must be set")
-	}
-
 	appVersion, err := getChartAppVersion("auth-service")
 	if err != nil {
 		return err
@@ -121,7 +101,6 @@ func authServiceBuild() error {
 		"docker",
 		"build",
 		"--load",
-		"--secret", "id=GITHUB_TOKEN,env=GITHUB_TOKEN",
 		"--build-arg", strings.Trim(gitarg, ""),
 		"--build-arg", "HTTPS_PROXY="+os.Getenv("HTTPS_PROXY"),
 		"--build-arg", "HTTP_PROXY="+os.Getenv("HTTP_PROXY"),
@@ -236,10 +215,6 @@ func squidProxyBuild() error {
 
 // Builds the Keycloak Tenant Controller container image.
 func keycloakTenantControllerBuild() error {
-	if os.Getenv("GITHUB_TOKEN") == "" {
-		return fmt.Errorf("GITHUB_TOKEN must be set")
-	}
-
 	appVersion, err := getChartAppVersion("keycloak-tenant-controller")
 	if err != nil {
 		return err
@@ -256,7 +231,6 @@ func keycloakTenantControllerBuild() error {
 		"docker",
 		"build",
 		"--load",
-		"--secret", "id=GITHUB_TOKEN,env=GITHUB_TOKEN",
 		"--build-arg", strings.Trim(gitarg, ""),
 		"--build-arg", "HTTPS_PROXY="+os.Getenv("HTTPS_PROXY"),
 		"--build-arg", "HTTP_PROXY="+os.Getenv("HTTP_PROXY"),
@@ -328,29 +302,15 @@ func tenancyDatamodelBuild() error {
 func tenancyAPIMappingBuild() error {
 	// some errors below are deliberately ignored to suppress “file already/doesn’t” exist errors
 	// Mage uses %v when formatting errors, so they cannot be unwrapped and handled on a case by case
-
 	projectDir := "tenancy-api-mapping"
-	homeDir := os.Getenv("HOME")
-
-	linkFiles := []string{".gitconfig", ".netrc"}
-	linkDirs := []string{".ssh"}
-
-	mg.Deps(tenancyAPIMappingClean)
-
-	for _, file := range linkFiles {
-		// deliberately ignored errors
-		_ = sh.RunV("touch", filepath.Join(projectDir, file))
-		_ = sh.Copy(filepath.Join(projectDir, file), filepath.Join(homeDir, file))
-	}
-
-	for _, dir := range linkDirs {
-		// deliberately ignored errors
-		_ = sh.RunV("mkdir", "-p", filepath.Join(projectDir, dir))
-		_ = sh.RunV("cp", "-r", filepath.Join(homeDir, dir), filepath.Join(projectDir, dir))
-	}
 
 	appVersion, err := getChartAppVersion(projectDir)
 	if err != nil {
+		return err
+	}
+
+	// run go mod vendor in project directory
+	if err := sh.RunV("sh", "-c", fmt.Sprintf("cd %s && go mod vendor", projectDir)); err != nil {
 		return err
 	}
 
@@ -371,27 +331,14 @@ func tenancyManagerBuild() error {
 
 	projectDir := "tenancy-manager"
 	componentName := "tenancy-manager"
-	homeDir := os.Getenv("HOME")
-
-	linkFiles := []string{".gitconfig", ".netrc"}
-	linkDirs := []string{".ssh"}
-
-	mg.Deps(tenancyManagerClean)
-
-	for _, file := range linkFiles {
-		// deliberately ignored errors
-		_ = sh.RunV("touch", filepath.Join(projectDir, file))
-		_ = sh.Copy(filepath.Join(projectDir, file), filepath.Join(homeDir, file))
-	}
-
-	for _, dir := range linkDirs {
-		// deliberately ignored errors
-		_ = sh.RunV("mkdir", "-p", filepath.Join(projectDir, dir))
-		_ = sh.RunV("cp", "-r", filepath.Join(homeDir, dir), filepath.Join(projectDir, dir))
-	}
 
 	appVersion, err := getChartAppVersion(projectDir)
 	if err != nil {
+		return err
+	}
+
+	// run go mod vendor in project directory
+	if err := sh.RunV("sh", "-c", fmt.Sprintf("cd %s && go mod vendor", projectDir)); err != nil {
 		return err
 	}
 
@@ -413,28 +360,15 @@ func nexusAPIGatewayBuild() error {
 
 	projectDir := "nexus-api-gw"
 	componentName := "api-gw"
-	homeDir := os.Getenv("HOME")
-
-	linkFiles := []string{".gitconfig", ".netrc"}
-	linkDirs := []string{".ssh"}
-
-	mg.Deps(nexusAPIGatewayClean)
 
 	appVersion, err := getChartAppVersion(projectDir)
 	if err != nil {
 		return err
 	}
 
-	for _, file := range linkFiles {
-		// deliberately ignored errors
-		_ = sh.RunV("touch", filepath.Join(projectDir, file))
-		_ = sh.Copy(filepath.Join(projectDir, file), filepath.Join(homeDir, file))
-	}
-
-	for _, dir := range linkDirs {
-		// deliberately ignored errors
-		_ = sh.RunV("mkdir", "-p", filepath.Join(projectDir, dir))
-		_ = sh.RunV("cp", "-r", filepath.Join(homeDir, dir), filepath.Join(projectDir, dir))
+	// run go mod vendor in project directory
+	if err := sh.RunV("sh", "-c", fmt.Sprintf("cd %s && go mod vendor", projectDir)); err != nil {
+		return err
 	}
 
 	return sh.RunV(
@@ -450,10 +384,6 @@ func nexusAPIGatewayBuild() error {
 
 // Builds the openapi-generator container image.
 func openAPIGeneratorBuild() error {
-	if os.Getenv("GITHUB_TOKEN") == "" {
-		return fmt.Errorf("GITHUB_TOKEN must be set")
-	}
-
 	TAG := getNexusCompilerTag()
 
 	g0 := sh.OutCmd("git")
@@ -467,7 +397,6 @@ func openAPIGeneratorBuild() error {
 		"docker",
 		"build",
 		"--load",
-		"--secret", "id=GITHUB_TOKEN,env=GITHUB_TOKEN",
 		"--build-arg", strings.Trim(gitarg, ""),
 		"--build-arg", "HTTPS_PROXY="+os.Getenv("HTTPS_PROXY"),
 		"--build-arg", "HTTP_PROXY="+os.Getenv("HTTP_PROXY"),

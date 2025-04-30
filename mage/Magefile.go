@@ -7,6 +7,7 @@ package mage
 
 import (
 	"fmt"
+	"os"
 	"regexp"
 
 	"github.com/bitfield/script"
@@ -16,10 +17,20 @@ import (
 var PublicCharts = []string{"aws-sm-get-rs-token", "aws-sm-proxy", "oci-secret", "secret-wait", "token-refresh"}
 var PublicContainers = []string{"aws-sm-proxy"}
 
-const (
-	AWSRegion                         = "us-west-2"
-	OpenEdgePlatformRegistryRepoURL   = "080137407410.dkr.ecr.us-west-2.amazonaws.com"
-	OpenEdgePlatformRepository        = "edge-orch"
+var (
+	AWSRegion                       = "us-west-2"
+	OpenEdgePlatformRegistryRepoURL = func() string {
+		if r := os.Getenv("DOCKER_REGISTRY"); r != "" {
+			return r
+		}
+		return "080137407410.dkr.ecr.us-west-2.amazonaws.com"
+	}()
+	OpenEdgePlatformRepository = func() string {
+		if r := os.Getenv("DOCKER_REPOSITORY"); r != "" {
+			return r
+		}
+		return "edge-orch"
+	}()
 	RegistryRepoSubProj               = "common"
 	OpenEdgePlatformContainerRegistry = OpenEdgePlatformRegistryRepoURL + "/" +
 		OpenEdgePlatformRepository + "/" +
@@ -257,21 +268,6 @@ func (t Test) Golang() error {
 
 // Namespace contains clean targets.
 type Clean mg.Namespace
-
-// Cleans the Tenancy API Mapping build environment.
-func (Clean) TenancyAPIMapping() error {
-	return tenancyAPIMappingClean()
-}
-
-// Cleans the Tenancy Manager build environment.
-func (Clean) TenancyManager() error {
-	return tenancyManagerClean()
-}
-
-// Cleans the Nexus API Gateway build environment.
-func (Clean) NexusAPIGateway() error {
-	return nexusAPIGatewayClean()
-}
 
 // Builds the OpenAPI-Generator container image.
 func (Build) OpenAPIGenerator() error {

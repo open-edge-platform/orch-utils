@@ -13,8 +13,7 @@ ARG NO_PROXY
 ARG USER_HOME
 
 COPY . /app
-COPY .gitconfig .netrc .ssh /root/
-COPY .netrc /root
+COPY vendor/ /go/src/github.com/open-edge-platform/orch-utils/nexus-api-gw/vendor/
 
 ENV http_proxy=${HTTP_PROXY}
 ENV https_proxy=${HTTPS_PROXY}
@@ -27,8 +26,6 @@ ENV GOPRIVATE=github.com/open-edge-platform/*
 RUN set -x && \
     apt-get update -y && \
     apt-get install -y --no-install-recommends netcat-openbsd=1.217-3 && \
-    go mod tidy && \
-    go mod download && \
     CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -buildvcs=false -o bin/${API_GW_COMPONENT_NAME}
 
 FROM gcr.io/distroless/static-debian12:nonroot
