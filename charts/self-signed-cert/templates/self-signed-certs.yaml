@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
----
 
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
@@ -181,6 +180,11 @@ data:
     - onboarding-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - onboarding-stream.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - alerting-monitor.{{ required "A valid certDomain entry required!" .Values.certDomain }}
+    - mps-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
+    - rps-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
+    - mpsrouter-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
+    - mps-webport-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
+    - rps-webport-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - connect-gateway.{{ required "A valid certDomain entry required!" .Values.certDomain }}
 ---
 # FIXME: The following ClusterRole and ClusterRoleBinding should be installed by CTM chart.
