@@ -123,7 +123,6 @@ jobs:
           repository: open-edge-platform/orch-ci
           path: ci
           ref: main
-          token: ${{ secrets.SYS_ORCH_GITHUB }}
 
       - name: Run Version Check
         shell: bash
@@ -152,7 +151,6 @@ jobs:
           repository: open-edge-platform/orch-ci
           path: ci
           ref: main
-          token: ${{ secrets.SYS_ORCH_GITHUB }}
 
       - name: Setup asdf and install dependencies
         uses: ./.github/actions/setup-asdf
@@ -161,8 +159,6 @@ jobs:
       # We need to find a long term solution that leverages orch-ci workflow
       - name: Run Version Tag
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        env:
-          GITHUB_TOKEN: ${{ secrets.SYS_ORCH_GITHUB }}
         shell: bash
         run: |
           # Tag the helm charts
