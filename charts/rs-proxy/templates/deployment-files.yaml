@@ -67,7 +67,7 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/caddy
-              readOnly: true
+              readOnly: false
           {{- if .Values.proxyTargetCA }}
             - name: certs
               mountPath: /data-ca
