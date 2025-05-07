@@ -88,7 +88,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: sanitize-project-folder
     env:
-      INPUTS_PROJECT_FOLDER: ${{ inputs.project_folder }}
       SANITIZIED_PROJECT_NAME: ${{ needs.sanitize-project-folder.outputs.sanitized_project_name }}
     steps:
       - name: Checkout code
@@ -110,10 +109,8 @@ jobs:
           path: ci
           persist-credentials: false
       - name: Scan for secrets
-        env:
-          PROJECT_FOLDER: ${{ inputs.project_folder }}
         run: |
-          gitleaks dir "${INPUTS_PROJECT_FOLDER}" -v -c ci/.gitleaks.toml --baseline-path ci/gitleaks_baselines/gitleaks-"${SANITIZIED_PROJECT_NAME}".json -r gitleaks-"${SANITIZIED_PROJECT_NAME}".json
+          gitleaks dir ${GITHUB_WORKSPACE} -v -c ci/.gitleaks.toml --baseline-path ci/gitleaks_baselines/gitleaks-"${SANITIZIED_PROJECT_NAME}".json -r gitleaks-"${SANITIZIED_PROJECT_NAME}".json
       - name: Upload Gitleaks Report
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
         with:
