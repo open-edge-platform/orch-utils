@@ -56,6 +56,11 @@ func (Test) golang() error {
 		"--race",
 		"-randomize-all",
 		"-randomize-suites",
+		// "--fail-on-pending",
+		// "--fail-on-empty",
+		// "--keep-going",
+		"--cover",
+		// "-coverpkg="+strings.Join(skippedPackages, ","),
 		"--skip-package="+strings.Join(skippedPackages, ","),
 	)
 }
