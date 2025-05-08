@@ -27,20 +27,187 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
-
+permissions: {}
 jobs:
+  sanitize-project-folder:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    outputs:
+      sanitized_project_name: ${{ steps.sanitize.outputs.sanitized_project_name }}
+    env:
+      INPUTS_PROJECT_FOLDER: ${{ inputs.project_folder }}
+    steps:
+      - name: Sanitize project folder
+        id: sanitize
+        run: |
+          # check if inputs.project_folder is set, if not return repository name
+          if [ -z "${INPUTS_PROJECT_FOLDER}" ] || [ "${INPUTS_PROJECT_FOLDER}" = "." ]; then
+            SANITIZED_PROJECT_NAME="${GITHUB_REPOSITORY#"${GITHUB_REPOSITORY_OWNER}/"}"
+          else
+            SANITIZED_PROJECT_NAME=$(echo "${INPUTS_PROJECT_FOLDER}" | tr '/' '-')
+          fi
+
+          echo "SANITIZED_PROJECT_NAME=${SANITIZED_PROJECT_NAME}" >> "$GITHUB_ENV"
+          echo "sanitized_project_name=${SANITIZED_PROJECT_NAME}" >> "$GITHUB_OUTPUT"
+  scorecard:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: sanitize-project-folder
+    permissions:
+      contents: read
+      # Needed to upload the results to code-scanning dashboard.
+      security-events: write
+      # Needed to publish results and get a badge (see publish_results below).
+      id-token: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          ref: ${{ github.head_ref }}
+          persist-credentials: false
+      - name: Run OpenSSF Scorecard
+        uses: ossf/scorecard-action@f49aabe0b5af0936a0987cfb85d86b75731b0186  # v2.4.1
+        with:
+          results_file: scorecard-results-${{ needs.sanitize-project-folder.outputs.sanitized_project_name }}.sarif
+          results_format: sarif
+          repo_token: ${{ secrets.SYS_ORCH_GITHUB }}
+          publish_results: true
+      - name: Upload Scorecard Results
+        uses: github/codeql-action/upload-sarif@60168efe1c415ce0f5521ea06d5c2062adbeed1b  # v3.28.17
+        with:
+          sarif_file: scorecard-results-${{ needs.sanitize-project-folder.outputs.sanitized_project_name }}.sarif
+      - name: Upload Scorecard Results
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: scorecard-results-${{ needs.sanitize-project-folder.outputs.sanitized_project_name }}
+          path: scorecard-results-${{ needs.sanitize-project-folder.outputs.sanitized_project_name }}.sarif
+  secrets-gitleaks-scan:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    needs: sanitize-project-folder
+    env:
+      SANITIZIED_PROJECT_NAME: ${{ needs.sanitize-project-folder.outputs.sanitized_project_name }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          ref: ${{ github.head_ref }}
+          persist-credentials: false
+      - name: Install gitleaks
+        uses: open-edge-platform/orch-ci/.github/actions/bootstrap@31986a986cab0a87721ecb694388029e94e55ff7   # 0.1.8
+        with:
+          bootstrap_tools: "gitleaks"
+      - name: Get current timestamp
+        id: timestamp
+        run: echo "time=$(date +%s)" >> "$GITHUB_OUTPUT"
+      - name: Clone CI repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          repository: open-edge-platform/orch-ci
+          path: ci
+          persist-credentials: false
+      - name: Scan for secrets
+        run: |
+          gitleaks dir ${GITHUB_WORKSPACE} -v -c ci/.gitleaks.toml --baseline-path ci/gitleaks_baselines/gitleaks-"${SANITIZIED_PROJECT_NAME}".json -r gitleaks-"${SANITIZIED_PROJECT_NAME}".json
+      - name: Upload Gitleaks Report
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: gitleaks-report-${{ needs.sanitize-project-folder.outputs.sanitized_project_name }}-${{ steps.timestamp.outputs.time }}
+          path: gitleaks-${{ needs.sanitize-project-folder.outputs.sanitized_project_name }}.json
+  zizimor-scan:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    needs: sanitize-project-folder
+    env:
+      ZIZMOR_VERSION: 1.5.2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca  # v6.0.1
+
+      - name: Run zizmor
+        run: uvx zizmor=="$ZIZMOR_VERSION" "$GITHUB_WORKSPACE" --no-exit-codes > zizmor_scan_report.txt
+
+      - name: Upload Zizimor Scan Report
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: zizmor-scan-report-${{ needs.sanitize-project-folder.outputs.sanitized_project_name }}
+          path: zizmor_scan_report.txt
+  trivy-filesystem-scan:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    needs: sanitize-project-folder
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Run Trivy Filesystem Scan
+        uses: aquasecurity/trivy-action@6c175e9c4083a92bbca2f9724c8a5e33bc2d97a5  # 0.30.0
+        with:
+          scan-type: 'fs'
+          scan-ref: ${{ inputs.project_folder }}
+          format: 'sarif'
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+          ignore-unfixed: true
+          trivy-config: ${{ inputs.trivy_config_path }}
+          scanners: 'vuln,misconfig,secret'
+          output: "trivy_scan_report-${{ needs.sanitize-project-folder.outputs.sanitized_project_name }}.sarif"
+      - name: Upload Trivy Scan Report
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: trivy-scan-report-${{ needs.sanitize-project-folder.outputs.sanitized_project_name }}
+          path: trivy_scan_report-${{ needs.sanitize-project-folder.outputs.sanitized_project_name }}.sarif
+      - name: Upload Trivy Results
+        uses: github/codeql-action/upload-sarif@60168efe1c415ce0f5521ea06d5c2062adbeed1b  # v3.28.17
+        with:
+          sarif_file: trivy_scan_report-${{ needs.sanitize-project-folder.outputs.sanitized_project_name }}.sarif
+  trivy-critical-scan:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    needs: sanitize-project-folder
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          ref: ${{ github.head_ref }}
+          persist-credentials: false
+      - name: Run Trivy Critical Filesystem Scan
+        uses: aquasecurity/trivy-action@6c175e9c4083a92bbca2f9724c8a5e33bc2d97a5  # 0.30.0
+        with:
+          scan-type: 'fs'
+          scan-ref: ${{ inputs.project_folder }}
+          format: 'table'
+          severity: 'HIGH,CRITICAL'
+          ignore-unfixed: false
+          trivy-config: ${{ inputs.trivy_config_path }}
+          scanners: 'vuln,misconfig,secret'
+          exit-code: 1
   lint-go:
+    permissions:
+      contents: read
     name: Lint Go
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Setup asdf and install dependencies
         uses: ./.github/actions/setup-asdf
 
-      - uses: actions/cache@v4.2.3
+      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
         with:
           path: |
             ~/.cache/go-build
@@ -54,14 +221,17 @@ jobs:
 
       - name: Run lint
         run: mage lint:golang
-
   lint-helm:
+    permissions:
+      contents: read
     name: Lint Helm Charts
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Setup asdf and install dependencies
         uses: ./.github/actions/setup-asdf
@@ -70,12 +240,16 @@ jobs:
         run: mage lint:helm
 
   lint-yaml:
+    permissions:
+      contents: read
     name: Lint YAML
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Setup asdf and install dependencies
         uses: ./.github/actions/setup-asdf
@@ -84,11 +258,15 @@ jobs:
         run: mage lint:yaml
 
   lint-dockerfile:
+    permissions:
+      contents: read
     name: Lint Dockerfiles
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Setup asdf and install dependencies
         uses: ./.github/actions/setup-asdf
@@ -97,17 +275,23 @@ jobs:
         run: mage lint:dockerfiles
 
   check-license:
+    permissions:
+      contents: read
     name: Check License
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: REUSE Compliance Check
-        uses: fsfe/reuse-action@v5.0.0
+        uses: fsfe/reuse-action@bb774aa972c2a89ff34781233d275075cbddf542  # v5.0.0
 
   version-check:
+    permissions:
+      contents: read
     name: Version Check
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -115,14 +299,17 @@ jobs:
       BASEDIR: .
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Checkout action repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
         with:
           repository: open-edge-platform/orch-ci
           path: ci
           ref: main
+          persist-credentials: false
 
       - name: Run Version Check
         shell: bash
@@ -130,6 +317,8 @@ jobs:
           ./ci/scripts/version-check.sh
 
   version-tag:
+    permissions:
+      contents: read
     name: Version Tag
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -140,17 +329,19 @@ jobs:
       BASEDIR: .
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
         with:
           fetch-tags: true
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Checkout action repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
         with:
           repository: open-edge-platform/orch-ci
           path: ci
           ref: main
+          persist-credentials: false
 
       - name: Setup asdf and install dependencies
         uses: ./.github/actions/setup-asdf
@@ -188,6 +379,8 @@ jobs:
           done
 
   test-go:
+    permissions:
+      contents: read
     name: Test Go
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -197,12 +390,14 @@ jobs:
       - version-check
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Setup asdf and install dependencies
         uses: ./.github/actions/setup-asdf
 
-      - uses: actions/cache@v4.2.3
+      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
         with:
           path: |
             ~/.cache/go-build
@@ -218,6 +413,8 @@ jobs:
         run: mage test:golang
 
   build-containers:
+    permissions:
+      contents: read
     name: Build and publish containers
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -243,12 +440,14 @@ jobs:
       - lint-yaml
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Setup asdf and install dependencies
         uses: ./.github/actions/setup-asdf
 
-      - uses: actions/cache@v4.2.3
+      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
         with:
           path: |
             ~/.cache/go-build
@@ -261,7 +460,7 @@ jobs:
         run: find . -name "go.mod" -execdir go mod download -x \;
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3.10.0
+        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2  # v3.10.0
         with:
           install: true
 
@@ -271,7 +470,7 @@ jobs:
 
       - name: Configure AWS credentials
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: aws-actions/configure-aws-credentials@v4.1.0
+        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722  # v4.1.0
         with:
           aws-access-key-id: ${{ secrets.NO_AUTH_ECR_PUSH_USERNAME }}
           aws-secret-access-key: ${{ secrets.NO_AUTH_ECR_PUSH_PASSWD }}
@@ -279,7 +478,7 @@ jobs:
 
       - name: Login to ECR
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: docker/login-action@v3.4.0
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772  # v3.4.0
         with:
           registry: 080137407410.dkr.ecr.us-west-2.amazonaws.com
 
@@ -290,6 +489,8 @@ jobs:
           mage push:${{ matrix.version }}
 
   build-helm-charts:
+    permissions:
+      contents: read
     name: Build and publish Helm charts
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -300,7 +501,9 @@ jobs:
       - version-check
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Setup asdf and install dependencies
         uses: ./.github/actions/setup-asdf
@@ -309,7 +512,7 @@ jobs:
         run: mage ChartsBuild
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4.1.0
+        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722  # v4.1.0
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
           aws-access-key-id: ${{ secrets.NO_AUTH_ECR_PUSH_USERNAME }}
@@ -318,7 +521,7 @@ jobs:
 
       - name: Login to Amazon ECR
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: aws-actions/amazon-ecr-login@v2
+        uses: aws-actions/amazon-ecr-login@062b18b96a7aff071d4dc91bc00c4c1a7945b076  # v2.0.1
         with:
           registries: "080137407410"
 
