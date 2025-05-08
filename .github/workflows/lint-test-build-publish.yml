@@ -12,7 +12,7 @@ on:
     branches:
       - main
 
-  # Trigger workflow on PRs to all branches
+  # Trigger  workflow on PRs to all branches
   pull_request:
     branches:
       - "*"
