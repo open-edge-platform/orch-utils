@@ -6,7 +6,7 @@ openapi: 3.0.3
 info:
   title: Cluster Manager 2.0
   description: This document defines the schema for the Cluster Manager 2.0 REST API.
-  version: 2.0.0-dev
+  version: 2.1.0
 servers:
 - url: '{apiRoot}'
   variables:
@@ -47,8 +47,14 @@ paths:
           default: 0
           minimum: 0
           type: integer
-      - description: The ordering of the entries. "asc" and "desc" are valid values.
-          If none is specified, "asc" is used.
+      - description: |
+          The ordering of the entries. "asc" and "desc" are valid values. If none is specified, "asc" is used.
+
+          Supported fields:
+          - name
+          - kubernetesVersion
+          - providerStatus
+          - lifecyclePhase
         examples:
           ascending:
             description: sort the entries by name entry in ascending order
@@ -64,7 +70,14 @@ paths:
         name: orderBy
         schema:
           type: string
-      - description: Filters the entries based on the filter provided.
+      - description: |
+          Filters the entries based on the filter provided.
+
+          Supported fields:
+          - name
+          - kubernetesVersion
+          - providerStatus
+          - lifecyclePhase
         examples:
           multiple_filter:
             description: filter by cluster name with the prefix "foo" or with Kubernetes
@@ -538,7 +551,7 @@ paths:
       schema:
         maxLength: 50
         minLength: 1
-        pattern: ^[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]$
+        pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
         type: string
     - description: unique projectName for the resource
       in: path
@@ -591,7 +604,7 @@ paths:
       schema:
         maxLength: 50
         minLength: 1
-        pattern: ^[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]$
+        pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
         type: string
     - description: unique projectName for the resource
       in: path
@@ -639,7 +652,7 @@ paths:
       schema:
         maxLength: 50
         minLength: 1
-        pattern: ^[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]$
+        pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
         type: string
     - description: Version of the template in the format of 'vX.Y.Z'
       example: v0.1.0
@@ -783,7 +796,7 @@ components:
           type: array
         template:
           maxLength: 63
-          pattern: ^$|^[A-Za-z0-9-_. ]+$
+          pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
           type: string
       required:
       - nodes
@@ -824,14 +837,14 @@ components:
           example: baseline
           maxLength: 50
           minLength: 1
-          pattern: ^[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]$
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
           type: string
         version:
           description: Cluster template version in the format of 'vX.Y.Z'
           example: v0.1.0
           maxLength: 63
           minLength: 1
-          pattern: ^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$
+          pattern: ^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-dev)?$
           type: string
       required:
       - name
@@ -899,7 +912,8 @@ components:
     NodeInfo:
       properties:
         id:
-          description: The unique identifier of this host.
+          description: Host resource id
+          example: host-15efd22c
           type: string
         role:
           type: string
@@ -909,7 +923,8 @@ components:
     NodeSpec:
       properties:
         id:
-          description: The unique identifier of this host.
+          description: UUID of the host.
+          example: 6e6422c3-625e-507a-bc8a-bd2330e07e7e
           type: string
         role:
           default: all
@@ -1030,12 +1045,12 @@ components:
         name:
           maxLength: 63
           minLength: 1
-          pattern: ^[A-Za-z0-9-_. ]+$
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
           type: string
         version:
           maxLength: 63
           minLength: 1
-          pattern: ^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$
+          pattern: ^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-dev)?$
           type: string
       required:
       - name
