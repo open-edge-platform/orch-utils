@@ -72,7 +72,7 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/caddy
-              readOnly: true
+              readOnly: false
             - name: certs-https
               mountPath: /data-tls
               readOnly: true
