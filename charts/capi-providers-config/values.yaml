@@ -35,3 +35,8 @@ controlplane:
     configSecret:
       namespace: capi-variables
       name: capi-variables
+
+# Configuration for enabling or disabling metrics
+# For all CAPI providers
+metrics:
+  enabled: true

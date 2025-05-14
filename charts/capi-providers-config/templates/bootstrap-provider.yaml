@@ -9,3 +9,25 @@ metadata:
   namespace: {{ .Values.bootstrap.namespace }}
 spec:
   {{- toYaml .Values.bootstrap.spec | nindent 2 }}
+---
+{{- if .Values.bootstrap.spec.additionalManifests }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.bootstrap.spec.additionalManifests.name }}
+  namespace: {{ .Values.bootstrap.spec.additionalManifests.namespace | default .Values.bootstrap.namespace }}
+data:
+  manifests: |
+    {{- if .Values.bootstrap.additionalManifests }}
+    {{- toYaml .Values.bootstrap.additionalManifests.manifests | nindent 4 }}
+    {{- end }}
+    {{- if .Values.metrics.enabled }}
+    ---
+    {{- include "metricsservicetemplate" (dict "name" (printf "%s-%s" "bootstrap" .Values.bootstrap.name) "namespace" .Values.bootstrap.namespace ) | nindent 4 }}
+        selector:
+          cluster.x-k8s.io/provider: bootstrap-{{ .Values.controlplane.name }}
+    ---
+    {{- include "metricsservicemonitortemplate" (dict "name" (printf "%s-%s" "bootstrap" .Values.bootstrap.name) "namespace" .Values.bootstrap.namespace) | nindent 4 }}
+    {{- end }}
+{{- end }}
+
