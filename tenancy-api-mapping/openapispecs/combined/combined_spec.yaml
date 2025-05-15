@@ -5228,6 +5228,94 @@ paths:
                     description: OK
             tags:
                 - DeploymentService
+    /v1/projects/{projectName}/compute/hosts:
+        get:
+            description: Get a list of hosts.
+            operationId: HostService_ListHosts
+            parameters:
+                - description: Optional comma separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details.
+                  in: query
+                  name: orderBy
+                  schema:
+                    maxLength: 1000
+                    pattern: ^$|^[a-zA-Z-_0-9., ]+$
+                    type: string
+                - description: Optional filter to return only item of interest. See https://google.aip.dev/160 for details.
+                  in: query
+                  name: filter
+                  schema:
+                    maxLength: 1000
+                    pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}"' ]+$
+                    type: string
+                - description: Defines the amount of items to be contained in a single page. Default of 20.
+                  in: query
+                  name: pageSize
+                  schema:
+                    format: int32
+                    maximum: 100
+                    minimum: 1
+                    type: integer
+                - description: Index of the first item to return. This allows skipping items.
+                  in: query
+                  name: offset
+                  schema:
+                    format: int32
+                    maximum: 10000
+                    type: integer
+                - description: unique projectName for the resource
+                  in: path
+                  name: projectName
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListHostsResponse'
+                    description: OK
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+                    description: Default error response
+            summary: ListHosts
+            tags:
+                - HostService
+        post:
+            description: Create a host.
+            operationId: HostService_CreateHost
+            parameters:
+                - description: unique projectName for the resource
+                  in: path
+                  name: projectName
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/HostResource'
+                required: true
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/HostResource'
+                    description: OK
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+                    description: Default error response
+            summary: CreateHost
+            tags:
+                - HostService
     /v1/projects/{projectName}/compute/hosts/{resourceId}:
         delete:
             description: Delete a host.
@@ -6425,7 +6513,7 @@ paths:
             summary: CreateWorkloadMember
             tags:
                 - WorkloadMemberService
-    /v1/projects/{projectName}/compute/workloads/{resourceId}/members/{resourceId}:
+    /v1/projects/{projectName}/compute/workloads/{workloadResourceId}/members/{resourceId}:
         delete:
             description: Delete a workload_member.
             operationId: WorkloadMemberService_DeleteWorkloadMember
@@ -6439,6 +6527,12 @@ paths:
                 - description: unique projectName for the resource
                   in: path
                   name: projectName
+                  required: true
+                  schema:
+                    type: string
+                - description: unique workloadResourceId for the resource
+                  in: path
+                  name: workloadResourceId
                   required: true
                   schema:
                     type: string
@@ -6471,6 +6565,12 @@ paths:
                 - description: unique projectName for the resource
                   in: path
                   name: projectName
+                  required: true
+                  schema:
+                    type: string
+                - description: unique workloadResourceId for the resource
+                  in: path
+                  name: workloadResourceId
                   required: true
                   schema:
                     type: string
@@ -7058,6 +7158,177 @@ paths:
             summary: CreateRegion
             tags:
                 - RegionService
+    /v1/projects/{projectName}/regions/{regionResourceId}/sites/{resourceId}:
+        delete:
+            description: Delete a site.
+            operationId: SiteService_DeleteSite
+            parameters:
+                - description: Name of the site site to be deleted.
+                  in: path
+                  name: resourceId
+                  required: true
+                  schema:
+                    type: string
+                - description: unique projectName for the resource
+                  in: path
+                  name: projectName
+                  required: true
+                  schema:
+                    type: string
+                - description: unique regionResourceId for the resource
+                  in: path
+                  name: regionResourceId
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeleteSiteResponse'
+                    description: OK
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+                    description: Default error response
+            summary: DeleteSite
+            tags:
+                - SiteService
+        get:
+            description: Get a specific site.
+            operationId: SiteService_GetSite
+            parameters:
+                - description: Name of the requested site.
+                  in: path
+                  name: resourceId
+                  required: true
+                  schema:
+                    type: string
+                - description: unique projectName for the resource
+                  in: path
+                  name: projectName
+                  required: true
+                  schema:
+                    type: string
+                - description: unique regionResourceId for the resource
+                  in: path
+                  name: regionResourceId
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/SiteResource'
+                    description: OK
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+                    description: Default error response
+            summary: GetSite
+            tags:
+                - SiteService
+        patch:
+            description: Patch a site.
+            operationId: SiteService_PatchSite
+            parameters:
+                - description: ID of the resource to be updated.
+                  in: path
+                  name: resourceId
+                  required: true
+                  schema:
+                    type: string
+                - description: Field mask to be applied on the patch of site.
+                  in: query
+                  name: fieldMask
+                  schema:
+                    format: field-mask
+                    type: string
+                - description: unique projectName for the resource
+                  in: path
+                  name: projectName
+                  required: true
+                  schema:
+                    type: string
+                - description: unique regionResourceId for the resource
+                  in: path
+                  name: regionResourceId
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/SiteResource'
+                required: true
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/SiteResource'
+                    description: OK
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+                    description: Default error response
+            summary: PatchSite
+            tags:
+                - SiteService
+        put:
+            description: Update a site.
+            operationId: SiteService_UpdateSite
+            parameters:
+                - description: Name of the site site to be updated.
+                  in: path
+                  name: resourceId
+                  required: true
+                  schema:
+                    type: string
+                - description: unique projectName for the resource
+                  in: path
+                  name: projectName
+                  required: true
+                  schema:
+                    type: string
+                - description: unique regionResourceId for the resource
+                  in: path
+                  name: regionResourceId
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/SiteResource'
+                required: true
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/SiteResource'
+                    description: OK
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+                    description: Default error response
+            summary: UpdateSite
+            tags:
+                - SiteService
     /v1/projects/{projectName}/regions/{resourceId}:
         delete:
             description: Delete a region.
@@ -7303,153 +7574,6 @@ paths:
                                 $ref: '#/components/schemas/Status'
                     description: Default error response
             summary: CreateSite
-            tags:
-                - SiteService
-    /v1/projects/{projectName}/regions/{resourceId}/sites/{resourceId}:
-        delete:
-            description: Delete a site.
-            operationId: SiteService_DeleteSite
-            parameters:
-                - description: Name of the site site to be deleted.
-                  in: path
-                  name: resourceId
-                  required: true
-                  schema:
-                    type: string
-                - description: unique projectName for the resource
-                  in: path
-                  name: projectName
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/DeleteSiteResponse'
-                    description: OK
-                default:
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-                    description: Default error response
-            summary: DeleteSite
-            tags:
-                - SiteService
-        get:
-            description: Get a specific site.
-            operationId: SiteService_GetSite
-            parameters:
-                - description: Name of the requested site.
-                  in: path
-                  name: resourceId
-                  required: true
-                  schema:
-                    type: string
-                - description: unique projectName for the resource
-                  in: path
-                  name: projectName
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/SiteResource'
-                    description: OK
-                default:
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-                    description: Default error response
-            summary: GetSite
-            tags:
-                - SiteService
-        patch:
-            description: Patch a site.
-            operationId: SiteService_PatchSite
-            parameters:
-                - description: ID of the resource to be updated.
-                  in: path
-                  name: resourceId
-                  required: true
-                  schema:
-                    type: string
-                - description: Field mask to be applied on the patch of site.
-                  in: query
-                  name: fieldMask
-                  schema:
-                    format: field-mask
-                    type: string
-                - description: unique projectName for the resource
-                  in: path
-                  name: projectName
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/SiteResource'
-                required: true
-            responses:
-                "200":
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/SiteResource'
-                    description: OK
-                default:
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-                    description: Default error response
-            summary: PatchSite
-            tags:
-                - SiteService
-        put:
-            description: Update a site.
-            operationId: SiteService_UpdateSite
-            parameters:
-                - description: Name of the site site to be updated.
-                  in: path
-                  name: resourceId
-                  required: true
-                  schema:
-                    type: string
-                - description: unique projectName for the resource
-                  in: path
-                  name: projectName
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/SiteResource'
-                required: true
-            responses:
-                "200":
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/SiteResource'
-                    description: OK
-                default:
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-                    description: Default error response
-            summary: UpdateSite
             tags:
                 - SiteService
     /v1/projects/{projectName}/resource/endpoints/applications/{appId}/clusters/{clusterId}:
@@ -8304,6 +8428,177 @@ paths:
             summary: CreateTelemetryLogsGroup
             tags:
                 - TelemetryLogsGroupService
+    /v1/projects/{projectName}/telemetry/loggroups/{loggroupResourceId}/logprofiles/{resourceId}:
+        delete:
+            description: Delete a telemetry_logs_profile.
+            operationId: TelemetryLogsProfileService_DeleteTelemetryLogsProfile
+            parameters:
+                - description: Name of the telemetry_logs_profile telemetry_logs_profile to be deleted.
+                  in: path
+                  name: resourceId
+                  required: true
+                  schema:
+                    type: string
+                - description: unique projectName for the resource
+                  in: path
+                  name: projectName
+                  required: true
+                  schema:
+                    type: string
+                - description: unique loggroupResourceId for the resource
+                  in: path
+                  name: loggroupResourceId
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeleteTelemetryLogsProfileResponse'
+                    description: OK
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+                    description: Default error response
+            summary: DeleteTelemetryLogsProfile
+            tags:
+                - TelemetryLogsProfileService
+        get:
+            description: Get a specific telemetry_logs_profile.
+            operationId: TelemetryLogsProfileService_GetTelemetryLogsProfile
+            parameters:
+                - description: Name of the requested telemetry_logs_profile.
+                  in: path
+                  name: resourceId
+                  required: true
+                  schema:
+                    type: string
+                - description: unique projectName for the resource
+                  in: path
+                  name: projectName
+                  required: true
+                  schema:
+                    type: string
+                - description: unique loggroupResourceId for the resource
+                  in: path
+                  name: loggroupResourceId
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TelemetryLogsProfileResource'
+                    description: OK
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+                    description: Default error response
+            summary: GetTelemetryLogsProfile
+            tags:
+                - TelemetryLogsProfileService
+        patch:
+            description: Patch a telemetry_logs_profile.
+            operationId: TelemetryLogsProfileService_PatchTelemetryLogsProfile
+            parameters:
+                - description: ID of the resource to be updated.
+                  in: path
+                  name: resourceId
+                  required: true
+                  schema:
+                    type: string
+                - description: Field mask to be applied on the patch of telemetry_logs_profile.
+                  in: query
+                  name: fieldMask
+                  schema:
+                    format: field-mask
+                    type: string
+                - description: unique projectName for the resource
+                  in: path
+                  name: projectName
+                  required: true
+                  schema:
+                    type: string
+                - description: unique loggroupResourceId for the resource
+                  in: path
+                  name: loggroupResourceId
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/TelemetryLogsProfileResource'
+                required: true
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TelemetryLogsProfileResource'
+                    description: OK
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+                    description: Default error response
+            summary: PatchTelemetryLogsProfile
+            tags:
+                - TelemetryLogsProfileService
+        put:
+            description: Update a telemetry_logs_profile.
+            operationId: TelemetryLogsProfileService_UpdateTelemetryLogsProfile
+            parameters:
+                - description: Name of the telemetry_logs_profile telemetry_logs_profile to be updated.
+                  in: path
+                  name: resourceId
+                  required: true
+                  schema:
+                    type: string
+                - description: unique projectName for the resource
+                  in: path
+                  name: projectName
+                  required: true
+                  schema:
+                    type: string
+                - description: unique loggroupResourceId for the resource
+                  in: path
+                  name: loggroupResourceId
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/TelemetryLogsProfileResource'
+                required: true
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TelemetryLogsProfileResource'
+                    description: OK
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+                    description: Default error response
+            summary: UpdateTelemetryLogsProfile
+            tags:
+                - TelemetryLogsProfileService
     /v1/projects/{projectName}/telemetry/loggroups/{resourceId}:
         delete:
             description: Delete a telemetry_logs_group.
@@ -8485,153 +8780,6 @@ paths:
             summary: CreateTelemetryLogsProfile
             tags:
                 - TelemetryLogsProfileService
-    /v1/projects/{projectName}/telemetry/loggroups/{resourceId}/logprofiles/{resourceId}:
-        delete:
-            description: Delete a telemetry_logs_profile.
-            operationId: TelemetryLogsProfileService_DeleteTelemetryLogsProfile
-            parameters:
-                - description: Name of the telemetry_logs_profile telemetry_logs_profile to be deleted.
-                  in: path
-                  name: resourceId
-                  required: true
-                  schema:
-                    type: string
-                - description: unique projectName for the resource
-                  in: path
-                  name: projectName
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/DeleteTelemetryLogsProfileResponse'
-                    description: OK
-                default:
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-                    description: Default error response
-            summary: DeleteTelemetryLogsProfile
-            tags:
-                - TelemetryLogsProfileService
-        get:
-            description: Get a specific telemetry_logs_profile.
-            operationId: TelemetryLogsProfileService_GetTelemetryLogsProfile
-            parameters:
-                - description: Name of the requested telemetry_logs_profile.
-                  in: path
-                  name: resourceId
-                  required: true
-                  schema:
-                    type: string
-                - description: unique projectName for the resource
-                  in: path
-                  name: projectName
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/TelemetryLogsProfileResource'
-                    description: OK
-                default:
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-                    description: Default error response
-            summary: GetTelemetryLogsProfile
-            tags:
-                - TelemetryLogsProfileService
-        patch:
-            description: Patch a telemetry_logs_profile.
-            operationId: TelemetryLogsProfileService_PatchTelemetryLogsProfile
-            parameters:
-                - description: ID of the resource to be updated.
-                  in: path
-                  name: resourceId
-                  required: true
-                  schema:
-                    type: string
-                - description: Field mask to be applied on the patch of telemetry_logs_profile.
-                  in: query
-                  name: fieldMask
-                  schema:
-                    format: field-mask
-                    type: string
-                - description: unique projectName for the resource
-                  in: path
-                  name: projectName
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/TelemetryLogsProfileResource'
-                required: true
-            responses:
-                "200":
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/TelemetryLogsProfileResource'
-                    description: OK
-                default:
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-                    description: Default error response
-            summary: PatchTelemetryLogsProfile
-            tags:
-                - TelemetryLogsProfileService
-        put:
-            description: Update a telemetry_logs_profile.
-            operationId: TelemetryLogsProfileService_UpdateTelemetryLogsProfile
-            parameters:
-                - description: Name of the telemetry_logs_profile telemetry_logs_profile to be updated.
-                  in: path
-                  name: resourceId
-                  required: true
-                  schema:
-                    type: string
-                - description: unique projectName for the resource
-                  in: path
-                  name: projectName
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/TelemetryLogsProfileResource'
-                required: true
-            responses:
-                "200":
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/TelemetryLogsProfileResource'
-                    description: OK
-                default:
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-                    description: Default error response
-            summary: UpdateTelemetryLogsProfile
-            tags:
-                - TelemetryLogsProfileService
     /v1/projects/{projectName}/telemetry/metricgroups:
         get:
             description: Get a list of telemetryMetricsGroups.
@@ -8713,6 +8861,177 @@ paths:
             summary: CreateTelemetryMetricsGroup
             tags:
                 - TelemetryMetricsGroupService
+    /v1/projects/{projectName}/telemetry/metricgroups/{metricgroupResourceId}/metricprofiles/{resourceId}:
+        delete:
+            description: Delete a telemetry_metrics_profile.
+            operationId: TelemetryMetricsProfileService_DeleteTelemetryMetricsProfile
+            parameters:
+                - description: Name of the telemetry_metrics_profile telemetry_metrics_profile to be deleted.
+                  in: path
+                  name: resourceId
+                  required: true
+                  schema:
+                    type: string
+                - description: unique projectName for the resource
+                  in: path
+                  name: projectName
+                  required: true
+                  schema:
+                    type: string
+                - description: unique metricgroupResourceId for the resource
+                  in: path
+                  name: metricgroupResourceId
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeleteTelemetryMetricsProfileResponse'
+                    description: OK
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+                    description: Default error response
+            summary: DeleteTelemetryMetricsProfile
+            tags:
+                - TelemetryMetricsProfileService
+        get:
+            description: Get a specific telemetry_metrics_profile.
+            operationId: TelemetryMetricsProfileService_GetTelemetryMetricsProfile
+            parameters:
+                - description: Name of the requested telemetry_metrics_profile.
+                  in: path
+                  name: resourceId
+                  required: true
+                  schema:
+                    type: string
+                - description: unique projectName for the resource
+                  in: path
+                  name: projectName
+                  required: true
+                  schema:
+                    type: string
+                - description: unique metricgroupResourceId for the resource
+                  in: path
+                  name: metricgroupResourceId
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TelemetryMetricsProfileResource'
+                    description: OK
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+                    description: Default error response
+            summary: GetTelemetryMetricsProfile
+            tags:
+                - TelemetryMetricsProfileService
+        patch:
+            description: Patch a telemetry_metrics_profile.
+            operationId: TelemetryMetricsProfileService_PatchTelemetryMetricsProfile
+            parameters:
+                - description: ID of the resource to be updated.
+                  in: path
+                  name: resourceId
+                  required: true
+                  schema:
+                    type: string
+                - description: Field mask to be applied on the patch of telemetry_metrics_profile.
+                  in: query
+                  name: fieldMask
+                  schema:
+                    format: field-mask
+                    type: string
+                - description: unique projectName for the resource
+                  in: path
+                  name: projectName
+                  required: true
+                  schema:
+                    type: string
+                - description: unique metricgroupResourceId for the resource
+                  in: path
+                  name: metricgroupResourceId
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/TelemetryMetricsProfileResource'
+                required: true
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TelemetryMetricsProfileResource'
+                    description: OK
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+                    description: Default error response
+            summary: PatchTelemetryMetricsProfile
+            tags:
+                - TelemetryMetricsProfileService
+        put:
+            description: Update a telemetry_metrics_profile.
+            operationId: TelemetryMetricsProfileService_UpdateTelemetryMetricsProfile
+            parameters:
+                - description: Name of the telemetry_metrics_profile telemetry_metrics_profile to be updated.
+                  in: path
+                  name: resourceId
+                  required: true
+                  schema:
+                    type: string
+                - description: unique projectName for the resource
+                  in: path
+                  name: projectName
+                  required: true
+                  schema:
+                    type: string
+                - description: unique metricgroupResourceId for the resource
+                  in: path
+                  name: metricgroupResourceId
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/TelemetryMetricsProfileResource'
+                required: true
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TelemetryMetricsProfileResource'
+                    description: OK
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+                    description: Default error response
+            summary: UpdateTelemetryMetricsProfile
+            tags:
+                - TelemetryMetricsProfileService
     /v1/projects/{projectName}/telemetry/metricgroups/{resourceId}:
         delete:
             description: Delete a telemetry_metrics_group.
@@ -8892,153 +9211,6 @@ paths:
                                 $ref: '#/components/schemas/Status'
                     description: Default error response
             summary: CreateTelemetryMetricsProfile
-            tags:
-                - TelemetryMetricsProfileService
-    /v1/projects/{projectName}/telemetry/metricgroups/{resourceId}/metricprofiles/{resourceId}:
-        delete:
-            description: Delete a telemetry_metrics_profile.
-            operationId: TelemetryMetricsProfileService_DeleteTelemetryMetricsProfile
-            parameters:
-                - description: Name of the telemetry_metrics_profile telemetry_metrics_profile to be deleted.
-                  in: path
-                  name: resourceId
-                  required: true
-                  schema:
-                    type: string
-                - description: unique projectName for the resource
-                  in: path
-                  name: projectName
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/DeleteTelemetryMetricsProfileResponse'
-                    description: OK
-                default:
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-                    description: Default error response
-            summary: DeleteTelemetryMetricsProfile
-            tags:
-                - TelemetryMetricsProfileService
-        get:
-            description: Get a specific telemetry_metrics_profile.
-            operationId: TelemetryMetricsProfileService_GetTelemetryMetricsProfile
-            parameters:
-                - description: Name of the requested telemetry_metrics_profile.
-                  in: path
-                  name: resourceId
-                  required: true
-                  schema:
-                    type: string
-                - description: unique projectName for the resource
-                  in: path
-                  name: projectName
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/TelemetryMetricsProfileResource'
-                    description: OK
-                default:
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-                    description: Default error response
-            summary: GetTelemetryMetricsProfile
-            tags:
-                - TelemetryMetricsProfileService
-        patch:
-            description: Patch a telemetry_metrics_profile.
-            operationId: TelemetryMetricsProfileService_PatchTelemetryMetricsProfile
-            parameters:
-                - description: ID of the resource to be updated.
-                  in: path
-                  name: resourceId
-                  required: true
-                  schema:
-                    type: string
-                - description: Field mask to be applied on the patch of telemetry_metrics_profile.
-                  in: query
-                  name: fieldMask
-                  schema:
-                    format: field-mask
-                    type: string
-                - description: unique projectName for the resource
-                  in: path
-                  name: projectName
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/TelemetryMetricsProfileResource'
-                required: true
-            responses:
-                "200":
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/TelemetryMetricsProfileResource'
-                    description: OK
-                default:
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-                    description: Default error response
-            summary: PatchTelemetryMetricsProfile
-            tags:
-                - TelemetryMetricsProfileService
-        put:
-            description: Update a telemetry_metrics_profile.
-            operationId: TelemetryMetricsProfileService_UpdateTelemetryMetricsProfile
-            parameters:
-                - description: Name of the telemetry_metrics_profile telemetry_metrics_profile to be updated.
-                  in: path
-                  name: resourceId
-                  required: true
-                  schema:
-                    type: string
-                - description: unique projectName for the resource
-                  in: path
-                  name: projectName
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/TelemetryMetricsProfileResource'
-                required: true
-            responses:
-                "200":
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/TelemetryMetricsProfileResource'
-                    description: OK
-                default:
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-                    description: Default error response
-            summary: UpdateTelemetryMetricsProfile
             tags:
                 - TelemetryMetricsProfileService
     /v1/status:
