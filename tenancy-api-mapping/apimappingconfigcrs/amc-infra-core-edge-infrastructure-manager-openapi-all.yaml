@@ -28,7 +28,7 @@ spec:
     - externalURI: /v1/projects/{projectName}/compute/hosts
       serviceURI: edge-infra.orchestrator.apis/v2/hosts
     - externalURI: /v1/projects/{projectName}/compute/hosts/summary
-      serviceURI: edge-infra.orchestrator.apis/v2/hosts/summary
+      serviceURI: edge-infra.orchestrator.apis/v2/hosts_summary
     - externalURI: /v1/projects/{projectName}/compute/hosts/register
       serviceURI: edge-infra.orchestrator.apis/v2/hosts/register
     - externalURI: /v1/projects/{projectName}/compute/hosts/{resourceId}

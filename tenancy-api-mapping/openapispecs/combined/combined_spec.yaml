@@ -5610,6 +5610,40 @@ paths:
             summary: RegisterHost
             tags:
                 - HostService
+    /v1/projects/{projectName}/compute/hosts/summary:
+        get:
+            description: Get a summary of the hosts status.
+            operationId: HostService_GetHostsSummary
+            parameters:
+                - description: Optional filter to return only item of interest. See https://google.aip.dev/160 for details.
+                  in: query
+                  name: filter
+                  schema:
+                    maxLength: 1000
+                    pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}"' ]+$
+                    type: string
+                - description: unique projectName for the resource
+                  in: path
+                  name: projectName
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetHostSummaryResponse'
+                    description: OK
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+                    description: Default error response
+            summary: GetHostsSummary
+            tags:
+                - HostService
     /v1/projects/{projectName}/compute/instances:
         get:
             description: Get a list of instances.
