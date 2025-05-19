@@ -26,6 +26,7 @@ spec:
         - "3100" # edgenode-observability-loki (TCP)
         - "9095" # edgenode-observability-loki (TCP)
         - "9094" # mi-edgenode-alerting-alertmanager (TCP)
+        - "4433"  # AMT CIRA
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
