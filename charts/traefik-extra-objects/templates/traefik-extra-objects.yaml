@@ -262,6 +262,8 @@ spec:
             port: {{ required "A valid keycloakServicePort entry required!" .Values.keycloakServicePort }}
             scheme: http
             namespace: orch-platform
+        middlewares:
+          - name: secure-headers-keycloak
   tls:
     secretName: {{ required "A valid orchSecretName entry required!" .Values.orchSecretName }}
 {{- if .Values.tlsOption }}
@@ -421,11 +423,87 @@ spec:
         style-src 'self'; img-src 'self' data:;
         connect-src 'self' {{ required "A valid connectCSPsAppOrch entry required!" (join " " .Values.connectCSPsAppOrch) }};
         upgrade-insecure-requests; block-all-mixed-content"
-      # Using unsafe-none for COEP until Keycloak supports CORP in 3.1
-      Cross-Origin-Embedder-Policy: unsafe-none
+      Cross-Origin-Embedder-Policy: require-corp
       Cross-Origin-Opener-Policy: same-origin
       Cross-Origin-Resource-Policy: same-origin
       Permissions-Policy: "accelerometer=(),ambient-light-sensor=(),autoplay=(),battery=(),camera=(),display-capture=(),document-domain=(),encrypted-media=(),fullscreen=(),gamepad=(),geolocation=(),gyroscope=(),layout-animations=(self),legacy-image-formats=(self),magnetometer=(),microphone=(),midi=(),oversized-images=(self),payment=(),picture-in-picture=(),publickey-credentials-get=(),speaker-selection=(),sync-xhr=(self),unoptimized-images=(self),unsized-media=(self),usb=(),screen-wake-lock=(),web-share=(),xr-spatial-tracking=()"
+      "$wsep": ""
+      Host-Header: ""
+      K-Proxy-Request: ""
+      Liferay-Portal: ""
+      OracleCommerceCloud-Version: ""
+      Pega-Host: ""
+      Powered-By: ""
+      Product: ""
+      Server: ""
+      SourceMap: ""
+      X-AspNet-Version: ""
+      X-AspNetMvc-Version: ""
+      X-Atmosphere-error: ""
+      X-Atmosphere-first-request: ""
+      X-Atmosphere-tracking-id: ""
+      X-B3-ParentSpanId: ""
+      X-B3-Sampled: ""
+      X-B3-SpanId: ""
+      X-B3-TraceId: ""
+      X-CF-Powered-By: ""
+      X-CMS: ""
+      X-Content-Encoded-By: ""
+      X-Envoy-Attempt-Count: ""
+      X-Envoy-External-Address: ""
+      X-Envoy-Internal: ""
+      X-Envoy-Original-Dst-Host: ""
+      X-Envoy-Upstream-Service-Time: ""
+      X-Framework: ""
+      X-Generated-By: ""
+      X-Generator: ""
+      X-LiteSpeed-Cache: ""
+      X-LiteSpeed-Purge: ""
+      X-LiteSpeed-Tag: ""
+      X-LiteSpeed-Vary: ""
+      X-Litespeed-Cache-Control: ""
+      X-Mod-Pagespeed: ""
+      X-Nextjs-Cache: ""
+      X-Nextjs-Matched-Path: ""
+      X-Nextjs-Page: ""
+      X-Nextjs-Redirect: ""
+      X-Old-Content-Length: ""
+      X-OneAgent-JS-Injection: ""
+      X-Page-Speed: ""
+      X-Php-Version: ""
+      X-Powered-By: ""
+      X-Powered-By-Plesk: ""
+      X-Powered-CMS: ""
+      X-Redirect-By: ""
+      X-Server-Powered-By: ""
+      X-SourceFiles: ""
+      X-SourceMap: ""
+      X-Turbo-Charged-By: ""
+      X-Umbraco-Version: ""
+      X-Varnish-Backend: ""
+      X-Varnish-Server: ""
+      X-dtAgentId: ""
+      X-dtHealthCheck: ""
+      X-dtInjectedServlet: ""
+      X-ruxit-JS-Agent: ""
+---
+# Middleware for Keycloak. Does not include Content-Security-Policy
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: secure-headers-keycloak
+  namespace: orch-gateway
+spec:
+  headers:
+    referrerPolicy: "no-referrer"
+    customResponseHeaders:
+      X-Permitted-Cross-Domain-Policies: none
+      Pragma: no-cache
+      Cache-Control: "no-store, max-age=0"
+      Cross-Origin-Embedder-Policy: require-corp
+      Cross-Origin-Opener-Policy: same-origin
+      Cross-Origin-Resource-Policy: same-origin
+      Permissions-Policy: "accelerometer=(),autoplay=(),camera=(),display-capture=(),encrypted-media=(),fullscreen=(),gamepad=(),geolocation=(),gyroscope=(),magnetometer=(),microphone=(),midi=(),payment=(),picture-in-picture=(),publickey-credentials-get=(),sync-xhr=(self),usb=(),screen-wake-lock=(),web-share=(),xr-spatial-tracking=()"
       "$wsep": ""
       Host-Header: ""
       K-Proxy-Request: ""
