@@ -331,17 +331,50 @@ spec:
       X-Permitted-Cross-Domain-Policies: none
       Pragma: no-cache
       Cache-Control: "no-store, max-age=0"
-      Content-Security-Policy: "
-        default-src 'self'; form-action 'self';
-        object-src 'none'; frame-ancestors 'none';
-        script-src 'self' 'unsafe-eval' {{ required "A valid scriptSources entry required!" (join " " .Values.scriptSources) }};
-        style-src 'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Security-Policy: >-
+        block-all-mixed-content;
         connect-src 'self' {{ required "A valid connectCSP entry required!" (join " " .Values.connectCSPs) }};
-        upgrade-insecure-requests; block-all-mixed-content"
+        default-src 'self';
+        form-action 'self';
+        frame-ancestors 'none';
+        img-src 'self' data:;
+        object-src 'none';
+        script-src 'self' 'unsafe-eval' {{ required "A valid scriptSources entry required!" (join " " .Values.scriptSources) }};
+        style-src 'self' 'unsafe-inline';
+        upgrade-insecure-requests;
       Cross-Origin-Embedder-Policy: require-corp
       Cross-Origin-Opener-Policy: same-origin
       Cross-Origin-Resource-Policy: same-origin
-      Permissions-Policy: "accelerometer=(),ambient-light-sensor=(),autoplay=(),battery=(),camera=(),display-capture=(),document-domain=(),encrypted-media=(),fullscreen=(),gamepad=(),geolocation=(),gyroscope=(),layout-animations=(self),legacy-image-formats=(self),magnetometer=(),microphone=(),midi=(),oversized-images=(self),payment=(),picture-in-picture=(),publickey-credentials-get=(),speaker-selection=(),sync-xhr=(self),unoptimized-images=(self),unsized-media=(self),usb=(),screen-wake-lock=(),web-share=(),xr-spatial-tracking=()"
+      Permissions-Policy: >-
+        accelerometer=(),
+        ambient-light-sensor=(),
+        autoplay=(),
+        battery=(),
+        camera=(),
+        display-capture=(),
+        document-domain=(),
+        encrypted-media=(),
+        fullscreen=(),
+        gamepad=(),
+        geolocation=(),
+        gyroscope=(),
+        layout-animations=(self),
+        legacy-image-formats=(self),
+        magnetometer=(),
+        microphone=(),
+        midi=(),
+        oversized-images=(self),
+        payment=(),
+        picture-in-picture=(),
+        publickey-credentials-get=(),
+        speaker-selection=(),
+        sync-xhr=(self),
+        unoptimized-images=(self),
+        unsized-media=(self),
+        usb=(),
+        screen-wake-lock=(),
+        web-share=(),
+        xr-spatial-tracking=()
       "$wsep": ""
       Host-Header: ""
       K-Proxy-Request: ""
@@ -415,18 +448,51 @@ spec:
       X-Permitted-Cross-Domain-Policies: none
       Pragma: no-cache
       Cache-Control: "no-store, max-age=0"
-      Content-Security-Policy: "
-        default-src 'self'; form-action 'self';
-        object-src 'none'; frame-ancestors 'none';
-        script-src 'self' ;
-        frame-src 'self' {{ required "A valid connectCSPsAppOrch entry required!" (join " " .Values.connectCSPsAppOrch) }};
-        style-src 'self'; img-src 'self' data:;
+      Content-Security-Policy: >-
+        block-all-mixed-content;
         connect-src 'self' {{ required "A valid connectCSPsAppOrch entry required!" (join " " .Values.connectCSPsAppOrch) }};
-        upgrade-insecure-requests; block-all-mixed-content"
+        default-src 'self';
+        form-action 'self';
+        frame-ancestors 'none';
+        frame-src 'self' {{ required "A valid connectCSPsAppOrch entry required!" (join " " .Values.connectCSPsAppOrch) }};
+        img-src 'self' data:;
+        object-src 'none';
+        script-src 'self';
+        style-src 'self';
+        upgrade-insecure-requests;
       Cross-Origin-Embedder-Policy: require-corp
       Cross-Origin-Opener-Policy: same-origin
       Cross-Origin-Resource-Policy: same-origin
-      Permissions-Policy: "accelerometer=(),ambient-light-sensor=(),autoplay=(),battery=(),camera=(),display-capture=(),document-domain=(),encrypted-media=(),fullscreen=(),gamepad=(),geolocation=(),gyroscope=(),layout-animations=(self),legacy-image-formats=(self),magnetometer=(),microphone=(),midi=(),oversized-images=(self),payment=(),picture-in-picture=(),publickey-credentials-get=(),speaker-selection=(),sync-xhr=(self),unoptimized-images=(self),unsized-media=(self),usb=(),screen-wake-lock=(),web-share=(),xr-spatial-tracking=()"
+      Permissions-Policy: >-
+        accelerometer=(),
+        ambient-light-sensor=(),
+        autoplay=(),
+        battery=(),
+        camera=(),
+        display-capture=(),
+        document-domain=(),
+        encrypted-media=(),
+        fullscreen=(),
+        gamepad=(),
+        geolocation=(),
+        gyroscope=(),
+        layout-animations=(self),
+        legacy-image-formats=(self),
+        magnetometer=(),
+        microphone=(),
+        midi=(),
+        oversized-images=(self),
+        payment=(),
+        picture-in-picture=(),
+        publickey-credentials-get=(),
+        speaker-selection=(),
+        sync-xhr=(self),
+        unoptimized-images=(self),
+        unsized-media=(self),
+        usb=(),
+        screen-wake-lock=(),
+        web-share=(),
+        xr-spatial-tracking=()
       "$wsep": ""
       Host-Header: ""
       K-Proxy-Request: ""
