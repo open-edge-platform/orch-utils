@@ -31,24 +31,10 @@ DM_REPO_TAG_VERSION := main
 .PHONY: all
 all: lint license build test ## Runs build, lint, test stages
 
-##@ CleanBuildFlag
-.PHONY: cleanbuildflag
-cleanbuildflag:
-	@rm -f .gitconfig
-	@rm -f .netrc
-	@rm -rf .ssh
-
-##@ LinkBuildFlag
-.PHONY: linkbuildflag
-linkbuildflag:
-	touch .gitconfig .netrc
-	mkdir -p .ssh
-	cp ${HOME}/.gitconfig . || true
-	cp ${HOME}/.netrc . || true
-	cp -r ${HOME}/.ssh .ssh || true
 
 .PHONY: build
-build: cleanbuildflag linkbuildflag ## Runs build stage
+build: ## Runs build stage
+	go mod vendor
 	@echo "---MAKEFILE BUILD---"
 	@docker build -t ${TENANCY_API_MAPPING_DOCKER_IMAGE_OEP} . -f Dockerfile
 	@echo "---END MAKEFILE Build---"

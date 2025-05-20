@@ -82,22 +82,6 @@ $(VENV_NAME): requirements.txt
 	python3 -m pip install --upgrade pip;\
 	python3 -m pip install -r requirements.txt
 
-##@ CleanBuildFlag
-.PHONY: cleanbuildflag
-cleanbuildflag:
-	@rm -f .gitconfig
-	@rm -f .netrc
-	@rm -rf .ssh
-
-##@ LinkBuildFlag
-.PHONY: linkbuildflag
-linkbuildflag:
-	touch .gitconfig .netrc
-	mkdir -p .ssh
-	cp ${HOME}/.gitconfig . || true
-	cp ${HOME}/.netrc . || true
-	cp -r ${HOME}/.ssh .ssh || true
-
 .PHONY: tidy
 tidy:
 	go mod tidy
@@ -127,7 +111,8 @@ go-build: tidy vendor create ## go build
 build: go-build docker.build.oep
 
 .PHONY: docker.build.oep
-docker.build.oep: cleanbuildflag linkbuildflag
+docker.build.oep:
+	go mod vendor
 	docker build --build-arg TENANCY_MANAGER_COMPONENT_NAME=${TENANCY_MANAGER_COMPONENT_NAME} --build-arg HTTP_PROXY=${http_proxy} --build-arg HTTPS_PROXY=${https_proxy} --build-arg FTP_PROXY=${ftp_proxy} --build-arg SOCKS_PROXY=${socks_proxy} --build-arg NO_PROXY=${no_proxy} -t ${TENANCY_MANAGER_DOCKER_IMAGE_OEP} -f Dockerfile .
 
 .PHONY: release

@@ -5,15 +5,18 @@
 FROM golang:1.24.2 AS builder
 ARG KTC_GIT_COMMIT
 
-# Set environment variables to allow fetching from private repositories
-ENV GONOSUMDB=*
-ENV GOPRIVATE=github.com/open-edge-platform/*
-ENV GOPROXY=direct
+# Set proxy environment variables using build arguments
+ARG http_proxy
+ARG https_proxy
+ARG no_proxy
+ARG ftp_proxy
+ARG socks_proxy
 
-# Configure git to use the GitHub token
-# Use build secret for GITHUB_TOKEN
-RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
-    git config --global url."https://${GITHUB_TOKEN}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+ENV HTTP_PROXY $http_proxy
+ENV HTTPS_PROXY $http_proxy
+ENV NO_PROXY $http_proxy
+ENV FTP_PROXY $ftp_proxy
+ENV SOCKS_PROXY $socks_proxy
 
 COPY . /usr/src/keycloak-tenant-controller/
 WORKDIR /usr/src/keycloak-tenant-controller/

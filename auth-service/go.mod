@@ -7,7 +7,7 @@ module github.com/open-edge-platform/orch-utils/auth-service
 go 1.24.0
 
 require (
-	github.com/golang-jwt/jwt/v5 v5.2.1
+	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/lestrrat-go/jwx/v2 v2.1.3
 	github.com/onsi/ginkgo/v2 v2.23.3
 	github.com/onsi/gomega v1.36.3

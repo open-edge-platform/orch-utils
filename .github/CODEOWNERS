@@ -8,3 +8,6 @@
 
 # Everything requires Platform team review by default
 * chris.thach@intel.com @mdbalvin @rad-szulim @charlesmcchan @yi-tseng-intel @ashridatta @teone @callumnobleintel @daniele-moro @SeanCondon @pierventre john.oloughlin@intel.com gary.loughnane@intel.com @ahalimx86 emma.kenny@intel.com andrei.palade@intel.com dmytro.yermolenko@intel.com patryk.iracki@intel.com john.rey.juele@intel.com diwan.chandrabose@intel.com sushil.lakra@intel.com
+
+# All changes to Nexus framework must be reviewed by the Nexus team
+nexus/* @Rashika-Rajaraman @xmen4xp

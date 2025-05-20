@@ -1,9 +1,7 @@
 # Orchestrator Utilities
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Build](https://github.com/open-edge-platform/orch-utils/actions/workflows/lint-test-build-publish.yml/badge.svg)](https://github.com/open-edge-platform/orch-utils/actions/workflows/lint-test-build-publish.yml)
-
-TODO: Update all links once the GitHub repository is created.
-
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/open-edge-platform/orch-utils/badge)](https://scorecard.dev/viewer/?uri=github.com/open-edge-platform/orch-utils)
 ## Overview
 
 The orch-utils repository is a crucial component of the Edge Orchestrator, providing various utility functions and tools
@@ -23,9 +21,7 @@ Key features include:
 
 ## Get Started
 
-See the [Documentation](https://github.com/intel) to get started using orch-utils.
-
-TODO: Use Make targets before releasing source code.
+See the [Documentation](https://docs.openedgeplatform.intel.com/edge-manage-docs/main/index.html) to get started using orch-utils.
 
 ### Lint
 
@@ -42,20 +38,41 @@ mage test:golang
 ### Build
 
 ```sh
-mage build:SecretsConfig
-mage build:awsSmProxy
-mage build:tokenFS
 mage build:authService
+mage build:awsSmProxy
 mage build:certSynchronizer
-mage build:squidProxy
 mage build:keycloakTenantController
-mage ChartsBuild
+mage build:nexusAPIGateway
+mage build:nexusCompiler
+mage build:openAPIGenerator
+mage build:secretsConfig
+mage build:squidProxy
+mage build:tenancyAPIMapping
+mage build:tenancyDatamodel
+mage build:tenancyManager
+mage build:tokenFS
+mage chartsBuild
 ```
 
 ### Release
 
 ```sh
-echo TODO
+mage push:authService
+mage push:awsSmProxy
+mage push:certSynchronizer
+mage push:charts
+mage push:keycloakTenantController
+mage push:nexusAPIGateway
+mage push:nexusCompiler
+mage push:openAPIGenerator
+mage push:publicAwsSmProxy
+mage push:publicCharts
+mage push:secretsConfig
+mage push:squidProxy
+mage push:tenancyAPIMapping
+mage push:tenancyDatamodel
+mage push:tenancyManager
+mage push:tokenFs
 ```
 
 ## Develop
@@ -85,26 +102,15 @@ To build the project, run the [build](#build) command.
 
 ## Contribute
 
-To learn how to contribute to the project, see the [Contributor's Guide](/CONTRIBUTING.md).
+To learn how to contribute to the project, see the [Contributor's Guide](https://docs.openedgeplatform.intel.com/edge-manage-docs/main/developer_guide/contributor_guide/index.html).
 
 ## Community and Support
 
 To learn more about the project, its community, and governance, visit the [Edge Orchestrator
-Community](https://github.com/intel).
+Community](https://github.com/open-edge-platform).
 
-For support, start with [Troubleshooting](https://github.com/intel) or [contact us](https://github.com/intel).
+For support, start with [Troubleshooting](https://docs.openedgeplatform.intel.com/edge-manage-docs/main/developer_guide/troubleshooting/index.html) or [contact us](https://github.com/open-edge-platform).
 
 ## License
 
-```text
-Copyright 2025 Intel Corporation
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the
-License. You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
-language governing permissions and limitations under the License.
-```
+Edge Manageability Framework is licensed under [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0).

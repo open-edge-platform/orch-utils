@@ -125,7 +125,7 @@ func (p *Client) WebsocketWithPayload(query string, initPayload map[string]inter
 				case connectionKaMsg:
 					continue
 				case errorMsg:
-					return fmt.Errorf(string(op.Payload))
+					return fmt.Errorf("%s", string(op.Payload))
 				default:
 					return fmt.Errorf("expected data message, got %#v", op)
 				}

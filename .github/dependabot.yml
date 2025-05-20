@@ -38,14 +38,14 @@ updates:
       - "/nexus/common-library"
       - "/nexus/nexus"
       - "/nexus/kube-openapi"
-      - "/nexus-api-gateway"
+      - "/nexus-api-gw"
       - "/cert-synchronizer"
       - "/keycloak-tenant-controller"
       - "/tenancy-manager"
       - "/tenancy-datamodel/test"
       - "/tenancy-datamodel"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     commit-message:
       prefix: "go.mod"
     reviewers:
@@ -70,11 +70,11 @@ updates:
       - "/charts/aws-sm-proxy"
       - "/charts/certificate-file-server"
       - "/charts/namespace-label"
-      - "/charts/tenancy-api-remapping"
+      - "/charts/tenancy-api-mapping"
       - "/charts/fleet-rs-secret"
       - "/charts/aws-lb-tgb"
       - "/charts/self-signed-cert"
-      - "/charts/tenancy-datamodel-init"
+      - "/charts/tenancy-datamodel"
       - "/charts/kyverno-istio-policy"
       - "/charts/nexus-api-gw"
       - "/charts/k8s-metrics-server"
@@ -96,7 +96,7 @@ updates:
       - "/charts/squid-proxy"
       - "/charts/oci-secret"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     commit-message:
       prefix: "Helm charts"
     reviewers:
@@ -113,7 +113,7 @@ updates:
       - "/nexus/compiler/builder"
       - "/nexus/compiler"
       - "/token-fs"
-      - "/nexus-api-gateway"
+      - "/nexus-api-gw"
       - "/secrets"
       - "/cert-synchronizer"
       - "/keycloak-tenant-controller/images"
@@ -121,7 +121,7 @@ updates:
       - "/tenancy-datamodel"
       - "/squid-proxy"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     commit-message:
       prefix: "Dockerfile"
     reviewers:
@@ -132,7 +132,7 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     commit-message:
       prefix: "Github Actions"
     reviewers:
