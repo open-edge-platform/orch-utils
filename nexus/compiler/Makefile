@@ -50,11 +50,17 @@ define run_in_container
   docker run \
   --volume $(realpath .)/..:/go/src/github.com/vmware-tanzu/graph-framework-for-microservices/ \
   --volume ~/.ssh:/root/.ssh \
+  --volume /tmp:/tmp \
+  --volume /go/pkg/mod:/go/pkg/mod \
+  --volume /root/.cache/go-build:/root/.cache/go-build \
   --network=host \
   --workdir ${PKG_NAME} \
   -e http_proxy=$(HTTP_PROXY) \
   -e https_proxy=$(HTTPS_PROXY) \
+  -e GOCACHE=/tmp/go-build-cache \
+  -e GOMODCACHE=/tmp/go-mod-cache \
   --user $(shell id -u):$(shell id -g) \
+  --read-only \
   "${BUILDER_DOCKER_TAG}" /bin/bash -c 'chown -R $(shell id -u) .; ${1}'
 endef
 else
