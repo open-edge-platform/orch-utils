@@ -72,3 +72,9 @@ require (
 	sigs.k8s.io/structured-merge-diff/v4 v4.2.3 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
+
+replace google.golang.org/genproto/googleapis/rpc/status => google.golang.org/genproto v0.0.0-20220502173005-c8bf987b8c21
+
+replace google.golang.org/genproto/googleapis/rpc/errdetails => google.golang.org/genproto v0.0.0-20220502173005-c8bf987b8c21
+
+replace google.golang.org/genproto/googleapis/rpc/code => google.golang.org/genproto v0.0.0-20220502173005-c8bf987b8c21
