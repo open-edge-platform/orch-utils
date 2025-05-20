@@ -4,7 +4,7 @@
 
 module github.com/vmware-tanzu/graph-framework-for-microservices/compiler/example/datamodel
 
-go 1.16
+go 1.24
 
 require (
 	github.com/elliotchance/orderedmap v1.8.0
