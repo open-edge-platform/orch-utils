@@ -240,7 +240,7 @@ generate_code:
 	CRD_MODULE_PATH=${CRD_MODULE_PATH} go run cmd/nexus-sdk/main.go -config-file ${CONFIG_FILE} -dsl ${DATAMODEL_PATH} -crd-output _generated -log-level ${LOG_LEVEL}
 	mv _generated/api_names.sh scripts/
 	@echo "Nexus Compiler: Resolving datamodel dependencies"
-	cd _generated && ../scripts/pin_deps.sh ${COMPILER_SRC_DIRECTORY} && go mod tidy -e 
+	cd _generated && ls -l && ../scripts/pin_deps.sh ${COMPILER_SRC_DIRECTORY} && cat go.mod && go mod tidy -e 
 	@echo "Nexus Compiler: Generating kuberenetes APIs"
 	./scripts/generate_k8s_api.sh
 	@echo "Nexus Compiler: Generating openapi schema"
