@@ -73,7 +73,12 @@ require (
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
 
+replace google.golang.org/grpc => google.golang.org/grpc v1.51.0
+
 replace google.golang.org/genproto/googleapis/rpc => google.golang.org/genproto v0.0.0-20220502173005-c8bf987b8c21
+
 replace google.golang.org/genproto/googleapis/rpc/status => google.golang.org/genproto v0.0.0-20220502173005-c8bf987b8c21
+
 replace google.golang.org/genproto/googleapis/rpc/code => google.golang.org/genproto v0.0.0-20220502173005-c8bf987b8c21
+
 replace google.golang.org/genproto/googleapis/rpc/errdetails => google.golang.org/genproto v0.0.0-20220502173005-c8bf987b8c21
