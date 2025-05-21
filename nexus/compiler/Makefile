@@ -143,8 +143,6 @@ build_openapigen_in_container:
 build_openapigen:
 	ls -al /go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler/cmd
 	id
-	whoami
-	go env GOCACHE
 	GOBIN=${PKG_NAME}/cmd go install ../kube-openapi/cmd/nexus-openapi-gen
 
 build_gqlgen_in_container:
