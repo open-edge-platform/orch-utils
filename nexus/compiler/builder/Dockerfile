@@ -4,6 +4,7 @@
 #graphql's and compiler's builder/Dockerfile should be in sync
 FROM golang:1.24.2
 
+USER nobody
 # Set environment variables
 ENV GOPATH /go
 ENV PATH $PATH:/usr/local/go/bin:/go/bin
@@ -17,8 +18,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN git config --global --add safe.directory '*' \
     && echo "deb http://deb.debian.org/debian unstable main" | tee -a /etc/apt/sources.list.d/unstable.list \
     && apt-get update \
-    && apt-get install -y -t unstable wget \
-    && apt-get install -y \
+    && apt-get install -y --no-install-recommends -t unstable wget \
+    && apt-get install -y --no-install-recommends \
         make=4.3-4.1 \
         coreutils=9.1-1 \
         openssh-client=1:9.2p1-2+deb12u5 \

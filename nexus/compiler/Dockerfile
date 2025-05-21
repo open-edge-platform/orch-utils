@@ -5,6 +5,7 @@ ARG BUILDER_TAG
 
 # hadolint ignore=DL3006
 FROM $BUILDER_TAG
+USER nobody
 ADD compiler.tar /go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler
 COPY cmd/nexus-openapi-gen /go/bin/nexus-openapi-gen
 COPY cmd/gqlgen /go/bin/gqlgen
