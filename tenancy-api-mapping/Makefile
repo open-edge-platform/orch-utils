@@ -46,25 +46,22 @@ $(VENV_NAME): requirements.txt
 
 ### Lint targets ###
 .PHONY: lint
-lint: clean-all go-lint hadolint yamllint  ## run all linters run as in CI
-
-.PHONY: lint-ci
-lint-ci: clean-all go-lint hadolint yamllint license
-
-.PHONY: hadolint
-hadolint: ## lint Dockerfile with hadolint
-	hadolint Dockerfile
-
-.PHONY: go-lint
-go-lint: ## lint all go code with golangci-lint
-	golangci-lint --version
-	golangci-lint run --timeout=3m --config .golangci.yml ./...
+lint: license go-lint hadolint yamllint  ## run all linters run as in CI
 
 .PHONY: license
 license: $(VENV_NAME) ## lint licensing with the reuse tool.
 	. ./$</bin/activate; set -u;\
 	reuse --version;\
 	reuse --root . lint
+
+.PHONY: go-lint
+go-lint: ## lint all go code with golangci-lint
+	golangci-lint --version
+	golangci-lint run --timeout=3m --config .golangci.yml ./...
+
+.PHONY: hadolint
+hadolint: ## lint Dockerfile with hadolint
+	hadolint Dockerfile
 
 YAML_FILES := $(shell find . -path './repos' -prune -o -type f \( -name '*.yaml' -o -name '*.yml' \) -print )
 .PHONY: yamllint
@@ -102,9 +99,7 @@ rebuild-deps:
 .PHONY: install-deps
 install-deps:
 	@echo "\n\n---Installing dependencies..."
-	@npm install -g openapi-format @redocly/cli @redocly/openapi-cli
-	sudo apt-get install jq
-	pip install yq
+	@npm install openapi-format @redocly/cli @redocly/openapi-cli
 	@echo "---Installation of dependencies done."
 
 node_modules:
@@ -120,7 +115,6 @@ openapi-lint: node_modules
 		--skip-rule=tag-description
 
 ### git checkout targets ###
-
 $(REPO_DIR):
 	@mkdir -p $@
 
@@ -164,22 +158,16 @@ specgen: generate-specs
 
 .PHONY: generate-specs
 generate-specs:  ## Generate openapi specs from apimapping
-	@echo "\n\n---Running the spec generation..."
+	@echo "---Running the spec generation..."
 	@go run cmd/specgen/specgen.go
-	@echo "\n---spec gen complete."
-
-# Target to copy the datamodel openapi spec
-.PHONY: copy-and-preprocess-dm-oas
-copy-and-preprocess-dm-oas:
-	@echo "\n\n---Copy OAS from DM repo..."
-	@DM_REPO_TAG_VERSION=$(DM_REPO_TAG_VERSION) ./scripts/copyDatamodelOpenAPISpec.sh
-	@echo "---Copied datamodel OAS."
+	@echo "---spec gen complete."
+	./scripts/copyDatamodelOpenAPISpec.sh
 
 # Define a target to convert the oas version of all the files
 # and combine into one 'openapispecs/combined/combined_spec.yaml'
 .PHONY: convert-and-combine
-convert-and-combine: copy-and-preprocess-dm-oas
-	@echo "\n\n---Running the conversion and combination script..."
+convert-and-combine:
+	@echo "---Running the conversion and combination script..."
 	@go run cmd/convertandcombinespec/main.go
 
 # Define a target to run the full workflow
@@ -199,6 +187,7 @@ clean-submodules: # clean up checked out repos
 
 .PHONY: clean-all
 clean-all: clean-submodules clean-intermediate  ## Cleanup all build files
+	rm -rf $(VENV_NAME)
 
 #### Help Target ####
 help: ## Print help for each target

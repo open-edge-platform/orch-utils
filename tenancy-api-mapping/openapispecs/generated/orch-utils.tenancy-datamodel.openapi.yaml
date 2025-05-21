@@ -1,5 +1,5 @@
+---
 # SPDX-FileCopyrightText: 2025 Intel Corporation
-#
 # SPDX-License-Identifier: Apache-2.0
 
 openapi: 3.0.0
@@ -453,22 +453,6 @@ paths:
           $ref: '#/components/responses/Getorg.Org.Status'
       tags:
         - Org
-    put:
-      operationId: PUT__v1_orgs_org_Org_status
-      parameters:
-        - description: Name of the org.Org node
-          in: path
-          name: org.Org
-          required: true
-          schema:
-            type: string
-      requestBody:
-        $ref: '#/components/requestBodies/Createorg.Org.Status'
-      responses:
-        "200":
-          $ref: '#/components/responses/DefaultResponse'
-      tags:
-        - Org
   /v1/projects:
     get:
       operationId: LIST__v1_projects
@@ -646,28 +630,6 @@ paths:
           $ref: '#/components/responses/Getnetwork.Network.Status'
       tags:
         - Network
-    put:
-      operationId: PUT__v1_projects_project_Project_networks_network_Network_status
-      parameters:
-        - description: Name of the project.Project node
-          in: path
-          name: project.Project
-          required: true
-          schema:
-            type: string
-        - description: Name of the network.Network node
-          in: path
-          name: network.Network
-          required: true
-          schema:
-            type: string
-      requestBody:
-        $ref: '#/components/requestBodies/Createnetwork.Network.Status'
-      responses:
-        "200":
-          $ref: '#/components/responses/DefaultResponse'
-      tags:
-        - Network
   /v1/projects/{project.Project}/status:
     get:
       operationId: GET__v1_projects_project_Project_status
@@ -681,22 +643,6 @@ paths:
       responses:
         "200":
           $ref: '#/components/responses/Getproject.Project.Status'
-      tags:
-        - Project
-    put:
-      operationId: PUT__v1_projects_project_Project_status
-      parameters:
-        - description: Name of the project.Project node
-          in: path
-          name: project.Project
-          required: true
-          schema:
-            type: string
-      requestBody:
-        $ref: '#/components/requestBodies/Createproject.Project.Status'
-      responses:
-        "200":
-          $ref: '#/components/responses/DefaultResponse'
       tags:
         - Project
 servers:
