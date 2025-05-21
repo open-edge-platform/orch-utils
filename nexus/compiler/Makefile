@@ -54,7 +54,7 @@ define run_in_container
   --workdir ${PKG_NAME} \
   -e http_proxy=$(HTTP_PROXY) \
   -e https_proxy=$(HTTPS_PROXY) \
-  --user $(shell id -u):$(shell id -g) \
+  --user appuser:appuser \
   "${BUILDER_DOCKER_TAG}" /bin/bash -c 'chown -R $(shell id -u) .; ${1}'
 endef
 else
