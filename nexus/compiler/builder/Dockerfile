@@ -15,10 +15,6 @@ ENV GOPROXY=""
 ENV GOFLAGS="-buildvcs=false"
 ENV HOME=/home/appuser
 
-# Set HOME for the new user
-# ENV HOME=/home/appuser
-# USER appuser
-
 # Configure git and install necessary packages
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # hadolint ignore=DL3008
