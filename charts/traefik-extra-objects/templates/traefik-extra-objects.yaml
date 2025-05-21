@@ -502,7 +502,7 @@ spec:
       Cache-Control: "no-store, max-age=0"
       Cross-Origin-Embedder-Policy: require-corp
       Cross-Origin-Opener-Policy: same-origin
-      Cross-Origin-Resource-Policy: same-origin
+      Cross-Origin-Resource-Policy: same-site
       Permissions-Policy: "accelerometer=(),autoplay=(),camera=(),display-capture=(),encrypted-media=(),fullscreen=(),gamepad=(),geolocation=(),gyroscope=(),magnetometer=(),microphone=(),midi=(),payment=(),picture-in-picture=(),publickey-credentials-get=(),sync-xhr=(self),usb=(),screen-wake-lock=(),web-share=(),xr-spatial-tracking=()"
       "$wsep": ""
       Host-Header: ""
