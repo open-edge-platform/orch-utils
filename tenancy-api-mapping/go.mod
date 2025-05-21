@@ -4,7 +4,7 @@
 
 module github.com/open-edge-platform/orch-utils/tenancy-api-mapping
 
-go 1.23.1
+go 1.24.2
 
 require (
 	github.com/getkin/kin-openapi v0.128.0

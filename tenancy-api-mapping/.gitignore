@@ -6,3 +6,5 @@
 .netrc
 !.ssh/
 .ssh/*
+
+repos/
