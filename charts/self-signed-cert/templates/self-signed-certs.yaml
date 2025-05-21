@@ -183,7 +183,6 @@ data:
     - alerting-monitor.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - mps-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - rps-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
-    - mpsrouter-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - mps-webport-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - rps-webport-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - connect-gateway.{{ required "A valid certDomain entry required!" .Values.certDomain }}
