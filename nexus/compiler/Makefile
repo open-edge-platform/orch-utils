@@ -55,7 +55,7 @@ define run_in_container
   -e http_proxy=$(HTTP_PROXY) \
   -e https_proxy=$(HTTPS_PROXY) \
   --user appuser:appuser \
-  "${BUILDER_DOCKER_TAG}" /bin/bash -c 'chown -R $(shell id -u) .; ${1}'
+  "${BUILDER_DOCKER_TAG}" /bin/bash -c 'chown -R appuser .; ${1}'
 endef
 else
 define run_in_container
