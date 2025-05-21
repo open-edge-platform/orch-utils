@@ -256,17 +256,18 @@ generate_code:
 	else \
 		cd _generated && goimports -w .; \
 	fi
-	@echo "Nexus Compiler: Generating GRAPHQL PKG"
-	cd _generated/nexus-gql && gqlgen generate
-	@echo "Nexus Compiler: GRAPHQL Generating completed"
-	cp -rf _generated/* ${GOPATH}/src/nexustempmodule/
-	cd ${GOPATH}/src/nexustempmodule && cd nexus-gql && go mod init && \
-	go mod edit -replace nexustempmodule=${GOPATH}/src/nexustempmodule && \
-	${COMPILER_SRC_DIRECTORY}/scripts/pin_graphql_build_version.sh ${COMPILER_SRC_DIRECTORY} && \
-	go mod edit -go=1.23.2 && \
-	go mod tidy -e && \
-	GOARCH=amd64 GOOS=linux go build -ldflags="-w -s" server.go
-	cp -r ${GOPATH}/src/nexustempmodule/nexus-gql/* _generated/nexus-gql/
+	# Disabling GRAPHQL generation...
+	# @echo "Nexus Compiler: Generating GRAPHQL PKG"
+	# cd _generated/nexus-gql && gqlgen generate
+	# @echo "Nexus Compiler: GRAPHQL Generating completed"
+	# cp -rf _generated/* ${GOPATH}/src/nexustempmodule/
+	# cd ${GOPATH}/src/nexustempmodule && cd nexus-gql && go mod init && \
+	# go mod edit -replace nexustempmodule=${GOPATH}/src/nexustempmodule && \
+	# ${COMPILER_SRC_DIRECTORY}/scripts/pin_graphql_build_version.sh ${COMPILER_SRC_DIRECTORY} && \
+	# go mod edit -go=1.23.2 && \
+	# go mod tidy -e && \
+	# GOARCH=amd64 GOOS=linux go build -ldflags="-w -s" server.go
+	# cp -r ${GOPATH}/src/nexustempmodule/nexus-gql/* _generated/nexus-gql/
 	@echo "Updating module name"
 	./scripts/replace_mod_path.sh
 	find . -name "*.bak" -type f -delete
