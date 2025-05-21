@@ -50,11 +50,11 @@ func New(datamodel string) {
 				URL:         "https://localhost:5443",
 			},
 		},
-		Paths: openapi3.Paths{},
-		Components: openapi3.Components{
+		Paths: &openapi3.Paths{},
+		Components: &openapi3.Components{
 			Schemas:       openapi3.Schemas{},
 			RequestBodies: openapi3.RequestBodies{},
-			Responses: openapi3.Responses{
+			Responses: openapi3.ResponseBodies{
 				"DefaultResponse": &openapi3.ResponseRef{
 					Value: openapi3.NewResponse().
 						WithDescription("Default response").
@@ -108,18 +108,17 @@ func AddPath(uri nexus.RestURIs, datamodel string) {
 	for method := range uri.Methods {
 		opId := getDescription(string(method), uri.Uri)
 		nameParts := strings.Split(crdInfo.Name, ".")
-
 		switch method {
 		case "LIST":
+			resp := &openapi3.Responses{}
+			resp.Set("200", &openapi3.ResponseRef{
+				Ref: "#/components/responses/List" + crdInfo.Name,
+			})
 			operation := &openapi3.Operation{
 				OperationID: opId,
 				Tags:        []string{nameParts[1]},
 				Parameters:  params,
-				Responses: openapi3.Responses{
-					"200": &openapi3.ResponseRef{
-						Ref: "#/components/responses/List" + crdInfo.Name,
-					},
-				},
+				Responses:   resp,
 			}
 			pathItem.Get = operation
 		case http.MethodGet:
@@ -131,36 +130,36 @@ func AddPath(uri nexus.RestURIs, datamodel string) {
 			if uriInfo, ok := model.GetUriInfo(uri.Uri); ok {
 				switch uriInfo.TypeOfURI {
 				case model.StatusURI:
-					operation.Responses = openapi3.Responses{
-						"200": &openapi3.ResponseRef{
-							Ref: "#/components/responses/Get" + crdInfo.Name + ".Status",
-						},
-					}
+					resp := &openapi3.Responses{}
+					resp.Set("200", &openapi3.ResponseRef{
+						Ref: "#/components/responses/Get" + crdInfo.Name + ".Status",
+					})
+					operation.Responses = resp
 				case model.SingleLinkURI:
-					operation.Responses = openapi3.Responses{
-						"200": &openapi3.ResponseRef{
-							Ref: "#/components/responses/Get" + crdInfo.Name + ".SingleLink",
-						},
-					}
+					resp := &openapi3.Responses{}
+					resp.Set("200", &openapi3.ResponseRef{
+						Ref: "#/components/responses/Get" + crdInfo.Name + ".SingleLink",
+					})
+					operation.Responses = resp
 				case model.NamedLinkURI:
-					operation.Responses = openapi3.Responses{
-						"200": &openapi3.ResponseRef{
-							Ref: "#/components/responses/Get" + crdInfo.Name + ".NamedLink",
-						},
-					}
+					resp := &openapi3.Responses{}
+					resp.Set("200", &openapi3.ResponseRef{
+						Ref: "#/components/responses/Get" + crdInfo.Name + ".NamedLink",
+					})
+					operation.Responses = resp
 				default:
-					operation.Responses = openapi3.Responses{
-						"200": &openapi3.ResponseRef{
-							Ref: "#/components/responses/Get" + crdInfo.Name,
-						},
-					}
+					resp := &openapi3.Responses{}
+					resp.Set("200", &openapi3.ResponseRef{
+						Ref: "#/components/responses/Get" + crdInfo.Name,
+					})
+					operation.Responses = resp
 				}
 			} else {
-				operation.Responses = openapi3.Responses{
-					"200": &openapi3.ResponseRef{
-						Ref: "#/components/responses/DefaultResponse",
-					},
-				}
+				resp := &openapi3.Responses{}
+				resp.Set("200", &openapi3.ResponseRef{
+					Ref: "#/components/responses/DefaultResponse",
+				})
+				operation.Responses = resp
 			}
 			pathItem.Get = operation
 		case http.MethodPut:
@@ -172,11 +171,11 @@ func AddPath(uri nexus.RestURIs, datamodel string) {
 				operation.RequestBody = &openapi3.RequestBodyRef{
 					Ref: "#/components/requestBodies/Create" + crdInfo.Name + ".Status",
 				}
-				operation.Responses = openapi3.Responses{
-					"200": &openapi3.ResponseRef{
-						Ref: "#/components/responses/DefaultResponse",
-					},
-				}
+				resp := &openapi3.Responses{}
+				resp.Set("200", &openapi3.ResponseRef{
+					Ref: "#/components/responses/DefaultResponse",
+				})
+				operation.Responses = resp
 				operation.Parameters = params
 			} else {
 				p := constructUpdateParam()
@@ -188,11 +187,11 @@ func AddPath(uri nexus.RestURIs, datamodel string) {
 				operation.RequestBody = &openapi3.RequestBodyRef{
 					Ref: "#/components/requestBodies/Create" + crdInfo.Name,
 				}
-				operation.Responses = openapi3.Responses{
-					"200": &openapi3.ResponseRef{
-						Ref: "#/components/responses/DefaultResponse",
-					},
-				}
+				resp := &openapi3.Responses{}
+				resp.Set("200", &openapi3.ResponseRef{
+					Ref: "#/components/responses/DefaultResponse",
+				})
+				operation.Responses = resp
 			}
 			pathItem.Put = operation
 		case http.MethodPatch:
@@ -201,14 +200,14 @@ func AddPath(uri nexus.RestURIs, datamodel string) {
 				Tags:        []string{nameParts[1]},
 				Parameters:  params,
 			}
-			operation.Responses = openapi3.Responses{
-				"200": &openapi3.ResponseRef{
-					Ref: "#/components/responses/DefaultResponse",
-				},
-				"404": &openapi3.ResponseRef{
-					Ref: "#/components/responses/NotFoundResponse",
-				},
-			}
+			resp := &openapi3.Responses{}
+			resp.Set("200", &openapi3.ResponseRef{
+				Ref: "#/components/responses/DefaultResponse",
+			})
+			resp.Set("404", &openapi3.ResponseRef{
+				Ref: "#/components/responses/NotFoundResponse",
+			})
+			operation.Responses = resp
 			if uriInfo, ok := model.GetUriInfo(uri.Uri); ok && uriInfo.TypeOfURI == model.StatusURI {
 				operation.RequestBody = &openapi3.RequestBodyRef{
 					Ref: "#/components/requestBodies/Create" + crdInfo.Name + ".Status",
@@ -220,22 +219,22 @@ func AddPath(uri nexus.RestURIs, datamodel string) {
 			}
 			pathItem.Patch = operation
 		case http.MethodDelete:
+			resp := &openapi3.Responses{}
+			resp.Set("200", &openapi3.ResponseRef{
+				Value: openapi3.NewResponse().WithDescription("No content"),
+			})
 			operation := &openapi3.Operation{
 				OperationID: opId,
 				Tags:        []string{nameParts[1]},
-				Responses: openapi3.Responses{
-					"200": &openapi3.ResponseRef{
-						Value: openapi3.NewResponse().WithDescription("No content"),
-					},
-				},
-				Parameters: params,
+				Responses:   resp,
+				Parameters:  params,
 			}
 			pathItem.Delete = operation
 		}
 	}
 
 	log.Infof("adding %s path to %s", uri.Uri, datamodel)
-	Schemas[datamodel].Paths[uri.Uri] = pathItem
+	Schemas[datamodel].Paths.Set(uri.Uri, pathItem)
 }
 
 // parseSpec parses openapi schema spec and status subresource
