@@ -4,13 +4,20 @@
 #graphql's and compiler's builder/Dockerfile should be in sync
 FROM golang:1.24.2
 
-USER nobody
+# Create a non-root user with home directory
+RUN useradd -m -d /home/appuser appuser
+
 # Set environment variables
 ENV GOPATH /go
 ENV PATH $PATH:/usr/local/go/bin:/go/bin
 ENV GO111MODULE=on
 ENV GOPROXY=""
 ENV GOFLAGS="-buildvcs=false"
+ENV HOME=/home/appuser
+
+# Set HOME for the new user
+# ENV HOME=/home/appuser
+# USER appuser
 
 # Configure git and install necessary packages
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -35,4 +42,8 @@ RUN git config --global --add safe.directory '*' \
     && rm -rf /var/lib/apt/lists/*
 
 # Create .cache dir and add write permissions for .cache and /go dirs
-RUN mkdir /.cache && chmod -R a+w /.cache && chmod -R a+w /go
+RUN mkdir /.cache && chmod -R a+w /.cache /go \
+    && chown -R appuser:appuser /.cache /go /home/appuser
+
+# Switch to non-root user
+USER appuser
