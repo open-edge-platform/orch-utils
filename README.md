@@ -1,7 +1,7 @@
 # Orchestrator Utilities
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Build](https://github.com/open-edge-platform/orch-utils/actions/workflows/lint-test-build-publish.yml/badge.svg)](https://github.com/open-edge-platform/orch-utils/actions/workflows/lint-test-build-publish.yml)
-
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/open-edge-platform/orch-utils/badge)](https://scorecard.dev/viewer/?uri=github.com/open-edge-platform/orch-utils)
 ## Overview
 
 The orch-utils repository is a crucial component of the Edge Orchestrator, providing various utility functions and tools
