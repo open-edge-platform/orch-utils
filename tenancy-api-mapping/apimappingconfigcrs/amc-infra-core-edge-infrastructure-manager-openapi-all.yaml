@@ -12,87 +12,87 @@ spec:
   specGenEnabled: true
   repoConf:
     url: "https://github.com/open-edge-platform/infra-core.git"
-    tag: "api/v1.32.0"
-    specFilePath: "api/api/openapi/edge-infrastructure-manager-openapi-all.yaml"
+    tag: "apiv2/v0.0.4"
+    specFilePath: "apiv2/api/openapi/openapi.yaml"
   mappings:
     - externalURI: /v1/projects/{projectName}/regions
-      serviceURI: edge-infra.orchestrator.apis/v1/regions
-    - externalURI: /v1/projects/{projectName}/regions/{regionID}
-      serviceURI: edge-infra.orchestrator.apis/v1/regions/{regionID}
-    - externalURI: /v1/projects/{projectName}/regions/{regionID}/sites
-      serviceURI: edge-infra.orchestrator.apis/v1/sites
-    - externalURI: /v1/projects/{projectName}/regions/{regionID}/sites/{siteID}
-      serviceURI: edge-infra.orchestrator.apis/v1/sites/{siteID}
+      serviceURI: edge-infra.orchestrator.apis/v2/regions
+    - externalURI: /v1/projects/{projectName}/regions/{resourceId}
+      serviceURI: edge-infra.orchestrator.apis/v2/regions/{resourceId}
+    - externalURI: /v1/projects/{projectName}/regions/{resourceId}/sites
+      serviceURI: edge-infra.orchestrator.apis/v2/sites
+    - externalURI: /v1/projects/{projectName}/regions/{regionResourceId}/sites/{resourceId}
+      serviceURI: edge-infra.orchestrator.apis/v2/sites/{resourceId}
     - externalURI: /v1/projects/{projectName}/compute
-      serviceURI: edge-infra.orchestrator.apis/v1/compute
+      serviceURI: edge-infra.orchestrator.apis/v2/compute
     - externalURI: /v1/projects/{projectName}/compute/hosts
-      serviceURI: edge-infra.orchestrator.apis/v1/compute/hosts
+      serviceURI: edge-infra.orchestrator.apis/v2/hosts
     - externalURI: /v1/projects/{projectName}/compute/hosts/summary
-      serviceURI: edge-infra.orchestrator.apis/v1/compute/hosts/summary
+      serviceURI: edge-infra.orchestrator.apis/v2/hosts_summary
     - externalURI: /v1/projects/{projectName}/compute/hosts/register
-      serviceURI: edge-infra.orchestrator.apis/v1/compute/hosts/register
-    - externalURI: /v1/projects/{projectName}/compute/hosts/{hostID}
-      serviceURI: edge-infra.orchestrator.apis/v1/compute/hosts/{hostID}
-    - externalURI: /v1/projects/{projectName}/compute/hosts/{hostID}/invalidate
-      serviceURI: edge-infra.orchestrator.apis/v1/compute/hosts/{hostID}/invalidate
-    - externalURI: /v1/projects/{projectName}/compute/hosts/{hostID}/onboard
-      serviceURI: edge-infra.orchestrator.apis/v1/compute/hosts/{hostID}/onboard
-    - externalURI: /v1/projects/{projectName}/compute/hosts/{hostID}/register
-      serviceURI: edge-infra.orchestrator.apis/v1/compute/hosts/{hostID}/register
+      serviceURI: edge-infra.orchestrator.apis/v2/hosts/register
+    - externalURI: /v1/projects/{projectName}/compute/hosts/{resourceId}
+      serviceURI: edge-infra.orchestrator.apis/v2/hosts/{resourceId}
+    - externalURI: /v1/projects/{projectName}/compute/hosts/{resourceId}/invalidate
+      serviceURI: edge-infra.orchestrator.apis/v2/hosts/{resourceId}/invalidate
+    - externalURI: /v1/projects/{projectName}/compute/hosts/{resourceId}/onboard
+      serviceURI: edge-infra.orchestrator.apis/v2/hosts/{resourceId}/onboard
+    - externalURI: /v1/projects/{projectName}/compute/hosts/{resourceId}/register
+      serviceURI: edge-infra.orchestrator.apis/v2/hosts/{resourceId}/register
     - externalURI: /v1/projects/{projectName}/compute/instances
-      serviceURI: edge-infra.orchestrator.apis/v1/instances
-    - externalURI: /v1/projects/{projectName}/compute/instances/{instanceID}
-      serviceURI: edge-infra.orchestrator.apis/v1/instances/{instanceID}
-    - externalURI: /v1/projects/{projectName}/compute/instances/{instanceID}/invalidate
-      serviceURI: edge-infra.orchestrator.apis/v1/instances/{instanceID}/invalidate
+      serviceURI: edge-infra.orchestrator.apis/v2/instances
+    - externalURI: /v1/projects/{projectName}/compute/instances/{resourceId}
+      serviceURI: edge-infra.orchestrator.apis/v2/instances/{resourceId}
+    - externalURI: /v1/projects/{projectName}/compute/instances/{resourceId}/invalidate
+      serviceURI: edge-infra.orchestrator.apis/v2/instances/{resourceId}/invalidate
     - externalURI: /v1/projects/{projectName}/locations
-      serviceURI: edge-infra.orchestrator.apis/v1/locations
+      serviceURI: edge-infra.orchestrator.apis/v2/locations
     - externalURI: /v1/projects/{projectName}/compute/os
-      serviceURI: edge-infra.orchestrator.apis/v1/OSResources
-    - externalURI: /v1/projects/{projectName}/compute/os/{OSResourceID}
-      serviceURI: edge-infra.orchestrator.apis/v1/OSResources/{OSResourceID}
+      serviceURI: edge-infra.orchestrator.apis/v2/operating_systems
+    - externalURI: /v1/projects/{projectName}/compute/os/{resourceId}
+      serviceURI: edge-infra.orchestrator.apis/v2/operating_systems/{resourceId}
     - externalURI: /v1/projects/{projectName}/compute/schedules
-      serviceURI: edge-infra.orchestrator.apis/v1/schedules
+      serviceURI: edge-infra.orchestrator.apis/v2/schedules
     - externalURI: /v1/projects/{projectName}/compute/workloads
-      serviceURI: edge-infra.orchestrator.apis/v1/workloads
-    - externalURI: /v1/projects/{projectName}/compute/workloads/{workloadID}
-      serviceURI: edge-infra.orchestrator.apis/v1/workloads/{workloadID}
-    - externalURI: /v1/projects/{projectName}/compute/workloads/{workloadID}/members
-      serviceURI: edge-infra.orchestrator.apis/v1/workloadMembers
-    - externalURI: /v1/projects/{projectName}/compute/workloads/{workloadID}/members/{workloadMemberID}
-      serviceURI: edge-infra.orchestrator.apis/v1/workloadMembers/{workloadMemberID}
+      serviceURI: edge-infra.orchestrator.apis/v2/workloads
+    - externalURI: /v1/projects/{projectName}/compute/workloads/{resourceId}
+      serviceURI: edge-infra.orchestrator.apis/v2/workloads/{resourceId}
+    - externalURI: /v1/projects/{projectName}/compute/workloads/{resourceId}/members
+      serviceURI: edge-infra.orchestrator.apis/v2/workload_members
+    - externalURI: /v1/projects/{projectName}/compute/workloads/{workloadResourceId}/members/{resourceId}
+      serviceURI: edge-infra.orchestrator.apis/v2/workload_members/{resourceId}
     - externalURI: /v1/projects/{projectName}/providers
-      serviceURI: edge-infra.orchestrator.apis/v1/providers
-    - externalURI: /v1/projects/{projectName}/providers/{providerID}
-      serviceURI: edge-infra.orchestrator.apis/v1/providers/{providerID}
+      serviceURI: edge-infra.orchestrator.apis/v2/providers
+    - externalURI: /v1/projects/{projectName}/providers/{resourceId}
+      serviceURI: edge-infra.orchestrator.apis/v2/providers/{resourceId}
     - externalURI: /v1/projects/{projectName}/schedules/single
-      serviceURI: edge-infra.orchestrator.apis/v1/schedules/single
-    - externalURI: /v1/projects/{projectName}/schedules/single/{singleScheduleID}
-      serviceURI: edge-infra.orchestrator.apis/v1/schedules/single/{singleScheduleID}
+      serviceURI: edge-infra.orchestrator.apis/v2/schedules/single
+    - externalURI: /v1/projects/{projectName}/schedules/single/{resourceId}
+      serviceURI: edge-infra.orchestrator.apis/v2/schedules/single/{resourceId}
     - externalURI: /v1/projects/{projectName}/schedules/repeated
-      serviceURI: edge-infra.orchestrator.apis/v1/schedules/repeated
-    - externalURI: /v1/projects/{projectName}/schedules/repeated/{repeatedScheduleID}
-      serviceURI: edge-infra.orchestrator.apis/v1/schedules/repeated/{repeatedScheduleID}
+      serviceURI: edge-infra.orchestrator.apis/v2/schedules/repeated
+    - externalURI: /v1/projects/{projectName}/schedules/repeated/{resourceId}
+      serviceURI: edge-infra.orchestrator.apis/v2/schedules/repeated/{resourceId}
     - externalURI: /v1/projects/{projectName}/telemetry/loggroups
-      serviceURI: edge-infra.orchestrator.apis/v1/telemetry/groups/logs
-    - externalURI: /v1/projects/{projectName}/telemetry/loggroups/{telemetryLogsGroupId}
-      serviceURI: edge-infra.orchestrator.apis/v1/telemetry/groups/logs/{telemetryLogsGroupId}
-    - externalURI: /v1/projects/{projectName}/telemetry/loggroups/{telemetryLogsGroupId}/logprofiles
-      serviceURI: edge-infra.orchestrator.apis/v1/telemetry/profiles/logs
-    - externalURI: /v1/projects/{projectName}/telemetry/loggroups/{telemetryLogsGroupId}/logprofiles/{telemetryLogsProfileId}
-      serviceURI: edge-infra.orchestrator.apis/v1/telemetry/profiles/logs/{telemetryLogsProfileId}
+      serviceURI: edge-infra.orchestrator.apis/v2/telemetry/groups/logs
+    - externalURI: /v1/projects/{projectName}/telemetry/loggroups/{resourceId}
+      serviceURI: edge-infra.orchestrator.apis/v2/telemetry/groups/logs/{resourceId}
+    - externalURI: /v1/projects/{projectName}/telemetry/loggroups/{resourceId}/logprofiles
+      serviceURI: edge-infra.orchestrator.apis/v2/telemetry/profiles/logs
+    - externalURI: /v1/projects/{projectName}/telemetry/loggroups/{loggroupResourceId}/logprofiles/{resourceId}
+      serviceURI: edge-infra.orchestrator.apis/v2/telemetry/profiles/logs/{resourceId}
     - externalURI: /v1/projects/{projectName}/telemetry/metricgroups
-      serviceURI: edge-infra.orchestrator.apis/v1/telemetry/groups/metrics
-    - externalURI: /v1/projects/{projectName}/telemetry/metricgroups/{telemetryMetricsGroupId}/metricprofiles
-      serviceURI: edge-infra.orchestrator.apis/v1/telemetry/profiles/metrics
-    - externalURI: /v1/projects/{projectName}/telemetry/metricgroups/{telemetryMetricsGroupId}/metricprofiles/{telemetryMetricsProfileId}
-      serviceURI: edge-infra.orchestrator.apis/v1/telemetry/profiles/metrics/{telemetryMetricsProfileId}
-    - externalURI: /v1/projects/{projectName}/telemetry/metricgroups/{telemetryMetricsGroupId}
-      serviceURI: edge-infra.orchestrator.apis/v1/telemetry/groups/metrics/{telemetryMetricsGroupId}
+      serviceURI: edge-infra.orchestrator.apis/v2/telemetry/groups/metrics
+    - externalURI: /v1/projects/{projectName}/telemetry/metricgroups/{resourceId}/metricprofiles
+      serviceURI: edge-infra.orchestrator.apis/v2/telemetry/profiles/metrics
+    - externalURI: /v1/projects/{projectName}/telemetry/metricgroups/{metricgroupResourceId}/metricprofiles/{resourceId}
+      serviceURI: edge-infra.orchestrator.apis/v2/telemetry/profiles/metrics/{resourceId}
+    - externalURI: /v1/projects/{projectName}/telemetry/metricgroups/{resourceId}
+      serviceURI: edge-infra.orchestrator.apis/v2/telemetry/groups/metrics/{resourceId}
     - externalURI: /v1/projects/{projectName}/localAccounts
-      serviceURI: edge-infra.orchestrator.apis/v1/localAccounts
-    - externalURI: /v1/projects/{projectName}/localAccounts/{localAccountID}
-      serviceURI: edge-infra.orchestrator.apis/v1/localAccounts/{localAccountID}
+      serviceURI: edge-infra.orchestrator.apis/v2/localAccounts
+    - externalURI: /v1/projects/{projectName}/localAccounts/{resourceId}
+      serviceURI: edge-infra.orchestrator.apis/v2/localAccounts/{resourceId}
   backend:
-    service: "api.orch-infra.svc.cluster.local"
+    service: "apiv2-proxy.orch-infra.svc.cluster.local"
     port: 8080
