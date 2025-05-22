@@ -1,5 +1,5 @@
+---
 # SPDX-FileCopyrightText: 2025 Intel Corporation
-#
 # SPDX-License-Identifier: Apache-2.0
 
 openapi: 3.0.2
@@ -11,109 +11,98 @@ info:
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   version: 0.1.0-dev
 servers:
-- url: '{apiRoot}'
-  variables:
-    apiRoot:
-      default: https://<multitenancy-gateway-host>
+  - url: '{apiRoot}'
+    variables:
+      apiRoot:
+        default: https://<multitenancy-gateway-host>
 security:
-- BearerAuth: []
+  - BearerAuth: []
 paths:
   /v1/projects/{projectName}/compute:
     get:
       description: Gets a compute object
       parameters:
-      - description: Index of the first item to return. This allows skipping of items.
-        in: query
-        name: offset
-        schema:
-          default: 0
-          maximum: 10000
-          minimum: 0
-          type: integer
-      - description: Defines the amount of items to be contained in a single page,
-          min of 1 and max of 100, default of 20.
-        in: query
-        name: pageSize
-        schema:
-          default: 20
-          maximum: 100
-          minimum: 1
-          type: integer
-      - description: Optional filter to return only items of interest. See https://google.aip.dev/160
-          for details. Takes precedence over other filter parameters, if set.
-        examples:
-          example1:
-            summary: through Host's Site-Id
-            value: site.resourceId="site-3b382a11"
-          example2:
-            summary: through Metadata
-            value: metadata='{"key":"exampleKey","value":"exampleValue"}'
-          example3:
-            summary: through Serial Number
-            value: serialNumber="xxxxx"
-        in: query
-        name: filter
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
-          type: string
-      - description: Optional comma separated list of fields to specify a sorting
-          order. See https://google.aip.dev/132 for details.
-        in: query
-        name: orderBy
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9., ]+$
-          type: string
-      - deprecated: true
-        description: Returns only the compute elements that are assigned with the
-          given site ID. If equals to 'null', then it returns all the hosts not associated
-          with any site.
-        in: query
-        name: siteID
-        schema:
-          pattern: ^site-[0-9a-f]{8}$|^null$
-          type: string
-      - deprecated: true
-        description: Returns only the compute elements that are assigned to the given
-          instanceID. If equals to 'null', then it returns all the hosts not associated
-          with any instance.
-        in: query
-        name: instanceID
-        schema:
-          pattern: ^inst-[0-9a-f]{8}$|^null$
-          type: string
-      - deprecated: true
-        description: Returns the compute elements associated with the given UUID.
-          UUID field cannot be null, if specified needs to be filled.
-        in: query
-        name: uuid
-        schema:
-          maxLength: 36
-          pattern: '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
-          type: string
-      - deprecated: true
-        description: Filters the metadata associated with the compute element. Values
-          are expected to be in the form of 'key=value'.
-        in: query
-        name: metadata
-        schema:
-          items:
-            pattern: ^[a-zA-Z-_0-9. ]+=[a-zA-Z-_0-9. ]+$
+        - description: Index of the first item to return. This allows skipping of items.
+          in: query
+          name: offset
+          schema:
+            default: 0
+            maximum: 10000
+            minimum: 0
+            type: integer
+        - description: Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20.
+          in: query
+          name: pageSize
+          schema:
+            default: 20
+            maximum: 100
+            minimum: 1
+            type: integer
+        - description: Optional filter to return only items of interest. See https://google.aip.dev/160 for details. Takes precedence over other filter parameters, if set.
+          examples:
+            example1:
+              summary: through Host's Site-Id
+              value: site.resourceId="site-3b382a11"
+            example2:
+              summary: through Metadata
+              value: metadata='{"key":"exampleKey","value":"exampleValue"}'
+            example3:
+              summary: through Serial Number
+              value: serialNumber="xxxxx"
+          in: query
+          name: filter
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
             type: string
-          type: array
-      - deprecated: true
-        description: Indicates if compute elements identified by the filter need to
-          be returned with all their respective child resources, e.g., USBs, Interfaces,
-          Storages.
-        in: query
-        name: detail
-        schema:
-          type: boolean
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: Optional comma separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details.
+          in: query
+          name: orderBy
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9., ]+$
+            type: string
+        - deprecated: true
+          description: Returns only the compute elements that are assigned with the given site ID. If equals to 'null', then it returns all the hosts not associated with any site.
+          in: query
+          name: siteID
+          schema:
+            pattern: ^site-[0-9a-f]{8}$|^null$
+            type: string
+        - deprecated: true
+          description: Returns only the compute elements that are assigned to the given instanceID. If equals to 'null', then it returns all the hosts not associated with any instance.
+          in: query
+          name: instanceID
+          schema:
+            pattern: ^inst-[0-9a-f]{8}$|^null$
+            type: string
+        - deprecated: true
+          description: Returns the compute elements associated with the given UUID. UUID field cannot be null, if specified needs to be filled.
+          in: query
+          name: uuid
+          schema:
+            maxLength: 36
+            pattern: '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
+            type: string
+        - deprecated: true
+          description: Filters the metadata associated with the compute element. Values are expected to be in the form of 'key=value'.
+          in: query
+          name: metadata
+          schema:
+            items:
+              pattern: ^[a-zA-Z-_0-9. ]+=[a-zA-Z-_0-9. ]+$
+              type: string
+            type: array
+        - deprecated: true
+          description: Indicates if compute elements identified by the filter need to be returned with all their respective child resources, e.g., USBs, Interfaces, Storages.
+          in: query
+          name: detail
+          schema:
+            type: boolean
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -148,101 +137,91 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Compute
+        - Compute
   /v1/projects/{projectName}/compute/hosts:
     get:
       description: Gets all host objects
       parameters:
-      - description: Index of the first item to return. This allows skipping of items.
-        in: query
-        name: offset
-        schema:
-          default: 0
-          maximum: 10000
-          minimum: 0
-          type: integer
-      - description: Defines the amount of items to be contained in a single page,
-          min of 1 and max of 100, default of 20.
-        in: query
-        name: pageSize
-        schema:
-          default: 20
-          maximum: 100
-          minimum: 1
-          type: integer
-      - description: Optional filter to return only items of interest. See https://google.aip.dev/160
-          for details. Takes precedence over other filter parameters, if set.
-        examples:
-          example1:
-            summary: Through the host's site ID
-            value: site.resourceId="site-3b382a11"
-          example2:
-            summary: Through the metadata
-            value: metadata='{"key":"exampleKey","value":"exampleValue"}'
-          example3:
-            summary: Through the serial number
-            value: serialNumber="xxxxx"
-        in: query
-        name: filter
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
-          type: string
-      - description: Optional comma separated list of fields to specify a sorting
-          order. See https://google.aip.dev/132 for details.
-        in: query
-        name: orderBy
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9., ]+$
-          type: string
-      - deprecated: true
-        description: Returns only the hosts that are assigned with the given site
-          ID. If equals to 'null', then it returns all the hosts not associated with
-          any site.
-        in: query
-        name: siteID
-        schema:
-          pattern: ^site-[0-9a-f]{8}$|^null$
-          type: string
-      - deprecated: true
-        description: Returns only the hosts that are assigned to the given instanceID.
-          If equals to 'null', then it returns all the hosts not associated with any
-          instance.
-        in: query
-        name: instanceID
-        schema:
-          pattern: ^inst-[0-9a-f]{8}$|^null$
-          type: string
-      - deprecated: true
-        description: Returns the host associated with the given UUID. UUID field cannot
-          be null, if specified needs to be filled.
-        in: query
-        name: uuid
-        schema:
-          maxLength: 36
-          pattern: '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
-          type: string
-      - description: Filters the metadata associated with the Host. Values are expected
-          to be in the form 'key=value'.
-        in: query
-        name: metadata
-        schema:
-          items:
-            pattern: ^[a-zA-Z-_0-9. ]+=[a-zA-Z-_0-9. ]+$
+        - description: Index of the first item to return. This allows skipping of items.
+          in: query
+          name: offset
+          schema:
+            default: 0
+            maximum: 10000
+            minimum: 0
+            type: integer
+        - description: Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20.
+          in: query
+          name: pageSize
+          schema:
+            default: 20
+            maximum: 100
+            minimum: 1
+            type: integer
+        - description: Optional filter to return only items of interest. See https://google.aip.dev/160 for details. Takes precedence over other filter parameters, if set.
+          examples:
+            example1:
+              summary: Through the host's site ID
+              value: site.resourceId="site-3b382a11"
+            example2:
+              summary: Through the metadata
+              value: metadata='{"key":"exampleKey","value":"exampleValue"}'
+            example3:
+              summary: Through the serial number
+              value: serialNumber="xxxxx"
+          in: query
+          name: filter
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
             type: string
-          type: array
-      - deprecated: true
-        description: Indicates if the host identified by the filter needs to be returned
-          with all their respective child resources, e.g., USBs, interfaces, and storages.
-        in: query
-        name: detail
-        schema:
-          type: boolean
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: Optional comma separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details.
+          in: query
+          name: orderBy
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9., ]+$
+            type: string
+        - deprecated: true
+          description: Returns only the hosts that are assigned with the given site ID. If equals to 'null', then it returns all the hosts not associated with any site.
+          in: query
+          name: siteID
+          schema:
+            pattern: ^site-[0-9a-f]{8}$|^null$
+            type: string
+        - deprecated: true
+          description: Returns only the hosts that are assigned to the given instanceID. If equals to 'null', then it returns all the hosts not associated with any instance.
+          in: query
+          name: instanceID
+          schema:
+            pattern: ^inst-[0-9a-f]{8}$|^null$
+            type: string
+        - deprecated: true
+          description: Returns the host associated with the given UUID. UUID field cannot be null, if specified needs to be filled.
+          in: query
+          name: uuid
+          schema:
+            maxLength: 36
+            pattern: '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
+            type: string
+        - description: Filters the metadata associated with the Host. Values are expected to be in the form 'key=value'.
+          in: query
+          name: metadata
+          schema:
+            items:
+              pattern: ^[a-zA-Z-_0-9. ]+=[a-zA-Z-_0-9. ]+$
+              type: string
+            type: array
+        - deprecated: true
+          description: Indicates if the host identified by the filter needs to be returned with all their respective child resources, e.g., USBs, interfaces, and storages.
+          in: query
+          name: detail
+          schema:
+            type: boolean
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -277,22 +256,22 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Host
+        - Host
     post:
       description: Creates a compute host.
       parameters:
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/Host'
+                - $ref: '#/components/schemas/Host'
         required: true
       responses:
         "201":
@@ -334,7 +313,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Host
+        - Host
   /v1/projects/{projectName}/compute/hosts/{hostID}:
     delete:
       description: Deletes a host.
@@ -373,7 +352,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Host
+        - Host
     get:
       description: Queries a host through the host ID.
       responses:
@@ -410,21 +389,21 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Host
+        - Host
     parameters:
-    - description: The unique host identifier
-      in: path
-      name: hostID
-      required: true
-      schema:
-        pattern: ^host-[0-9a-f]{8}$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
+      - description: The unique host identifier
+        in: path
+        name: hostID
+        required: true
+        schema:
+          pattern: ^host-[0-9a-f]{8}$
+          type: string
+      - description: unique projectName for the resource
+        in: path
+        name: projectName
+        required: true
+        schema:
+          type: string
     patch:
       description: Partially updates a host.
       requestBody:
@@ -432,7 +411,7 @@ paths:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/Host'
+                - $ref: '#/components/schemas/Host'
               properties:
                 uuid:
                   deprecated: true
@@ -471,7 +450,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Host
+        - Host
     put:
       description: Updates a host.
       requestBody:
@@ -479,7 +458,7 @@ paths:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/Host'
+                - $ref: '#/components/schemas/Host'
               properties:
                 uuid:
                   deprecated: true
@@ -518,26 +497,24 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Host
+        - Host
   /v1/projects/{projectName}/compute/hosts/{hostID}/invalidate:
     parameters:
-    - description: The unique host identifier
-      in: path
-      name: hostID
-      required: true
-      schema:
-        pattern: ^host-[0-9a-f]{8}$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
+      - description: The unique host identifier
+        in: path
+        name: hostID
+        required: true
+        schema:
+          pattern: ^host-[0-9a-f]{8}$
+          type: string
+      - description: unique projectName for the resource
+        in: path
+        name: projectName
+        required: true
+        schema:
+          type: string
     put:
-      description: Invalidates a host by marking it as untrusted. Once invalidated,
-        a Host will no longer be able to communicate with Edge Infrastructure Manager
-        unless it is deleted and provisioned again.
+      description: Invalidates a host by marking it as untrusted. Once invalidated, a Host will no longer be able to communicate with Edge Infrastructure Manager unless it is deleted and provisioned again.
       requestBody:
         content:
           application/json:
@@ -573,22 +550,22 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Host
+        - Host
   /v1/projects/{projectName}/compute/hosts/{hostID}/onboard:
     parameters:
-    - description: The unique host identifier.
-      in: path
-      name: hostID
-      required: true
-      schema:
-        pattern: ^host-[0-9a-f]{8}$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
+      - description: The unique host identifier.
+        in: path
+        name: hostID
+        required: true
+        schema:
+          pattern: ^host-[0-9a-f]{8}$
+          type: string
+      - description: unique projectName for the resource
+        in: path
+        name: projectName
+        required: true
+        schema:
+          type: string
     patch:
       description: Onboards a host to Edge Orchestrator.
       responses:
@@ -621,22 +598,22 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Host
+        - Host
   /v1/projects/{projectName}/compute/hosts/{hostID}/register:
     parameters:
-    - description: The unique host identifier.
-      in: path
-      name: hostID
-      required: true
-      schema:
-        pattern: ^host-[0-9a-f]{8}$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
+      - description: The unique host identifier.
+        in: path
+        name: hostID
+        required: true
+        schema:
+          pattern: ^host-[0-9a-f]{8}$
+          type: string
+      - description: unique projectName for the resource
+        in: path
+        name: projectName
+        required: true
+        schema:
+          type: string
     patch:
       description: Updates a host registration information.
       requestBody:
@@ -644,12 +621,12 @@ paths:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/HostRegisterInfo'
-              - properties:
-                  serialNumber:
-                    readOnly: true
-                  uuid:
-                    readOnly: true
+                - $ref: '#/components/schemas/HostRegisterInfo'
+                - properties:
+                    serialNumber:
+                      readOnly: true
+                    uuid:
+                      readOnly: true
         required: true
       responses:
         "200":
@@ -681,17 +658,17 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Host
+        - Host
   /v1/projects/{projectName}/compute/hosts/register:
     post:
       description: Registers a host by providing unique identifiers.
       parameters:
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -738,44 +715,41 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Host
+        - Host
   /v1/projects/{projectName}/compute/hosts/summary:
     get:
       description: Gets the summary of host objects.
       parameters:
-      - deprecated: true
-        description: The site ID the hosts belong to. If not specified, returns the
-          summary of all hosts. If specified, returns the summary of hosts that have
-          the given site ID applied to them.
-        in: query
-        name: siteID
-        schema:
-          deprecated: true
-          pattern: ^site-[0-9a-f]{8}$
-          type: string
-      - description: Optional filter to return only items of interest. See https://google.aip.dev/160
-          for details. Takes precedence over other filter parameters, if set.
-        examples:
-          example1:
-            summary: Through the host's site ID
-            value: site.resourceId="site-3b382a11"
-          example2:
-            summary: Through the metadata
-            value: metadata='{"key":"exampleKey","value":"exampleValue"}'
-          example3:
-            summary: Through the serial number
-            value: serialNumber="xxxxx"
-        in: query
-        name: filter
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
-          type: string
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - deprecated: true
+          description: The site ID the hosts belong to. If not specified, returns the summary of all hosts. If specified, returns the summary of hosts that have the given site ID applied to them.
+          in: query
+          name: siteID
+          schema:
+            deprecated: true
+            pattern: ^site-[0-9a-f]{8}$
+            type: string
+        - description: Optional filter to return only items of interest. See https://google.aip.dev/160 for details. Takes precedence over other filter parameters, if set.
+          examples:
+            example1:
+              summary: Through the host's site ID
+              value: site.resourceId="site-3b382a11"
+            example2:
+              summary: Through the metadata
+              value: metadata='{"key":"exampleKey","value":"exampleValue"}'
+            example3:
+              summary: Through the serial number
+              value: serialNumber="xxxxx"
+          in: query
+          name: filter
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -810,85 +784,77 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Host
+        - Host
   /v1/projects/{projectName}/compute/instances:
     get:
       description: Gets all instance objects.
       parameters:
-      - description: Index of the first item to return. This allows skipping of items.
-        in: query
-        name: offset
-        schema:
-          default: 0
-          maximum: 10000
-          minimum: 0
-          type: integer
-      - description: Defines the amount of items to be contained in a single page,
-          min of 1 and max of 100, default of 20.
-        in: query
-        name: pageSize
-        schema:
-          default: 20
-          maximum: 100
-          minimum: 1
-          type: integer
-      - description: Optional filter to return only items of interest. See https://google.aip.dev/160
-          for details.
-        examples:
-          example1:
-            summary: Through the instance's host ID
-            value: host.resourceId="host-3b382a11"
-          example2:
-            summary: Through the instance's name
-            value: name="instance name example"
-          example3:
-            summary: Through the instance's OS ID
-            value: os.resourceId="os-a3b1c66d"
-        in: query
-        name: filter
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
-          type: string
-      - description: Optional comma-separated list of fields to specify a sorting
-          order. See https://google.aip.dev/132 for details.
-        in: query
-        name: orderBy
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9., ]+$
-          type: string
-      - allowEmptyValue: true
-        deprecated: true
-        description: Returns only the instances that are assigned to the given workload
-          member. If equals to 'null', returns all instances not associated with any
-          workload member. If equal to '' (empty string), returns all instances that
-          have a workload member associated.
-        in: query
-        name: workloadMemberID
-        schema:
-          pattern: ^$|^workloadmember-[0-9a-f]{8}$|^null$
-          type: string
-      - deprecated: true
-        description: Returns the instances associated with the host with the given
-          host ID.
-        in: query
-        name: hostID
-        schema:
-          pattern: ^host-[0-9a-f]{8}$
-          type: string
-      - deprecated: true
-        description: Returns the instances associated with the hosts in the site identified.
-          by the given siteID
-        in: query
-        name: siteID
-        schema:
-          pattern: ^site-[0-9a-f]{8}$
-          type: string
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: Index of the first item to return. This allows skipping of items.
+          in: query
+          name: offset
+          schema:
+            default: 0
+            maximum: 10000
+            minimum: 0
+            type: integer
+        - description: Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20.
+          in: query
+          name: pageSize
+          schema:
+            default: 20
+            maximum: 100
+            minimum: 1
+            type: integer
+        - description: Optional filter to return only items of interest. See https://google.aip.dev/160 for details.
+          examples:
+            example1:
+              summary: Through the instance's host ID
+              value: host.resourceId="host-3b382a11"
+            example2:
+              summary: Through the instance's name
+              value: name="instance name example"
+            example3:
+              summary: Through the instance's OS ID
+              value: os.resourceId="os-a3b1c66d"
+          in: query
+          name: filter
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
+            type: string
+        - description: Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details.
+          in: query
+          name: orderBy
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9., ]+$
+            type: string
+        - allowEmptyValue: true
+          deprecated: true
+          description: Returns only the instances that are assigned to the given workload member. If equals to 'null', returns all instances not associated with any workload member. If equal to '' (empty string), returns all instances that have a workload member associated.
+          in: query
+          name: workloadMemberID
+          schema:
+            pattern: ^$|^workloadmember-[0-9a-f]{8}$|^null$
+            type: string
+        - deprecated: true
+          description: Returns the instances associated with the host with the given host ID.
+          in: query
+          name: hostID
+          schema:
+            pattern: ^host-[0-9a-f]{8}$
+            type: string
+        - deprecated: true
+          description: Returns the instances associated with the hosts in the site identified. by the given siteID
+          in: query
+          name: siteID
+          schema:
+            pattern: ^site-[0-9a-f]{8}$
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -923,26 +889,26 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Instance
+        - Instance
     post:
       description: Creates an instance.
       parameters:
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/Instance'
+                - $ref: '#/components/schemas/Instance'
               required:
-              - kind
-              - hostID
-              - osID
+                - kind
+                - hostID
+                - osID
         required: true
       responses:
         "201":
@@ -984,11 +950,10 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Instance
+        - Instance
   /v1/projects/{projectName}/compute/instances/{instanceID}:
     delete:
-      description: Deletes an instance, provided that the instance does not contain
-        members.
+      description: Deletes an instance, provided that the instance does not contain members.
       responses:
         "204":
           description: The instance was deleted.
@@ -1019,7 +984,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Instance
+        - Instance
     get:
       description: Gets an instance.
       responses:
@@ -1056,21 +1021,21 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Instance
+        - Instance
     parameters:
-    - description: The unique instance identifier.
-      in: path
-      name: instanceID
-      required: true
-      schema:
-        pattern: ^inst-[0-9a-f]{8}$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
+      - description: The unique instance identifier.
+        in: path
+        name: instanceID
+        required: true
+        schema:
+          pattern: ^inst-[0-9a-f]{8}$
+          type: string
+      - description: unique projectName for the resource
+        in: path
+        name: projectName
+        required: true
+        schema:
+          type: string
     patch:
       description: Partially updates an instance.
       requestBody:
@@ -1078,7 +1043,7 @@ paths:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/Instance'
+                - $ref: '#/components/schemas/Instance'
               properties:
                 securityFeature:
                   deprecated: true
@@ -1117,26 +1082,24 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Instance
+        - Instance
   /v1/projects/{projectName}/compute/instances/{instanceID}/invalidate:
     parameters:
-    - description: The unique instance identifier.
-      in: path
-      name: instanceID
-      required: true
-      schema:
-        pattern: ^inst-[0-9a-f]{8}$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
+      - description: The unique instance identifier.
+        in: path
+        name: instanceID
+        required: true
+        schema:
+          pattern: ^inst-[0-9a-f]{8}$
+          type: string
+      - description: unique projectName for the resource
+        in: path
+        name: projectName
+        required: true
+        schema:
+          type: string
     put:
-      description: Invalidates an instance by marking it as untrusted. Once invalidated,
-        the instance will no longer be able to communicate with Edge Infrastructure
-        Manager unless it is deleted and provisioned again.
+      description: Invalidates an instance by marking it as untrusted. Once invalidated, the instance will no longer be able to communicate with Edge Infrastructure Manager unless it is deleted and provisioned again.
       responses:
         "200":
           description: The instance was invalidated
@@ -1167,48 +1130,45 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Instance
+        - Instance
   /v1/projects/{projectName}/compute/os:
     get:
       description: Gets all OS resources' objects.
       parameters:
-      - description: Index of the first item to return. This allows skipping of items.
-        in: query
-        name: offset
-        schema:
-          default: 0
-          maximum: 10000
-          minimum: 0
-          type: integer
-      - description: Defines the amount of items to be contained in a single page,
-          min of 1 and max of 100, default of 20.
-        in: query
-        name: pageSize
-        schema:
-          default: 20
-          maximum: 100
-          minimum: 1
-          type: integer
-      - description: Optional filter to return only items of interest. See https://google.aip.dev/160
-          for details. Takes precedence over other filter parameters, if set.
-        in: query
-        name: filter
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
-          type: string
-      - description: Optional comma-separated list of fields to specify a sorting
-          order. See https://google.aip.dev/132 for details.
-        in: query
-        name: orderBy
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9., ]+$
-          type: string
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: Index of the first item to return. This allows skipping of items.
+          in: query
+          name: offset
+          schema:
+            default: 0
+            maximum: 10000
+            minimum: 0
+            type: integer
+        - description: Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20.
+          in: query
+          name: pageSize
+          schema:
+            default: 20
+            maximum: 100
+            minimum: 1
+            type: integer
+        - description: Optional filter to return only items of interest. See https://google.aip.dev/160 for details. Takes precedence over other filter parameters, if set.
+          in: query
+          name: filter
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
+            type: string
+        - description: Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details.
+          in: query
+          name: orderBy
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9., ]+$
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -1243,16 +1203,16 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - OS
+        - OS
     post:
       description: Creates an OS resource.
       parameters:
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -1299,7 +1259,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - OS
+        - OS
   /v1/projects/{projectName}/compute/os/{OSResourceID}:
     delete:
       description: Deletes an OS resource.
@@ -1333,7 +1293,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - OS
+        - OS
     get:
       description: Gets an OS resource.
       responses:
@@ -1360,21 +1320,21 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - OS
+        - OS
     parameters:
-    - description: The unique OS resource identifier.
-      in: path
-      name: OSResourceID
-      required: true
-      schema:
-        pattern: ^os-[0-9a-f]{8}$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
+      - description: The unique OS resource identifier.
+        in: path
+        name: OSResourceID
+        required: true
+        schema:
+          pattern: ^os-[0-9a-f]{8}$
+          type: string
+      - description: unique projectName for the resource
+        in: path
+        name: projectName
+        required: true
+        schema:
+          type: string
     patch:
       description: Partially updates an OS resource.
       requestBody:
@@ -1382,7 +1342,7 @@ paths:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/OperatingSystemResource'
+                - $ref: '#/components/schemas/OperatingSystemResource'
               properties:
                 osProvider:
                   readOnly: true
@@ -1429,7 +1389,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - OS
+        - OS
     put:
       description: Updates an OS resource.
       requestBody:
@@ -1437,7 +1397,7 @@ paths:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/OperatingSystemResource'
+                - $ref: '#/components/schemas/OperatingSystemResource'
               properties:
                 osProvider:
                   readOnly: true
@@ -1484,72 +1444,57 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - OS
+        - OS
   /v1/projects/{projectName}/compute/schedules:
     get:
       description: Gets all schedules to operate on objects.
       parameters:
-      - description: Identifies the paging unique identifier for a single page, starts
-          index at 1.
-        in: query
-        name: offset
-        schema:
-          default: 0
-          maximum: 10000
-          minimum: 0
-          type: integer
-      - description: Defines the amount of items to be contained in a single page,
-          min of 1 and max of 100, default of 20.
-        in: query
-        name: pageSize
-        schema:
-          default: 20
-          maximum: 100
-          minimum: 1
-          type: integer
-      - description: The region ID target of the schedules. If not specified, returns
-          all schedules (given the other query parameters). If specified, returns
-          the schedules that have the specified region ID applied to them, i.e., target
-          including the inherited ones (parent region if not null). If null, returns
-          all schedules without a region ID as target.
-        in: query
-        name: regionID
-        schema:
-          pattern: ^region-[0-9a-f]{8}$
-          type: string
-      - description: The site ID target of the schedules. If not specified, returns
-          all schedules (given the other query parameters). If specified, returns
-          the schedules that have the specified site ID applied to them, i.e., target
-          including the inherited ones. If null, returns all schedules without a site
-          ID as target.
-        in: query
-        name: siteID
-        schema:
-          pattern: ^site-[0-9a-f]{8}$|^null$
-          type: string
-      - description: The host ID target of the schedules. If not specified, returns
-          all schedules (given the other query parameters). If specified, returns
-          the schedules that have the specified host ID applied to them, i.e., target
-          including the inherited ones (parent site if not null). If null, returns
-          all schedules without a host ID as target.
-        in: query
-        name: hostID
-        schema:
-          pattern: ^host-[0-9a-f]{8}$|^null$
-          type: string
-      - description: Filters based on the timestamp, expected to be UNIX epoch UTC
-          timestamp in seconds
-        in: query
-        name: unix_epoch
-        schema:
-          pattern: ^[0-9]+$
-          type: string
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: Identifies the paging unique identifier for a single page, starts index at 1.
+          in: query
+          name: offset
+          schema:
+            default: 0
+            maximum: 10000
+            minimum: 0
+            type: integer
+        - description: Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20.
+          in: query
+          name: pageSize
+          schema:
+            default: 20
+            maximum: 100
+            minimum: 1
+            type: integer
+        - description: The region ID target of the schedules. If not specified, returns all schedules (given the other query parameters). If specified, returns the schedules that have the specified region ID applied to them, i.e., target including the inherited ones (parent region if not null). If null, returns all schedules without a region ID as target.
+          in: query
+          name: regionID
+          schema:
+            pattern: ^region-[0-9a-f]{8}$
+            type: string
+        - description: The site ID target of the schedules. If not specified, returns all schedules (given the other query parameters). If specified, returns the schedules that have the specified site ID applied to them, i.e., target including the inherited ones. If null, returns all schedules without a site ID as target.
+          in: query
+          name: siteID
+          schema:
+            pattern: ^site-[0-9a-f]{8}$|^null$
+            type: string
+        - description: The host ID target of the schedules. If not specified, returns all schedules (given the other query parameters). If specified, returns the schedules that have the specified host ID applied to them, i.e., target including the inherited ones (parent site if not null). If null, returns all schedules without a host ID as target.
+          in: query
+          name: hostID
+          schema:
+            pattern: ^host-[0-9a-f]{8}$|^null$
+            type: string
+        - description: Filters based on the timestamp, expected to be UNIX epoch UTC timestamp in seconds
+          in: query
+          name: unix_epoch
+          schema:
+            pattern: ^[0-9]+$
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -1584,53 +1529,50 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Schedule
+        - Schedule
   /v1/projects/{projectName}/compute/workloads:
     get:
       description: Gets all workload objects.
       parameters:
-      - description: Index of the first item to return. This allows skipping of items.
-        in: query
-        name: offset
-        schema:
-          default: 0
-          maximum: 10000
-          minimum: 0
-          type: integer
-      - description: Defines the amount of items to be contained in a single page,
-          min of 1 and max of 100, default of 20.
-        in: query
-        name: pageSize
-        schema:
-          default: 20
-          maximum: 100
-          minimum: 1
-          type: integer
-      - description: Optional filter to return only items of interest. See https://google.aip.dev/160
-          for details. Takes precedence over other filter parameters, if set.
-        in: query
-        name: filter
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
-          type: string
-      - description: Optional comma-separated list of fields to specify a sorting
-          order. See https://google.aip.dev/132 for details.
-        in: query
-        name: orderBy
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9., ]+$
-          type: string
-      - deprecated: true
-        in: query
-        name: kind
-        schema:
-          $ref: '#/components/schemas/WorkloadKind'
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: Index of the first item to return. This allows skipping of items.
+          in: query
+          name: offset
+          schema:
+            default: 0
+            maximum: 10000
+            minimum: 0
+            type: integer
+        - description: Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20.
+          in: query
+          name: pageSize
+          schema:
+            default: 20
+            maximum: 100
+            minimum: 1
+            type: integer
+        - description: Optional filter to return only items of interest. See https://google.aip.dev/160 for details. Takes precedence over other filter parameters, if set.
+          in: query
+          name: filter
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
+            type: string
+        - description: Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details.
+          in: query
+          name: orderBy
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9., ]+$
+            type: string
+        - deprecated: true
+          in: query
+          name: kind
+          schema:
+            $ref: '#/components/schemas/WorkloadKind'
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -1665,16 +1607,16 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Workload
+        - Workload
     post:
       description: Creates a workload object.
       parameters:
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -1721,11 +1663,10 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Workload
+        - Workload
   /v1/projects/{projectName}/compute/workloads/{workloadID}:
     delete:
-      description: Deletes a workload, provided that the workload does not contain
-        members.
+      description: Deletes a workload, provided that the workload does not contain members.
       responses:
         "204":
           description: The workload was deleted.
@@ -1756,7 +1697,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Workload
+        - Workload
     get:
       description: Gets a workload object.
       responses:
@@ -1793,21 +1734,21 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Workload
+        - Workload
     parameters:
-    - description: The unique workload identifier.
-      in: path
-      name: workloadID
-      required: true
-      schema:
-        pattern: ^workload-[0-9a-f]{8}$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
+      - description: The unique workload identifier.
+        in: path
+        name: workloadID
+        required: true
+        schema:
+          pattern: ^workload-[0-9a-f]{8}$
+          type: string
+      - description: unique projectName for the resource
+        in: path
+        name: projectName
+        required: true
+        schema:
+          type: string
     patch:
       description: Partially updates a workload object.
       requestBody:
@@ -1850,7 +1791,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Workload
+        - Workload
     put:
       description: Updates a workload object.
       requestBody:
@@ -1893,61 +1834,58 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Workload
+        - Workload
   /v1/projects/{projectName}/compute/workloads/{workloadID}/members:
     get:
       description: Gets the list of workload members.
       parameters:
-      - description: Index of the first item to return. This allows skipping of items.
-        in: query
-        name: offset
-        schema:
-          default: 0
-          maximum: 10000
-          minimum: 0
-          type: integer
-      - description: Defines the amount of items to be contained in a single page,
-          min of 1 and max of 100, default of 20.
-        in: query
-        name: pageSize
-        schema:
-          default: 20
-          maximum: 100
-          minimum: 1
-          type: integer
-      - description: Optional filter to return only items of interest. See https://google.aip.dev/160
-          for details. Takes precedence over other filter parameters, if set.
-        in: query
-        name: filter
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
-          type: string
-      - description: Optional comma-separated list of fields to specify a sorting
-          order. See https://google.aip.dev/132 for details.
-        in: query
-        name: orderBy
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9., ]+$
-          type: string
-      - deprecated: true
-        description: The unique workload identifier.
-        in: query
-        name: workload_id
-        schema:
-          pattern: ^workload-[0-9a-f]{8}$
-          type: string
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
-      - description: unique workloadID for the resource
-        in: path
-        name: workloadID
-        required: true
-        schema:
-          type: string
+        - description: Index of the first item to return. This allows skipping of items.
+          in: query
+          name: offset
+          schema:
+            default: 0
+            maximum: 10000
+            minimum: 0
+            type: integer
+        - description: Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20.
+          in: query
+          name: pageSize
+          schema:
+            default: 20
+            maximum: 100
+            minimum: 1
+            type: integer
+        - description: Optional filter to return only items of interest. See https://google.aip.dev/160 for details. Takes precedence over other filter parameters, if set.
+          in: query
+          name: filter
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
+            type: string
+        - description: Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details.
+          in: query
+          name: orderBy
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9., ]+$
+            type: string
+        - deprecated: true
+          description: The unique workload identifier.
+          in: query
+          name: workload_id
+          schema:
+            pattern: ^workload-[0-9a-f]{8}$
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique workloadID for the resource
+          in: path
+          name: workloadID
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -1982,22 +1920,22 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Workload
+        - Workload
     post:
       description: Adds a workload member object.
       parameters:
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
-      - description: unique workloadID for the resource
-        in: path
-        name: workloadID
-        required: true
-        schema:
-          type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique workloadID for the resource
+          in: path
+          name: workloadID
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -2044,7 +1982,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Workload
+        - Workload
   /v1/projects/{projectName}/compute/workloads/{workloadID}/members/{workloadMemberID}:
     delete:
       description: Removes the workload member.
@@ -2078,7 +2016,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Workload
+        - Workload
     get:
       description: Gets the workload member based on its given ID.
       responses:
@@ -2115,61 +2053,14 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Workload
+        - Workload
     parameters:
-    - description: The unique identifier of the workload member.
-      in: path
-      name: workloadMemberID
-      required: true
-      schema:
-        pattern: ^workloadmember-[0-9a-f]{8}$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
-    - description: unique workloadID for the resource
-      in: path
-      name: workloadID
-      required: true
-      schema:
-        type: string
-  /v1/projects/{projectName}/localAccounts:
-    get:
-      description: Gets all local account objects.
-      parameters:
-      - description: Index of the first item to return. This allows skipping of items.
-        in: query
-        name: offset
+      - description: The unique identifier of the workload member.
+        in: path
+        name: workloadMemberID
+        required: true
         schema:
-          default: 0
-          maximum: 10000
-          minimum: 0
-          type: integer
-      - description: Defines the amount of items to be contained in a single page,
-          min of 1 and max of 100, default of 20.
-        in: query
-        name: pageSize
-        schema:
-          default: 20
-          maximum: 100
-          minimum: 1
-          type: integer
-      - description: Optional filter to return only items of interest. See https://google.aip.dev/160
-          for details.
-        in: query
-        name: filter
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
-          type: string
-      - description: Optional comma-separated list of fields to specify a sorting
-          order. See https://google.aip.dev/132 for details.
-        in: query
-        name: orderBy
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9., ]+$
+          pattern: ^workloadmember-[0-9a-f]{8}$
           type: string
       - description: unique projectName for the resource
         in: path
@@ -2177,6 +2068,50 @@ paths:
         required: true
         schema:
           type: string
+      - description: unique workloadID for the resource
+        in: path
+        name: workloadID
+        required: true
+        schema:
+          type: string
+  /v1/projects/{projectName}/localAccounts:
+    get:
+      description: Gets all local account objects.
+      parameters:
+        - description: Index of the first item to return. This allows skipping of items.
+          in: query
+          name: offset
+          schema:
+            default: 0
+            maximum: 10000
+            minimum: 0
+            type: integer
+        - description: Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20.
+          in: query
+          name: pageSize
+          schema:
+            default: 20
+            maximum: 100
+            minimum: 1
+            type: integer
+        - description: Optional filter to return only items of interest. See https://google.aip.dev/160 for details.
+          in: query
+          name: filter
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
+            type: string
+        - description: Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details.
+          in: query
+          name: orderBy
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9., ]+$
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -2211,16 +2146,16 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - LocalAccount
+        - LocalAccount
     post:
       description: Create a Local account instance
       parameters:
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -2267,7 +2202,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - LocalAccount
+        - LocalAccount
   /v1/projects/{projectName}/localAccounts/{localAccountID}:
     delete:
       description: Delete a local account object by ID.
@@ -2301,7 +2236,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - LocalAccount
+        - LocalAccount
     get:
       description: Get a local account object by ID.
       responses:
@@ -2338,58 +2273,55 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - LocalAccount
+        - LocalAccount
     parameters:
-    - description: The unique identifier of the local account.
-      in: path
-      name: localAccountID
-      required: true
-      schema:
-        pattern: ^localaccount-[0-9a-f]{8}$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
-  /v1/projects/{projectName}/locations:
-    get:
-      description: Gets a list of location node objects.
-      parameters:
-      - description: The name of the resource to be queried; it can be a region and/or
-          site name, if the query parameters below are stated.
-        in: query
-        name: name
+      - description: The unique identifier of the local account.
+        in: path
+        name: localAccountID
+        required: true
         schema:
-          maxLength: 20
-          pattern: '^[a-zA-Z-_0-9./: ]+$'
+          pattern: ^localaccount-[0-9a-f]{8}$
           type: string
-      - description: Indicates if the filter will be applied on the site resources.
-        in: query
-        name: showSites
-        schema:
-          type: boolean
-      - description: Indicates if the filter will be applied on the region resources.
-        in: query
-        name: showRegions
-        schema:
-          type: boolean
       - description: unique projectName for the resource
         in: path
         name: projectName
         required: true
         schema:
           type: string
+  /v1/projects/{projectName}/locations:
+    get:
+      description: Gets a list of location node objects.
+      parameters:
+        - description: The name of the resource to be queried; it can be a region and/or site name, if the query parameters below are stated.
+          in: query
+          name: name
+          schema:
+            maxLength: 20
+            pattern: '^[a-zA-Z-_0-9./: ]+$'
+            type: string
+        - description: Indicates if the filter will be applied on the site resources.
+          in: query
+          name: showSites
+          schema:
+            type: boolean
+        - description: Indicates if the filter will be applied on the region resources.
+          in: query
+          name: showRegions
+          schema:
+            type: boolean
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/LocationNodeList'
-          description: Array of the location node objects containing the resources
-            that match the query name parameter. For each type of location, the maximum
-            amount of resources to be returned is 20.
+          description: Array of the location node objects containing the resources that match the query name parameter. For each type of location, the maximum amount of resources to be returned is 20.
         "400":
           $ref: '#/components/responses/400-BadRequest'
         "401":
@@ -2405,48 +2337,45 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Location
+        - Location
   /v1/projects/{projectName}/providers:
     get:
       description: Gets all provider objects.
       parameters:
-      - description: Index of the first item to return. This allows skipping of items.
-        in: query
-        name: offset
-        schema:
-          default: 0
-          maximum: 10000
-          minimum: 0
-          type: integer
-      - description: Defines the amount of items to be contained in a single page,
-          min of 1 and max of 100, default of 20.
-        in: query
-        name: pageSize
-        schema:
-          default: 20
-          maximum: 100
-          minimum: 1
-          type: integer
-      - description: Optional filter to return only items of interest. See https://google.aip.dev/160
-          for details. Takes precedence over other filter parameters, if set.
-        in: query
-        name: filter
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
-          type: string
-      - description: Optional comma-separated list of fields to specify a sorting
-          order. See https://google.aip.dev/132 for details.
-        in: query
-        name: orderBy
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9., ]+$
-          type: string
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: Index of the first item to return. This allows skipping of items.
+          in: query
+          name: offset
+          schema:
+            default: 0
+            maximum: 10000
+            minimum: 0
+            type: integer
+        - description: Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20.
+          in: query
+          name: pageSize
+          schema:
+            default: 20
+            maximum: 100
+            minimum: 1
+            type: integer
+        - description: Optional filter to return only items of interest. See https://google.aip.dev/160 for details. Takes precedence over other filter parameters, if set.
+          in: query
+          name: filter
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
+            type: string
+        - description: Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details.
+          in: query
+          name: orderBy
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9., ]+$
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -2481,16 +2410,16 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Provider
+        - Provider
     post:
       description: Creates a provider resource.
       parameters:
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -2537,7 +2466,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Provider
+        - Provider
   /v1/projects/{projectName}/providers/{providerID}:
     delete:
       description: Deletes a provider resource.
@@ -2571,7 +2500,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Provider
+        - Provider
     get:
       description: Gets a provider resource.
       responses:
@@ -2608,87 +2537,81 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Provider
+        - Provider
     parameters:
-    - description: The provider resource's unique identifier.
-      in: path
-      name: providerID
-      required: true
-      schema:
-        pattern: ^provider-[0-9a-f]{8}$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
-  /v1/projects/{projectName}/regions:
-    get:
-      description: Gets all region objects.
-      parameters:
-      - description: Index of the first item to return. This allows skipping of items.
-        in: query
-        name: offset
+      - description: The provider resource's unique identifier.
+        in: path
+        name: providerID
+        required: true
         schema:
-          default: 0
-          maximum: 10000
-          minimum: 0
-          type: integer
-      - description: Defines the amount of items to be contained in a single page,
-          min of 1 and max of 100, default of 20.
-        in: query
-        name: pageSize
-        schema:
-          default: 20
-          maximum: 100
-          minimum: 1
-          type: integer
-      - description: Optional filter to return only items of interest. See https://google.aip.dev/160
-          for details.
-        examples:
-          example1:
-            summary: Through the region's parent region ID.
-            value: parentRegion.resourceId="region-3b382a11"
-          example2:
-            summary: Through the region name.
-            value: name="region name example"
-          example3:
-            summary: Through the metadata.
-            value: metadata='{"key":"exampleKey","value":"exampleValue"}'
-        in: query
-        name: filter
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
+          pattern: ^provider-[0-9a-f]{8}$
           type: string
-      - description: Optional comma-separated list of fields to specify a sorting
-          order. See https://google.aip.dev/132 for details.
-        in: query
-        name: orderBy
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9., ]+$
-          type: string
-      - deprecated: true
-        description: The parent region ID that the region belongs to. If not specified,
-          returns all regions. If specified, returns the regions that have the specified
-          parent applied to them. If null, returns all the regions without a parent.
-        in: query
-        name: parent
-        schema:
-          pattern: ^region-[0-9a-f]{8}$|^null$
-          type: string
-      - description: Indicates if the region identified by the filter needs to be
-          returned with the field totalSites filled.
-        in: query
-        name: showTotalSites
-        schema:
-          type: boolean
       - description: unique projectName for the resource
         in: path
         name: projectName
         required: true
         schema:
           type: string
+  /v1/projects/{projectName}/regions:
+    get:
+      description: Gets all region objects.
+      parameters:
+        - description: Index of the first item to return. This allows skipping of items.
+          in: query
+          name: offset
+          schema:
+            default: 0
+            maximum: 10000
+            minimum: 0
+            type: integer
+        - description: Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20.
+          in: query
+          name: pageSize
+          schema:
+            default: 20
+            maximum: 100
+            minimum: 1
+            type: integer
+        - description: Optional filter to return only items of interest. See https://google.aip.dev/160 for details.
+          examples:
+            example1:
+              summary: Through the region's parent region ID.
+              value: parentRegion.resourceId="region-3b382a11"
+            example2:
+              summary: Through the region name.
+              value: name="region name example"
+            example3:
+              summary: Through the metadata.
+              value: metadata='{"key":"exampleKey","value":"exampleValue"}'
+          in: query
+          name: filter
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
+            type: string
+        - description: Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details.
+          in: query
+          name: orderBy
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9., ]+$
+            type: string
+        - deprecated: true
+          description: The parent region ID that the region belongs to. If not specified, returns all regions. If specified, returns the regions that have the specified parent applied to them. If null, returns all the regions without a parent.
+          in: query
+          name: parent
+          schema:
+            pattern: ^region-[0-9a-f]{8}$|^null$
+            type: string
+        - description: Indicates if the region identified by the filter needs to be returned with the field totalSites filled.
+          in: query
+          name: showTotalSites
+          schema:
+            type: boolean
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -2709,16 +2632,16 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Region
+        - Region
     post:
       description: Creates a region.
       parameters:
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -2751,7 +2674,7 @@ paths:
         "501":
           $ref: '#/components/responses/501-Unimplemented'
       tags:
-      - Region
+        - Region
   /v1/projects/{projectName}/regions/{regionID}:
     delete:
       description: Deletes a region.
@@ -2775,7 +2698,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Region
+        - Region
     get:
       description: Gets a region.
       responses:
@@ -2796,21 +2719,21 @@ paths:
         "501":
           $ref: '#/components/responses/501-Unimplemented'
       tags:
-      - Region
+        - Region
     parameters:
-    - description: The unique region identifier
-      in: path
-      name: regionID
-      required: true
-      schema:
-        pattern: ^region-[0-9a-f]{8}$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
+      - description: The unique region identifier
+        in: path
+        name: regionID
+        required: true
+        schema:
+          pattern: ^region-[0-9a-f]{8}$
+          type: string
+      - description: unique projectName for the resource
+        in: path
+        name: projectName
+        required: true
+        schema:
+          type: string
     patch:
       description: Partially updates a region.
       requestBody:
@@ -2841,7 +2764,7 @@ paths:
         "501":
           $ref: '#/components/responses/501-Unimplemented'
       tags:
-      - Region
+        - Region
     put:
       description: Updates a region.
       requestBody:
@@ -2870,79 +2793,70 @@ paths:
         "501":
           $ref: '#/components/responses/501-Unimplemented'
       tags:
-      - Region
+        - Region
   /v1/projects/{projectName}/regions/{regionID}/sites:
     get:
       description: Gets all site objects.
       parameters:
-      - description: Index of the first item to return. This allows skipping of items.
-        in: query
-        name: offset
-        schema:
-          default: 0
-          maximum: 10000
-          minimum: 0
-          type: integer
-      - description: Defines the amount of items to be contained in a single page,
-          min of 1 and max of 100, default of 20.
-        in: query
-        name: pageSize
-        schema:
-          default: 20
-          maximum: 100
-          minimum: 1
-          type: integer
-      - description: Optional filter to return only items of interest. See https://google.aip.dev/160
-          for details.
-        examples:
-          example1:
-            summary: Through site's region ID
-            value: region.resourceId="region-3b382a11"
-          example2:
-            summary: Through site name
-            value: name="site name example"
-          example3:
-            summary: Through metadata
-            value: metadata='{"key":"exampleKey","value":"exampleValue"}'
-        in: query
-        name: filter
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
-          type: string
-      - description: Optional comma-separated list of fields to specify a sorting
-          order. See https://google.aip.dev/132 for details.
-        in: query
-        name: orderBy
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9., ]+$
-          type: string
-      - deprecated: true
-        description: The region ID that the sites belong to. If not specified, returns
-          all sites (given the other query params). If specified, returns the sites
-          that have the specified region ID applied to them. If null, returns all
-          sites without a region ID.
-        in: path
-        name: regionID
-        required: true
-        schema:
-          pattern: ^region-[0-9a-f]{8}$|^null$
-          type: string
-      - deprecated: true
-        description: The OUID that the sites belong to. If not specified, returns
-          all sites (given the other query parameters). If specified, returns the
-          sites that have the specified OUID applied to them. If null, returns all
-          sites without an OUID.
-        in: query
-        name: ouID
-        schema:
-          pattern: ^ou-[0-9a-f]{8}$|^null$
-          type: string
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: Index of the first item to return. This allows skipping of items.
+          in: query
+          name: offset
+          schema:
+            default: 0
+            maximum: 10000
+            minimum: 0
+            type: integer
+        - description: Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20.
+          in: query
+          name: pageSize
+          schema:
+            default: 20
+            maximum: 100
+            minimum: 1
+            type: integer
+        - description: Optional filter to return only items of interest. See https://google.aip.dev/160 for details.
+          examples:
+            example1:
+              summary: Through site's region ID
+              value: region.resourceId="region-3b382a11"
+            example2:
+              summary: Through site name
+              value: name="site name example"
+            example3:
+              summary: Through metadata
+              value: metadata='{"key":"exampleKey","value":"exampleValue"}'
+          in: query
+          name: filter
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}\"' ]+$
+            type: string
+        - description: Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details.
+          in: query
+          name: orderBy
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9., ]+$
+            type: string
+        - deprecated: true
+          description: The region ID that the sites belong to. If not specified, returns all sites (given the other query params). If specified, returns the sites that have the specified region ID applied to them. If null, returns all sites without a region ID.
+          in: path
+          name: regionID
+          required: true
+          schema:
+            pattern: ^region-[0-9a-f]{8}$|^null$
+            type: string
+        - deprecated: true
+          description: The OUID that the sites belong to. If not specified, returns all sites (given the other query parameters). If specified, returns the sites that have the specified OUID applied to them. If null, returns all sites without an OUID.
+          in: query
+          name: ouID
+          schema:
+            pattern: ^ou-[0-9a-f]{8}$|^null$
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -2977,22 +2891,22 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Site
+        - Site
     post:
       description: Creates a site.
       parameters:
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
-      - description: unique regionID for the resource
-        in: path
-        name: regionID
-        required: true
-        schema:
-          type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique regionID for the resource
+          in: path
+          name: regionID
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -3039,7 +2953,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Site
+        - Site
   /v1/projects/{projectName}/regions/{regionID}/sites/{siteID}:
     delete:
       description: Delete a site
@@ -3073,7 +2987,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Site
+        - Site
     get:
       description: Gets a site.
       responses:
@@ -3110,27 +3024,27 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Site
+        - Site
     parameters:
-    - description: The unique site identifier.
-      in: path
-      name: siteID
-      required: true
-      schema:
-        pattern: ^site-[0-9a-f]{8}$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
-    - description: unique regionID for the resource
-      in: path
-      name: regionID
-      required: true
-      schema:
-        type: string
+      - description: The unique site identifier.
+        in: path
+        name: siteID
+        required: true
+        schema:
+          pattern: ^site-[0-9a-f]{8}$
+          type: string
+      - description: unique projectName for the resource
+        in: path
+        name: projectName
+        required: true
+        schema:
+          type: string
+      - description: unique regionID for the resource
+        in: path
+        name: regionID
+        required: true
+        schema:
+          type: string
     patch:
       description: Partially updates a site.
       requestBody:
@@ -3173,7 +3087,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Site
+        - Site
     put:
       description: Updates a site.
       requestBody:
@@ -3216,69 +3130,57 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Site
+        - Site
   /v1/projects/{projectName}/schedules/repeated:
     get:
       description: Gets all repeated schedule objects.
       parameters:
-      - description: Index of the first item to return. This allows skipping of items.
-        in: query
-        name: offset
-        schema:
-          default: 0
-          maximum: 10000
-          minimum: 0
-          type: integer
-      - description: Defines the amount of items to be contained in a single page,
-          min of 1 and max of 100, default of 20.
-        in: query
-        name: pageSize
-        schema:
-          default: 20
-          maximum: 100
-          minimum: 1
-          type: integer
-      - description: The region ID target of the schedules. If not specified, returns
-          all repeated schedules (given the other query parameters). If specified,
-          returns the schedules that have the specified region ID applied to them,
-          i.e., target. If null, returns all repeated schedules without a region ID
-          as target.
-        in: query
-        name: regionID
-        schema:
-          pattern: ^region-[0-9a-f]{8}$
-          type: string
-      - description: The site ID target of the schedules. If not specified, returns
-          all repeated schedules (given the other query parameters). If specified,
-          returns the schedules that have the specified site ID applied to them, i.e.,
-          target. If null, returns all repeated schedules without a site ID as target.
-        in: query
-        name: siteID
-        schema:
-          pattern: ^site-[0-9a-f]{8}$|^null$
-          type: string
-      - description: The host ID target of the repeated schedules. If not specified,
-          returns all repeated schedules (given the other query parameters). If specified,
-          returns the schedules that have the specified host ID applied to them, i.e.,
-          target. If null, returns all repeated schedules without a host ID as target.
-        in: query
-        name: hostID
-        schema:
-          pattern: ^host-[0-9a-f]{8}$|^null$
-          type: string
-      - description: Filters based on the timestamp, expected to be UNIX epoch UTC
-          timestamp in seconds.
-        in: query
-        name: unix_epoch
-        schema:
-          pattern: ^[0-9]+$
-          type: string
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: Index of the first item to return. This allows skipping of items.
+          in: query
+          name: offset
+          schema:
+            default: 0
+            maximum: 10000
+            minimum: 0
+            type: integer
+        - description: Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20.
+          in: query
+          name: pageSize
+          schema:
+            default: 20
+            maximum: 100
+            minimum: 1
+            type: integer
+        - description: The region ID target of the schedules. If not specified, returns all repeated schedules (given the other query parameters). If specified, returns the schedules that have the specified region ID applied to them, i.e., target. If null, returns all repeated schedules without a region ID as target.
+          in: query
+          name: regionID
+          schema:
+            pattern: ^region-[0-9a-f]{8}$
+            type: string
+        - description: The site ID target of the schedules. If not specified, returns all repeated schedules (given the other query parameters). If specified, returns the schedules that have the specified site ID applied to them, i.e., target. If null, returns all repeated schedules without a site ID as target.
+          in: query
+          name: siteID
+          schema:
+            pattern: ^site-[0-9a-f]{8}$|^null$
+            type: string
+        - description: The host ID target of the repeated schedules. If not specified, returns all repeated schedules (given the other query parameters). If specified, returns the schedules that have the specified host ID applied to them, i.e., target. If null, returns all repeated schedules without a host ID as target.
+          in: query
+          name: hostID
+          schema:
+            pattern: ^host-[0-9a-f]{8}$|^null$
+            type: string
+        - description: Filters based on the timestamp, expected to be UNIX epoch UTC timestamp in seconds.
+          in: query
+          name: unix_epoch
+          schema:
+            pattern: ^[0-9]+$
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -3313,16 +3215,16 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Schedule
+        - Schedule
     post:
       description: Creates a repeated schedule.
       parameters:
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -3369,7 +3271,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Schedule
+        - Schedule
   /v1/projects/{projectName}/schedules/repeated/{repeatedScheduleID}:
     delete:
       description: Deletes a repeated schedule.
@@ -3403,7 +3305,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Schedule
+        - Schedule
     get:
       description: Gets a repeated schedule.
       responses:
@@ -3440,21 +3342,21 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Schedule
+        - Schedule
     parameters:
-    - description: The unique repeated schedule identifier.
-      in: path
-      name: repeatedScheduleID
-      required: true
-      schema:
-        pattern: ^repeatedsche-[0-9a-f]{8}$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
+      - description: The unique repeated schedule identifier.
+        in: path
+        name: repeatedScheduleID
+        required: true
+        schema:
+          pattern: ^repeatedsche-[0-9a-f]{8}$
+          type: string
+      - description: unique projectName for the resource
+        in: path
+        name: projectName
+        required: true
+        schema:
+          type: string
     patch:
       description: Partially updates a repeated schedule.
       requestBody:
@@ -3497,7 +3399,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Schedule
+        - Schedule
     put:
       description: Updates a repeated schedule.
       requestBody:
@@ -3540,68 +3442,57 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Schedule
+        - Schedule
   /v1/projects/{projectName}/schedules/single:
     get:
       description: Gets all single schedule objects.
       parameters:
-      - description: Index of the first item to return. This allows skipping of items.
-        in: query
-        name: offset
-        schema:
-          default: 0
-          maximum: 10000
-          minimum: 0
-          type: integer
-      - description: Defines the amount of items to be contained in a single page,
-          min of 1 and max of 100, default of 20.
-        in: query
-        name: pageSize
-        schema:
-          default: 20
-          maximum: 100
-          minimum: 1
-          type: integer
-      - description: The region ID target of the schedules. If not specified, returns
-          all single schedules (given the other query parameters). If specified, returns
-          the schedules that have the specified region ID applied to them, i.e., target.
-          If null, returns all single schedules without a region ID as target.
-        in: query
-        name: regionID
-        schema:
-          pattern: ^region-[0-9a-f]{8}$
-          type: string
-      - description: The site ID target of the schedules. If not specified, returns
-          all single schedules (given the other query parameters). If specified, returns
-          the schedules that have the specified site ID applied to them, i.e., target.
-          If null, returns all single schedules without a site ID as target.
-        in: query
-        name: siteID
-        schema:
-          pattern: ^site-[0-9a-f]{8}$|^null$
-          type: string
-      - description: The host ID target of the single schedules. If not specified,
-          returns all single schedules (given the other query parameters). If specified,
-          returns the schedules that have the specified host ID applied to them, i.e.,
-          target. If null, returns all single schedules without a host ID as target.
-        in: query
-        name: hostID
-        schema:
-          pattern: ^host-[0-9a-f]{8}$|^null$
-          type: string
-      - description: Filters based on the timestamp, expected to be UNIX epoch UTC
-          timestamp in seconds
-        in: query
-        name: unix_epoch
-        schema:
-          pattern: ^[0-9]+$
-          type: string
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: Index of the first item to return. This allows skipping of items.
+          in: query
+          name: offset
+          schema:
+            default: 0
+            maximum: 10000
+            minimum: 0
+            type: integer
+        - description: Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20.
+          in: query
+          name: pageSize
+          schema:
+            default: 20
+            maximum: 100
+            minimum: 1
+            type: integer
+        - description: The region ID target of the schedules. If not specified, returns all single schedules (given the other query parameters). If specified, returns the schedules that have the specified region ID applied to them, i.e., target. If null, returns all single schedules without a region ID as target.
+          in: query
+          name: regionID
+          schema:
+            pattern: ^region-[0-9a-f]{8}$
+            type: string
+        - description: The site ID target of the schedules. If not specified, returns all single schedules (given the other query parameters). If specified, returns the schedules that have the specified site ID applied to them, i.e., target. If null, returns all single schedules without a site ID as target.
+          in: query
+          name: siteID
+          schema:
+            pattern: ^site-[0-9a-f]{8}$|^null$
+            type: string
+        - description: The host ID target of the single schedules. If not specified, returns all single schedules (given the other query parameters). If specified, returns the schedules that have the specified host ID applied to them, i.e., target. If null, returns all single schedules without a host ID as target.
+          in: query
+          name: hostID
+          schema:
+            pattern: ^host-[0-9a-f]{8}$|^null$
+            type: string
+        - description: Filters based on the timestamp, expected to be UNIX epoch UTC timestamp in seconds
+          in: query
+          name: unix_epoch
+          schema:
+            pattern: ^[0-9]+$
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -3636,16 +3527,16 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Schedule
+        - Schedule
     post:
       description: Creates a single schedule to operate on an object.
       parameters:
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -3692,7 +3583,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Schedule
+        - Schedule
   /v1/projects/{projectName}/schedules/single/{singleScheduleID}:
     delete:
       description: Deletes a single schedule.
@@ -3726,7 +3617,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Schedule
+        - Schedule
     get:
       description: Gets a single schedule based on its ID.
       responses:
@@ -3763,21 +3654,21 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Schedule
+        - Schedule
     parameters:
-    - description: The unique single schedule identifier.
-      in: path
-      name: singleScheduleID
-      required: true
-      schema:
-        pattern: ^singlesche-[0-9a-f]{8}$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
+      - description: The unique single schedule identifier.
+        in: path
+        name: singleScheduleID
+        required: true
+        schema:
+          pattern: ^singlesche-[0-9a-f]{8}$
+          type: string
+      - description: unique projectName for the resource
+        in: path
+        name: projectName
+        required: true
+        schema:
+          type: string
     patch:
       description: Partially updates a single schedule.
       requestBody:
@@ -3820,7 +3711,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Schedule
+        - Schedule
     put:
       description: Updates a single schedule.
       requestBody:
@@ -3863,41 +3754,39 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - Schedule
+        - Schedule
   /v1/projects/{projectName}/telemetry/loggroups:
     get:
       description: Gets all telemetry log groups.
       parameters:
-      - description: Index of the first item to return. This allows skipping of items.
-        in: query
-        name: offset
-        schema:
-          default: 0
-          maximum: 10000
-          minimum: 0
-          type: integer
-      - description: Defines the amount of items to be contained in a single page,
-          min of 1 and max of 100, default of 20.
-        in: query
-        name: pageSize
-        schema:
-          default: 20
-          maximum: 100
-          minimum: 1
-          type: integer
-      - description: Optional comma-separated list of fields to specify a sorting
-          order. See https://google.aip.dev/132 for details.
-        in: query
-        name: orderBy
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9., ]+$
-          type: string
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: Index of the first item to return. This allows skipping of items.
+          in: query
+          name: offset
+          schema:
+            default: 0
+            maximum: 10000
+            minimum: 0
+            type: integer
+        - description: Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20.
+          in: query
+          name: pageSize
+          schema:
+            default: 20
+            maximum: 100
+            minimum: 1
+            type: integer
+        - description: Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details.
+          in: query
+          name: orderBy
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9., ]+$
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -3922,16 +3811,16 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - TelemetryLogsGroup
+        - TelemetryLogsGroup
     post:
       description: Creates a telemetry log group.
       parameters:
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -3966,7 +3855,7 @@ paths:
         "501":
           $ref: '#/components/responses/501-Unimplemented'
       tags:
-      - TelemetryLogsGroup
+        - TelemetryLogsGroup
   /v1/projects/{projectName}/telemetry/loggroups/{telemetryLogsGroupId}:
     delete:
       description: Deletes a telemetry log group.
@@ -4000,7 +3889,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - TelemetryLogsGroup
+        - TelemetryLogsGroup
     get:
       description: Gets a telemetry log group.
       responses:
@@ -4037,77 +3926,14 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - TelemetryLogsGroup
+        - TelemetryLogsGroup
     parameters:
-    - description: The unique telemetry group resource identifier.
-      in: path
-      name: telemetryLogsGroupId
-      required: true
-      schema:
-        pattern: ^telemetrygroup-[0-9a-f]{8}$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
-  /v1/projects/{projectName}/telemetry/loggroups/{telemetryLogsGroupId}/logprofiles:
-    get:
-      description: Gets all telemetry log profiles.
-      parameters:
-      - description: Index of the first item to return. This allows skipping of items.
-        in: query
-        name: offset
+      - description: The unique telemetry group resource identifier.
+        in: path
+        name: telemetryLogsGroupId
+        required: true
         schema:
-          default: 0
-          maximum: 10000
-          minimum: 0
-          type: integer
-      - description: Defines the amount of items to be contained in a single page,
-          min of 1 and max of 100, default of 20.
-        in: query
-        name: pageSize
-        schema:
-          default: 20
-          maximum: 100
-          minimum: 1
-          type: integer
-      - description: Returns only the telemetry profiles that are assigned with the
-          given site ID.
-        in: query
-        name: siteId
-        schema:
-          pattern: ^site-[0-9a-f]{8}$
-          type: string
-      - description: Returns only the telemetry profiles that are assigned with the
-          given region ID.
-        in: query
-        name: regionId
-        schema:
-          pattern: ^region-[0-9a-f]{8}$
-          type: string
-      - description: Returns only the telemetry profiles that are assigned with the
-          given instance identifier.
-        in: query
-        name: instanceId
-        schema:
-          pattern: ^inst-[0-9a-f]{8}$
-          type: string
-      - description: Indicates if the listed telemetry profiles will be extended with
-          telemetry profiles rendered from the hierarchy. This flag is used along
-          with one of site ID, region ID or instance ID. If site ID, region ID, or
-          instance ID are not set, this flag is ignored.
-        in: query
-        name: showInherited
-        schema:
-          type: boolean
-      - description: Optional comma-separated list of fields to specify a sorting
-          order. See https://google.aip.dev/132 for details.
-        in: query
-        name: orderBy
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9., ]+$
+          pattern: ^telemetrygroup-[0-9a-f]{8}$
           type: string
       - description: unique projectName for the resource
         in: path
@@ -4115,12 +3941,67 @@ paths:
         required: true
         schema:
           type: string
-      - description: unique telemetryLogsGroupId for the resource
-        in: path
-        name: telemetryLogsGroupId
-        required: true
-        schema:
-          type: string
+  /v1/projects/{projectName}/telemetry/loggroups/{telemetryLogsGroupId}/logprofiles:
+    get:
+      description: Gets all telemetry log profiles.
+      parameters:
+        - description: Index of the first item to return. This allows skipping of items.
+          in: query
+          name: offset
+          schema:
+            default: 0
+            maximum: 10000
+            minimum: 0
+            type: integer
+        - description: Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20.
+          in: query
+          name: pageSize
+          schema:
+            default: 20
+            maximum: 100
+            minimum: 1
+            type: integer
+        - description: Returns only the telemetry profiles that are assigned with the given site ID.
+          in: query
+          name: siteId
+          schema:
+            pattern: ^site-[0-9a-f]{8}$
+            type: string
+        - description: Returns only the telemetry profiles that are assigned with the given region ID.
+          in: query
+          name: regionId
+          schema:
+            pattern: ^region-[0-9a-f]{8}$
+            type: string
+        - description: Returns only the telemetry profiles that are assigned with the given instance identifier.
+          in: query
+          name: instanceId
+          schema:
+            pattern: ^inst-[0-9a-f]{8}$
+            type: string
+        - description: Indicates if the listed telemetry profiles will be extended with telemetry profiles rendered from the hierarchy. This flag is used along with one of site ID, region ID or instance ID. If site ID, region ID, or instance ID are not set, this flag is ignored.
+          in: query
+          name: showInherited
+          schema:
+            type: boolean
+        - description: Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details.
+          in: query
+          name: orderBy
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9., ]+$
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique telemetryLogsGroupId for the resource
+          in: path
+          name: telemetryLogsGroupId
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -4155,22 +4036,22 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - TelemetryLogsProfile
+        - TelemetryLogsProfile
     post:
       description: Creates a telemetry log profile.
       parameters:
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
-      - description: unique telemetryLogsGroupId for the resource
-        in: path
-        name: telemetryLogsGroupId
-        required: true
-        schema:
-          type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique telemetryLogsGroupId for the resource
+          in: path
+          name: telemetryLogsGroupId
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -4217,7 +4098,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - TelemetryLogsProfile
+        - TelemetryLogsProfile
   /v1/projects/{projectName}/telemetry/loggroups/{telemetryLogsGroupId}/logprofiles/{telemetryLogsProfileId}:
     delete:
       description: Deletes a telemetry log profile.
@@ -4251,7 +4132,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - TelemetryLogsProfile
+        - TelemetryLogsProfile
     get:
       description: Gets a telemetry log profile.
       responses:
@@ -4288,27 +4169,27 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - TelemetryLogsProfile
+        - TelemetryLogsProfile
     parameters:
-    - description: The unique telemetry profile identifier.
-      in: path
-      name: telemetryLogsProfileId
-      required: true
-      schema:
-        pattern: ^telemetryprofile-[0-9a-f]{8}$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
-    - description: unique telemetryLogsGroupId for the resource
-      in: path
-      name: telemetryLogsGroupId
-      required: true
-      schema:
-        type: string
+      - description: The unique telemetry profile identifier.
+        in: path
+        name: telemetryLogsProfileId
+        required: true
+        schema:
+          pattern: ^telemetryprofile-[0-9a-f]{8}$
+          type: string
+      - description: unique projectName for the resource
+        in: path
+        name: projectName
+        required: true
+        schema:
+          type: string
+      - description: unique telemetryLogsGroupId for the resource
+        in: path
+        name: telemetryLogsGroupId
+        required: true
+        schema:
+          type: string
     patch:
       description: Partially updates a telemetry log profile.
       requestBody:
@@ -4351,7 +4232,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - TelemetryLogsProfile
+        - TelemetryLogsProfile
     put:
       description: Updates a telemetry log profile.
       requestBody:
@@ -4394,41 +4275,39 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - TelemetryLogsProfile
+        - TelemetryLogsProfile
   /v1/projects/{projectName}/telemetry/metricgroups:
     get:
       description: Gets all telemetry metric groups.
       parameters:
-      - description: Index of the first item to return. This allows skipping of items.
-        in: query
-        name: offset
-        schema:
-          default: 0
-          maximum: 10000
-          minimum: 0
-          type: integer
-      - description: Defines the amount of items to be contained in a single page,
-          min of 1 and max of 100, default of 20.
-        in: query
-        name: pageSize
-        schema:
-          default: 20
-          maximum: 100
-          minimum: 1
-          type: integer
-      - description: Optional comma-separated list of fields to specify a sorting
-          order. See https://google.aip.dev/132 for details.
-        in: query
-        name: orderBy
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9., ]+$
-          type: string
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: Index of the first item to return. This allows skipping of items.
+          in: query
+          name: offset
+          schema:
+            default: 0
+            maximum: 10000
+            minimum: 0
+            type: integer
+        - description: Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20.
+          in: query
+          name: pageSize
+          schema:
+            default: 20
+            maximum: 100
+            minimum: 1
+            type: integer
+        - description: Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details.
+          in: query
+          name: orderBy
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9., ]+$
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -4453,16 +4332,16 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - TelemetryMetricsGroup
+        - TelemetryMetricsGroup
     post:
       description: Creates a telemetry metric group.
       parameters:
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -4497,7 +4376,7 @@ paths:
         "501":
           $ref: '#/components/responses/501-Unimplemented'
       tags:
-      - TelemetryMetricsGroup
+        - TelemetryMetricsGroup
   /v1/projects/{projectName}/telemetry/metricgroups/{telemetryMetricsGroupId}:
     delete:
       description: Deletes a telemetry metric group.
@@ -4531,7 +4410,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - TelemetryMetricsGroup
+        - TelemetryMetricsGroup
     get:
       description: Gets a telemetry metric group.
       responses:
@@ -4568,77 +4447,14 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - TelemetryMetricsGroup
+        - TelemetryMetricsGroup
     parameters:
-    - description: The unique telemetry group resource identifier.
-      in: path
-      name: telemetryMetricsGroupId
-      required: true
-      schema:
-        pattern: ^telemetrygroup-[0-9a-f]{8}$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
-  /v1/projects/{projectName}/telemetry/metricgroups/{telemetryMetricsGroupId}/metricprofiles:
-    get:
-      description: Gets all telemetry metric profiles.
-      parameters:
-      - description: Index of the first item to return. This allows skipping of items.
-        in: query
-        name: offset
+      - description: The unique telemetry group resource identifier.
+        in: path
+        name: telemetryMetricsGroupId
+        required: true
         schema:
-          default: 0
-          maximum: 10000
-          minimum: 0
-          type: integer
-      - description: Defines the amount of items to be contained in a single page,
-          min of 1 and max of 100, default of 20.
-        in: query
-        name: pageSize
-        schema:
-          default: 20
-          maximum: 100
-          minimum: 1
-          type: integer
-      - description: Returns only the telemetry profiles that are assigned with the
-          given site ID.
-        in: query
-        name: siteId
-        schema:
-          pattern: ^site-[0-9a-f]{8}$
-          type: string
-      - description: Returns only the telemetry profiles that are assigned with the
-          given region ID.
-        in: query
-        name: regionId
-        schema:
-          pattern: ^region-[0-9a-f]{8}$
-          type: string
-      - description: Returns only the telemetry profiles that are assigned with the
-          given instance identifier.
-        in: query
-        name: instanceId
-        schema:
-          pattern: ^inst-[0-9a-f]{8}$
-          type: string
-      - description: Indicates if the listed telemetry profiles will be extended with
-          telemetry profiles rendered from the hierarchy. This flag is only used along
-          with one of site ID, region ID or instance ID. If site ID, region ID, or
-          instance ID are not set, this flag is ignored.
-        in: query
-        name: showInherited
-        schema:
-          type: boolean
-      - description: Optional comma-separated list of fields to specify a sorting
-          order. See https://google.aip.dev/132 for details.
-        in: query
-        name: orderBy
-        schema:
-          pattern: ^$|^[a-zA-Z-_0-9., ]+$
+          pattern: ^telemetrygroup-[0-9a-f]{8}$
           type: string
       - description: unique projectName for the resource
         in: path
@@ -4646,12 +4462,67 @@ paths:
         required: true
         schema:
           type: string
-      - description: unique telemetryMetricsGroupId for the resource
-        in: path
-        name: telemetryMetricsGroupId
-        required: true
-        schema:
-          type: string
+  /v1/projects/{projectName}/telemetry/metricgroups/{telemetryMetricsGroupId}/metricprofiles:
+    get:
+      description: Gets all telemetry metric profiles.
+      parameters:
+        - description: Index of the first item to return. This allows skipping of items.
+          in: query
+          name: offset
+          schema:
+            default: 0
+            maximum: 10000
+            minimum: 0
+            type: integer
+        - description: Defines the amount of items to be contained in a single page, min of 1 and max of 100, default of 20.
+          in: query
+          name: pageSize
+          schema:
+            default: 20
+            maximum: 100
+            minimum: 1
+            type: integer
+        - description: Returns only the telemetry profiles that are assigned with the given site ID.
+          in: query
+          name: siteId
+          schema:
+            pattern: ^site-[0-9a-f]{8}$
+            type: string
+        - description: Returns only the telemetry profiles that are assigned with the given region ID.
+          in: query
+          name: regionId
+          schema:
+            pattern: ^region-[0-9a-f]{8}$
+            type: string
+        - description: Returns only the telemetry profiles that are assigned with the given instance identifier.
+          in: query
+          name: instanceId
+          schema:
+            pattern: ^inst-[0-9a-f]{8}$
+            type: string
+        - description: Indicates if the listed telemetry profiles will be extended with telemetry profiles rendered from the hierarchy. This flag is only used along with one of site ID, region ID or instance ID. If site ID, region ID, or instance ID are not set, this flag is ignored.
+          in: query
+          name: showInherited
+          schema:
+            type: boolean
+        - description: Optional comma-separated list of fields to specify a sorting order. See https://google.aip.dev/132 for details.
+          in: query
+          name: orderBy
+          schema:
+            pattern: ^$|^[a-zA-Z-_0-9., ]+$
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique telemetryMetricsGroupId for the resource
+          in: path
+          name: telemetryMetricsGroupId
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -4686,22 +4557,22 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - TelemetryMetricsProfile
+        - TelemetryMetricsProfile
     post:
       description: Creates a telemetry metric profile.
       parameters:
-      - description: unique projectName for the resource
-        in: path
-        name: projectName
-        required: true
-        schema:
-          type: string
-      - description: unique telemetryMetricsGroupId for the resource
-        in: path
-        name: telemetryMetricsGroupId
-        required: true
-        schema:
-          type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique telemetryMetricsGroupId for the resource
+          in: path
+          name: telemetryMetricsGroupId
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -4748,7 +4619,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - TelemetryMetricsProfile
+        - TelemetryMetricsProfile
   /v1/projects/{projectName}/telemetry/metricgroups/{telemetryMetricsGroupId}/metricprofiles/{telemetryMetricsProfileId}:
     delete:
       description: Deletes a telemetry metric profile.
@@ -4782,7 +4653,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - TelemetryMetricsProfile
+        - TelemetryMetricsProfile
     get:
       description: Gets a telemetry metric profile.
       responses:
@@ -4819,27 +4690,27 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - TelemetryMetricsProfile
+        - TelemetryMetricsProfile
     parameters:
-    - description: The unique telemetry profile identifier.
-      in: path
-      name: telemetryMetricsProfileId
-      required: true
-      schema:
-        pattern: ^telemetryprofile-[0-9a-f]{8}$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
-    - description: unique telemetryMetricsGroupId for the resource
-      in: path
-      name: telemetryMetricsGroupId
-      required: true
-      schema:
-        type: string
+      - description: The unique telemetry profile identifier.
+        in: path
+        name: telemetryMetricsProfileId
+        required: true
+        schema:
+          pattern: ^telemetryprofile-[0-9a-f]{8}$
+          type: string
+      - description: unique projectName for the resource
+        in: path
+        name: projectName
+        required: true
+        schema:
+          type: string
+      - description: unique telemetryMetricsGroupId for the resource
+        in: path
+        name: telemetryMetricsGroupId
+        required: true
+        schema:
+          type: string
     patch:
       description: Partially updates a telemetry metric profile.
       requestBody:
@@ -4870,7 +4741,7 @@ paths:
         "501":
           $ref: '#/components/responses/501-Unimplemented'
       tags:
-      - TelemetryMetricsProfile
+        - TelemetryMetricsProfile
     put:
       description: Updates a telemetry metric profile.
       requestBody:
@@ -4913,7 +4784,7 @@ paths:
         "503":
           $ref: '#/components/responses/503-ServiceUnavailable'
       tags:
-      - TelemetryMetricsProfile
+        - TelemetryMetricsProfile
 components:
   responses:
     400-BadRequest:
@@ -4921,22 +4792,19 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-      description: Object in payload is not properly formulated or not related to
-        the method.
+      description: Object in payload is not properly formulated or not related to the method.
     401-Unauthorized:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-      description: Request is not authenticated; it either does not contain a JSON
-        Web Token (JWT) in its header, or the JWT is not valid.
+      description: Request is not authenticated; it either does not contain a JSON Web Token (JWT) in its header, or the JWT is not valid.
     403-Forbidden:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-      description: Request is not authorized; it does not contain valid roles to perform
-        a request.
+      description: Request is not authorized; it does not contain valid roles to perform a request.
     404-NotFound:
       content:
         application/json:
@@ -4948,8 +4816,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-      description: Response content is not acceptable according to the request's accept
-        headers.
+      description: Response content is not acceptable according to the request's accept headers.
     408-Timeout:
       content:
         application/json:
@@ -4967,8 +4834,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-      description: The server does not meet one of the preconditions that the requester
-        put on the request header fields.
+      description: The server does not meet one of the preconditions that the requester put on the request header fields.
     422-UnprocessableEntity:
       content:
         application/json:
@@ -4986,8 +4852,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-      description: The provider is currently unable to handle the request because
-        of an internal error.
+      description: The provider is currently unable to handle the request because of an internal error.
     501-Unimplemented:
       content:
         application/json:
@@ -4999,24 +4864,13 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-      description: The provider is currently unable to handle the request because
-        of a temporary overload.
+      description: The provider is currently unable to handle the request because of a temporary overload.
   schemas:
     Amount:
-      description: Defines an amount of resources related to memory and disk by default,
-        specified in bytes.
+      description: Defines an amount of resources related to memory and disk by default, specified in bytes.
       maxLength: 20
       minLength: 1
       pattern: ^[0-9]+$
-      type: string
-    EventKind:
-      description: The type of event.
-      enum:
-      - EVENT_KIND_UNSPECIFIED
-      - EVENT_KIND_CREATED
-      - EVENT_KIND_UPDATED
-      - EVENT_KIND_DELETED
-      format: enum
       type: string
     Host:
       description: A host resource.
@@ -5040,11 +4894,11 @@ components:
         bmcKind:
           description: The type of BMC.
           enum:
-          - BAREMETAL_CONTROLLER_KIND_UNSPECIFIED
-          - BAREMETAL_CONTROLLER_KIND_NONE
-          - BAREMETAL_CONTROLLER_KIND_IPMI
-          - BAREMETAL_CONTROLLER_KIND_VPRO
-          - BAREMETAL_CONTROLLER_KIND_PDU
+            - BAREMETAL_CONTROLLER_KIND_UNSPECIFIED
+            - BAREMETAL_CONTROLLER_KIND_NONE
+            - BAREMETAL_CONTROLLER_KIND_IPMI
+            - BAREMETAL_CONTROLLER_KIND_VPRO
+            - BAREMETAL_CONTROLLER_KIND_PDU
           format: enum
           readOnly: true
           type: string
@@ -5076,9 +4930,7 @@ components:
           readOnly: true
           type: integer
         cpuTopology:
-          description: A JSON field describing the CPU topology. The CPU topology
-            may contain, among others, information about CPU core types, their layout,
-            and mapping to CPU sockets.
+          description: A JSON field describing the CPU topology. The CPU topology may contain, among others, information about CPU core types, their layout, and mapping to CPU sockets.
           readOnly: true
           type: string
         currentPowerState:
@@ -5110,8 +4962,7 @@ components:
         hostStatusIndicator:
           $ref: '#/components/schemas/StatusIndicator'
         hostStatusTimestamp:
-          description: A Unix, UTC timestamp when the host's lifecycle status was
-            last updated.
+          description: A Unix, UTC timestamp when the host's lifecycle status was last updated.
           format: uint64
           readOnly: true
           type: integer
@@ -5159,8 +5010,7 @@ components:
         onboardingStatusIndicator:
           $ref: '#/components/schemas/StatusIndicator'
         onboardingStatusTimestamp:
-          description: A Unix, UTC timestamp when the host's onboarding status was
-            last updated.
+          description: A Unix, UTC timestamp when the host's onboarding status was last updated.
           format: uint64
           readOnly: true
           type: integer
@@ -5179,8 +5029,7 @@ components:
         registrationStatusIndicator:
           $ref: '#/components/schemas/StatusIndicator'
         registrationStatusTimestamp:
-          description: A Unix, UTC timestamp when the host's registration status was
-            last updated.
+          description: A Unix, UTC timestamp when the host's registration status was last updated.
           format: uint64
           readOnly: true
           type: integer
@@ -5208,32 +5057,24 @@ components:
           maxLength: 36
           type: string
       required:
-      - name
-    HostEvent:
-      description: Event for a host.
-      properties:
-        eventKind:
-          $ref: '#/components/schemas/EventKind'
-        host:
-          $ref: '#/components/schemas/Host'
+        - name
     HostOperationWithNote:
-      description: A freeform field associated with the host invalidate or delete
-        operations to store the reason for change.
+      description: A freeform field associated with the host invalidate or delete operations to store the reason for change.
       properties:
         note:
           pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()\"" ]+$
           type: string
       required:
-      - note
+        - note
       title: HostOperationWithNote
       type: object
     HostPowerState:
       description: The representation of a host power state.
       enum:
-      - POWER_STATE_UNSPECIFIED
-      - POWER_STATE_ERROR
-      - POWER_STATE_ON
-      - POWER_STATE_OFF
+        - POWER_STATE_UNSPECIFIED
+        - POWER_STATE_ERROR
+        - POWER_STATE_ON
+        - POWER_STATE_OFF
       format: enum
       type: string
     HostRegisterInfo:
@@ -5241,9 +5082,7 @@ components:
       properties:
         autoOnboard:
           default: false
-          description: Set to enforce auto-onboarding of the host, which means that
-            no confirmation will be required when the host connects for the first
-            time, to Edge Orchestrator.
+          description: Set to enforce auto-onboarding of the host, which means that no confirmation will be required when the host connects for the first time, to Edge Orchestrator.
           type: boolean
         name:
           description: The host name.
@@ -5265,8 +5104,7 @@ components:
       description: The set of available host GPU cards.
       properties:
         capabilities:
-          description: The specific GPU device capabilities [e.g., PCI Express*, MSI*,
-            power management (PM)].
+          description: The specific GPU device capabilities [e.g., PCI Express*, MSI*, power management (PM)].
           items:
             type: string
           readOnly: true
@@ -5298,8 +5136,7 @@ components:
       description: The set of available host interfaces.
       properties:
         bmcInterface:
-          description: Defines if the card is the Baseboard Management Controller
-            (BMC) interface.
+          description: Defines if the card is the Baseboard Management Controller (BMC) interface.
           readOnly: true
           type: boolean
         deviceName:
@@ -5329,13 +5166,11 @@ components:
           readOnly: true
           type: boolean
         sriovVfsNum:
-          description: The number of virtual functions (VFs) currently provisioned
-            on the interface, if SR-IOV is supported.
+          description: The number of virtual functions (VFs) currently provisioned on the interface, if SR-IOV is supported.
           readOnly: true
           type: integer
         sriovVfsTotal:
-          description: The maximum number of VFs the interface supports, if SR-IOV
-            is supported.
+          description: The maximum number of VFs the interface supports, if SR-IOV is supported.
           readOnly: true
           type: integer
         timestamps:
@@ -5369,7 +5204,7 @@ components:
           readOnly: true
           type: string
       required:
-      - capacity
+        - capacity
       type: object
     HostResourcesUSB:
       description: The set of host USB resources.
@@ -5408,13 +5243,12 @@ components:
     HostState:
       description: State of the host.
       enum:
-      - HOST_STATE_UNSPECIFIED
-      - HOST_STATE_ERROR
-      - HOST_STATE_DELETING
-      - HOST_STATE_DELETED
-      - HOST_STATE_ONBOARDED
-      - HOST_STATE_UNTRUSTED
-      - HOST_STATE_REGISTERED
+        - HOST_STATE_UNSPECIFIED
+        - HOST_STATE_DELETING
+        - HOST_STATE_DELETED
+        - HOST_STATE_ONBOARDED
+        - HOST_STATE_UNTRUSTED
+        - HOST_STATE_REGISTERED
       format: enum
       type: string
     HostsList:
@@ -5430,14 +5264,13 @@ components:
           readOnly: true
           type: array
         totalElements:
-          description: Total number of items the request would return, if not limited
-            by pagination.
+          description: Total number of items the request would return, if not limited by pagination.
           readOnly: true
           type: integer
       required:
-      - hosts
-      - hasNext
-      - totalElements
+        - hosts
+        - hasNext
+        - totalElements
       title: HostsList
       type: object
     HostsSummary:
@@ -5462,8 +5295,7 @@ components:
       title: HostsSummary
       type: object
     IPAddress:
-      description: An IP address represented using the CIDR notation, and additional
-        information identifying the configuration mode of the address.
+      description: An IP address represented using the CIDR notation, and additional information identifying the configuration mode of the address.
       properties:
         address:
           description: CIDR representation of the IP address.
@@ -5475,22 +5307,22 @@ components:
           default: IP_ADDRESS_CONFIG_MODE_UNSPECIFIED
           description: Specifies how the IP address is configured.
           enum:
-          - IP_ADDRESS_CONFIG_MODE_UNSPECIFIED
-          - IP_ADDRESS_CONFIG_MODE_STATIC
-          - IP_ADDRESS_CONFIG_MODE_DYNAMIC
+            - IP_ADDRESS_CONFIG_MODE_UNSPECIFIED
+            - IP_ADDRESS_CONFIG_MODE_STATIC
+            - IP_ADDRESS_CONFIG_MODE_DYNAMIC
           readOnly: true
           type: string
         status:
           default: IP_ADDRESS_STATUS_UNSPECIFIED
           description: The status of the IP address.
           enum:
-          - IP_ADDRESS_STATUS_UNSPECIFIED
-          - IP_ADDRESS_STATUS_ASSIGNMENT_ERROR
-          - IP_ADDRESS_STATUS_ASSIGNED
-          - IP_ADDRESS_STATUS_CONFIGURATION_ERROR
-          - IP_ADDRESS_STATUS_CONFIGURED
-          - IP_ADDRESS_STATUS_RELEASED
-          - IP_ADDRESS_STATUS_ERROR
+            - IP_ADDRESS_STATUS_UNSPECIFIED
+            - IP_ADDRESS_STATUS_ASSIGNMENT_ERROR
+            - IP_ADDRESS_STATUS_ASSIGNED
+            - IP_ADDRESS_STATUS_CONFIGURATION_ERROR
+            - IP_ADDRESS_STATUS_CONFIGURED
+            - IP_ADDRESS_STATUS_RELEASED
+            - IP_ADDRESS_STATUS_ERROR
           readOnly: true
           type: string
         statusDetail:
@@ -5500,8 +5332,8 @@ components:
         timestamps:
           $ref: '#/components/schemas/Timestamps'
       required:
-      - address
-      - configMethod
+        - address
+        - configMethod
       type: object
     Instance:
       description: An instance resource.
@@ -5542,8 +5374,7 @@ components:
         instanceStatusIndicator:
           $ref: '#/components/schemas/StatusIndicator'
         instanceStatusTimestamp:
-          description: A Unix, UTC timestamp when the instance's lifecycle status
-            was last updated.
+          description: A Unix, UTC timestamp when the instance's lifecycle status was last updated.
           format: uint64
           readOnly: true
           type: integer
@@ -5552,8 +5383,7 @@ components:
         localAccount:
           $ref: '#/components/schemas/LocalAccount'
         localAccountID:
-          description: The unique identifier of local account will be associated with
-            the instance.
+          description: The unique identifier of local account will be associated with the instance.
           pattern: ^localaccount-[0-9a-f]{8}$
           title: localAccountResourceID
           type: string
@@ -5567,8 +5397,7 @@ components:
           $ref: '#/components/schemas/OperatingSystemResource'
         osID:
           deprecated: true
-          description: The unique identifier of OS resource that must be installed
-            on the instance.
+          description: The unique identifier of OS resource that must be installed on the instance.
           pattern: ^os-[0-9a-f]{8}$
           title: osResourceID
           type: string
@@ -5582,8 +5411,7 @@ components:
         provisioningStatusIndicator:
           $ref: '#/components/schemas/StatusIndicator'
         provisioningStatusTimestamp:
-          description: A Unix, UTC timestamp when the instance's provisioning status
-            was last updated.
+          description: A Unix, UTC timestamp when the instance's provisioning status was last updated.
           format: uint64
           readOnly: true
           type: integer
@@ -5605,8 +5433,7 @@ components:
         trustedAttestationStatusIndicator:
           $ref: '#/components/schemas/StatusIndicator'
         trustedAttestationStatusTimestamp:
-          description: A Unix, UTC timestamp when the instance's software trusted
-            attestation status was last updated.
+          description: A Unix, UTC timestamp when the instance's software trusted attestation status was last updated.
           format: uint64
           readOnly: true
           type: integer
@@ -5617,16 +5444,14 @@ components:
           readOnly: true
           type: string
         updateStatusDetail:
-          description: 'Beta: The detailed description of the instance''s last software
-            update.'
+          description: 'Beta: The detailed description of the instance''s last software update.'
           maxLength: 100000
           readOnly: true
           type: string
         updateStatusIndicator:
           $ref: '#/components/schemas/StatusIndicator'
         updateStatusTimestamp:
-          description: A Unix, UTC timestamp when the instance's software update status
-            was last updated.
+          description: A Unix, UTC timestamp when the instance's software update status was last updated.
           format: uint64
           readOnly: true
           type: integer
@@ -5636,26 +5461,18 @@ components:
             $ref: '#/components/schemas/WorkloadMember'
           readOnly: true
           type: array
-    InstanceEvent:
-      description: Event for an instance.
-      properties:
-        eventKind:
-          $ref: '#/components/schemas/EventKind'
-        instance:
-          $ref: '#/components/schemas/Instance'
     InstanceKind:
       description: Type of the instance.
       enum:
-      - INSTANCE_KIND_UNSPECIFIED
-      - INSTANCE_KIND_METAL
+        - INSTANCE_KIND_UNSPECIFIED
+        - INSTANCE_KIND_METAL
       format: enum
       type: string
     InstanceList:
       description: A list of instance objects.
       properties:
         hasNext:
-          description: Indicates if there are more instance objects available to be
-            retrieved.
+          description: Indicates if there are more instance objects available to be retrieved.
           readOnly: true
           type: boolean
         instances:
@@ -5664,24 +5481,22 @@ components:
           readOnly: true
           type: array
         totalElements:
-          description: Total number of items the request would return, if not limited
-            by pagination.
+          description: Total number of items the request would return, if not limited by pagination.
           readOnly: true
           type: integer
       required:
-      - instances
-      - hasNext
-      - totalElements
+        - instances
+        - hasNext
+        - totalElements
       title: InstanceList
       type: object
     InstanceState:
       description: State of the instance.
       enum:
-      - INSTANCE_STATE_UNSPECIFIED
-      - INSTANCE_STATE_ERROR
-      - INSTANCE_STATE_RUNNING
-      - INSTANCE_STATE_UNTRUSTED
-      - INSTANCE_STATE_DELETED
+        - INSTANCE_STATE_UNSPECIFIED
+        - INSTANCE_STATE_RUNNING
+        - INSTANCE_STATE_UNTRUSTED
+        - INSTANCE_STATE_DELETED
       format: enum
       type: string
     LinkState:
@@ -5698,14 +5513,14 @@ components:
           default: LINK_STATE_UNSPECIFIED
           description: the type of the state.
           enum:
-          - LINK_STATE_UNSPECIFIED
-          - LINK_STATE_UP
-          - LINK_STATE_DOWN
+            - LINK_STATE_UNSPECIFIED
+            - LINK_STATE_UP
+            - LINK_STATE_DOWN
           readOnly: true
           type: string
       required:
-      - timestamp
-      - type
+        - timestamp
+        - type
       type: object
     LocalAccount:
       description: A local account resource.
@@ -5734,8 +5549,8 @@ components:
           pattern: ^[a-z][a-z0-9-]{0,31}$
           type: string
       required:
-      - username
-      - sshKey
+        - username
+        - sshKey
       title: LocalAccount
       type: object
     LocalAccountList:
@@ -5752,14 +5567,13 @@ components:
           readOnly: true
           type: array
         totalElements:
-          description: Total number of items that the request would return, if not
-            limited by pagination.
+          description: Total number of items that the request would return, if not limited by pagination.
           readOnly: true
           type: integer
       required:
-      - localAccounts
-      - hasNext
-      - totalElements
+        - localAccounts
+        - hasNext
+        - totalElements
       title: LocalAccountList
       type: object
     LocationNode:
@@ -5772,53 +5586,45 @@ components:
           readOnly: true
           type: string
         parentId:
-          description: The associated resource ID of the parent resource of this location
-            node. For a region, it could be empty or a regionId. For a site, it could
-            be empty or a regionId.
+          description: The associated resource ID of the parent resource of this location node. For a region, it could be empty or a regionId. For a site, it could be empty or a regionId.
           readOnly: true
           type: string
         resourceId:
-          description: The associated node's resource ID, generated by the inventory
-            on Create.
+          description: The associated node's resource ID, generated by the inventory on Create.
           readOnly: true
           type: string
         type:
           $ref: '#/components/schemas/LocationType'
       required:
-      - resourceId
-      - parentId
-      - name
-      - type
+        - resourceId
+        - parentId
+        - name
+        - type
       type: object
     LocationNodeList:
-      description: A LocationNodeList object. Contains all the required information
-        to build a tree of regions and sites, given their associations.
+      description: A LocationNodeList object. Contains all the required information to build a tree of regions and sites, given their associations.
       properties:
         nodes:
-          description: The ordered list of nodes (root to leaf) of the location's
-            hierarchy tree of regions and sites. The relationship of the root to leaf
-            is limited by the maximum depth of seven items.
+          description: The ordered list of nodes (root to leaf) of the location's hierarchy tree of regions and sites. The relationship of the root to leaf is limited by the maximum depth of seven items.
           items:
             $ref: '#/components/schemas/LocationNode'
           readOnly: true
           type: array
         outputElements:
-          description: The number of items returned in the nodes's array that match
-            the query parameters of the request.
+          description: The number of items returned in the nodes's array that match the query parameters of the request.
           readOnly: true
           type: integer
         totalElements:
-          description: The total number of items that match the query parameters of
-            the request.
+          description: The total number of items that match the query parameters of the request.
           readOnly: true
           type: integer
       required:
-      - nodes
+        - nodes
     LocationType:
       description: The type of the location node.
       enum:
-      - RESOURCE_KIND_REGION
-      - RESOURCE_KIND_SITE
+        - RESOURCE_KIND_REGION
+        - RESOURCE_KIND_SITE
       format: enum
       readOnly: true
       type: string
@@ -5835,8 +5641,8 @@ components:
             pattern: ^$|^[a-z0-9]$|^[a-z0-9][a-z0-9._-]*[a-z0-9]$
             type: string
         required:
-        - key
-        - value
+          - key
+          - value
         type: object
       type: array
     MetadataJoin:
@@ -5872,8 +5678,7 @@ components:
           pattern: '^$|^[a-zA-Z-_0-9./: ]+$'
           type: string
         parentOu:
-          description: The parent OU's unique identifier that the OU is associated
-            to, when it exists.
+          description: The parent OU's unique identifier that the OU is associated to, when it exists.
           pattern: ^$|^ou-[0-9a-f]{8}$
           type: string
         resourceId:
@@ -5884,7 +5689,7 @@ components:
         timestamps:
           $ref: '#/components/schemas/Timestamps'
       required:
-      - name
+        - name
       title: OU
       type: object
     OUsList:
@@ -5900,22 +5705,21 @@ components:
           readOnly: true
           type: boolean
         totalElements:
-          description: Total number of items that the request would return, if not
-            limited by pagination.
+          description: Total number of items that the request would return, if not limited by pagination.
           readOnly: true
           type: integer
       required:
-      - OUs
-      - hasNext
-      - totalElements
+        - OUs
+        - hasNext
+        - totalElements
       title: OUsList
       type: object
     OperatingSystemProvider:
       description: Describes the OS owner that drives the OS provisioning.
       enum:
-      - OPERATING_SYSTEM_PROVIDER_UNSPECIFIED
-      - OPERATING_SYSTEM_PROVIDER_INFRA
-      - OPERATING_SYSTEM_PROVIDER_LENOVO
+        - OPERATING_SYSTEM_PROVIDER_UNSPECIFIED
+        - OPERATING_SYSTEM_PROVIDER_INFRA
+        - OPERATING_SYSTEM_PROVIDER_LENOVO
       format: enum
       type: string
     OperatingSystemResource:
@@ -5928,8 +5732,7 @@ components:
           title: architecture
           type: string
         imageId:
-          description: A unique identifier of the OS image that can be retrieved from
-            the running OS.
+          description: A unique identifier of the OS image that can be retrieved from the running OS.
           pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()\"" ]+$
           title: imageId
           type: string
@@ -5940,8 +5743,7 @@ components:
           title: imageUrl
           type: string
         installedPackages:
-          description: Freeform text, OS-dependent. A list of package names, one per
-            line (newline separated). Must not contain version information.
+          description: Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information.
           pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()\" \\\n]+$
           title: installedPackages
           type: string
@@ -5967,9 +5769,7 @@ components:
         osType:
           $ref: '#/components/schemas/OperatingSystemType'
         platformBundle:
-          description: Opaque JSON field storing references to custom installation
-            script(s) that supplements the base OS with additional OS-level dependencies/configurations.
-            If empty, the default OS installation will be used.
+          description: Opaque JSON field storing references to custom installation script(s) that supplements the base OS with additional OS-level dependencies/configurations. If empty, the default OS installation will be used.
           readOnly: true
           type: string
         profileName:
@@ -5983,8 +5783,7 @@ components:
           type: string
         repoUrl:
           deprecated: true
-          description: The URL repository of the OS update sources. Deprecated. Use
-            imageUrl to filter repoUrl.
+          description: The URL repository of the OS update sources. Deprecated. Use imageUrl to filter repoUrl.
           maxLength: 500
           pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()\"" ]+$
           title: repoUrl
@@ -6013,8 +5812,8 @@ components:
           title: updateSources
           type: array
       required:
-      - updateSources
-      - sha256
+        - updateSources
+        - sha256
       title: OperatingSystemResource
       type: object
     OperatingSystemResourceList:
@@ -6030,31 +5829,28 @@ components:
           readOnly: true
           type: boolean
         totalElements:
-          description: Total number of items the request would return, if not limited
-            by pagination.
+          description: Total number of items the request would return, if not limited by pagination.
           readOnly: true
           type: integer
       required:
-      - OperatingSystemResources
-      - hasNext
-      - totalElements
+        - OperatingSystemResources
+        - hasNext
+        - totalElements
       title: OperatingSystemResourceList
       type: object
     OperatingSystemType:
-      description: OsType describes the immutability of the OS. This field is immutable
-        after creation.
+      description: OsType describes the immutability of the OS. This field is immutable after creation.
       enum:
-      - OPERATING_SYSTEM_TYPE_UNSPECIFIED
-      - OPERATING_SYSTEM_TYPE_MUTABLE
-      - OPERATING_SYSTEM_TYPE_IMMUTABLE
+        - OPERATING_SYSTEM_TYPE_UNSPECIFIED
+        - OPERATING_SYSTEM_TYPE_MUTABLE
+        - OPERATING_SYSTEM_TYPE_IMMUTABLE
       format: enum
       type: string
     ProblemDetails:
       description: Carries a message in an HTTP error response.
       properties:
         message:
-          description: Contains detailed information about the problem, such as its
-            source data that can be used for debugging purposes.
+          description: Contains detailed information about the problem, such as its source data that can be used for debugging purposes.
           readOnly: true
           type: string
       type: object
@@ -6102,16 +5898,16 @@ components:
         timestamps:
           $ref: '#/components/schemas/Timestamps'
       required:
-      - providerKind
-      - name
-      - apiEndpoint
+        - providerKind
+        - name
+        - apiEndpoint
       title: Provider
       type: object
     ProviderKind:
       description: Kind of provider.
       enum:
-      - PROVIDER_KIND_UNSPECIFIED
-      - PROVIDER_KIND_BAREMETAL
+        - PROVIDER_KIND_UNSPECIFIED
+        - PROVIDER_KIND_BAREMETAL
       format: enum
       type: string
     ProviderList:
@@ -6127,22 +5923,21 @@ components:
           readOnly: true
           type: array
         totalElements:
-          description: Total number of items that the request would return, if not
-            limited by pagination.
+          description: Total number of items that the request would return, if not limited by pagination.
           readOnly: true
           type: integer
       required:
-      - providers
-      - hasNext
-      - totalElements
+        - providers
+        - hasNext
+        - totalElements
       title: ProviderList
       type: object
     ProviderVendor:
       description: Vendor of the provider.
       enum:
-      - PROVIDER_VENDOR_UNSPECIFIED
-      - PROVIDER_VENDOR_LENOVO_LXCA
-      - PROVIDER_VENDOR_LENOVO_LOCA
+        - PROVIDER_VENDOR_UNSPECIFIED
+        - PROVIDER_VENDOR_LENOVO_LXCA
+        - PROVIDER_VENDOR_LENOVO_LOCA
       format: enum
       type: string
     Proxy:
@@ -6175,8 +5970,7 @@ components:
           title: region-name
           type: string
         parentId:
-          description: The parent region's unique identifier that the region is associated
-            to, if it exists. This field cannot be used in filter.
+          description: The parent region's unique identifier that the region is associated to, if it exists. This field cannot be used in filter.
           pattern: ^$|^region-[0-9a-f]{8}$
           type: string
           writeOnly: true
@@ -6196,8 +5990,7 @@ components:
         timestamps:
           $ref: '#/components/schemas/Timestamps'
         totalSites:
-          description: Total number of sites associated to this region, directly or
-            by child regions.
+          description: Total number of sites associated to this region, directly or by child regions.
           readOnly: true
           type: integer
       title: Region
@@ -6206,8 +5999,7 @@ components:
       description: A list of region objects.
       properties:
         hasNext:
-          description: Indicates if there are more location objects available to be
-            retrieved.
+          description: Indicates if there are more location objects available to be retrieved.
           readOnly: true
           type: boolean
         regions:
@@ -6216,14 +6008,13 @@ components:
           readOnly: true
           type: array
         totalElements:
-          description: Total number of items that the request would return, if not
-            limited by pagination.
+          description: Total number of items that the request would return, if not limited by pagination.
           readOnly: true
           type: integer
       required:
-      - regions
-      - hasNext
-      - totalElements
+        - regions
+        - hasNext
+        - totalElements
       title: RegionsList
       type: object
     RepeatedSchedule:
@@ -6271,8 +6062,7 @@ components:
         targetHost:
           $ref: '#/components/schemas/Host'
         targetHostId:
-          description: The target host ID of the schedule. Only one target can be
-            provided per schedule. This field cannot be used as filter.
+          description: The target host ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter.
           pattern: ^$|^host-[0-9a-f]{8}$
           title: targetHostId
           type: string
@@ -6280,8 +6070,7 @@ components:
         targetRegion:
           $ref: '#/components/schemas/Region'
         targetRegionId:
-          description: The target region ID of the schedule. Only one target can be
-            provided per schedule. This field cannot be used as filter.
+          description: The target region ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter.
           pattern: ^$|^region-[0-9a-f]{8}$
           title: targetRegionId
           type: string
@@ -6289,8 +6078,7 @@ components:
         targetSite:
           $ref: '#/components/schemas/Site'
         targetSiteId:
-          description: The target site ID of the schedule. Only one target can be
-            provided per schedule. This field cannot be used as filter.
+          description: The target site ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter.
           pattern: ^$|^site-[0-9a-f]{8}$
           title: targetSiteId
           type: string
@@ -6298,13 +6086,13 @@ components:
         timestamps:
           $ref: '#/components/schemas/Timestamps'
       required:
-      - durationSeconds
-      - scheduleStatus
-      - cronMinutes
-      - cronHours
-      - cronDayMonth
-      - cronMonth
-      - cronDayWeek
+        - durationSeconds
+        - scheduleStatus
+        - cronMinutes
+        - cronHours
+        - cronDayMonth
+        - cronMonth
+        - cronDayWeek
       title: SingleSchedule
       type: object
     RepeatedSchedulesList:
@@ -6316,76 +6104,69 @@ components:
           readOnly: true
           type: array
         hasNext:
-          description: Indicates if there are more repeated schedule objects available
-            to be retrieved.
+          description: Indicates if there are more repeated schedule objects available to be retrieved.
           readOnly: true
           type: boolean
         totalElements:
-          description: Total number of items that the request would return, if not
-            limited by pagination.
+          description: Total number of items that the request would return, if not limited by pagination.
           readOnly: true
           type: integer
       required:
-      - RepeatedSchedules
-      - hasNext
-      - totalElements
+        - RepeatedSchedules
+        - hasNext
+        - totalElements
       title: RepeatedSchedulesList
       type: object
     ScheduleStatus:
       description: The representation of a schedule's status.
       enum:
-      - SCHEDULE_STATUS_UNSPECIFIED
-      - SCHEDULE_STATUS_MAINTENANCE
-      - SCHEDULE_STATUS_OS_UPDATE
+        - SCHEDULE_STATUS_UNSPECIFIED
+        - SCHEDULE_STATUS_MAINTENANCE
+        - SCHEDULE_STATUS_OS_UPDATE
       format: enum
       type: string
     SchedulesListJoin:
       description: List of all schedule objects, repeated and single.
       properties:
         RepeatedSchedules:
-          description: Contains a flat list of repeated schedules, possibly including
-            all inherited ones.
+          description: Contains a flat list of repeated schedules, possibly including all inherited ones.
           items:
             $ref: '#/components/schemas/RepeatedSchedule'
           readOnly: true
           type: array
         SingleSchedules:
-          description: Contains a flat list of single schedules, possibly including
-            all inherited ones.
+          description: Contains a flat list of single schedules, possibly including all inherited ones.
           items:
             $ref: '#/components/schemas/SingleSchedule'
           readOnly: true
           type: array
         hasNext:
-          description: Indicates if there are more schedule objects available to be
-            retrieved.
+          description: Indicates if there are more schedule objects available to be retrieved.
           readOnly: true
           type: boolean
         totalElements:
-          description: Total number of items that the request would return, if not
-            limited by pagination.
+          description: Total number of items that the request would return, if not limited by pagination.
           readOnly: true
           type: integer
       required:
-      - SingleSchedules
-      - RepeatedSchedules
-      - hasNext
-      - totalElements
+        - SingleSchedules
+        - RepeatedSchedules
+        - hasNext
+        - totalElements
       type: object
     SecurityFeature:
       description: Security capabilities of a resource.
       enum:
-      - SECURITY_FEATURE_UNSPECIFIED
-      - SECURITY_FEATURE_NONE
-      - SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION
+        - SECURITY_FEATURE_UNSPECIFIED
+        - SECURITY_FEATURE_NONE
+        - SECURITY_FEATURE_SECURE_BOOT_AND_FULL_DISK_ENCRYPTION
       format: enum
       type: string
     SingleSchedule:
       description: A single schedule resource.
       properties:
         endSeconds:
-          description: The end time in seconds, of the single schedule. The value
-            of endSeconds must be equal to or bigger than the value of startSeconds.
+          description: The end time in seconds, of the single schedule. The value of endSeconds must be equal to or bigger than the value of startSeconds.
           maxLength: 19
           minLength: 1
           pattern: ^[0-9]+$
@@ -6404,8 +6185,7 @@ components:
         scheduleStatus:
           $ref: '#/components/schemas/ScheduleStatus'
         singleScheduleID:
-          description: The single schedule resource's unique identifier. Alias of
-            resourceId.
+          description: The single schedule resource's unique identifier. Alias of resourceId.
           pattern: ^singlesche-[0-9a-f]{8}$
           readOnly: true
           title: singleScheduleID
@@ -6420,8 +6200,7 @@ components:
         targetHost:
           $ref: '#/components/schemas/Host'
         targetHostId:
-          description: The target host ID of the schedule. Only one target can be
-            provided per schedule. This field cannot be used as filter.
+          description: The target host ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter.
           pattern: ^$|^host-[0-9a-f]{8}$
           title: targetHostId
           type: string
@@ -6429,8 +6208,7 @@ components:
         targetRegion:
           $ref: '#/components/schemas/Region'
         targetRegionId:
-          description: The target region ID of the schedule. Only one target can be
-            provided per schedule. This field cannot be used as filter.
+          description: The target region ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter.
           pattern: ^$|^region-[0-9a-f]{8}$
           title: targetRegionId
           type: string
@@ -6438,8 +6216,7 @@ components:
         targetSite:
           $ref: '#/components/schemas/Site'
         targetSiteId:
-          description: The target site ID of the schedule. Only one target can be
-            provided per schedule. This field cannot be used as filter.
+          description: The target site ID of the schedule. Only one target can be provided per schedule. This field cannot be used as filter.
           pattern: ^$|^site-[0-9a-f]{8}$
           title: targetSiteId
           type: string
@@ -6447,8 +6224,8 @@ components:
         timestamps:
           $ref: '#/components/schemas/Timestamps'
       required:
-      - startSeconds
-      - scheduleStatus
+        - startSeconds
+        - scheduleStatus
       title: SingleSchedule
       type: object
     SingleSchedulesList:
@@ -6464,14 +6241,13 @@ components:
           readOnly: true
           type: boolean
         totalElements:
-          description: Total number of items that the request would return, if not
-            limited by pagination.
+          description: Total number of items that the request would return, if not limited by pagination.
           readOnly: true
           type: integer
       required:
-      - SingleSchedules
-      - hasNext
-      - totalElements
+        - SingleSchedules
+        - hasNext
+        - totalElements
       title: SingleSchedulesList
       type: object
     Site:
@@ -6498,8 +6274,7 @@ components:
         metadata:
           $ref: '#/components/schemas/Metadata'
         metricsEndpoint:
-          description: The set of site-available metrics, specified in a single JSON
-            object.
+          description: The set of site-available metrics, specified in a single JSON object.
           maxLength: 100
           pattern: '^$|^[a-zA-Z-_0-9./: ]+$'
           title: site-metrics
@@ -6513,8 +6288,7 @@ components:
         ou:
           $ref: '#/components/schemas/OU'
         ouId:
-          description: The OU unique identifier that the site is associated to, if
-            it exists. This field cannot be used in filter.
+          description: The OU unique identifier that the site is associated to, if it exists. This field cannot be used in filter.
           pattern: ^$|^ou-[0-9a-f]{8}$
           type: string
           writeOnly: true
@@ -6525,8 +6299,7 @@ components:
         region:
           $ref: '#/components/schemas/Region'
         regionId:
-          description: The region's unique identifier that the site is associated
-            to. This field cannot be used in filter.
+          description: The region's unique identifier that the site is associated to. This field cannot be used in filter.
           pattern: ^$|^region-[0-9a-f]{8}$
           type: string
           writeOnly: true
@@ -6541,19 +6314,13 @@ components:
           readOnly: true
           type: string
         siteLat:
-          description: The geolocation latitude of the site. Points are represented
-            as latitude-longitude pairs in the E7 representation (degrees are multiplied
-            by 10**7 and rounded to the nearest integer). siteLat must be in the range
-            of +/- 90 degrees.
+          description: The geolocation latitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLat must be in the range of +/- 90 degrees.
           maximum: 9e+08
           minimum: -9e+08
           title: site-latitude
           type: integer
         siteLng:
-          description: The geolocation longitude of the site. Points are represented
-            as latitude-longitude pairs in the E7 representation (degrees are multiplied
-            by 10**7 and rounded to the nearest integer). siteLng must be in the range
-            of +/- 180 degrees (inclusive).
+          description: The geolocation longitude of the site. Points are represented as latitude-longitude pairs in the E7 representation (degrees are multiplied by 10**7 and rounded to the nearest integer). siteLng must be in the range of +/- 180 degrees (inclusive).
           maximum: 1.8e+09
           minimum: -1.8e+09
           title: site-longitude
@@ -6575,32 +6342,31 @@ components:
           readOnly: true
           type: array
         totalElements:
-          description: Total number of items that the request would return, if not
-            limited by pagination.
+          description: Total number of items that the request would return, if not limited by pagination.
           readOnly: true
           type: integer
       required:
-      - sites
-      - hasNext
-      - totalElements
+        - sites
+        - hasNext
+        - totalElements
       title: SitesList
       type: object
     StatusIndicator:
       description: The status indicator.
       enum:
-      - STATUS_INDICATION_UNSPECIFIED
-      - STATUS_INDICATION_ERROR
-      - STATUS_INDICATION_IN_PROGRESS
-      - STATUS_INDICATION_IDLE
+        - STATUS_INDICATION_UNSPECIFIED
+        - STATUS_INDICATION_ERROR
+        - STATUS_INDICATION_IN_PROGRESS
+        - STATUS_INDICATION_IDLE
       format: enum
       readOnly: true
       type: string
     TelemetryCollectorKind:
       description: Kind of telemetry collector.
       enum:
-      - TELEMETRY_COLLECTOR_KIND_UNSPECIFIED
-      - TELEMETRY_COLLECTOR_KIND_HOST
-      - TELEMETRY_COLLECTOR_KIND_CLUSTER
+        - TELEMETRY_COLLECTOR_KIND_UNSPECIFIED
+        - TELEMETRY_COLLECTOR_KIND_HOST
+        - TELEMETRY_COLLECTOR_KIND_CLUSTER
       format: enum
       type: string
     TelemetryLogsGroup:
@@ -6629,9 +6395,9 @@ components:
         timestamps:
           $ref: '#/components/schemas/Timestamps'
       required:
-      - name
-      - collectorKind
-      - groups
+        - name
+        - collectorKind
+        - groups
     TelemetryLogsGroupList:
       description: A list of log group objects.
       properties:
@@ -6641,21 +6407,19 @@ components:
           readOnly: true
           type: array
         hasNext:
-          description: Indicates if there are more log group objects available to
-            be retrieved.
+          description: Indicates if there are more log group objects available to be retrieved.
           readOnly: true
           type: boolean
         timestamps:
           $ref: '#/components/schemas/Timestamps'
         totalElements:
-          description: Total number of items that the request would return, if not
-            limited by pagination.
+          description: Total number of items that the request would return, if not limited by pagination.
           readOnly: true
           type: integer
       required:
-      - TelemetryLogsGroups
-      - hasNext
-      - totalElements
+        - TelemetryLogsGroups
+        - hasNext
+        - totalElements
       title: TelemetryLogsGroupList
       type: object
     TelemetryLogsProfile:
@@ -6676,25 +6440,22 @@ components:
           readOnly: true
           type: string
         targetInstance:
-          description: The ID of the instance that the telemetry profile is assigned
-            to. Can only be one of targetInstance, targetSite, or targetRegion.
+          description: The ID of the instance that the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion.
           pattern: ^$|^inst-[0-9a-f]{8}$
           type: string
         targetRegion:
-          description: The ID of the region where the telemetry profile is assigned
-            to. Can only be one of targetInstance, targetSite, or targetRegion.
+          description: The ID of the region where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion.
           pattern: ^$|^region-[0-9a-f]{8}$
           type: string
         targetSite:
-          description: The ID of the site where the telemetry profile is assigned
-            to. Can only be one of targetInstance, targetSite, or targetRegion.
+          description: The ID of the site where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion.
           pattern: ^$|^site-[0-9a-f]{8}$
           type: string
         timestamps:
           $ref: '#/components/schemas/Timestamps'
       required:
-      - logsGroupId
-      - logLevel
+        - logsGroupId
+        - logLevel
       type: object
     TelemetryLogsProfileList:
       description: A list of telemetry log profiles.
@@ -6705,21 +6466,19 @@ components:
           readOnly: true
           type: array
         hasNext:
-          description: Indicates if there are more telemetry log profile objects available
-            to be retrieved.
+          description: Indicates if there are more telemetry log profile objects available to be retrieved.
           readOnly: true
           type: boolean
         timestamps:
           $ref: '#/components/schemas/Timestamps'
         totalElements:
-          description: Total number of items that the request would return, if not
-            limited by pagination.
+          description: Total number of items that the request would return, if not limited by pagination.
           readOnly: true
           type: integer
       required:
-      - TelemetryLogsProfiles
-      - hasNext
-      - totalElements
+        - TelemetryLogsProfiles
+        - hasNext
+        - totalElements
       title: TelemetryLogsProfileList
       type: object
     TelemetryMetricsGroup:
@@ -6748,9 +6507,9 @@ components:
         timestamps:
           $ref: '#/components/schemas/Timestamps'
       required:
-      - name
-      - collectorKind
-      - groups
+        - name
+        - collectorKind
+        - groups
     TelemetryMetricsGroupList:
       description: A list of telemetry groups, which defines a set of metrics to collect.
       properties:
@@ -6760,21 +6519,19 @@ components:
           readOnly: true
           type: array
         hasNext:
-          description: Indicates if there are more telemetry metric group objects
-            available to be retrieved.
+          description: Indicates if there are more telemetry metric group objects available to be retrieved.
           readOnly: true
           type: boolean
         timestamps:
           $ref: '#/components/schemas/Timestamps'
         totalElements:
-          description: Total number of items that the request would return, if not
-            limited by pagination.
+          description: Total number of items that the request would return, if not limited by pagination.
           readOnly: true
           type: integer
       required:
-      - TelemetryMetricsGroups
-      - hasNext
-      - totalElements
+        - TelemetryMetricsGroups
+        - hasNext
+        - totalElements
       title: TelemetryMetricsGroupList
       type: object
     TelemetryMetricsProfile:
@@ -6788,8 +6545,7 @@ components:
           title: metricsGroupId
           type: string
         metricsInterval:
-          description: Metric interval (in seconds) for the telemetry profile. This
-            field must only be defined if the type equals to TELEMETRY_CONFIG_KIND_METRICS.
+          description: Metric interval (in seconds) for the telemetry profile. This field must only be defined if the type equals to TELEMETRY_CONFIG_KIND_METRICS.
           minimum: 1
           type: integer
         profileId:
@@ -6798,25 +6554,22 @@ components:
           readOnly: true
           type: string
         targetInstance:
-          description: The ID of the instance that the telemetry profile is assigned
-            to. Can only be one of targetInstance, targetSite, or targetRegion.
+          description: The ID of the instance that the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion.
           pattern: ^$|^inst-[0-9a-f]{8}$
           type: string
         targetRegion:
-          description: The ID of the region where the telemetry profile is assigned
-            to. Can only be one of targetInstance, targetSite, or targetRegion.
+          description: The ID of the region where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion.
           pattern: ^$|^region-[0-9a-f]{8}$
           type: string
         targetSite:
-          description: The ID of the site where the telemetry profile is assigned
-            to. Can only be one of targetInstance, targetSite, or targetRegion.
+          description: The ID of the site where the telemetry profile is assigned to. Can only be one of targetInstance, targetSite, or targetRegion.
           pattern: ^$|^site-[0-9a-f]{8}$
           type: string
         timestamps:
           $ref: '#/components/schemas/Timestamps'
       required:
-      - metricsGroupId
-      - metricsInterval
+        - metricsGroupId
+        - metricsInterval
       type: object
     TelemetryMetricsProfileList:
       description: A list of telemetry metric profiles.
@@ -6827,33 +6580,30 @@ components:
           readOnly: true
           type: array
         hasNext:
-          description: Indicates if there are more telemetry metric profile objects
-            available to be retrieved.
+          description: Indicates if there are more telemetry metric profile objects available to be retrieved.
           readOnly: true
           type: boolean
         timestamps:
           $ref: '#/components/schemas/Timestamps'
         totalElements:
-          description: Total number of items that the request would return, if not
-            limited by pagination.
+          description: Total number of items that the request would return, if not limited by pagination.
           readOnly: true
           type: integer
       required:
-      - TelemetryMetricsProfiles
-      - hasNext
-      - totalElements
+        - TelemetryMetricsProfiles
+        - hasNext
+        - totalElements
       title: TelemetryLogsProfileList
       type: object
     TelemetrySeverityLevel:
-      description: Log level used for the telemetry config. This field must only be
-        defined if kind equals to TELEMETRY_CONFIG_KIND_LOGS.
+      description: Log level used for the telemetry config. This field must only be defined if kind equals to TELEMETRY_CONFIG_KIND_LOGS.
       enum:
-      - TELEMETRY_SEVERITY_LEVEL_UNSPECIFIED
-      - TELEMETRY_SEVERITY_LEVEL_CRITICAL
-      - TELEMETRY_SEVERITY_LEVEL_ERROR
-      - TELEMETRY_SEVERITY_LEVEL_WARN
-      - TELEMETRY_SEVERITY_LEVEL_INFO
-      - TELEMETRY_SEVERITY_LEVEL_DEBUG
+        - TELEMETRY_SEVERITY_LEVEL_UNSPECIFIED
+        - TELEMETRY_SEVERITY_LEVEL_CRITICAL
+        - TELEMETRY_SEVERITY_LEVEL_ERROR
+        - TELEMETRY_SEVERITY_LEVEL_WARN
+        - TELEMETRY_SEVERITY_LEVEL_INFO
+        - TELEMETRY_SEVERITY_LEVEL_DEBUG
       format: enum
       type: string
     Timestamps:
@@ -6871,15 +6621,14 @@ components:
           type: string
       readOnly: true
       required:
-      - createdAt
-      - updateAt
+        - createdAt
+        - updateAt
       type: object
     Workload:
       description: A generic way to group compute resources to obtain a workload.
       properties:
         externalId:
-          description: The ID of the external resource, used to link to resources
-            outside the realm of Edge Infrastructure Manager.
+          description: The ID of the external resource, used to link to resources outside the realm of Edge Infrastructure Manager.
           maxLength: 40
           pattern: '^$|^[a-zA-Z-_0-9./: ]+$'
           type: string
@@ -6914,13 +6663,13 @@ components:
           title: workloadId
           type: string
       required:
-      - kind
-      - members
+        - kind
+        - members
     WorkloadKind:
       description: Type of workload.
       enum:
-      - WORKLOAD_KIND_UNSPECIFIED
-      - WORKLOAD_KIND_CLUSTER
+        - WORKLOAD_KIND_UNSPECIFIED
+        - WORKLOAD_KIND_CLUSTER
       format: enum
       type: string
     WorkloadList:
@@ -6932,19 +6681,17 @@ components:
           readOnly: true
           type: array
         hasNext:
-          description: Indicates if there are more workload objects available to be
-            retrieved.
+          description: Indicates if there are more workload objects available to be retrieved.
           readOnly: true
           type: boolean
         totalElements:
-          description: Total number of items the request would return, if not limited
-            by pagination.
+          description: Total number of items the request would return, if not limited by pagination.
           readOnly: true
           type: integer
       required:
-      - Workloads
-      - hasNext
-      - totalElements
+        - Workloads
+        - hasNext
+        - totalElements
       title: WorkloadList
       type: object
     WorkloadMember:
@@ -6961,8 +6708,8 @@ components:
         kind:
           description: Type of workload member.
           enum:
-          - WORKLOAD_MEMBER_KIND_UNSPECIFIED
-          - WORKLOAD_MEMBER_KIND_CLUSTER_NODE
+            - WORKLOAD_MEMBER_KIND_UNSPECIFIED
+            - WORKLOAD_MEMBER_KIND_CLUSTER_NODE
           format: enum
           type: string
         member:
@@ -6989,11 +6736,11 @@ components:
           title: workloadMemberId
           type: string
       required:
-      - resourceId
-      - workloadMemberId
-      - workloadId
-      - kind
-      - instanceId
+        - resourceId
+        - workloadMemberId
+        - workloadId
+        - kind
+        - instanceId
     WorkloadMemberList:
       description: A list of workload member objects.
       properties:
@@ -7003,19 +6750,17 @@ components:
           readOnly: true
           type: array
         hasNext:
-          description: Indicates if there are more workload members objects available
-            to be retrieved.
+          description: Indicates if there are more workload members objects available to be retrieved.
           readOnly: true
           type: boolean
         totalElements:
-          description: Total number of items the request would return, if not limited
-            by pagination.
+          description: Total number of items the request would return, if not limited by pagination.
           readOnly: true
           type: integer
       required:
-      - WorkloadMembers
-      - hasNext
-      - totalElements
+        - WorkloadMembers
+        - hasNext
+        - totalElements
       title: WorkloadMemberList
       type: object
   securitySchemes:

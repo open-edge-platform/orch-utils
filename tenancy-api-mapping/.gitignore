@@ -1,8 +1,10 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
-#
 # SPDX-License-Identifier: Apache-2.0
 
-.gitconfig
-.netrc
-!.ssh/
-.ssh/*
+# repos that are checked out locally
+repos/
+
+# build/test artifacts
+out/
+openapispecs/converted_specs/
+cmd/specgen/tests/

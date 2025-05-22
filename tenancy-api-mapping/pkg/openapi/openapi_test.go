@@ -48,7 +48,7 @@ var _ = ginkgo.Describe("OpenAPISpecProcessor", func() {
 		tmpDir, err := os.MkdirTemp("", "openapi_test")
 		gomega.Expect(err).NotTo(gomega.HaveOccurred())
 
-		localPath := filepath.Join(tmpDir, "gitsubmodules")
+		localPath := filepath.Join(tmpDir, "repos")
 		specOpDir := filepath.Join(tmpDir, "genspecs")
 
 		err = os.MkdirAll(localPath, defaultDirMode)
