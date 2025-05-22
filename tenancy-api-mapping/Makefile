@@ -1,9 +1,11 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
-#
 # SPDX-License-Identifier: Apache-2.0
 
-# Create the virtualenv with python tools installed
-VENV_NAME = venv_apimapping
+# safe shell invocations
+SHELL   := bash -eu -o pipefail
+
+# default goal to show help
+.DEFAULT_GOAL := help
 
 VERSION                       ?= $(shell cat VERSION)
 GIT_HASH_SHORT     						:= $(shell git rev-parse --abbrev-ref HEAD)
@@ -15,46 +17,30 @@ ifneq ($(GIT_HASH_SHORT), main)
 	endif
 endif
 
-DOCKER_REGISTRY_OEP	?= registry-rs.edgeorchestration.intel.com
-DOCKER_REPOSITORY_OEP	?= edge-orch/common
-IMG_NAME_OEP			?= tenancy-api-mapping
-IMG_VERSION_OEP		?= ${VERSION}
+DOCKER_REGISTRY_OEP          	?= registry-rs.edgeorchestration.intel.com
+DOCKER_REPOSITORY_OEP	        ?= edge-orch/common
+IMG_NAME_OEP			            ?= tenancy-api-mapping
+IMG_VERSION_OEP		            ?= ${VERSION}
 TENANCY_API_MAPPING_DOCKER_IMAGE_OEP ?= ${DOCKER_REGISTRY_OEP}/${DOCKER_REPOSITORY_OEP}/${IMG_NAME_OEP}:${IMG_VERSION_OEP}
-BUILD_DIR               := build
+OUT_DIR                       := out
+REPO_DIR                      := repos
+API_MAPPING_CONFIG_DIR        := apimappingconfigcrs
+
+# directory creation
+$(OUT_DIR):
+	@mkdir -p $@
 
 # Go command invocation
-GOCMD                   := GOPRIVATE="github.com/open-edge-platform/*" go
+GOCMD                         := GOPRIVATE="github.com/open-edge-platform/*" go
 
 # tag for the datamodel openapi spec copy
-DM_REPO_TAG_VERSION := main
+DM_REPO_TAG_VERSION           := main
 
 .PHONY: all
 all: lint license build test ## Runs build, lint, test stages
 
-
-.PHONY: build
-build: ## Runs build stage
-	go mod vendor
-	@echo "---MAKEFILE BUILD---"
-	@docker build -t ${TENANCY_API_MAPPING_DOCKER_IMAGE_OEP} . -f Dockerfile
-	@echo "---END MAKEFILE Build---"
-
-.PHONY: test
-test: run-test clean-submodules   ## Run go tests
-
-.PHONY: run-test
-run-test:
-	${GOCMD} test -coverprofile ${BUILD_DIR}/coverage.out -coverpkg=$$(go list ./... | grep -v "pkg/git/" | grep -v "pkg/config/" | grep -v "pkg/openapi/" | tr '\n' ,)  -covermode atomic ./...
-	gocover-cobertura < ${BUILD_DIR}/coverage.out > ${BUILD_DIR}/coverage.xml
-	${GOCMD} tool cover -html=${BUILD_DIR}/coverage.out -o ${BUILD_DIR}/coverage.html
-	${GOCMD} tool cover -func ${BUILD_DIR}/coverage.out -o ${BUILD_DIR}/function_coverage.log
-	@echo "test run completed"
-
-coverage: ## Run Coverage
-	@echo "---MAKEFILE COVERAGE---"
-	echo $@
-	@echo "---END MAKEFILE COVERAGE---"
-
+# virtualenv for python tools
+VENV_NAME = venv_apimapping
 $(VENV_NAME): requirements.txt
 	echo "Creating virtualenv $@"
 	python3 -m venv $@;\
@@ -62,20 +48,9 @@ $(VENV_NAME): requirements.txt
 	python3 -m pip install --upgrade pip;\
 	python3 -m pip install -r requirements.txt
 
+### Lint targets ###
 .PHONY: lint
-lint: clean-all go-lint hadolint yamllint  ## run all linters run as in CI
-
-.PHONY: lint-ci
-lint-ci: clean-all go-lint hadolint yamllint license
-
-.PHONY: hadolint
-hadolint: ## lint Dockerfile with hadolint
-	hadolint Dockerfile
-
-.PHONY: go-lint
-go-lint: ## lint all go code with golangci-lint
-	golangci-lint --version
-	golangci-lint run --timeout=3m --config .golangci.yml ./...
+lint: license go-lint hadolint yamllint  ## run all linters run as in CI
 
 .PHONY: license
 license: $(VENV_NAME) ## lint licensing with the reuse tool.
@@ -83,19 +58,45 @@ license: $(VENV_NAME) ## lint licensing with the reuse tool.
 	reuse --version;\
 	reuse --root . lint
 
-YAML_FILES := $(shell find . -path './gitsubmodules' -prune -o -type f \( -name '*.yaml' -o -name '*.yml' \) -print )
+.PHONY: go-lint
+go-lint: ## lint all go code with golangci-lint
+	golangci-lint --version
+	golangci-lint run --timeout=3m --config .golangci.yml ./...
+
+.PHONY: hadolint
+hadolint: ## lint Dockerfile with hadolint
+	hadolint Dockerfile
+
+YAML_FILES := $(shell find . -path './repos' -prune -o -type f \( -name '*.yaml' -o -name '*.yml' \) -print )
 .PHONY: yamllint
 yamllint: ## Lint all yaml files
 	yamllint --version
 	yamllint -c yamllint_conf.yml -s $(YAML_FILES)
 
+### Docker targets ###
+.PHONY: build
+build: ## Runs build stage
+	go mod vendor
+	docker build -t ${TENANCY_API_MAPPING_DOCKER_IMAGE_OEP} . -f Dockerfile
+
 .PHONY: release
 release: docker.publish.oep
 
 docker.publish.oep:
-	@echo "---MAKEFILE PUBLISH---"
 	@docker push ${TENANCY_API_MAPPING_DOCKER_IMAGE_OEP}
-	@echo "---END MAKEFILE PUBLISH---"
+
+### npm/openapi lint targets ###
+
+# Define a target to clean and rebuild dependencies
+.PHONY: rebuild-deps
+rebuild-deps:
+	rm -rf node_modules
+	npm install
+
+# Define a target to install dependencies
+.PHONY: install-deps
+install-deps:
+	npm install openapi-format @redocly/cli @redocly/openapi-cli
 
 node_modules:
 	npm ci
@@ -109,6 +110,81 @@ openapi-lint: node_modules
 		--skip-rule=info-license \
 		--skip-rule=tag-description
 
+### git checkout targets ###
+$(REPO_DIR):
+	@mkdir -p $@
+
+# Get list of directories to checkout repos, named per api mapping
+REPO_LIST := $(shell ls $(API_MAPPING_CONFIG_DIR))
+REPOS := $(addprefix $(REPO_DIR)/, $(basename $(REPO_LIST)))
+
+checkout-repos: $(REPOS) ## checkout all repos
+	@ echo "All repos checked out"
+	@for repo in $(REPO_LIST); do \
+    GIT_REF=$$(yq eval ".spec.repoConf.tag" "$(API_MAPPING_CONFIG_DIR)/$$repo" );\
+    pushd "$(REPO_DIR)/$${repo%.*}" ;\
+      git fetch -q ;\
+      git switch --detach "$$GIT_REF" ;\
+    popd ;\
+	done
+
+# individual repo clones, based on presence
+$(REPO_DIR)/%:
+	@REPO_URL=$$(yq eval ".spec.repoConf.url" "$(API_MAPPING_CONFIG_DIR)/$*.yaml" );\
+  git clone -q "$$REPO_URL" $@
+
+### Test targets ###
+
+.PHONY: test
+test: checkout-repos | $(OUT_DIR) ## Run go tests
+	$(GOCMD) test -coverprofile $(OUT_DIR)/coverage.out -coverpkg=$$(go list ./... | grep -v "pkg/git/" | grep -v "pkg/config/" | grep -v "pkg/openapi/" | tr '\n' ,)  -covermode atomic ./...
+	gocover-cobertura < $(OUT_DIR)/coverage.out > $(OUT_DIR)/coverage.xml
+	$(GOCMD) tool cover -html=$(OUT_DIR)/coverage.out -o $(OUT_DIR)/coverage.html
+	$(GOCMD) tool cover -func $(OUT_DIR)/coverage.out -o $(OUT_DIR)/function_coverage.log
+	@echo "test run completed"
+
+coverage: ## Run coverage
+	echo  "See output of test"
+
+### Build targets ###
+
+# Define a target to generate the openapi spec and clean up
+.PHONY: specgen ## Generate all MT OpenAPI Specs
+specgen: generate-specs
+
+.PHONY: generate-specs
+generate-specs:  ## Generate openapi specs from apimapping
+	@echo "---Running the spec generation..."
+	@go run cmd/specgen/specgen.go
+	@echo "---spec gen complete."
+	./scripts/copyDatamodelOpenAPISpec.sh
+
+# Define a target to convert the oas version of all the files
+# and combine into one 'openapispecs/combined/combined_spec.yaml'
+.PHONY: convert-and-combine
+convert-and-combine:
+	@echo "---Running the conversion and combination script..."
+	@go run cmd/convertandcombinespec/main.go
+
+# Define a target to run the full workflow
+.PHONY: gen-convert-combine-all
+gen-convert-combine-all: install-deps specgen convert-and-combine clean-intermediate
+
+### Cleanup ###
+
+# Define a target to clean the intermediate directories
+.PHONY: clean-intermediate
+clean-intermediate:
+	rm -rf openapispecs/converted_specs
+
+.PHONY: clean-submodules
+clean-submodules: # clean up checked out repos
+	rm -rf $(REPO_DIR)
+
+.PHONY: clean-all
+clean-all: clean-submodules clean-intermediate  ## Cleanup all build files
+	rm -rf $(VENV_NAME) $(OUT_DIR)
+
 #### Help Target ####
 help: ## Print help for each target
 	@echo $(PROJECT_NAME) make targets
@@ -118,66 +194,3 @@ help: ## Print help for each target
     | sort -t ":" -k 3 \
     | awk 'BEGIN  {FS=":"}; {sub(".* ## ", "", $$4)}; {printf "%-20s %-16s %s\n", $$3, $$1 ":" $$2, $$4};'
 
-# Define a target to generate the openapi spec and clean up
-.PHONY: specgen ## Generate all MT OpenAPI Specs
-specgen: generate-specs clean-submodules
-
-# Define a target to generate the openapi spec for the apimappingconfigs
-.PHONY: generate-specs
-generate-specs:
-	@echo "\n\n---Running the spec generation..."
-	@go run cmd/specgen/specgen.go
-	@echo "\n---spec gen complete."
-
-# Define a target to clean git submodules
-.PHONY: clean-submodules
-clean-submodules:
-	@echo "\n\n---Cleaning submodules..."
-	@./scripts/remove_submodules.sh
-	@echo "---submodules cleanup done."
-
-# Define a target to clean and rebuild dependencies
-.PHONY: rebuild-deps
-rebuild-deps:
-	@echo "\n\n---Cleaning and rebuilding dependencies..."
-	@rm -rf node_modules
-	@npm install
-	@echo "---rebuilding dependencies done."
-
-# Define a target to install dependencies
-.PHONY: install-deps
-install-deps:
-	@echo "\n\n---Installing dependencies..."
-	@npm install -g openapi-format @redocly/cli @redocly/openapi-cli
-	sudo apt-get install jq
-	pip install yq
-	@echo "---Installation of dependencies done."
-
-# Define a target to clean the intermediate directories
-.PHONY: clean-intermediate
-clean-intermediate:
-	@echo "\n\n---Cleaning intermediate directories..."
-	@rm -rf openapispecs/converted_specs
-	@echo "---Cleanup of intermediate directories done."
-
-# Target to copy the datamodel openapi spec
-.PHONY: copy-and-preprocess-dm-oas
-copy-and-preprocess-dm-oas:
-	@echo "\n\n---Copy OAS from DM repo..."
-	@DM_REPO_TAG_VERSION=$(DM_REPO_TAG_VERSION) ./scripts/copyDatamodelOpenAPISpec.sh
-	@echo "---Copied datamodel OAS."
-
-# Define a target to convert the oas version of all the files
-# and combine into one 'openapispecs/combined/combined_spec.yaml'
-.PHONY: convert-and-combine
-convert-and-combine: copy-and-preprocess-dm-oas
-	@echo "\n\n---Running the conversion and combination script..."
-	@go run cmd/convertandcombinespec/main.go
-
-# Define a target to clear all
-.PHONY: clean-all
-clean-all: clean-submodules clean-intermediate
-
-# Define a target to run the full workflow
-.PHONY: gen-convert-combine-all
-gen-convert-combine-all: install-deps specgen convert-and-combine clean-intermediate
