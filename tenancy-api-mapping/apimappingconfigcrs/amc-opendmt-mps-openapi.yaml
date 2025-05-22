@@ -1,0 +1,65 @@
+---
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+apiVersion: apimappingconfig.edge-orchestrator.intel.com/v1
+kind: APIMappingConfig
+metadata:
+  name: amc-opendmt-mps-openapi
+  labels:
+    configs.config.edge-orchestrator.intel.com: default
+spec:
+  specGenEnabled: true
+  downloadConf:
+    version: "2.13.0"
+    url: "https://api.swaggerhub.com/apis/rbheopenamt/mps/2.13.0/swagger.yaml"
+  backend:
+    service: "mps.orch-gateway.svc.cluster.local"
+    port: 4433  # https://github.com/device-management-toolkit/mps
+  mappings:
+    - externalURI: /v1/projects/{projectName}/mps/amt/log/audit/{guid}
+      serviceURI: api/v1/amt/log/audit/{guid}
+    - externalURI: /v1/projects/{projectName}/mps/amt/log/event/{guid}
+      serviceURI: api/v1/amt/log/event/{guid}
+    - externalURI: /v1/projects/{projectName}/mps/amt/version/{guid}
+      serviceURI: api/v1/amt/version/{guid}
+    - externalURI: /v1/projects/{projectName}/mps/amt/generalSettings/{guid}
+      serviceURI: api/v1/amt/generalSettings/{guid}
+    - externalURI: /v1/projects/{projectName}/mps/amt/hardwareInfo/{guid}
+      serviceURI: api/v1/amt/hardwareInfo/{guid}
+    - externalURI: /v1/projects/{projectName}/mps/amt/features/{guid}
+      serviceURI: api/v1/amt/features/{guid}
+    - externalURI: /v1/projects/{projectName}/mps/amt/alarmOccurrences/{guid}
+      serviceURI: api/v1/amt/alarmOccurrences/{guid}
+    - externalURI: /v1/projects/{projectName}/mps/amt/power/state/{guid}
+      serviceURI: api/v1/amt/power/state/{guid}
+    - externalURI: /v1/projects/{projectName}/mps/amt/power/capabilities/{guid}
+      serviceURI: api/v1/amt/power/capabilities/{guid}
+    - externalURI: /v1/projects/{projectName}/mps/amt/power/action/{guid}
+      serviceURI: api/v1/amt/power/action/{guid}
+    - externalURI: /v1/projects/{projectName}/mps/amt/power/bootoptions/{guid}
+      serviceURI: api/v1/amt/power/bootoptions/{guid}
+    - externalURI: /v1/projects/{projectName}/mps/amt/userConsentCode/{guid}
+      serviceURI: api/v1/amt/userConsentCode/{guid}
+    - externalURI: /v1/projects/{projectName}/mps/amt/userConsentCode/cancel/{guid}
+      serviceURI: api/v1/amt/userConsentCode/cancel/{guid}
+    - externalURI: /v1/projects/{projectName}/mps/amt/deactivate/{guid}
+      serviceURI: api/v1/amt/deactivate/{guid}
+    - externalURI: /v1/projects/{projectName}/mps/devices
+      serviceURI: api/v1/devices
+    - externalURI: /v1/projects/{projectName}/mps/devices/redirectStatus/{guid}
+      serviceURI: api/v1/devices/redirectStatus/{guid}
+    - externalURI: /v1/projects/{projectName}/mps/devices/stats
+      serviceURI: api/v1/devices/stats
+    - externalURI: /v1/projects/{projectName}/mps/devices/{guid}
+      serviceURI: api/v1/devices/{guid}
+    - externalURI: /v1/projects/{projectName}/mps/devices/disconnect/{guid}
+      serviceURI: api/v1/devices/disconnect/{guid}
+    - externalURI: /v1/projects/{projectName}/mps/devices/refresh/{guid}
+      serviceURI: api/v1/devices/refresh/{guid}
+    - externalURI: /v1/projects/{projectName}/mps/ciracert
+      serviceURI: api/v1/ciracert
+    - externalURI: /v1/projects/{projectName}/mps/health
+      serviceURI: api/v1/health
+    - externalURI: /v1/projects/{projectName}/mps/version
+      serviceURI: api/v1/version
