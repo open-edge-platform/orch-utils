@@ -22,9 +22,13 @@ DOCKER_REPOSITORY_OEP	        ?= edge-orch/common
 IMG_NAME_OEP			            ?= tenancy-api-mapping
 IMG_VERSION_OEP		            ?= ${VERSION}
 TENANCY_API_MAPPING_DOCKER_IMAGE_OEP ?= ${DOCKER_REGISTRY_OEP}/${DOCKER_REPOSITORY_OEP}/${IMG_NAME_OEP}:${IMG_VERSION_OEP}
-BUILD_DIR                     := build
+OUT_DIR                       := out
 REPO_DIR                      := repos
 API_MAPPING_CONFIG_DIR        := apimappingconfigcrs
+
+# directory creation
+$(OUT_DIR):
+	@mkdir -p $@
 
 # Go command invocation
 GOCMD                         := GOPRIVATE="github.com/open-edge-platform/*" go
@@ -73,34 +77,26 @@ yamllint: ## Lint all yaml files
 .PHONY: build
 build: ## Runs build stage
 	go mod vendor
-	@echo "---MAKEFILE BUILD---"
-	@docker build -t ${TENANCY_API_MAPPING_DOCKER_IMAGE_OEP} . -f Dockerfile
-	@echo "---END MAKEFILE Build---"
+	docker build -t ${TENANCY_API_MAPPING_DOCKER_IMAGE_OEP} . -f Dockerfile
 
 .PHONY: release
 release: docker.publish.oep
 
 docker.publish.oep:
-	@echo "---MAKEFILE PUBLISH---"
 	@docker push ${TENANCY_API_MAPPING_DOCKER_IMAGE_OEP}
-	@echo "---END MAKEFILE PUBLISH---"
 
 ### npm/openapi lint targets ###
 
 # Define a target to clean and rebuild dependencies
 .PHONY: rebuild-deps
 rebuild-deps:
-	@echo "\n\n---Cleaning and rebuilding dependencies..."
-	@rm -rf node_modules
-	@npm install
-	@echo "---rebuilding dependencies done."
+	rm -rf node_modules
+	npm install
 
 # Define a target to install dependencies
 .PHONY: install-deps
 install-deps:
-	@echo "\n\n---Installing dependencies..."
-	@npm install openapi-format @redocly/cli @redocly/openapi-cli
-	@echo "---Installation of dependencies done."
+	npm install openapi-format @redocly/cli @redocly/openapi-cli
 
 node_modules:
 	npm ci
@@ -140,11 +136,11 @@ $(REPO_DIR)/%:
 ### Test targets ###
 
 .PHONY: test
-test: ## Run go tests
-	${GOCMD} test -coverprofile ${BUILD_DIR}/coverage.out -coverpkg=$$(go list ./... | grep -v "pkg/git/" | grep -v "pkg/config/" | grep -v "pkg/openapi/" | tr '\n' ,)  -covermode atomic ./...
-	gocover-cobertura < ${BUILD_DIR}/coverage.out > ${BUILD_DIR}/coverage.xml
-	${GOCMD} tool cover -html=${BUILD_DIR}/coverage.out -o ${BUILD_DIR}/coverage.html
-	${GOCMD} tool cover -func ${BUILD_DIR}/coverage.out -o ${BUILD_DIR}/function_coverage.log
+test: checkout-repos | $(OUT_DIR) ## Run go tests
+	$(GOCMD) test -coverprofile $(OUT_DIR)/coverage.out -coverpkg=$$(go list ./... | grep -v "pkg/git/" | grep -v "pkg/config/" | grep -v "pkg/openapi/" | tr '\n' ,)  -covermode atomic ./...
+	gocover-cobertura < $(OUT_DIR)/coverage.out > $(OUT_DIR)/coverage.xml
+	$(GOCMD) tool cover -html=$(OUT_DIR)/coverage.out -o $(OUT_DIR)/coverage.html
+	$(GOCMD) tool cover -func $(OUT_DIR)/coverage.out -o $(OUT_DIR)/function_coverage.log
 	@echo "test run completed"
 
 coverage: ## Run coverage
@@ -187,7 +183,7 @@ clean-submodules: # clean up checked out repos
 
 .PHONY: clean-all
 clean-all: clean-submodules clean-intermediate  ## Cleanup all build files
-	rm -rf $(VENV_NAME)
+	rm -rf $(VENV_NAME) $(OUT_DIR)
 
 #### Help Target ####
 help: ## Print help for each target

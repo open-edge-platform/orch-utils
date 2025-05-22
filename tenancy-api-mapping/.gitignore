@@ -4,5 +4,7 @@
 # repos that are checked out locally
 repos/
 
-# build artifacts
+# build/test artifacts
+out/
 openapispecs/converted_specs/
+cmd/specgen/tests/
