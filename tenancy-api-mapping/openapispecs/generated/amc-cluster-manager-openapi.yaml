@@ -6,7 +6,7 @@ openapi: 3.0.3
 info:
   title: Cluster Manager 2.0
   description: This document defines the schema for the Cluster Manager 2.0 REST API.
-  version: 2.0.0
+  version: 2.1.1-dev
 servers:
   - url: '{apiRoot}'
     variables:
@@ -46,7 +46,14 @@ paths:
             default: 0
             minimum: 0
             type: integer
-        - description: The ordering of the entries. "asc" and "desc" are valid values. If none is specified, "asc" is used.
+        - description: |
+            The ordering of the entries. "asc" and "desc" are valid values. If none is specified, "asc" is used.
+
+            Supported fields:
+            - name
+            - kubernetesVersion
+            - providerStatus
+            - lifecyclePhase
           examples:
             ascending:
               description: sort the entries by name entry in ascending order
@@ -61,7 +68,14 @@ paths:
           name: orderBy
           schema:
             type: string
-        - description: Filters the entries based on the filter provided.
+        - description: |
+            Filters the entries based on the filter provided.
+
+            Supported fields:
+            - name
+            - kubernetesVersion
+            - providerStatus
+            - lifecyclePhase
           examples:
             multiple_filter:
               description: filter by cluster name with the prefix "foo" or with Kubernetes software v1.27.5.
@@ -600,6 +614,8 @@ paths:
           $ref: '#/components/responses/400-BadRequest'
         "404":
           $ref: '#/components/responses/404-NotFound'
+        "409":
+          $ref: '#/components/responses/409-Conflict'
         "500":
           $ref: '#/components/responses/500-InternalServerError'
       tags:
@@ -884,7 +900,8 @@ components:
     NodeInfo:
       properties:
         id:
-          description: The unique identifier of this host.
+          description: Host resource id
+          example: host-15efd22c
           type: string
         role:
           type: string
@@ -894,7 +911,8 @@ components:
     NodeSpec:
       properties:
         id:
-          description: The unique identifier of this host.
+          description: UUID of the host.
+          example: 6e6422c3-625e-507a-bc8a-bd2330e07e7e
           type: string
         role:
           default: all
@@ -994,6 +1012,7 @@ components:
           enum:
             - kubeadm
             - rke2
+            - k3s
           type: string
         description:
           maxLength: 4096

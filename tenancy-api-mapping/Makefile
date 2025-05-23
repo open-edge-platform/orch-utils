@@ -168,7 +168,7 @@ convert-and-combine:
 
 # Define a target to run the full workflow
 .PHONY: gen-convert-combine-all
-gen-convert-combine-all: install-deps specgen convert-and-combine clean-intermediate
+gen-convert-combine-all: install-deps checkout-repos specgen convert-and-combine clean-all
 
 ### Cleanup ###
 
