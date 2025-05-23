@@ -36,6 +36,7 @@ jobs:
 
     - name: Check for changes
       run: |
+        npm --version
         if [[ `git status --porcelain` ]]; then
           echo "### Error: Changes detected after running make gen-convert-combine-all"
           echo "### git status --porcelain"
