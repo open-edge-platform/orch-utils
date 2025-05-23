@@ -17,7 +17,6 @@ spec:
   - to:
     - operation:
         ports:
-        - "3306" # FIXME: For MariaDB part of remote onboarding. Should delete once we migrate to Postgres
         - "7946" # Loki member list, gossip-ring (Raw TCP)
         - "6831" # observability-opentelemetry-collector jaeger-compact (Raw UDP)
         - "14268" # edgenode-observability-opentelemetry-collector jaeger-thrift (Raw TCP)
