@@ -1,6 +1,5 @@
 # SPDX-FileCopyrightText: (C) 2025 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
-
 ---
 
 name: Validate and Generate OpenAPI
@@ -8,7 +7,7 @@ name: Validate and Generate OpenAPI
 on:
   pull_request:
     paths:
-      - 'tenancy-api-mapping/apimappingconfigcrs/*.yaml'
+      - 'tenancy-api-mapping/**'
 
 permissions: {}
 
@@ -19,32 +18,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      with:
-        persist-credentials: false
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          persist-credentials: false
 
-    - name: Bootstrap CI environment
-      uses: open-edge-platform/orch-ci/.github/actions/bootstrap@13722579bc8edfb712203cb8e88fcc404d2218bc  # 0.1.9
-      with:
-        gh_token: ${{ secrets.SYS_ORCH_GITHUB }}
+      - name: Bootstrap CI environment
+        uses: open-edge-platform/orch-ci/.github/actions/bootstrap@13722579bc8edfb712203cb8e88fcc404d2218bc  # 0.1.9
+        with:
+          gh_token: ${{ secrets.SYS_ORCH_GITHUB }}
 
-    - name: Generate OpenAPI specs and combined spec
-      run: |
-        cd tenancy-api-mapping
-        make gen-convert-combine-all
+      - name: Generate OpenAPI specs and combined spec
+        run: |
+          cd tenancy-api-mapping
+          make gen-convert-combine-all
 
-    - name: Check for changes
-      run: |
-        npm --version
-        if [[ `git status --porcelain` ]]; then
-          echo "### Error: Changes detected after running make gen-convert-combine-all"
-          echo "### git status --porcelain"
-          git status --porcelain
-          echo "### git diff"
-          git diff
-          echo "### Error: Changes detected after running make gen-convert-combine-all" >> $GITHUB_STEP_SUMMARY
-          exit 1
-        else
-          echo "No changes detected - OpenAPI is up to date" >> $GITHUB_STEP_SUMMARY
-        fi
+      - name: Check for changes
+        run: |
+          npm --version
+          if [[ `git status --porcelain` ]]; then
+            echo "### Error: Changes detected after running make gen-convert-combine-all"
+            echo "### git status --porcelain"
+            git status --porcelain
+            echo "### git diff"
+            git diff
+            echo "### Error: Changes detected after running make gen-convert-combine-all" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo "No changes detected - OpenAPI is up to date" >> $GITHUB_STEP_SUMMARY
+          fi
