@@ -31,6 +31,7 @@ jobs:
 
     - name: Generate OpenAPI specs and combined spec
       run: |
+        cd tenancy-api-mapping
         make gen-convert-combine-all
 
     - name: Check for changes
