@@ -44,6 +44,8 @@ func (Test) golang() error {
 		"nexus/kube-openapi/pkg/util/proto/validation",
 		"nexus/kube-openapi/pkg/schemamutation",
 		"nexus/kube-openapi/test/integration",
+		"tenancy-manager/fuzztest",
+		"tenancy-api-mapping/cmd/specgen",
 	}
 
 	return sh.RunV(

@@ -7,6 +7,7 @@ package mage
 
 import (
 	"fmt"
+	"os"
 	"regexp"
 
 	"github.com/bitfield/script"
@@ -16,10 +17,20 @@ import (
 var PublicCharts = []string{"aws-sm-get-rs-token", "aws-sm-proxy", "oci-secret", "secret-wait", "token-refresh"}
 var PublicContainers = []string{"aws-sm-proxy"}
 
-const (
-	AWSRegion                         = "us-west-2"
-	OpenEdgePlatformRegistryRepoURL   = "080137407410.dkr.ecr.us-west-2.amazonaws.com"
-	OpenEdgePlatformRepository        = "edge-orch"
+var (
+	AWSRegion                       = "us-west-2"
+	OpenEdgePlatformRegistryRepoURL = func() string {
+		if r := os.Getenv("DOCKER_REGISTRY"); r != "" {
+			return r
+		}
+		return "080137407410.dkr.ecr.us-west-2.amazonaws.com"
+	}()
+	OpenEdgePlatformRepository = func() string {
+		if r := os.Getenv("DOCKER_REPOSITORY"); r != "" {
+			return r
+		}
+		return "edge-orch"
+	}()
 	RegistryRepoSubProj               = "common"
 	OpenEdgePlatformContainerRegistry = OpenEdgePlatformRegistryRepoURL + "/" +
 		OpenEdgePlatformRepository + "/" +
@@ -167,32 +178,32 @@ func (Build) NexusAPIGateway() error {
 
 type Push mg.Namespace
 
-// Push the secrets-config container image to the AMR registry.
+// Push the secrets-config container image to the registry.
 func (Push) SecretsConfig() error {
 	return pushImage("secrets-config", "secrets-config")
 }
 
-// Push the aws-sm-proxy container image to the AMR registry.
+// Push the aws-sm-proxy container image to the registry.
 func (Push) AwsSmProxy() error {
 	return pushImage("aws-sm-proxy", "aws-sm-proxy")
 }
 
-// Push the aws-sm-proxy container image to the AMR registry.
+// Push the aws-sm-proxy container image to the registry.
 func (Push) TokenFs() error {
-	return pushImage("token-fs", "token-file-server")
+	return pushImage("token-fs", "token-fs")
 }
 
-// Push the auth-service container image to the AMR registry.
+// Push the auth-service container image to the registry.
 func (Push) AuthService() error {
 	return pushImage("auth-service", "auth-service")
 }
 
-// Push the cert-synchronizer container image to the AMR registry.
+// Push the cert-synchronizer container image to the registry.
 func (Push) CertSynchronizer() error {
 	return pushImage("cert-synchronizer", "cert-synchronizer")
 }
 
-// Push the Keycloak Tenant Controller container image to the AMR registry.
+// Push the Keycloak Tenant Controller container image to the registry.
 func (Push) KeycloakTenantController() error {
 	return pushImage("keycloak-tenant-controller", "keycloak-tenant-controller")
 }
@@ -202,7 +213,7 @@ func (Push) PublicAwsSmProxy() error {
 	return pushImage("aws-sm-proxy", "aws-sm-proxy")
 }
 
-// Push the squid-proxy container image to the AMR registry.
+// Push the squid-proxy container image to the registry.
 func (Push) SquidProxy() error {
 	return pushImage("squid-proxy", "squid-proxy")
 }
@@ -229,26 +240,22 @@ func (Push) NexusCompiler() error {
 
 // Push the Tenancy Datamodel container image to the registry.
 func (Push) TenancyDatamodel() error {
-	return pushImage("tenancy-datamodel",
-		"tenancy-datamodel-init")
+	return pushImage("tenancy-datamodel", "tenancy-datamodel")
 }
 
 // Push the Tenancy API Mapping container image to the registry.
 func (Push) TenancyAPIMapping() error {
-	return pushImage("tenancy-api-mapping",
-		"tenancy-api-remapping")
+	return pushImage("tenancy-api-mapping", "tenancy-api-mapping")
 }
 
 // Push the Tenancy Manager container image to the registry.
 func (Push) TenancyManager() error {
-	return pushImage("tenancy-manager",
-		"tenancy-manager")
+	return pushImage("tenancy-manager", "tenancy-manager")
 }
 
 // Push the Nexus API Gateway container image to the registry.
 func (Push) NexusAPIGateway() error {
-	return pushImage("nexus-api-gw",
-		"nexus-api-gw")
+	return pushImage("nexus-api-gw", "nexus-api-gw")
 }
 
 // Namespace contains test targets.
@@ -262,22 +269,16 @@ func (t Test) Golang() error {
 // Namespace contains clean targets.
 type Clean mg.Namespace
 
-// Cleans the Tenancy API Mapping build environment.
-func (Clean) TenancyAPIMapping() error {
-	return tenancyAPIMappingClean()
-}
-
-// Cleans the Tenancy Manager build environment.
-func (Clean) TenancyManager() error {
-	return tenancyManagerClean()
-}
-
-// Cleans the Nexus API Gateway build environment.
-func (Clean) NexusAPIGateway() error {
-	return nexusAPIGatewayClean()
-}
-
 // Builds the OpenAPI-Generator container image.
 func (Build) OpenAPIGenerator() error {
 	return openAPIGeneratorBuild()
+}
+
+// Builds the OpenAPI-Generator container image.
+func ListContainers() error {
+	return listContainers()
+}
+
+func ListTaggedContainers() error {
+	return listTaggedContainers()
 }

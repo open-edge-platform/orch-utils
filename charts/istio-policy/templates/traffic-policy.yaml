@@ -64,6 +64,7 @@ spec:
         ports:
         - "5432" # Postgresql
         - "11211" # memcache
+        - "9443" # cluster-manager webhook service
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy

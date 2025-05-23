@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: v2
+name: tenancy-datamodel
+description: Tenancy Datamodel
+type: application
+version: 0.2.1
+appVersion: "1.1.5"
+annotations: {}
+
