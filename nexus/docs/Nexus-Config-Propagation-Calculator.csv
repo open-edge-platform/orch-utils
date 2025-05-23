@@ -1,0 +1,38 @@
+Topology Layout,,,,,,,,,,
+,,,,,,,,,,
+Number of Traffic Lights," 100,000 ",,,,,,,,,
+Number of Traffic Lights per Traffic Light Agents, 500 ,,,,,,,,,
+Number of Traffic Light Agents, 200 ,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,MAX cores = 10,,,,,,,,
+Measuremets,,,,,,,,,,
+API GW WR, 333 ,wr/sec/core,,,,,,,,
+API GW READ/Events," 1,000 ",rd/sec/core,,,,,,,,
+GRPC Rate, 200 ,IO/sec/core/link,,,,,,,,
+CORES for APIGW, 10 ,,,,,,,,,
+Cores for Traffic Light Agent, 10 ,,,,,,,,,
+,,,,,,,,,,
+Number of Traffic Light Agents,, 2 , 20 , 100 , 200 ,,,,,
+ Total Cores Needed ,, 30 , 30 , 110 , 210 ,,,,,
+, Config propegation time  Including the write time ,,,,,,,,,
+, Traffic Lights ->  ," 1,000 "," 10,000 "," 50,000 "," 100,000 ",,,,,
+CONFIG/Traffic Light, 1 , 1 , 8 , 40 , 80 ,,,,,    (# of Traffic Lights * # of Config Per Traffic Light) / API GW WR * (CORES for APIGW / 2) +
+, 10 , 11 , 80 , 400 , 801 ,,min,,,   (# of Traffic Lights * # of Config Per Traffic Light) /  (API GW READ * (CORES for APIGW / 2)) +
+, 100 , 105 , 803 ," 4,004 "," 8,006 ",, 133 ,,,   (# of Traffic Lights per Traffic Light Agents * # of Config Per Traffic Light) /  (GRPC Rate * Cores for Traffic Light Agent * Number of Traffic Light Agent) +
+,,,,,,,,,,   (# of Traffic Lights per Traffic Light Agents * # of Config Per Traffic Light) /  (GRPC Rate * Cores for Traffic Light Agent * Number of Traffic Light Agent) 
+, Config propegation time Excluding the wrtie time ,,,,,,,,,
+,,,,,,,,,,
+CONFIG/Traffic Light, 1 , 0 , 1 , 5 , 10 ,,,,,   (# of Traffic Lights * # of Config Per Traffic Light) /  (API GW READ * CORES for APIGW ) +
+, 10 , 4 , 10 , 50 , 100 ,,min,,,   (# of Traffic Lights per Traffic Light Agents * # of Config Per Traffic Light) /  (GRPC Rate * Cores for Traffic Light Agent * Number of Traffic Light Agent) +
+, 100 , 35 , 103 , 501 ," 1,000 ",, 17 ,,,   (# of Traffic Lights per Traffic Light Agents * # of Config Per Traffic Light) /  (GRPC Rate * Cores for Traffic Light Agent * Number of Traffic Light Agent) +
+,,,,,,,,,,
+, Config is split between Unicast and broad cast config ,,,,,,,,,
+, Unicast ,30%,,,,,,,,(
+, Broadcast ,70%,,,,,,,,    (# of Traffic Lights * # of Config Per Traffic Light * Unicast%) +
+CONFIG/Traffic Light, 1 , 0 , 0 , 2 , 3 ,,,,,    (# of Config Per Traffic Light * Broadcast%) 
+, 10 , 2 , 5 , 17 , 32 ,,min,,,) * (
+, 100 , 18 , 45 , 165 , 315 ,, 5 ,,,    (1 / (API GW READ * CORES for APIGW)) +
+,,,,,,,,,,    (1 / (GRPC Rate * Cores for Traffic Light Agent * # of Traffic Light Agent)) +
+,,,,,,,,,,    (1 / (GRPC Rate * Cores for Traffic Light Agent * # of Traffic Light Agent)) 
+,,,,,,,,,,)

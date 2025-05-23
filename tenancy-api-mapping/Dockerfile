@@ -17,6 +17,7 @@ RUN set -x && \
     CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -buildvcs=false -o bin/jobapp
 
 FROM gcr.io/distroless/static-debian12:nonroot
+
 # Run as non-privileged user
 USER nobody
 COPY apimappingconfigcrs /apimappingconfigcrs
@@ -26,7 +27,9 @@ COPY vendor/ /go/src/github.com/open-edge-platform/orch-utils/tenancy-api-mappin
 COPY --from=builder /app/bin/jobapp /usr/local/bin/jobapp
 COPY --from=builder /mnt/shared/openapispecs /mnt/shared/openapispecs
 WORKDIR /bin
+
 # Copy the kubectl to runner
+# hadolint ignore=DL3022
 COPY --from=bitnami/kubectl:1.31.1 /opt/bitnami/kubectl/bin/kubectl kubectl
 
 ENTRYPOINT ["jobapp"]

@@ -9,6 +9,7 @@ linters:
     - asciicheck
     - bidichk
     - bodyclose
+    - copyloopvar
     - cyclop
     - depguard
     - dogsled
@@ -17,7 +18,6 @@ linters:
     - errname
     - errorlint
     - exhaustive
-    - copyloopvar
     - funlen
     - gci
     - gochecknoinits
@@ -28,7 +28,6 @@ linters:
     - gofmt
     - gofumpt
     - goheader
-    - mnd
     - gomoddirectives
     - goprintffuncname
     - gosec
@@ -37,6 +36,7 @@ linters:
     - ineffassign
     - lll
     - misspell
+    - mnd
     - nakedret
     - nilerr
     - nilnil
@@ -48,9 +48,8 @@ linters:
     - staticcheck
     - stylecheck
     - tagliatelle
-    - testpackage
-    - tenv
     - testableexamples
+    - testpackage
     - thelper
     - tparallel
     - typecheck
@@ -58,8 +57,8 @@ linters:
     - unparam
     - unused
     - usestdlibvars
+    - usetesting
     - whitespace
-    # - dupl  #TBD
 
 run:
   exclude-dirs:
@@ -174,7 +173,6 @@ linters-settings:
           - github.com/open-edge-platform/orch-utils/tenancy-api-mapping/pkg/config
           - github.com/open-edge-platform/orch-utils/tenancy-api-mapping/pkg/git
           - gopkg.in/yaml.v3
-          - gopkg.in/yaml.v2
         deny:
       Test:
         files:
@@ -197,11 +195,12 @@ linters-settings:
           - github.com/open-edge-platform/orch-utils/tenancy-api-mapping/pkg/git
           - github.com/open-edge-platform/orch-utils/tenancy-api-mapping/cmd/specgen
           - gopkg.in/yaml.v3
-          - gopkg.in/yaml.v2
         deny:
 
 issues:
   max-issues-per-linter: 0
+
+  uniq-by-line: false
 
   max-same-issues: 0
 
@@ -237,7 +236,5 @@ output:
   formats: colored-line-number:stdout,html:build/golangci-lint_report.html
 
   print-linter-name: true
-
-  uniq-by-line: false
 
   sort-results: true
