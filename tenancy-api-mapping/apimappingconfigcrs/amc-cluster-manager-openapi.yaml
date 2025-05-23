@@ -12,7 +12,7 @@ spec:
   specGenEnabled: true
   repoConf:
     url: "https://github.com/open-edge-platform/cluster-manager.git"
-    tag: "v2.1.0"
+    tag: "v2.1.2"
     specFilePath: "api/openapi/openapi.yaml"
   mappings:
     - externalURI: /v2/projects/{projectName}/clusters

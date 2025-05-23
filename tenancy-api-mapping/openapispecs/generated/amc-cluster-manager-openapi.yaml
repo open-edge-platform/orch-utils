@@ -6,7 +6,7 @@ openapi: 3.0.3
 info:
   title: Cluster Manager 2.0
   description: This document defines the schema for the Cluster Manager 2.0 REST API.
-  version: 2.1.0
+  version: 2.1.1-dev
 servers:
   - url: '{apiRoot}'
     variables:
@@ -29,70 +29,67 @@ paths:
     get:
       description: Gets all clusters' information.
       parameters:
-      - description: The maximum number of items to return.
-        example: /v2/clusters?pageSize=20
-        in: query
-        name: pageSize
-        schema:
-          default: 20
-          maximum: 100
-          minimum: 0
-          type: integer
-      - description: Index of the first item to return. It is almost always used in
-          conjunction with the 'pageSize' query.
-        example: /v2/clusters?pageSize=20&offset=10
-        in: query
-        name: offset
-        schema:
-          default: 0
-          minimum: 0
-          type: integer
-      - description: |
-          The ordering of the entries. "asc" and "desc" are valid values. If none is specified, "asc" is used.
+        - description: The maximum number of items to return.
+          example: /v2/clusters?pageSize=20
+          in: query
+          name: pageSize
+          schema:
+            default: 20
+            maximum: 100
+            minimum: 0
+            type: integer
+        - description: Index of the first item to return. It is almost always used in conjunction with the 'pageSize' query.
+          example: /v2/clusters?pageSize=20&offset=10
+          in: query
+          name: offset
+          schema:
+            default: 0
+            minimum: 0
+            type: integer
+        - description: |
+            The ordering of the entries. "asc" and "desc" are valid values. If none is specified, "asc" is used.
 
-          Supported fields:
-          - name
-          - kubernetesVersion
-          - providerStatus
-          - lifecyclePhase
-        examples:
-          ascending:
-            description: sort the entries by name entry in ascending order
-            value: /v2/clusters?orderBy="name asc"
-          default:
-            description: Sorts the entries by name in ascending order as default when
-              no order is specified.
-            value: /v2/clusters?orderBy="name"
-          descending:
-            description: sort the entries by name entry in descending order
-            value: /v2/clusters?orderBy="name desc"
-        in: query
-        name: orderBy
-        schema:
-          type: string
-      - description: |
-          Filters the entries based on the filter provided.
+            Supported fields:
+            - name
+            - kubernetesVersion
+            - providerStatus
+            - lifecyclePhase
+          examples:
+            ascending:
+              description: sort the entries by name entry in ascending order
+              value: /v2/clusters?orderBy="name asc"
+            default:
+              description: Sorts the entries by name in ascending order as default when no order is specified.
+              value: /v2/clusters?orderBy="name"
+            descending:
+              description: sort the entries by name entry in descending order
+              value: /v2/clusters?orderBy="name desc"
+          in: query
+          name: orderBy
+          schema:
+            type: string
+        - description: |
+            Filters the entries based on the filter provided.
 
-          Supported fields:
-          - name
-          - kubernetesVersion
-          - providerStatus
-          - lifecyclePhase
-        examples:
-          multiple_filter:
-            description: filter by cluster name with the prefix "foo" or with Kubernetes
-              software v1.27.5.
-            value: /v2/clusters?filter="name=foo* OR kubernetes_version=v2.27.5"
-          single_filter_with_search_prefix:
-            description: filter clusters whose cluster prefix has foo
-            value: /v2/clusters?filter="name=foo*"
-          single_filter_without_search_prefix:
-            description: Filter by the cluster name "foo".
-            value: /v2/clusters?filter="name=foo"
-        in: query
-        name: filter
-        schema:
-          type: string
+            Supported fields:
+            - name
+            - kubernetesVersion
+            - providerStatus
+            - lifecyclePhase
+          examples:
+            multiple_filter:
+              description: filter by cluster name with the prefix "foo" or with Kubernetes software v1.27.5.
+              value: /v2/clusters?filter="name=foo* OR kubernetes_version=v2.27.5"
+            single_filter_with_search_prefix:
+              description: filter clusters whose cluster prefix has foo
+              value: /v2/clusters?filter="name=foo*"
+            single_filter_without_search_prefix:
+              description: Filter by the cluster name "foo".
+              value: /v2/clusters?filter="name=foo"
+          in: query
+          name: filter
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -538,22 +535,22 @@ paths:
         - Cluster Templates
   /v2/projects/{projectName}/templates/{name}/default:
     parameters:
-    - description: Name of the template
-      example: baseline
-      in: path
-      name: name
-      required: true
-      schema:
-        maxLength: 50
-        minLength: 1
-        pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
+      - description: Name of the template
+        example: baseline
+        in: path
+        name: name
+        required: true
+        schema:
+          maxLength: 50
+          minLength: 1
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+          type: string
+      - description: unique projectName for the resource
+        in: path
+        name: projectName
+        required: true
+        schema:
+          type: string
     put:
       description: Updates this template as the default template
       requestBody:
@@ -591,22 +588,22 @@ paths:
       tags:
         - Cluster Templates
     parameters:
-    - description: Name of the template
-      example: baseline
-      in: path
-      name: name
-      required: true
-      schema:
-        maxLength: 50
-        minLength: 1
-        pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
+      - description: Name of the template
+        example: baseline
+        in: path
+        name: name
+        required: true
+        schema:
+          maxLength: 50
+          minLength: 1
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+          type: string
+      - description: unique projectName for the resource
+        in: path
+        name: projectName
+        required: true
+        schema:
+          type: string
   /v2/projects/{projectName}/templates/{name}/versions/{version}:
     delete:
       description: Deletes a specific template
@@ -617,6 +614,8 @@ paths:
           $ref: '#/components/responses/400-BadRequest'
         "404":
           $ref: '#/components/responses/404-NotFound'
+        "409":
+          $ref: '#/components/responses/409-Conflict'
         "500":
           $ref: '#/components/responses/500-InternalServerError'
       tags:
@@ -639,30 +638,30 @@ paths:
       tags:
         - Cluster Templates
     parameters:
-    - description: Name of the template
-      example: baseline
-      in: path
-      name: name
-      required: true
-      schema:
-        maxLength: 50
-        minLength: 1
-        pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
-        type: string
-    - description: Version of the template in the format of 'vX.Y.Z'
-      example: v0.1.0
-      in: path
-      name: version
-      required: true
-      schema:
-        pattern: ^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$
-        type: string
-    - description: unique projectName for the resource
-      in: path
-      name: projectName
-      required: true
-      schema:
-        type: string
+      - description: Name of the template
+        example: baseline
+        in: path
+        name: name
+        required: true
+        schema:
+          maxLength: 50
+          minLength: 1
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+          type: string
+      - description: Version of the template in the format of 'vX.Y.Z'
+        example: v0.1.0
+        in: path
+        name: version
+        required: true
+        schema:
+          pattern: ^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$
+          type: string
+      - description: unique projectName for the resource
+        in: path
+        name: projectName
+        required: true
+        schema:
+          type: string
 components:
   responses:
     400-BadRequest:
@@ -1013,6 +1012,7 @@ components:
           enum:
             - kubeadm
             - rke2
+            - k3s
           type: string
         description:
           maxLength: 4096
