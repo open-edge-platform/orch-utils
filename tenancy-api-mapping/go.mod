@@ -4,7 +4,7 @@
 
 module github.com/open-edge-platform/orch-utils/tenancy-api-mapping
 
-go 1.23.1
+go 1.24.2
 
 require (
 	github.com/getkin/kin-openapi v0.128.0
@@ -12,7 +12,6 @@ require (
 	github.com/onsi/gomega v1.36.2
 	github.com/spf13/afero v1.11.0
 	github.com/urfave/cli/v2 v2.27.5
-	gopkg.in/yaml.v2 v2.4.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 

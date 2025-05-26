@@ -20,7 +20,6 @@ package main_test
 
 import (
 	"os"
-	"path/filepath"
 	"testing"
 
 	"github.com/onsi/ginkgo/v2"
@@ -39,7 +38,8 @@ var _ = ginkgo.Describe("Main", func() {
 	var err error
 	ginkgo.AfterEach(func() {
 		if cfg != nil {
-			os.RemoveAll(filepath.Dir(cfg.Global.LocalSubModsDir))
+			os.RemoveAll(cfg.Global.LocalSubModsDir)
+			os.RemoveAll(cfg.Global.SpecOutputDir)
 		}
 	})
 	ginkgo.Context("when running the application", func() {

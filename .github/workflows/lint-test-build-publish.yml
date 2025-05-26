@@ -351,6 +351,8 @@ jobs:
       - name: Run Version Tag
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.SYS_ORCH_GITHUB }}
         run: |
           # Tag the helm charts
           pushd charts
