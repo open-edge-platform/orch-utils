@@ -4,12 +4,16 @@
 #graphql's and compiler's builder/Dockerfile should be in sync
 FROM golang:1.24.2
 
+# Create a non-root user with home directory
+RUN useradd -m -d /home/appuser appuser
+
 # Set environment variables
 ENV GOPATH /go
 ENV PATH $PATH:/usr/local/go/bin:/go/bin
 ENV GO111MODULE=on
 ENV GOPROXY=""
 ENV GOFLAGS="-buildvcs=false"
+ENV HOME=/home/appuser
 
 # Configure git and install necessary packages
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -17,12 +21,12 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN git config --global --add safe.directory '*' \
     && echo "deb http://deb.debian.org/debian unstable main" | tee -a /etc/apt/sources.list.d/unstable.list \
     && apt-get update \
-    && apt-get install -y -t unstable wget \
-    && apt-get install -y \
+    && apt-get install -y --no-install-recommends -t unstable wget \
+    && apt-get install -y --no-install-recommends \
         make=4.3-4.1 \
         coreutils=9.1-1 \
         openssh-client=1:9.2p1-2+deb12u5 \
-    && curl -o /usr/local/bin/jq https://github.com/stedolan/jq/releases/latest/download/jq-linux-amd64 \
+    && curl -Lo /usr/local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.7.1/jq-linux-amd64 \
     && chmod +x /usr/local/bin/jq \
     && go install github.com/onsi/ginkgo/ginkgo@v1.16.0 \
     && go install github.com/onsi/gomega/...@v1.18.0 \
@@ -34,4 +38,8 @@ RUN git config --global --add safe.directory '*' \
     && rm -rf /var/lib/apt/lists/*
 
 # Create .cache dir and add write permissions for .cache and /go dirs
-RUN mkdir /.cache && chmod -R a+w /.cache && chmod -R a+w /go
+RUN mkdir /.cache && chmod -R a+w /.cache /go \
+    && chown -R appuser:appuser /.cache /go /home/appuser
+
+# Switch to non-root user
+USER appuser

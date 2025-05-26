@@ -153,12 +153,13 @@ datamodel_build:
 			-v /go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler/datamodel/build/ \
 			--volume $(realpath .)/build:/go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler/generated/ \
 			--volume ~/.ssh:/root/.ssh \
-			--volume ${HOME}/.cache/go-build:/root/.cache/go-build \
-			-e GOCACHE=/root/.cache/go-build \
+			--volume ${HOME}/.cache/go-build:/home/appuser/.cache/go-build \
+			-e GOCACHE=/home/appuser/.cache/go-build \
 			-e CRD_MODULE_PATH=${CRD_MODULE_PATH} \
 			-e CONFIG_FILE=datamodel/nexus.yaml \
 			-e GOPRIVATE=*.eng.vmware.com \
 			-e GOINSECURE=*.eng.vmware.com \
+			--user root:root \
 			-e FORCE=$(FORCE) \
 			${COMPILER_DOCKER_TAG} /bin/bash -c 'make generate_code && chown -R $(shell id -u):$(shell id -g) ./datamodel/build;'; \
 	else \
