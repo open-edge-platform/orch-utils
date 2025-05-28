@@ -55,6 +55,7 @@ define run_in_container
   -e http_proxy=$(HTTP_PROXY) \
   -e https_proxy=$(HTTPS_PROXY) \
   --user $(shell id -u):$(shell id -g) \
+  -e GOCACHE=/tmp/go-build \
   "${BUILDER_DOCKER_TAG}" /bin/bash -c 'chown -R $(shell id -u) .; ${1}'
 endef
 else
@@ -140,6 +141,8 @@ build_openapigen_in_container:
 
 .PHONY: build_openapigen
 build_openapigen:
+	ls -al /go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler/cmd
+	id
 	GOBIN=${PKG_NAME}/cmd go install ../kube-openapi/cmd/nexus-openapi-gen
 
 build_gqlgen_in_container:
@@ -240,7 +243,7 @@ generate_code:
 	CRD_MODULE_PATH=${CRD_MODULE_PATH} go run cmd/nexus-sdk/main.go -config-file ${CONFIG_FILE} -dsl ${DATAMODEL_PATH} -crd-output _generated -log-level ${LOG_LEVEL}
 	mv _generated/api_names.sh scripts/
 	@echo "Nexus Compiler: Resolving datamodel dependencies"
-	cd _generated && ../scripts/pin_deps.sh ${COMPILER_SRC_DIRECTORY} && go mod tidy -e 
+	cd _generated && ls -l && ../scripts/pin_deps.sh ${COMPILER_SRC_DIRECTORY} && cat go.mod && go mod tidy -e 
 	@echo "Nexus Compiler: Generating kuberenetes APIs"
 	./scripts/generate_k8s_api.sh
 	@echo "Nexus Compiler: Generating openapi schema"
@@ -256,17 +259,18 @@ generate_code:
 	else \
 		cd _generated && goimports -w .; \
 	fi
-	@echo "Nexus Compiler: Generating GRAPHQL PKG"
-	cd _generated/nexus-gql && gqlgen generate
-	@echo "Nexus Compiler: GRAPHQL Generating completed"
-	cp -rf _generated/* ${GOPATH}/src/nexustempmodule/
-	cd ${GOPATH}/src/nexustempmodule && cd nexus-gql && go mod init && \
-	go mod edit -replace nexustempmodule=${GOPATH}/src/nexustempmodule && \
-	${COMPILER_SRC_DIRECTORY}/scripts/pin_graphql_build_version.sh ${COMPILER_SRC_DIRECTORY} && \
-	go mod edit -go=1.23.2 && \
-	go mod tidy && \
-	GOARCH=amd64 GOOS=linux go build -ldflags="-w -s" server.go
-	cp -r ${GOPATH}/src/nexustempmodule/nexus-gql/* _generated/nexus-gql/
+	# Disabling GRAPHQL generation...
+	# @echo "Nexus Compiler: Generating GRAPHQL PKG"
+	# cd _generated/nexus-gql && gqlgen generate
+	# @echo "Nexus Compiler: GRAPHQL Generating completed"
+	# cp -rf _generated/* ${GOPATH}/src/nexustempmodule/
+	# cd ${GOPATH}/src/nexustempmodule && cd nexus-gql && go mod init && \
+	# go mod edit -replace nexustempmodule=${GOPATH}/src/nexustempmodule && \
+	# ${COMPILER_SRC_DIRECTORY}/scripts/pin_graphql_build_version.sh ${COMPILER_SRC_DIRECTORY} && \
+	# go mod edit -go=1.23.2 && \
+	# go mod tidy -e && \
+	# GOARCH=amd64 GOOS=linux go build -ldflags="-w -s" server.go
+	# cp -r ${GOPATH}/src/nexustempmodule/nexus-gql/* _generated/nexus-gql/
 	@echo "Updating module name"
 	./scripts/replace_mod_path.sh
 	find . -name "*.bak" -type f -delete

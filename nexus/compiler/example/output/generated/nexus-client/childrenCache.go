@@ -189,7 +189,11 @@ func GetChildren(parentNodeType, parentName, childNodeType string) (children []s
 	}
 
 	childrenCache.children.Range(func(k, v interface{}) bool {
-		children = append(children, k.(string))
+		if str, ok := k.(string); ok {
+			children = append(children, str)
+		} else {
+			logger.Errorf("invalid key type found in childrenCache for childNodeType %s", childNodeType)
+		}
 		return true
 	})
 	return children
