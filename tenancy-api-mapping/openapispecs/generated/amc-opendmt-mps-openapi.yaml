@@ -46,7 +46,7 @@ security:
   - BearerAuth: []
   - BearerAuth: []
 paths:
-  /v1/projects/{projectName}/mps/amt/alarmOccurrences/{guid}:
+  /v1/projects/{projectName}/dmt/amt/alarmOccurrences/{guid}:
     delete:
       description: |
         Delete named Alarm Clock occurence from the device.
@@ -148,7 +148,7 @@ paths:
       summary: Set new Alarm Clock Occurence
       tags:
         - AMT
-  /v1/projects/{projectName}/mps/amt/deactivate/{guid}:
+  /v1/projects/{projectName}/dmt/amt/deactivate/{guid}:
     delete:
       description: Deactivate an AMT device using the CIRA channel with MPS rather than RPS RPC.
       parameters:
@@ -183,7 +183,7 @@ paths:
       summary: Deactivate AMT over CIRA
       tags:
         - AMT
-  /v1/projects/{projectName}/mps/amt/features/{guid}:
+  /v1/projects/{projectName}/dmt/amt/features/{guid}:
     get:
       description: |
         Retrieves the current Intel® AMT Enable/Disable state for User Consent, Redirection, KVM, SOL, and IDE-R.
@@ -251,7 +251,7 @@ paths:
       summary: Set Intel® AMT Features
       tags:
         - AMT
-  /v1/projects/{projectName}/mps/amt/generalSettings/{guid}:
+  /v1/projects/{projectName}/dmt/amt/generalSettings/{guid}:
     get:
       description: Retrieve the Intel® AMT general settings.
       parameters:
@@ -278,7 +278,7 @@ paths:
       summary: Return Intel® AMT General Settings
       tags:
         - AMT
-  /v1/projects/{projectName}/mps/amt/hardwareInfo/{guid}:
+  /v1/projects/{projectName}/dmt/amt/hardwareInfo/{guid}:
     get:
       description: Retrieve hardware information such as processor or storage.
       parameters:
@@ -305,7 +305,7 @@ paths:
       summary: Return Hardware Information
       tags:
         - AMT
-  /v1/projects/{projectName}/mps/amt/log/audit/{guid}:
+  /v1/projects/{projectName}/dmt/amt/log/audit/{guid}:
     get:
       description: Returns Intel® AMT Audit Log data in blocks of 10 records for a specified guid.  Reference [AMT SDK](https://software.intel.com/sites/manageability/AMT_Implementation_and_Reference_Guide/default.htm?turl=WordDocuments%2Freadingtheauditlog.htm) for definition of property return codes.
       parameters:
@@ -339,7 +339,7 @@ paths:
       summary: Return Intel® AMT Audit Log
       tags:
         - AMT
-  /v1/projects/{projectName}/mps/amt/log/event/{guid}:
+  /v1/projects/{projectName}/dmt/amt/log/event/{guid}:
     get:
       description: Return sensor and hardware event data from the Intel® AMT event log.  Reference [AMT SDK](https://software.intel.com/sites/manageability/AMT_Implementation_and_Reference_Guide/default.htm?turl=HTMLDocuments%2FWS-Management_Class_Reference%2FAMT_EventLogEntry.htm) for definition of property return codes.
       parameters:
@@ -366,7 +366,7 @@ paths:
       summary: Return Intel® AMT Event Log
       tags:
         - AMT
-  /v1/projects/{projectName}/mps/amt/power/action/{guid}:
+  /v1/projects/{projectName}/dmt/amt/power/action/{guid}:
     post:
       description: |
         Perform an OOB power actions numbered 1 thru 99.  Execute a [GET /power/capabilities/{guid}](#/AMT/get_api_v1_amt_power_capabilities__guid_) call first to get the list of available power actions. See [AMT Power States](https://open-amt-cloud-toolkit.github.io/docs/2.11/Reference/powerstates/) for ALL potential power actions. <br /><br />
@@ -401,7 +401,7 @@ paths:
       summary: Perform OOB Power Action (1 to 99)
       tags:
         - AMT
-  /v1/projects/{projectName}/mps/amt/power/bootoptions/{guid}:
+  /v1/projects/{projectName}/dmt/amt/power/bootoptions/{guid}:
     post:
       description: |
         Perform an OOB power actions numbered 100+.  Execute a [GET /power/capabilities/{guid}](#/AMT/get_api_v1_amt_power_capabilities__guid_) call first to get the list of available power actions. See [AMT Power States](https://open-amt-cloud-toolkit.github.io/docs/2.11/Reference/powerstates/) for ALL potential power actions.
@@ -446,7 +446,7 @@ paths:
       summary: Perform OOB Power Action (100+)
       tags:
         - AMT
-  /v1/projects/{projectName}/mps/amt/power/capabilities/{guid}:
+  /v1/projects/{projectName}/dmt/amt/power/capabilities/{guid}:
     get:
       description: View what OOB power actions are available for that device.
       parameters:
@@ -473,7 +473,7 @@ paths:
       summary: Return Available Power Actions
       tags:
         - AMT
-  /v1/projects/{projectName}/mps/amt/power/state/{guid}:
+  /v1/projects/{projectName}/dmt/amt/power/state/{guid}:
     get:
       description: "Retrieve current power state of Intel® AMT device, returns a number that maps to a device power state. \nPossible power state values: \n* 2 = On - corresponding to ACPI state G0 or S0 or D0 \n* 3 = Sleep - Light, corresponding to ACPI state G1, S1/S2, or D1 \n* 4 = Sleep - Deep, corresponding to ACPI state G1, S3, or D2 \n* 6 = Off - Hard, corresponding to ACPI state G3, S5, or D3 \n* 7 = Hibernate (Off - Soft), corresponding to ACPI state S4, where the state of the managed element is preserved and will be recovered upon powering on \n* 8 = Off - Soft, corresponding to ACPI state G2, S5, or D3 \n* 9 = Power Cycle (Off-Hard), corresponds to the managed element reaching the ACPI state G3 followed by ACPI state S0 \n* 13 = Off - Hard Graceful, equivalent to Off Hard but preceded by a request to the managed element to perform an orderly shutdown\n"
       parameters:
@@ -500,7 +500,7 @@ paths:
       summary: Return Current Device Power State
       tags:
         - AMT
-  /v1/projects/{projectName}/mps/amt/userConsentCode/{guid}:
+  /v1/projects/{projectName}/dmt/amt/userConsentCode/{guid}:
     get:
       description: If optInState is 0, it will request for a new user consent code
       parameters:
@@ -559,7 +559,7 @@ paths:
       summary: Send user consent code
       tags:
         - AMT
-  /v1/projects/{projectName}/mps/amt/userConsentCode/cancel/{guid}:
+  /v1/projects/{projectName}/dmt/amt/userConsentCode/cancel/{guid}:
     get:
       description: Cancel six digit user consent code previously generated on client device
       parameters:
@@ -586,7 +586,7 @@ paths:
       summary: Cancel user consent code
       tags:
         - AMT
-  /v1/projects/{projectName}/mps/amt/version/{guid}:
+  /v1/projects/{projectName}/dmt/amt/version/{guid}:
     get:
       description: Retrieves hardware version information for Intel® AMT and the current activation state.
       parameters:
@@ -613,7 +613,7 @@ paths:
       summary: Return Intel® AMT Version
       tags:
         - AMT
-  /v1/projects/{projectName}/mps/ciracert:
+  /v1/projects/{projectName}/dmt/ciracert:
     get:
       description: Returns the self-signed CIRA Certificate for the MPS Instance. Used for creation of CIRA Config in RPS.
       parameters:
@@ -633,7 +633,7 @@ paths:
       summary: Return CIRA Certificate
       tags:
         - Misc
-  /v1/projects/{projectName}/mps/devices:
+  /v1/projects/{projectName}/dmt/devices:
     get:
       description: Lists all devices known to MPS.
       parameters:
@@ -764,7 +764,7 @@ paths:
       summary: Add New Device to MPS
       tags:
         - Devices
-  /v1/projects/{projectName}/mps/devices/{guid}:
+  /v1/projects/{projectName}/dmt/devices/{guid}:
     delete:
       description: Removes the device with a specific GUID and all device information from the database.  This will prevent the device from connecting to MPS, even if the device has not yet been unprovisioned.  Use the disconnect API after this call to remove a device and prevent it from reconnecting to the MPS.
       parameters:
@@ -837,7 +837,7 @@ paths:
       summary: Find Device by GUID
       tags:
         - Devices
-  /v1/projects/{projectName}/mps/devices/disconnect/{guid}:
+  /v1/projects/{projectName}/dmt/devices/disconnect/{guid}:
     delete:
       description: Forces a specified device to disconnect from the MPS. Device will reconnect again if it is able. To prevent reconnection, first [delete the device information](#/Devices/delete_api_v1_devices__guid_) from MPS.
       parameters:
@@ -872,7 +872,7 @@ paths:
       summary: Disconnect Device
       tags:
         - Devices
-  /v1/projects/{projectName}/mps/devices/redirectStatus/{guid}:
+  /v1/projects/{projectName}/dmt/devices/redirectStatus/{guid}:
     get:
       description: Retrieves boolean values for KVM, SOL, and IDER session states.
       parameters:
@@ -905,7 +905,7 @@ paths:
       summary: Find Redirection State of Device by GUID
       tags:
         - Devices
-  /v1/projects/{projectName}/mps/devices/refresh/{guid}:
+  /v1/projects/{projectName}/dmt/devices/refresh/{guid}:
     delete:
       description: |
         Delete the device's existing cached AMT password and refresh the cache from the secret store.
@@ -939,7 +939,7 @@ paths:
       summary: Refresh Stored AMT Password
       tags:
         - Devices
-  /v1/projects/{projectName}/mps/devices/stats:
+  /v1/projects/{projectName}/dmt/devices/stats:
     get:
       description: Retrieve the current count of all registered, connected, and disconnected devices.
       parameters:
@@ -959,7 +959,7 @@ paths:
       summary: Return Count of All Devices by Connection Status
       tags:
         - Devices
-  /v1/projects/{projectName}/mps/health:
+  /v1/projects/{projectName}/dmt/health:
     get:
       description: Returns statuses for the database and secret store that MPS is attempting to connect to.
       parameters:
@@ -979,7 +979,7 @@ paths:
       summary: Return Status of DB and Secret Store
       tags:
         - Misc
-  /v1/projects/{projectName}/mps/version:
+  /v1/projects/{projectName}/dmt/version:
     get:
       description: Returns the version of the service and the supported protocol version.  The protocol version is used to check compatibility with RPC
       operationId: GetVersion

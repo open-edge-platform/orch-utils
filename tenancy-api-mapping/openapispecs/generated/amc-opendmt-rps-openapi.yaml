@@ -42,7 +42,7 @@ security:
   - BearerAuth: []
   - BearerAuth: []
 paths:
-  /v1/projects/{projectName}/rps/ciraconfigs:
+  /v1/projects/{projectName}/dmt/admin/ciraconfigs:
     get:
       description: Retrieves all of the CIRA configuration profiles from the database.  Will not return the password field to protect the privacy of this asset
       operationId: GetAllCIRAConfigs
@@ -181,7 +181,7 @@ paths:
       summary: Create CIRA Config
       tags:
         - CIRA
-  /v1/projects/{projectName}/rps/ciraconfigs/{configName}:
+  /v1/projects/{projectName}/dmt/admin/ciraconfigs/{configName}:
     delete:
       description: Removes the specific CIRA configuration profile from the database.
       operationId: RemoveCIRAConfig
@@ -254,7 +254,7 @@ paths:
       summary: Get CIRA Config
       tags:
         - CIRA
-  /v1/projects/{projectName}/rps/domains:
+  /v1/projects/{projectName}/dmt/admin/domains:
     get:
       description: Retrieves all of the domain configuration profiles stored in the database.  Will not return the provisioning certificate or certificate password to protect the privacy of these assets.
       operationId: GetAllDomains
@@ -391,7 +391,7 @@ paths:
       summary: Create Domain
       tags:
         - Domains
-  /v1/projects/{projectName}/rps/domains/{profileName}:
+  /v1/projects/{projectName}/dmt/admin/domains/{profileName}:
     delete:
       description: Removes the specific domain configuration profile
       operationId: RemoveDomain
@@ -464,7 +464,7 @@ paths:
       summary: Get Domain
       tags:
         - Domains
-  /v1/projects/{projectName}/rps/health:
+  /v1/projects/{projectName}/dmt/admin/health:
     get:
       description: Returns statuses for the database and secret store that RPS is attempting to connect to.
       parameters:
@@ -484,7 +484,7 @@ paths:
       summary: Return Status of DB and Secret Store
       tags:
         - Misc
-  /v1/projects/{projectName}/rps/ieee8021xconfigs:
+  /v1/projects/{projectName}/dmt/admin/ieee8021xconfigs:
     get:
       description: Retrieves all of the IEEE802.1x configuration profiles from the database.
       operationId: GetAll8021xConfigs
@@ -619,7 +619,7 @@ paths:
       summary: Create IEEE802.1x Config
       tags:
         - IEEE802.1x
-  /v1/projects/{projectName}/rps/ieee8021xconfigs/{profileName}:
+  /v1/projects/{projectName}/dmt/admin/ieee8021xconfigs/{profileName}:
     delete:
       description: Removes the specific IEEE802.1x configuration profile from the database.
       operationId: Remove8021xConfig
@@ -692,7 +692,7 @@ paths:
       summary: Get IEEE802.1x Config
       tags:
         - IEEE802.1x
-  /v1/projects/{projectName}/rps/profiles:
+  /v1/projects/{projectName}/dmt/admin/profiles:
     get:
       description: Retrieves all of the AMT configuration profiles from the database.  Will not return the amtPassword or mebxPassword fields to protect the privacy of these assets.
       operationId: GetAllProfiles
@@ -833,7 +833,7 @@ paths:
       summary: Create Profile
       tags:
         - Profiles
-  /v1/projects/{projectName}/rps/profiles/{profileName}:
+  /v1/projects/{projectName}/dmt/admin/profiles/{profileName}:
     delete:
       description: Removes the specific AMT configuration profile from the database.
       operationId: RemoveProfile
@@ -906,7 +906,7 @@ paths:
       summary: Get Profile
       tags:
         - Profiles
-  /v1/projects/{projectName}/rps/version:
+  /v1/projects/{projectName}/dmt/admin/version:
     get:
       description: Returns the version of the service and the supported protocol version.  The protocol version is used to check compatibility with RPC
       operationId: GetVersion
@@ -927,7 +927,7 @@ paths:
       summary: Get Version
       tags:
         - Misc
-  /v1/projects/{projectName}/rps/wirelessconfigs:
+  /v1/projects/{projectName}/dmt/admin/wirelessconfigs:
     get:
       description: Retrieves all of the Wireless configuration profiles from the database.  Will not return the password field to protect the privacy of this asset.
       operationId: GetAllWirelessConfigs
@@ -1064,7 +1064,7 @@ paths:
       summary: Create Wireless Config
       tags:
         - Wireless
-  /v1/projects/{projectName}/rps/wirelessconfigs/{profileName}:
+  /v1/projects/{projectName}/dmt/admin/wirelessconfigs/{profileName}:
     delete:
       description: Removes the specific Wireless configuration profile from the database.
       operationId: RemoveWirelessConfig

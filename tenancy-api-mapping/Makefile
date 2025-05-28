@@ -105,7 +105,7 @@ node_modules:
 	npm ci
 
 openapi-lint: node_modules
-	npx redocly lint ./downloads/*.yaml \
+	npx redocly lint ./openapispecs/generated/*.yaml \
 		--skip-rule=no-unused-components \
 		--skip-rule=operation-summary \
 		--skip-rule=operation-operationId \
@@ -183,7 +183,7 @@ convert-and-combine:
 
 # Define a target to run the full workflow
 .PHONY: gen-convert-combine-all
-gen-convert-combine-all: install-deps checkout-repos specgen convert-and-combine clean-all
+gen-convert-combine-all: install-deps checkout-repos specgen convert-and-combine
 
 ### Cleanup ###
 
