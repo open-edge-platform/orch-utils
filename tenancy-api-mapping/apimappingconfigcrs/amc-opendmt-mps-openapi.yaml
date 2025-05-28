@@ -14,8 +14,8 @@ spec:
     version: "2.13.0"
     url: "https://api.swaggerhub.com/apis/rbheopenamt/mps/2.13.0/swagger.yaml"
   backend:
-    service: "mps.orch-gateway.svc.cluster.local"
-    port: 4433  # https://github.com/device-management-toolkit/mps
+    service: "mps.orch-infra.svc.cluster.local"
+    port: 3000  # https://github.com/device-management-toolkit/mps
   mappings:
     - externalURI: /v1/projects/{projectName}/dmt/amt/log/audit/{guid}
       serviceURI: api/v1/amt/log/audit/{guid}
