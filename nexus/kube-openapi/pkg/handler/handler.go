@@ -133,7 +133,7 @@ func jsonToYAML(j map[string]interface{}) yaml.MapSlice {
 	}
 	ret := make(yaml.MapSlice, 0, len(j))
 	for k, v := range j {
-		ret = append(ret, yaml.MapItem{k, jsonToYAMLValue(v)})
+		ret = append(ret, yaml.MapItem{Key: k, Value: jsonToYAMLValue(v)})
 	}
 	return ret
 }
