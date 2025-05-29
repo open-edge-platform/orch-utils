@@ -1270,7 +1270,7 @@ components:
       properties:
         resourceId:
           description: Name of the host host to be deleted.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -1287,7 +1287,7 @@ components:
       properties:
         resourceId:
           description: Name of the instance instance to be deleted.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -1304,7 +1304,7 @@ components:
       properties:
         resourceId:
           description: Name of the localaccount to be deleted.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -1321,7 +1321,7 @@ components:
       properties:
         resourceId:
           description: Name of the os os to be deleted.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -1341,7 +1341,7 @@ components:
       properties:
         resourceId:
           description: Name of the provider provider to be deleted.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -1358,7 +1358,7 @@ components:
       properties:
         resourceId:
           description: Name of the region region to be deleted.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -1375,7 +1375,7 @@ components:
       properties:
         resourceId:
           description: Name of the repeated_schedule repeated_schedule to be deleted.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -1392,7 +1392,7 @@ components:
       properties:
         resourceId:
           description: Name of the single_schedule single_schedule to be deleted.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -1409,7 +1409,7 @@ components:
       properties:
         resourceId:
           description: Name of the site site to be deleted.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -1426,7 +1426,7 @@ components:
       properties:
         resourceId:
           description: Name of the telemetry_logs_group telemetry_logs_group to be deleted.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -1443,7 +1443,7 @@ components:
       properties:
         resourceId:
           description: Name of the telemetry_logs_profile telemetry_logs_profile to be deleted.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -1460,7 +1460,7 @@ components:
       properties:
         resourceId:
           description: Name of the telemetry_metrics_group telemetry_metrics_group to be deleted.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -1477,7 +1477,7 @@ components:
       properties:
         resourceId:
           description: Name of the telemetry_metrics_profile telemetry_metrics_profile to be deleted.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -1494,7 +1494,7 @@ components:
       properties:
         resourceId:
           description: Name of the workload_member workload_member to be deleted.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -1511,7 +1511,7 @@ components:
       properties:
         resourceId:
           description: Name of the workload workload to be deleted.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -2025,7 +2025,7 @@ components:
       properties:
         resourceId:
           description: Name of the requested host.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -2087,7 +2087,7 @@ components:
       properties:
         resourceId:
           description: Name of the requested instance.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -2109,7 +2109,7 @@ components:
       properties:
         resourceId:
           description: Name of the requested localaccount.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -2131,7 +2131,7 @@ components:
       properties:
         resourceId:
           description: Name of the requested os.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -2153,7 +2153,7 @@ components:
       properties:
         resourceId:
           description: Name of the requested provider.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -2175,7 +2175,7 @@ components:
       properties:
         resourceId:
           description: Name of the requested region.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -2205,7 +2205,7 @@ components:
       properties:
         resourceId:
           description: Name of the requested repeated_schedule.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -2227,7 +2227,7 @@ components:
       properties:
         resourceId:
           description: Name of the requested single_schedule.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -2249,7 +2249,7 @@ components:
       properties:
         resourceId:
           description: Name of the requested site.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -2271,7 +2271,7 @@ components:
       properties:
         resourceId:
           description: Name of the requested telemetry_logs_group.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -2293,7 +2293,7 @@ components:
       properties:
         resourceId:
           description: Name of the requested telemetry_logs_profile.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -2315,7 +2315,7 @@ components:
       properties:
         resourceId:
           description: Name of the requested telemetry_metrics_group.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -2337,7 +2337,7 @@ components:
       properties:
         resourceId:
           description: Name of the requested telemetry_metrics_profile.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -2367,7 +2367,7 @@ components:
       properties:
         resourceId:
           description: Name of the requested workload_member.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -2389,7 +2389,7 @@ components:
       properties:
         resourceId:
           description: Name of the requested workload.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -3085,7 +3085,7 @@ components:
         resourceId:
           description: Host resource ID
           pattern: ^host-[0-9a-f]{8}$
-          title: resource_id
+          title: resourceId
           type: string
       title: InvalidateHostRequest
       type: object
@@ -3101,7 +3101,7 @@ components:
         resourceId:
           description: Instance resource ID
           pattern: ^inst-[0-9a-f]{8}$
-          title: resource_id
+          title: resourceId
           type: string
       title: InvalidateInstanceRequest
       type: object
@@ -3492,7 +3492,7 @@ components:
           type: string
         resourceId:
           description: The associated node resource ID, generated by inventory on Create.
-          title: resource_id
+          title: resourceId
           type: string
         type:
           $ref: '#/components/schemas/ListLocationsResponse.ResourceKind'
@@ -4554,7 +4554,7 @@ components:
         resourceId:
           description: Host resource ID
           pattern: ^host-[0-9a-f]{8}$
-          title: resource_id
+          title: resourceId
           type: string
       title: OnboardHostRequest
       type: object
@@ -4762,7 +4762,7 @@ components:
           $ref: '#/components/schemas/HostResource'
         resourceId:
           description: ID of the resource to be updated.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -4779,7 +4779,7 @@ components:
           $ref: '#/components/schemas/InstanceResource'
         resourceId:
           description: ID of the resource to be updated.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -4796,7 +4796,7 @@ components:
           $ref: '#/components/schemas/OperatingSystemResource'
         resourceId:
           description: ID of the resource to be updated.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -4813,7 +4813,7 @@ components:
           $ref: '#/components/schemas/RegionResource'
         resourceId:
           description: ID of the resource to be updated.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -4830,7 +4830,7 @@ components:
           $ref: '#/components/schemas/RepeatedScheduleResource'
         resourceId:
           description: ID of the resource to be updated.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -4845,7 +4845,7 @@ components:
           $ref: '#/components/schemas/google.protobuf.FieldMask'
         resourceId:
           description: ID of the resource to be updated.
-          title: resource_id
+          title: resourceId
           type: string
         singleSchedule:
           $ref: '#/components/schemas/SingleScheduleResource'
@@ -4862,7 +4862,7 @@ components:
           $ref: '#/components/schemas/google.protobuf.FieldMask'
         resourceId:
           description: ID of the resource to be updated.
-          title: resource_id
+          title: resourceId
           type: string
         site:
           $ref: '#/components/schemas/SiteResource'
@@ -4879,7 +4879,7 @@ components:
           $ref: '#/components/schemas/google.protobuf.FieldMask'
         resourceId:
           description: ID of the resource to be updated.
-          title: resource_id
+          title: resourceId
           type: string
         telemetryLogsProfile:
           $ref: '#/components/schemas/TelemetryLogsProfileResource'
@@ -4896,7 +4896,7 @@ components:
           $ref: '#/components/schemas/google.protobuf.FieldMask'
         resourceId:
           description: ID of the resource to be updated.
-          title: resource_id
+          title: resourceId
           type: string
         telemetryMetricsProfile:
           $ref: '#/components/schemas/TelemetryMetricsProfileResource'
@@ -4913,7 +4913,7 @@ components:
           $ref: '#/components/schemas/google.protobuf.FieldMask'
         resourceId:
           description: ID of the resource to be updated.
-          title: resource_id
+          title: resourceId
           type: string
         workload:
           $ref: '#/components/schemas/WorkloadResource'
@@ -5195,7 +5195,7 @@ components:
           $ref: '#/components/schemas/HostRegister'
         resourceId:
           pattern: ^host-[0-9a-f]{8}$
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - host
@@ -6101,7 +6101,7 @@ components:
           $ref: '#/components/schemas/HostResource'
         resourceId:
           description: Name of the host host to be updated.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -6116,7 +6116,7 @@ components:
           $ref: '#/components/schemas/InstanceResource'
         resourceId:
           description: ID of the resource to be updated.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -6131,7 +6131,7 @@ components:
           $ref: '#/components/schemas/OperatingSystemResource'
         resourceId:
           description: Name of the os os to be updated.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -6146,7 +6146,7 @@ components:
           $ref: '#/components/schemas/RegionResource'
         resourceId:
           description: Name of the region region to be updated.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -6161,7 +6161,7 @@ components:
           $ref: '#/components/schemas/RepeatedScheduleResource'
         resourceId:
           description: Name of the repeated_schedule repeated_schedule to be updated.
-          title: resource_id
+          title: resourceId
           type: string
       required:
         - resourceId
@@ -6174,7 +6174,7 @@ components:
       properties:
         resourceId:
           description: Name of the single_schedule single_schedule to be updated.
-          title: resource_id
+          title: resourceId
           type: string
         singleSchedule:
           $ref: '#/components/schemas/SingleScheduleResource'
@@ -6189,7 +6189,7 @@ components:
       properties:
         resourceId:
           description: Name of the site site to be updated.
-          title: resource_id
+          title: resourceId
           type: string
         site:
           $ref: '#/components/schemas/SiteResource'
@@ -6204,7 +6204,7 @@ components:
       properties:
         resourceId:
           description: Name of the telemetry_logs_profile telemetry_logs_profile to be updated.
-          title: resource_id
+          title: resourceId
           type: string
         telemetryLogsProfile:
           $ref: '#/components/schemas/TelemetryLogsProfileResource'
@@ -6219,7 +6219,7 @@ components:
       properties:
         resourceId:
           description: Name of the telemetry_metrics_profile telemetry_metrics_profile to be updated.
-          title: resource_id
+          title: resourceId
           type: string
         telemetryMetricsProfile:
           $ref: '#/components/schemas/TelemetryMetricsProfileResource'
@@ -6234,7 +6234,7 @@ components:
       properties:
         resourceId:
           description: Name of the workload workload to be updated.
-          title: resource_id
+          title: resourceId
           type: string
         workload:
           $ref: '#/components/schemas/WorkloadResource'
@@ -6799,9 +6799,6 @@ components:
          the Joda Time's [`ISODateTimeFormat.dateTime()`](
          http://joda-time.sourceforge.net/apidocs/org/joda/time/format/ISODateTimeFormat.html#dateTime()
          ) to obtain a formatter capable of generating timestamps in this format.
-      examples:
-        - 1s
-        - 1.000340012s
       format: date-time
       type: string
     network.Network.Get:
@@ -7965,6 +7962,276 @@ paths:
       summary: CreateHost
       tags:
         - HostService
+  /v1/projects/{projectName}/compute/hosts/{resourceId}:
+    delete:
+      description: Delete a host.
+      operationId: HostService_DeleteHost
+      parameters:
+        - description: Name of the host host to be deleted.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the host host to be deleted.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteHostResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: DeleteHost
+      tags:
+        - HostService
+    get:
+      description: Get a specific host.
+      operationId: HostService_GetHost
+      parameters:
+        - description: Name of the requested host.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the requested host.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HostResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: GetHost
+      tags:
+        - HostService
+    patch:
+      description: Patch a host.
+      operationId: HostService_PatchHost
+      parameters:
+        - description: ID of the resource to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: ID of the resource to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HostResource'
+        description: Updated values for the host.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HostResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: PatchHost
+      tags:
+        - HostService
+    put:
+      description: Update a host.
+      operationId: HostService_UpdateHost
+      parameters:
+        - description: Name of the host host to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the host host to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HostResource'
+        description: Updated values for the host.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HostResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: UpdateHost
+      tags:
+        - HostService
+  /v1/projects/{projectName}/compute/hosts/{resourceId}/invalidate:
+    put:
+      description: Invalidate a host.
+      operationId: HostService_InvalidateHost
+      parameters:
+        - description: Host resource ID
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Host resource ID
+            pattern: ^host-[0-9a-f]{8}$
+            title: resourceId
+            type: string
+        - description: user-provided reason for change or a freeform field
+          in: query
+          name: note
+          schema:
+            description: user-provided reason for change or a freeform field
+            maxLength: 512
+            minLength: 1
+            pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()" ]+$
+            title: note
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidateHostResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: InvalidateHost
+      tags:
+        - HostService
+  /v1/projects/{projectName}/compute/hosts/{resourceId}/onboard:
+    patch:
+      description: Onboard a host.
+      operationId: HostService_OnboardHost
+      parameters:
+        - description: Host resource ID
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Host resource ID
+            pattern: ^host-[0-9a-f]{8}$
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardHostResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: OnboardHost
+      tags:
+        - HostService
+  /v1/projects/{projectName}/compute/hosts/{resourceId}/register:
+    patch:
+      description: Update a host register.
+      operationId: HostService_RegisterUpdateHost
+      parameters:
+        - in: path
+          name: resourceId
+          required: true
+          schema:
+            pattern: ^host-[0-9a-f]{8}$
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HostRegister'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HostResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: RegisterUpdateHost
+      tags:
+        - HostService
   /v1/projects/{projectName}/compute/hosts/register:
     post:
       description: Register a host.
@@ -8143,6 +8410,191 @@ paths:
       summary: CreateInstance
       tags:
         - InstanceService
+  /v1/projects/{projectName}/compute/instances/{resourceId}:
+    delete:
+      description: Delete a instance.
+      operationId: InstanceService_DeleteInstance
+      parameters:
+        - description: Name of the instance instance to be deleted.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the instance instance to be deleted.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteInstanceResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: DeleteInstance
+      tags:
+        - InstanceService
+    get:
+      description: Get a specific instance.
+      operationId: InstanceService_GetInstance
+      parameters:
+        - description: Name of the requested instance.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the requested instance.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: GetInstance
+      tags:
+        - InstanceService
+    patch:
+      description: Patch a instance.
+      operationId: InstanceService_PatchInstance
+      parameters:
+        - description: ID of the resource to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: ID of the resource to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstanceResource'
+        description: Updated values for the instance.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: PatchInstance
+      tags:
+        - InstanceService
+    put:
+      description: Update a instance.
+      operationId: InstanceService_UpdateInstance
+      parameters:
+        - description: ID of the resource to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: ID of the resource to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstanceResource'
+        description: Updated values for the instance.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: UpdateInstance
+      tags:
+        - InstanceService
+  /v1/projects/{projectName}/compute/instances/{resourceId}/invalidate:
+    put:
+      description: Invalidate a instance.
+      operationId: InstanceService_InvalidateInstance
+      parameters:
+        - description: Instance resource ID
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Instance resource ID
+            pattern: ^inst-[0-9a-f]{8}$
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidateInstanceResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: InvalidateInstance
+      tags:
+        - InstanceService
   /v1/projects/{projectName}/compute/os:
     get:
       description: Get a list of OSs.
@@ -8247,6 +8699,155 @@ paths:
                 $ref: '#/components/schemas/connect.error'
           description: Error
       summary: CreateOperatingSystem
+      tags:
+        - OperatingSystemService
+  /v1/projects/{projectName}/compute/os/{resourceId}:
+    delete:
+      description: Delete an OS.
+      operationId: OperatingSystemService_DeleteOperatingSystem
+      parameters:
+        - description: Name of the os os to be deleted.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the os os to be deleted.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteOperatingSystemResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: DeleteOperatingSystem
+      tags:
+        - OperatingSystemService
+    get:
+      description: Get a specific OS.
+      operationId: OperatingSystemService_GetOperatingSystem
+      parameters:
+        - description: Name of the requested os.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the requested os.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperatingSystemResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: GetOperatingSystem
+      tags:
+        - OperatingSystemService
+    patch:
+      description: Patch an OS.
+      operationId: OperatingSystemService_PatchOperatingSystem
+      parameters:
+        - description: ID of the resource to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: ID of the resource to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperatingSystemResource'
+        description: Updated values for the os.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperatingSystemResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: PatchOperatingSystem
+      tags:
+        - OperatingSystemService
+    put:
+      description: Update an OS.
+      operationId: OperatingSystemService_UpdateOperatingSystem
+      parameters:
+        - description: Name of the os os to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the os os to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperatingSystemResource'
+        description: Updated values for the os.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperatingSystemResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: UpdateOperatingSystem
       tags:
         - OperatingSystemService
   /v1/projects/{projectName}/compute/schedules:
@@ -8461,6 +9062,155 @@ paths:
       summary: CreateWorkload
       tags:
         - WorkloadService
+  /v1/projects/{projectName}/compute/workloads/{resourceId}:
+    delete:
+      description: Delete a workload.
+      operationId: WorkloadService_DeleteWorkload
+      parameters:
+        - description: Name of the workload workload to be deleted.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the workload workload to be deleted.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteWorkloadResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: DeleteWorkload
+      tags:
+        - WorkloadService
+    get:
+      description: Get a specific workload.
+      operationId: WorkloadService_GetWorkload
+      parameters:
+        - description: Name of the requested workload.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the requested workload.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkloadResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: GetWorkload
+      tags:
+        - WorkloadService
+    patch:
+      description: Patch a workload.
+      operationId: WorkloadService_PatchWorkload
+      parameters:
+        - description: ID of the resource to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: ID of the resource to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkloadResource'
+        description: Updated values for the workload.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkloadResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: PatchWorkload
+      tags:
+        - WorkloadService
+    put:
+      description: Update a workload.
+      operationId: WorkloadService_UpdateWorkload
+      parameters:
+        - description: Name of the workload workload to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the workload workload to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkloadResource'
+        description: Updated values for the workload.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkloadResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: UpdateWorkload
+      tags:
+        - WorkloadService
   /v1/projects/{projectName}/compute/workloads/{resourceId}/members:
     get:
       description: Get a list of workload_members.
@@ -8577,6 +9327,87 @@ paths:
                 $ref: '#/components/schemas/connect.error'
           description: Error
       summary: CreateWorkloadMember
+      tags:
+        - WorkloadMemberService
+  /v1/projects/{projectName}/compute/workloads/{workloadResourceId}/members/{resourceId}:
+    delete:
+      description: Delete a workload_member.
+      operationId: WorkloadMemberService_DeleteWorkloadMember
+      parameters:
+        - description: Name of the workload_member workload_member to be deleted.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the workload_member workload_member to be deleted.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique workloadResourceId for the resource
+          in: path
+          name: workloadResourceId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteWorkloadMemberResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: DeleteWorkloadMember
+      tags:
+        - WorkloadMemberService
+    get:
+      description: Get a specific workload_member.
+      operationId: WorkloadMemberService_GetWorkloadMember
+      parameters:
+        - description: Name of the requested workload_member.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the requested workload_member.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique workloadResourceId for the resource
+          in: path
+          name: workloadResourceId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkloadMember'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: GetWorkloadMember
       tags:
         - WorkloadMemberService
   /v1/projects/{projectName}/deployments/clusters/{clusterId}:
@@ -8737,6 +9568,75 @@ paths:
                 $ref: '#/components/schemas/connect.error'
           description: Error
       summary: CreateLocalAccount
+      tags:
+        - LocalAccountService
+  /v1/projects/{projectName}/localAccounts/{resourceId}:
+    delete:
+      description: Delete a provider.
+      operationId: LocalAccountService_DeleteLocalAccount
+      parameters:
+        - description: Name of the localaccount to be deleted.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the localaccount to be deleted.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteLocalAccountResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: DeleteLocalAccount
+      tags:
+        - LocalAccountService
+    get:
+      description: Get a specific provider.
+      operationId: LocalAccountService_GetLocalAccount
+      parameters:
+        - description: Name of the requested localaccount.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the requested localaccount.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocalAccountResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: GetLocalAccount
       tags:
         - LocalAccountService
   /v1/projects/{projectName}/locations:
@@ -8967,6 +9867,75 @@ paths:
       summary: CreateProvider
       tags:
         - ProviderService
+  /v1/projects/{projectName}/providers/{resourceId}:
+    delete:
+      description: Delete a provider.
+      operationId: ProviderService_DeleteProvider
+      parameters:
+        - description: Name of the provider provider to be deleted.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the provider provider to be deleted.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteProviderResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: DeleteProvider
+      tags:
+        - ProviderService
+    get:
+      description: Get a specific provider.
+      operationId: ProviderService_GetProvider
+      parameters:
+        - description: Name of the requested provider.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the requested provider.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: GetProvider
+      tags:
+        - ProviderService
   /v1/projects/{projectName}/regions:
     get:
       description: Get a list of regions.
@@ -9078,6 +10047,328 @@ paths:
                 $ref: '#/components/schemas/connect.error'
           description: Error
       summary: CreateRegion
+      tags:
+        - RegionService
+  /v1/projects/{projectName}/regions/{regionResourceId}/sites/{resourceId}:
+    delete:
+      description: Delete a site.
+      operationId: SiteService_DeleteSite
+      parameters:
+        - description: Name of the site site to be deleted.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the site site to be deleted.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique regionResourceId for the resource
+          in: path
+          name: regionResourceId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteSiteResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: DeleteSite
+      tags:
+        - SiteService
+    get:
+      description: Get a specific site.
+      operationId: SiteService_GetSite
+      parameters:
+        - description: Name of the requested site.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the requested site.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique regionResourceId for the resource
+          in: path
+          name: regionResourceId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: GetSite
+      tags:
+        - SiteService
+    patch:
+      description: Patch a site.
+      operationId: SiteService_PatchSite
+      parameters:
+        - description: ID of the resource to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: ID of the resource to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique regionResourceId for the resource
+          in: path
+          name: regionResourceId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteResource'
+        description: Updated values for the site.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: PatchSite
+      tags:
+        - SiteService
+    put:
+      description: Update a site.
+      operationId: SiteService_UpdateSite
+      parameters:
+        - description: Name of the site site to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the site site to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique regionResourceId for the resource
+          in: path
+          name: regionResourceId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteResource'
+        description: Updated values for the site.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: UpdateSite
+      tags:
+        - SiteService
+  /v1/projects/{projectName}/regions/{resourceId}:
+    delete:
+      description: Delete a region.
+      operationId: RegionService_DeleteRegion
+      parameters:
+        - description: Name of the region region to be deleted.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the region region to be deleted.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteRegionResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: DeleteRegion
+      tags:
+        - RegionService
+    get:
+      description: Get a specific region.
+      operationId: RegionService_GetRegion
+      parameters:
+        - description: Name of the requested region.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the requested region.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: GetRegion
+      tags:
+        - RegionService
+    patch:
+      description: Patch a region.
+      operationId: RegionService_PatchRegion
+      parameters:
+        - description: ID of the resource to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: ID of the resource to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegionResource'
+        description: Updated values for the region.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: PatchRegion
+      tags:
+        - RegionService
+    put:
+      description: Update a region.
+      operationId: RegionService_UpdateRegion
+      parameters:
+        - description: Name of the region region to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the region region to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegionResource'
+        description: Updated values for the region.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: UpdateRegion
       tags:
         - RegionService
   /v1/projects/{projectName}/regions/{resourceId}/sites:
@@ -9597,6 +10888,155 @@ paths:
       summary: CreateRepeatedSchedule
       tags:
         - ScheduleService
+  /v1/projects/{projectName}/schedules/repeated/{resourceId}:
+    delete:
+      description: Delete a repeated_schedule.
+      operationId: ScheduleService_DeleteRepeatedSchedule
+      parameters:
+        - description: Name of the repeated_schedule repeated_schedule to be deleted.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the repeated_schedule repeated_schedule to be deleted.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteRepeatedScheduleResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: DeleteRepeatedSchedule
+      tags:
+        - ScheduleService
+    get:
+      description: Get a specific repeated_schedule.
+      operationId: ScheduleService_GetRepeatedSchedule
+      parameters:
+        - description: Name of the requested repeated_schedule.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the requested repeated_schedule.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepeatedScheduleResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: GetRepeatedSchedule
+      tags:
+        - ScheduleService
+    patch:
+      description: Patch a repeated_schedule.
+      operationId: ScheduleService_PatchRepeatedSchedule
+      parameters:
+        - description: ID of the resource to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: ID of the resource to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RepeatedScheduleResource'
+        description: Updated values for the repeated_schedule.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepeatedScheduleResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: PatchRepeatedSchedule
+      tags:
+        - ScheduleService
+    put:
+      description: Update a repeated_schedule.
+      operationId: ScheduleService_UpdateRepeatedSchedule
+      parameters:
+        - description: Name of the repeated_schedule repeated_schedule to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the repeated_schedule repeated_schedule to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RepeatedScheduleResource'
+        description: Updated values for the repeated_schedule.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepeatedScheduleResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: UpdateRepeatedSchedule
+      tags:
+        - ScheduleService
   /v1/projects/{projectName}/schedules/single:
     get:
       description: Get a list of singleSchedules.
@@ -9735,6 +11175,155 @@ paths:
       summary: CreateSingleSchedule
       tags:
         - ScheduleService
+  /v1/projects/{projectName}/schedules/single/{resourceId}:
+    delete:
+      description: Delete a single_schedule.
+      operationId: ScheduleService_DeleteSingleSchedule
+      parameters:
+        - description: Name of the single_schedule single_schedule to be deleted.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the single_schedule single_schedule to be deleted.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteSingleScheduleResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: DeleteSingleSchedule
+      tags:
+        - ScheduleService
+    get:
+      description: Get a specific single_schedule.
+      operationId: ScheduleService_GetSingleSchedule
+      parameters:
+        - description: Name of the requested single_schedule.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the requested single_schedule.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleScheduleResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: GetSingleSchedule
+      tags:
+        - ScheduleService
+    patch:
+      description: Patch a single_schedule.
+      operationId: ScheduleService_PatchSingleSchedule
+      parameters:
+        - description: ID of the resource to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: ID of the resource to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SingleScheduleResource'
+        description: Updated values for the single_schedule.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleScheduleResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: PatchSingleSchedule
+      tags:
+        - ScheduleService
+    put:
+      description: Update a single_schedule.
+      operationId: ScheduleService_UpdateSingleSchedule
+      parameters:
+        - description: Name of the single_schedule single_schedule to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the single_schedule single_schedule to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SingleScheduleResource'
+        description: Updated values for the single_schedule.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleScheduleResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: UpdateSingleSchedule
+      tags:
+        - ScheduleService
   /v1/projects/{projectName}/summary/deployments_status:
     get:
       description: Gets all deployment clusters count status.
@@ -9854,6 +11443,248 @@ paths:
                 $ref: '#/components/schemas/connect.error'
           description: Error
       summary: CreateTelemetryLogsGroup
+      tags:
+        - TelemetryLogsGroupService
+  /v1/projects/{projectName}/telemetry/loggroups/{loggroupResourceId}/logprofiles/{resourceId}:
+    delete:
+      description: Delete a telemetry_logs_profile.
+      operationId: TelemetryLogsProfileService_DeleteTelemetryLogsProfile
+      parameters:
+        - description: Name of the telemetry_logs_profile telemetry_logs_profile to be deleted.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the telemetry_logs_profile telemetry_logs_profile to be deleted.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique loggroupResourceId for the resource
+          in: path
+          name: loggroupResourceId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteTelemetryLogsProfileResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: DeleteTelemetryLogsProfile
+      tags:
+        - TelemetryLogsProfileService
+    get:
+      description: Get a specific telemetry_logs_profile.
+      operationId: TelemetryLogsProfileService_GetTelemetryLogsProfile
+      parameters:
+        - description: Name of the requested telemetry_logs_profile.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the requested telemetry_logs_profile.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique loggroupResourceId for the resource
+          in: path
+          name: loggroupResourceId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TelemetryLogsProfileResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: GetTelemetryLogsProfile
+      tags:
+        - TelemetryLogsProfileService
+    patch:
+      description: Patch a telemetry_logs_profile.
+      operationId: TelemetryLogsProfileService_PatchTelemetryLogsProfile
+      parameters:
+        - description: ID of the resource to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: ID of the resource to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique loggroupResourceId for the resource
+          in: path
+          name: loggroupResourceId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TelemetryLogsProfileResource'
+        description: Updated values for the telemetry_logs_profile.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TelemetryLogsProfileResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: PatchTelemetryLogsProfile
+      tags:
+        - TelemetryLogsProfileService
+    put:
+      description: Update a telemetry_logs_profile.
+      operationId: TelemetryLogsProfileService_UpdateTelemetryLogsProfile
+      parameters:
+        - description: Name of the telemetry_logs_profile telemetry_logs_profile to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the telemetry_logs_profile telemetry_logs_profile to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique loggroupResourceId for the resource
+          in: path
+          name: loggroupResourceId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TelemetryLogsProfileResource'
+        description: Updated values for the telemetry_logs_profile.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TelemetryLogsProfileResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: UpdateTelemetryLogsProfile
+      tags:
+        - TelemetryLogsProfileService
+  /v1/projects/{projectName}/telemetry/loggroups/{resourceId}:
+    delete:
+      description: Delete a telemetry_logs_group.
+      operationId: TelemetryLogsGroupService_DeleteTelemetryLogsGroup
+      parameters:
+        - description: Name of the telemetry_logs_group telemetry_logs_group to be deleted.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the telemetry_logs_group telemetry_logs_group to be deleted.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteTelemetryLogsGroupResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: DeleteTelemetryLogsGroup
+      tags:
+        - TelemetryLogsGroupService
+    get:
+      description: Get a specific telemetry_logs_group.
+      operationId: TelemetryLogsGroupService_GetTelemetryLogsGroup
+      parameters:
+        - description: Name of the requested telemetry_logs_group.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the requested telemetry_logs_group.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TelemetryLogsGroupResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: GetTelemetryLogsGroup
       tags:
         - TelemetryLogsGroupService
   /v1/projects/{projectName}/telemetry/loggroups/{resourceId}/logprofiles:
@@ -10091,6 +11922,248 @@ paths:
                 $ref: '#/components/schemas/connect.error'
           description: Error
       summary: CreateTelemetryMetricsGroup
+      tags:
+        - TelemetryMetricsGroupService
+  /v1/projects/{projectName}/telemetry/metricgroups/{metricgroupResourceId}/metricprofiles/{resourceId}:
+    delete:
+      description: Delete a telemetry_metrics_profile.
+      operationId: TelemetryMetricsProfileService_DeleteTelemetryMetricsProfile
+      parameters:
+        - description: Name of the telemetry_metrics_profile telemetry_metrics_profile to be deleted.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the telemetry_metrics_profile telemetry_metrics_profile to be deleted.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique metricgroupResourceId for the resource
+          in: path
+          name: metricgroupResourceId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteTelemetryMetricsProfileResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: DeleteTelemetryMetricsProfile
+      tags:
+        - TelemetryMetricsProfileService
+    get:
+      description: Get a specific telemetry_metrics_profile.
+      operationId: TelemetryMetricsProfileService_GetTelemetryMetricsProfile
+      parameters:
+        - description: Name of the requested telemetry_metrics_profile.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the requested telemetry_metrics_profile.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique metricgroupResourceId for the resource
+          in: path
+          name: metricgroupResourceId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TelemetryMetricsProfileResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: GetTelemetryMetricsProfile
+      tags:
+        - TelemetryMetricsProfileService
+    patch:
+      description: Patch a telemetry_metrics_profile.
+      operationId: TelemetryMetricsProfileService_PatchTelemetryMetricsProfile
+      parameters:
+        - description: ID of the resource to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: ID of the resource to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique metricgroupResourceId for the resource
+          in: path
+          name: metricgroupResourceId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TelemetryMetricsProfileResource'
+        description: Updated values for the telemetry_metrics_profile.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TelemetryMetricsProfileResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: PatchTelemetryMetricsProfile
+      tags:
+        - TelemetryMetricsProfileService
+    put:
+      description: Update a telemetry_metrics_profile.
+      operationId: TelemetryMetricsProfileService_UpdateTelemetryMetricsProfile
+      parameters:
+        - description: Name of the telemetry_metrics_profile telemetry_metrics_profile to be updated.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the telemetry_metrics_profile telemetry_metrics_profile to be updated.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+        - description: unique metricgroupResourceId for the resource
+          in: path
+          name: metricgroupResourceId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TelemetryMetricsProfileResource'
+        description: Updated values for the telemetry_metrics_profile.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TelemetryMetricsProfileResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: UpdateTelemetryMetricsProfile
+      tags:
+        - TelemetryMetricsProfileService
+  /v1/projects/{projectName}/telemetry/metricgroups/{resourceId}:
+    delete:
+      description: Delete a telemetry_metrics_group.
+      operationId: TelemetryMetricsGroupService_DeleteTelemetryMetricsGroup
+      parameters:
+        - description: Name of the telemetry_metrics_group telemetry_metrics_group to be deleted.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the telemetry_metrics_group telemetry_metrics_group to be deleted.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteTelemetryMetricsGroupResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: DeleteTelemetryMetricsGroup
+      tags:
+        - TelemetryMetricsGroupService
+    get:
+      description: Get a specific telemetry_metrics_group.
+      operationId: TelemetryMetricsGroupService_GetTelemetryMetricsGroup
+      parameters:
+        - description: Name of the requested telemetry_metrics_group.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the requested telemetry_metrics_group.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TelemetryMetricsGroupResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: GetTelemetryMetricsGroup
       tags:
         - TelemetryMetricsGroupService
   /v1/projects/{projectName}/telemetry/metricgroups/{resourceId}/metricprofiles:
