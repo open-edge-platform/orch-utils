@@ -7017,7 +7017,7 @@ components:
 info:
   description: Tenancy aware APIs for the Open Edge Platform services
   title: Multi tenancy APIs
-  version: 1.5.2
+  version: 1.5.3
 openapi: 3.0.3
 paths:
   /v1/orgs:
