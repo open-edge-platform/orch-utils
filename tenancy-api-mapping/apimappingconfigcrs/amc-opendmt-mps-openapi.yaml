@@ -17,49 +17,9 @@ spec:
     service: "mps.orch-infra.svc.cluster.local"
     port: 3000  # https://github.com/device-management-toolkit/mps
   mappings:
-    - externalURI: /v1/projects/{projectName}/dmt/amt/log/audit/{guid}
-      serviceURI: api/v1/amt/log/audit/{guid}
-    - externalURI: /v1/projects/{projectName}/dmt/amt/log/event/{guid}
-      serviceURI: api/v1/amt/log/event/{guid}
-    - externalURI: /v1/projects/{projectName}/dmt/amt/version/{guid}
-      serviceURI: api/v1/amt/version/{guid}
-    - externalURI: /v1/projects/{projectName}/dmt/amt/generalSettings/{guid}
+    - externalURI: /v1/projects/{projectName}/dm/amt/generalSettings/{guid}
       serviceURI: api/v1/amt/generalSettings/{guid}
-    - externalURI: /v1/projects/{projectName}/dmt/amt/hardwareInfo/{guid}
-      serviceURI: api/v1/amt/hardwareInfo/{guid}
-    - externalURI: /v1/projects/{projectName}/dmt/amt/features/{guid}
-      serviceURI: api/v1/amt/features/{guid}
-    - externalURI: /v1/projects/{projectName}/dmt/amt/alarmOccurrences/{guid}
-      serviceURI: api/v1/amt/alarmOccurrences/{guid}
-    - externalURI: /v1/projects/{projectName}/dmt/amt/power/state/{guid}
-      serviceURI: api/v1/amt/power/state/{guid}
-    - externalURI: /v1/projects/{projectName}/dmt/amt/power/capabilities/{guid}
+    - externalURI: /v1/projects/{projectName}/dm/amt/power/capabilities/{guid}
       serviceURI: api/v1/amt/power/capabilities/{guid}
-    - externalURI: /v1/projects/{projectName}/dmt/amt/power/action/{guid}
-      serviceURI: api/v1/amt/power/action/{guid}
-    - externalURI: /v1/projects/{projectName}/dmt/amt/power/bootoptions/{guid}
-      serviceURI: api/v1/amt/power/bootoptions/{guid}
-    - externalURI: /v1/projects/{projectName}/dmt/amt/userConsentCode/{guid}
-      serviceURI: api/v1/amt/userConsentCode/{guid}
-    - externalURI: /v1/projects/{projectName}/dmt/amt/userConsentCode/cancel/{guid}
-      serviceURI: api/v1/amt/userConsentCode/cancel/{guid}
-    - externalURI: /v1/projects/{projectName}/dmt/amt/deactivate/{guid}
-      serviceURI: api/v1/amt/deactivate/{guid}
-    - externalURI: /v1/projects/{projectName}/dmt/devices
-      serviceURI: api/v1/devices
-    - externalURI: /v1/projects/{projectName}/dmt/devices/redirectStatus/{guid}
-      serviceURI: api/v1/devices/redirectStatus/{guid}
-    - externalURI: /v1/projects/{projectName}/dmt/devices/stats
-      serviceURI: api/v1/devices/stats
-    - externalURI: /v1/projects/{projectName}/dmt/devices/{guid}
+    - externalURI: /v1/projects/{projectName}/dm/devices/{guid}
       serviceURI: api/v1/devices/{guid}
-    - externalURI: /v1/projects/{projectName}/dmt/devices/disconnect/{guid}
-      serviceURI: api/v1/devices/disconnect/{guid}
-    - externalURI: /v1/projects/{projectName}/dmt/devices/refresh/{guid}
-      serviceURI: api/v1/devices/refresh/{guid}
-    - externalURI: /v1/projects/{projectName}/dmt/ciracert
-      serviceURI: api/v1/ciracert
-    - externalURI: /v1/projects/{projectName}/dmt/health
-      serviceURI: api/v1/health
-    - externalURI: /v1/projects/{projectName}/dmt/version
-      serviceURI: api/v1/version

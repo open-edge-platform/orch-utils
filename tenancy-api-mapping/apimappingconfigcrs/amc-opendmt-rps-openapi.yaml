@@ -17,27 +17,7 @@ spec:
     service: "rps.orch-infra.svc.cluster.local"
     port: 8081  # https://github.com/device-management-toolkit/rps/
   mappings:
-    - externalURI: /v1/projects/{projectName}/dmt/admin/ciraconfigs
-      serviceURI: api/v1/admin/ciraconfigs
-    - externalURI: /v1/projects/{projectName}/dmt/admin/ciraconfigs/{configName}
-      serviceURI: api/v1/admin/ciraconfigs/{configName}
-    - externalURI: /v1/projects/{projectName}/dmt/admin/domains
+    - externalURI: /v1/projects/{projectName}/dm/amt/admin/domains
       serviceURI: api/v1/admin/domains
-    - externalURI: /v1/projects/{projectName}/dmt/admin/domains/{profileName}
-      serviceURI: api/v1/admin/domains/{profileName}
-    - externalURI: /v1/projects/{projectName}/dmt/admin/profiles
-      serviceURI: api/v1/admin/profiles
-    - externalURI: /v1/projects/{projectName}/dmt/admin/profiles/{profileName}
-      serviceURI: api/v1/admin/profiles/{profileName}
-    - externalURI: /v1/projects/{projectName}/dmt/admin/wirelessconfigs
-      serviceURI: api/v1/admin/wirelessconfigs
-    - externalURI: /v1/projects/{projectName}/dmt/admin/wirelessconfigs/{profileName}
-      serviceURI: api/v1/admin/wirelessconfigs/{profileName}
-    - externalURI: /v1/projects/{projectName}/dmt/admin/ieee8021xconfigs
-      serviceURI: api/v1/admin/ieee8021xconfigs
-    - externalURI: /v1/projects/{projectName}/dmt/admin/ieee8021xconfigs/{profileName}
-      serviceURI: api/v1/admin/ieee8021xconfigs/{profileName}
-    - externalURI: /v1/projects/{projectName}/dmt/admin/health
-      serviceURI: api/v1/admin/health
-    - externalURI: /v1/projects/{projectName}/dmt/admin/version
-      serviceURI: api/v1/admin/version
+    - externalURI: /v1/projects/{projectName}/dm/amt/admin/domains/{domainName}
+      serviceURI: api/v1/admin/domains/{domainName}
