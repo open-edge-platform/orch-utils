@@ -49,6 +49,10 @@ tags:
     name: TelemetryMetricsProfileService
   - description: LocalAccount.
     name: LocalAccountService
+  - description: OS Update Policy.
+    name: OSUpdatePolicy
+  - description: OS Update Run.
+    name: OSUpdateRun
 security:
   - BearerAuth: []
 paths:
@@ -391,8 +395,8 @@ paths:
         - HostService
   /v1/projects/{projectName}/compute/hosts/{resourceId}/register:
     patch:
-      description: Update a host register.
-      operationId: HostService_RegisterUpdateHost
+      description: Update a host registration.
+      operationId: HostService_PatchRegisterHost
       parameters:
         - in: path
           name: resourceId
@@ -425,7 +429,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/connect.error'
           description: Error
-      summary: RegisterUpdateHost
+      summary: PatchRegisterHost
       tags:
         - HostService
   /v1/projects/{projectName}/compute/hosts/register:
@@ -1831,6 +1835,324 @@ paths:
       summary: ListLocations
       tags:
         - LocationService
+  /v1/projects/{projectName}/os-update-policies:
+    get:
+      description: Get a list of OS Update Policies.
+      operationId: OSUpdatePolicy_ListOSUpdatePolicy
+      parameters:
+        - description: |-
+            Optional comma separated list of fields to specify a sorting order.
+             See https://google.aip.dev/132 for details.
+          in: query
+          name: orderBy
+          schema:
+            description: |-
+              (OPTIONAL) Optional comma separated list of fields to specify a sorting order.
+               See https://google.aip.dev/132 for details.
+            maxLength: 1000
+            pattern: ^$|^[a-zA-Z-_0-9., ]+$
+            title: order_by
+            type: string
+        - description: |-
+            Optional filter to return only item of interest.
+             See https://google.aip.dev/160 for details.
+          in: query
+          name: filter
+          schema:
+            description: |-
+              (OPTIONAL) Optional filter to return only item of interest.
+               See https://google.aip.dev/160 for details.
+            maxLength: 1000
+            pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}"' ]+$
+            title: filter
+            type: string
+        - description: |-
+            Defines the amount of items to be contained in a single page.
+             Default of 20.
+          in: query
+          name: pageSize
+          schema:
+            description: |-
+              (OPTIONAL) Defines the amount of items to be contained in a single page.
+               Default of 20.
+            maximum: 100
+            minimum: 1
+            title: page_size
+            type: integer
+        - description: Index of the first item to return. This allows skipping items.
+          in: query
+          name: offset
+          schema:
+            description: (OPTIONAL) Index of the first item to return. This allows skipping items.
+            maximum: 10000
+            title: offset
+            type: integer
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListOSUpdatePolicyResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: ListOSUpdatePolicy
+      tags:
+        - OSUpdatePolicy
+    post:
+      description: Create an OS Update Policy.
+      operationId: OSUpdatePolicy_CreateOSUpdatePolicy
+      parameters:
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OSUpdatePolicy'
+        description: The OS Update policy to create.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OSUpdatePolicy'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: CreateOSUpdatePolicy
+      tags:
+        - OSUpdatePolicy
+  /v1/projects/{projectName}/os-update-policies/{resourceId}:
+    delete:
+      description: Delete a OS Update Policy.
+      operationId: OSUpdatePolicy_DeleteOSUpdatePolicy
+      parameters:
+        - description: Name of the OS Update Policy to be deleted.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the OS Update Policy to be deleted.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OSUpdatePolicy'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: DeleteOSUpdatePolicy
+      tags:
+        - OSUpdatePolicy
+    get:
+      description: Get a specific OS Update Policy.
+      operationId: OSUpdatePolicy_GetOSUpdatePolicy
+      parameters:
+        - description: Name of the requested os.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the requested os.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OSUpdatePolicy'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: GetOSUpdatePolicy
+      tags:
+        - OSUpdatePolicy
+  /v1/projects/{projectName}/os-update-runs:
+    get:
+      description: Get a list of OS Update Policies.
+      operationId: OSUpdateRun_ListOSUpdateRun
+      parameters:
+        - description: |-
+            Optional comma separated list of fields to specify a sorting order.
+             See https://google.aip.dev/132 for details.
+          in: query
+          name: orderBy
+          schema:
+            description: |-
+              (OPTIONAL) Optional comma separated list of fields to specify a sorting order.
+               See https://google.aip.dev/132 for details.
+            maxLength: 1000
+            pattern: ^$|^[a-zA-Z-_0-9., ]+$
+            title: order_by
+            type: string
+        - description: |-
+            Optional filter to return only item of interest.
+             See https://google.aip.dev/160 for details.
+          in: query
+          name: filter
+          schema:
+            description: |-
+              (OPTIONAL) Optional filter to return only item of interest.
+               See https://google.aip.dev/160 for details.
+            maxLength: 1000
+            pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}"' ]+$
+            title: filter
+            type: string
+        - description: |-
+            Defines the amount of items to be contained in a single page.
+             Default of 20.
+          in: query
+          name: pageSize
+          schema:
+            description: |-
+              (OPTIONAL) Defines the amount of items to be contained in a single page.
+               Default of 20.
+            maximum: 100
+            minimum: 1
+            title: page_size
+            type: integer
+        - description: Index of the first item to return. This allows skipping items.
+          in: query
+          name: offset
+          schema:
+            description: (OPTIONAL) Index of the first item to return. This allows skipping items.
+            maximum: 10000
+            title: offset
+            type: integer
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListOSUpdateRunResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: ListOSUpdateRun
+      tags:
+        - OSUpdateRun
+  /v1/projects/{projectName}/os-update-runs/{resourceId}:
+    delete:
+      description: Delete a OS Update Run.
+      operationId: OSUpdateRun_DeleteOSUpdateRun
+      parameters:
+        - description: Name of the os update run to be deleted.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the os update run to be deleted.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OSUpdateRun'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: DeleteOSUpdateRun
+      tags:
+        - OSUpdateRun
+    get:
+      description: Get a specific OS Update Run.
+      operationId: OSUpdateRun_GetOSUpdateRun
+      parameters:
+        - description: Name of the requested os.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the requested os.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OSUpdateRun'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: GetOSUpdateRun
+      tags:
+        - OSUpdateRun
   /v1/projects/{projectName}/providers:
     get:
       description: Get a list of providers.
@@ -4163,6 +4485,46 @@ components:
         - localAccount
       title: CreateLocalAccountResponse
       type: object
+    CreateOSUpdatePolicyRequest:
+      additionalProperties: false
+      description: Request message for the CreateOSUpdatePolicy method.
+      properties:
+        osUpdatePolicy:
+          $ref: '#/components/schemas/OSUpdatePolicy'
+      required:
+        - osUpdatePolicy
+      title: CreateOSUpdatePolicyRequest
+      type: object
+    CreateOSUpdatePolicyResponse:
+      additionalProperties: false
+      description: Response message for the CreateOSUpdatePolicy method.
+      properties:
+        osUpdatePolicy:
+          $ref: '#/components/schemas/OSUpdatePolicy'
+      required:
+        - osUpdatePolicy
+      title: CreateOSUpdatePolicyResponse
+      type: object
+    CreateOSUpdateRunRequest:
+      additionalProperties: false
+      description: Request message for the CreateOSUpdateRun method.
+      properties:
+        osUpdateRun:
+          $ref: '#/components/schemas/OSUpdateRun'
+      required:
+        - osUpdateRun
+      title: CreateOSUpdateRunRequest
+      type: object
+    CreateOSUpdateRunResponse:
+      additionalProperties: false
+      description: Response message for the CreateOSUpdateRun method.
+      properties:
+        osUpdateRun:
+          $ref: '#/components/schemas/OSUpdateRun'
+      required:
+        - osUpdateRun
+      title: CreateOSUpdateRunResponse
+      type: object
     CreateOperatingSystemRequest:
       additionalProperties: false
       description: Request message for the CreateOperatingSystem method.
@@ -4453,6 +4815,40 @@ components:
       additionalProperties: false
       description: Response message for DeleteLocalAccount.
       title: DeleteLocalAccountResponse
+      type: object
+    DeleteOSUpdatePolicyRequest:
+      additionalProperties: false
+      description: Request message for DeleteOperatingSystem.
+      properties:
+        resourceId:
+          description: Name of the OS Update Policy to be deleted.
+          title: resourceId
+          type: string
+      required:
+        - resourceId
+      title: DeleteOSUpdatePolicyRequest
+      type: object
+    DeleteOSUpdatePolicyResponse:
+      additionalProperties: false
+      description: Response message for DeleteOperatingSystem.
+      title: DeleteOSUpdatePolicyResponse
+      type: object
+    DeleteOSUpdateRunRequest:
+      additionalProperties: false
+      description: Request message for DeleteOperatingSystem.
+      properties:
+        resourceId:
+          description: Name of the os update run to be deleted.
+          title: resourceId
+          type: string
+      required:
+        - resourceId
+      title: DeleteOSUpdateRunRequest
+      type: object
+    DeleteOSUpdateRunResponse:
+      additionalProperties: false
+      description: Response message for DeleteOperatingSystem.
+      title: DeleteOSUpdateRunResponse
       type: object
     DeleteOperatingSystemRequest:
       additionalProperties: false
@@ -4763,6 +5159,50 @@ components:
       required:
         - localAccount
       title: GetLocalAccountResponse
+      type: object
+    GetOSUpdatePolicyRequest:
+      additionalProperties: false
+      description: Request message for the GetOSUpdatePolicy method.
+      properties:
+        resourceId:
+          description: Name of the requested os.
+          title: resourceId
+          type: string
+      required:
+        - resourceId
+      title: GetOSUpdatePolicyRequest
+      type: object
+    GetOSUpdatePolicyResponse:
+      additionalProperties: false
+      description: Response message for the GetOSUpdatePolicy method.
+      properties:
+        osUpdatePolicy:
+          $ref: '#/components/schemas/OSUpdatePolicy'
+      required:
+        - osUpdatePolicy
+      title: GetOSUpdatePolicyResponse
+      type: object
+    GetOSUpdateRunRequest:
+      additionalProperties: false
+      description: Request message for the GetOSUpdateRun method.
+      properties:
+        resourceId:
+          description: Name of the requested os.
+          title: resourceId
+          type: string
+      required:
+        - resourceId
+      title: GetOSUpdateRunRequest
+      type: object
+    GetOSUpdateRunResponse:
+      additionalProperties: false
+      description: Response message for the GetOSUpdateRun method.
+      properties:
+        osUpdateRun:
+          $ref: '#/components/schemas/OSUpdateRun'
+      required:
+        - osUpdateRun
+      title: GetOSUpdateRunResponse
       type: object
     GetOperatingSystemRequest:
       additionalProperties: false
@@ -5546,6 +5986,13 @@ components:
           $ref: '#/components/schemas/OperatingSystemResource'
         desiredState:
           $ref: '#/components/schemas/InstanceState'
+        existingCves:
+          description: The CVEs that are currently present on the Instance, encoded as a JSON list.
+          maxLength: 20000
+          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\ \n{}[]]+$
+          readOnly: true
+          title: existing_cves
+          type: string
         host:
           $ref: '#/components/schemas/HostResource'
         hostID:
@@ -5602,10 +6049,23 @@ components:
         os:
           $ref: '#/components/schemas/OperatingSystemResource'
         osID:
-          description: The unique identifier of OS resource that must be installed on the instance.
+          description: The unique identifier of OS resource that must be installed on the instance. The field is used to drive the day0 operations, and immutable once set the first time.
           maxLength: 11
           pattern: ^os-[0-9a-f]{8}$
           title: osID
+          type: string
+          writeOnly: true
+        osUpdateAvailable:
+          description: Details about OS Updates available for this Instance. If empty, there are no updates available.
+          maxLength: 10000
+          pattern: ^$|^[a-zA-Z-_0-9./:;=?@!#,<>*()"\ \n]+$
+          readOnly: true
+          title: os_update_available
+          type: string
+        osUpdatePolicyID:
+          maxLength: 23
+          pattern: ^osupdatepolicy-[0-9a-f]{8}$
+          title: os_update_policyID
           type: string
           writeOnly: true
         provisioningStatus:
@@ -5628,6 +6088,13 @@ components:
           readOnly: true
           title: resource_id
           type: string
+        runtimePackages:
+          description: The packages available on the Instance at runtime, represented as a JSON list.
+          maxLength: 500000
+          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\ \n{}[]]+$
+          readOnly: true
+          title: runtime_packages
+          type: string
         securityFeature:
           $ref: '#/components/schemas/SecurityFeature'
         timestamps:
@@ -5645,6 +6112,8 @@ components:
           readOnly: true
           title: trusted_attestation_status_timestamp
           type: integer
+        updatePolicy:
+          $ref: '#/components/schemas/OSUpdatePolicy'
         updateStatus:
           description: textual message that describes the update status of Instance. Set by RMs only.
           maxLength: 1024
@@ -5652,7 +6121,7 @@ components:
           title: update_status
           type: string
         updateStatusDetail:
-          description: JSON field storing details of Instance update status. Set by RMs only. Beta, subject to change.
+          description: Deprecated, will be removed in EMF v3.2.0, use OSUpdateRun instead. JSON field storing details of Instance update status. Set by RMs only. Beta, subject to change.
           maxLength: 100000
           readOnly: true
           title: update_status_detail
@@ -5988,6 +6457,126 @@ components:
         - RESOURCE_KIND_SITE
       title: ResourceKind
       type: string
+    ListOSUpdatePolicyRequest:
+      additionalProperties: false
+      description: Request message for the ListOSUpdatePolicy method.
+      properties:
+        filter:
+          description: |-
+            (OPTIONAL) Optional filter to return only item of interest.
+             See https://google.aip.dev/160 for details.
+          maxLength: 1000
+          pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}"' ]+$
+          title: filter
+          type: string
+        offset:
+          description: (OPTIONAL) Index of the first item to return. This allows skipping items.
+          maximum: 10000
+          title: offset
+          type: integer
+        orderBy:
+          description: |-
+            (OPTIONAL) Optional comma separated list of fields to specify a sorting order.
+             See https://google.aip.dev/132 for details.
+          maxLength: 1000
+          pattern: ^$|^[a-zA-Z-_0-9., ]+$
+          title: order_by
+          type: string
+        pageSize:
+          description: |-
+            (OPTIONAL) Defines the amount of items to be contained in a single page.
+             Default of 20.
+          maximum: 100
+          minimum: 1
+          title: page_size
+          type: integer
+      title: ListOSUpdatePolicyRequest
+      type: object
+    ListOSUpdatePolicyResponse:
+      additionalProperties: false
+      description: Response message for the ListOSUpdatePolicy method.
+      properties:
+        hasNext:
+          description: Inform if there are more elements
+          title: has_next
+          type: boolean
+        osUpdatePolicies:
+          description: Sorted and filtered list of OS Update Policies.
+          items:
+            $ref: '#/components/schemas/OSUpdatePolicy'
+          title: os_update_policies
+          type: array
+        totalElements:
+          description: Count of items in the entire list, regardless of pagination.
+          format: int32
+          title: total_elements
+          type: integer
+      required:
+        - osUpdatePolicies
+        - totalElements
+        - hasNext
+      title: ListOSUpdatePolicyResponse
+      type: object
+    ListOSUpdateRunRequest:
+      additionalProperties: false
+      description: Request message for the ListOSUpdateRun method.
+      properties:
+        filter:
+          description: |-
+            (OPTIONAL) Optional filter to return only item of interest.
+             See https://google.aip.dev/160 for details.
+          maxLength: 1000
+          pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}"' ]+$
+          title: filter
+          type: string
+        offset:
+          description: (OPTIONAL) Index of the first item to return. This allows skipping items.
+          maximum: 10000
+          title: offset
+          type: integer
+        orderBy:
+          description: |-
+            (OPTIONAL) Optional comma separated list of fields to specify a sorting order.
+             See https://google.aip.dev/132 for details.
+          maxLength: 1000
+          pattern: ^$|^[a-zA-Z-_0-9., ]+$
+          title: order_by
+          type: string
+        pageSize:
+          description: |-
+            (OPTIONAL) Defines the amount of items to be contained in a single page.
+             Default of 20.
+          maximum: 100
+          minimum: 1
+          title: page_size
+          type: integer
+      title: ListOSUpdateRunRequest
+      type: object
+    ListOSUpdateRunResponse:
+      additionalProperties: false
+      description: Response message for the ListOSUpdateRun method.
+      properties:
+        hasNext:
+          description: Inform if there are more elements
+          title: has_next
+          type: boolean
+        osUpdatePolicies:
+          description: Sorted and filtered list of os update policies.
+          items:
+            $ref: '#/components/schemas/OSUpdateRun'
+          title: os_update_policies
+          type: array
+        totalElements:
+          description: Count of items in the entire list, regardless of pagination.
+          format: int32
+          title: total_elements
+          type: integer
+      required:
+        - osUpdatePolicies
+        - totalElements
+        - hasNext
+      title: ListOSUpdateRunResponse
+      type: object
     ListOperatingSystemsRequest:
       additionalProperties: false
       description: Request message for the ListOperatingSystems method.
@@ -6910,6 +7499,114 @@ components:
           $ref: '#/components/schemas/LinkState'
       title: NetworkInterfaceLinkState
       type: object
+    OSUpdatePolicy:
+      additionalProperties: false
+      properties:
+        description:
+          description: User-provided, human-readable description.
+          maxLength: 200
+          pattern: ^$|^[a-zA-Z-_0-9./:;=?@!#,<>*() ]+$
+          title: description
+          type: string
+        installPackages:
+          description: |-
+            Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information.
+             Applies only to Mutable OSes.
+          maxLength: 500000
+          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\ \n{}[]]+$
+          title: install_packages
+          type: string
+        kernelCommand:
+          description: |-
+            The OS resource's kernel Command Line Options.
+             Applies only to Mutable OSes.
+          maxLength: 500
+          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()" ]+$
+          title: kernel_command
+          type: string
+        name:
+          description: User-provided, human-readable name.
+          maxLength: 50
+          pattern: '^$|^[a-zA-Z-_0-9./: ]+$'
+          title: name
+          type: string
+        resourceId:
+          description: resource ID, generated by the inventory on Create.
+          pattern: ^osupdatepolicy-[0-9a-f]{8}$
+          readOnly: true
+          title: resource_id
+          type: string
+        targetOs:
+          $ref: '#/components/schemas/OperatingSystemResource'
+        timestamps:
+          $ref: '#/components/schemas/Timestamps'
+        updatePolicy:
+          $ref: '#/components/schemas/UpdatePolicy'
+        updateSources:
+          description: |-
+            The list of OS resource update sources.
+             Should be in 'DEB822 Source Format' for Debian style OSs.
+             Applies only to Mutable OSes.
+          items:
+            pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+()"\ \n]+$
+            type: string
+          title: update_sources
+          type: array
+      required:
+        - name
+      title: OSUpdatePolicy
+      type: object
+    OSUpdateRun:
+      additionalProperties: false
+      properties:
+        appliedPolicy:
+          $ref: '#/components/schemas/OSUpdatePolicy'
+        description:
+          description: Human-readable description.
+          maxLength: 200
+          pattern: ^$|^[a-zA-Z-_0-9./:;=?@!#,<>*() ]+$
+          readOnly: true
+          title: description
+          type: string
+        endTime:
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+        instance:
+          $ref: '#/components/schemas/InstanceResource'
+        name:
+          description: Human-readable name.
+          maxLength: 40
+          pattern: ^$|^[a-zA-Z-_0-9./:;=?@!#,<>*() ]+$
+          readOnly: true
+          title: name
+          type: string
+        resourceId:
+          description: resource ID, generated by the inventory on Create.
+          pattern: ^osupdaterun-[0-9a-f]{8}$
+          readOnly: true
+          title: resource_id
+          type: string
+        startTime:
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+        status:
+          description: Short message that describes what happened during the OS Update.
+          maxLength: 1024
+          readOnly: true
+          title: status
+          type: string
+        statusDetails:
+          description: Details about what happened during the OS Update.
+          maxLength: 100000
+          readOnly: true
+          title: status_details
+          type: string
+        statusIndicator:
+          $ref: '#/components/schemas/StatusIndication'
+        statusTimestamp:
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+        timestamps:
+          $ref: '#/components/schemas/Timestamps'
+      title: OSUpdateRun
+      type: object
     OnboardHostRequest:
       additionalProperties: false
       description: Request to onboard a Host.
@@ -6941,6 +7638,32 @@ components:
           pattern: ^$|^[a-zA-Z-_0-9.:;=@?!#,<>*(){}&%$`^\+\- ]+$
           title: description
           type: string
+        existingCves:
+          description: The CVEs that are currently present on the Operating System, encoded as a JSON list.
+          maxLength: 20000
+          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\ \n{}[]]+$
+          readOnly: true
+          title: existing_cves
+          type: string
+        existingCvesUrl:
+          description: URL of the file containing information about the existing CVEs on the Operating System.
+          maxLength: 500
+          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()"\ ]+$
+          title: existing_cves_url
+          type: string
+        fixedCves:
+          description: The CVEs that have been fixed by this OS Resource version, encoded as a JSON list.
+          maxLength: 20000
+          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\ \n{}[]]+$
+          readOnly: true
+          title: fixed_cves
+          type: string
+        fixedCvesUrl:
+          description: URL of the file containing information about the CVEs that have been fixed by this OS Resource version.
+          maxLength: 500
+          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()"\ ]+$
+          title: fixed_cves_url
+          type: string
         imageId:
           description: A unique identifier of the OS image that can be retrieved from the running OS.
           maxLength: 500
@@ -6954,16 +7677,31 @@ components:
           title: image_url
           type: string
         installedPackages:
-          description: Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information.
+          description: List of installed packages, encoded as a JSON list.
           maxLength: 500000
           pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()" \\\n]+$
+          readOnly: true
           title: installed_packages
           type: string
+        installedPackagesUrl:
+          description: |-
+            (IMMUTABLE) The URL of the OS manifest which contains install packages details. This will be used to fill the installed_packages field
+             for the advance use case to allow manual creation of OSProfiles when supported from backend.
+          maxLength: 200
+          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()"\ ]+$
+          title: installed_packages_url
+          type: string
         kernelCommand:
-          description: The OS resource's kernel Command Line Options.
+          description: Deprecated, will be removed in EMF v3.2.0, this has been moved to new resource OSUpdatePolicy. The OS resource's kernel Command Line Options.
           maxLength: 500
           pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()" ]+$
           title: kernel_command
+          type: string
+        metadata:
+          description: Opaque JSON field storing metadata associated to this OS resource.
+          maxLength: 500
+          pattern: ^$|^[a-z0-9.-_:/"\ \n{}]+$
+          title: metadata
           type: string
         name:
           description: The OS resource's name.
@@ -7024,7 +7762,7 @@ components:
           $ref: '#/components/schemas/Timestamps'
         updateSources:
           description: |-
-            The list of OS resource update sources.
+            Deprecated, will be removed in EMF v3.2.0, this has been moved to new resource OSUpdatePolicy. The list of OS resource update sources.
              Should be in 'DEB822 Source Format' for Debian style OSs
           items:
             maxItems: 100
@@ -7035,7 +7773,6 @@ components:
           title: update_sources
           type: array
       required:
-        - updateSources
         - sha256
       title: OperatingSystemResource
       type: object
@@ -7979,6 +8716,14 @@ components:
         - os
       title: UpdateOperatingSystemRequest
       type: object
+    UpdatePolicy:
+      description: States of the host.
+      enum:
+        - UPDATE_POLICY_UNSPECIFIED
+        - UPDATE_POLICY_LATEST
+        - UPDATE_POLICY_TARGET
+      title: UpdatePolicy
+      type: string
     UpdateRegionRequest:
       additionalProperties: false
       description: Request message for the UpdateRegion method.

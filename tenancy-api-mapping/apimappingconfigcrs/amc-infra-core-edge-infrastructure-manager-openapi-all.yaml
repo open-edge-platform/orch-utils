@@ -12,7 +12,7 @@ spec:
   specGenEnabled: true
   repoConf:
     url: "https://github.com/open-edge-platform/infra-core.git"
-    tag: "apiv2/v0.2.2"
+    tag: "apiv2/v0.3.1"
     specFilePath: "apiv2/api/openapi/openapi.yaml"
   mappings:
     - externalURI: /v1/projects/{projectName}/regions
@@ -93,6 +93,14 @@ spec:
       serviceURI: edge-infra.orchestrator.apis/v2/localAccounts
     - externalURI: /v1/projects/{projectName}/localAccounts/{resourceId}
       serviceURI: edge-infra.orchestrator.apis/v2/localAccounts/{resourceId}
+    - externalURI: /v1/projects/{projectName}/os-update-policies
+      serviceURI: edge-infra.orchestrator.apis/v2/os_update_policy
+    - externalURI: /v1/projects/{projectName}/os-update-policies/{resourceId}
+      serviceURI: edge-infra.orchestrator.apis/v2/os_update_policy/{resourceId}
+    - externalURI: /v1/projects/{projectName}/os-update-runs
+      serviceURI: edge-infra.orchestrator.apis/v2/os_update_run
+    - externalURI: /v1/projects/{projectName}/os-update-runs/{resourceId}
+      serviceURI: edge-infra.orchestrator.apis/v2/os_update_run/{resourceId}
   backend:
     service: "apiv2-proxy.orch-infra.svc.cluster.local"
     port: 8080
