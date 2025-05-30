@@ -20,4 +20,4 @@ spec:
     - externalURI: /v1/projects/{projectName}/dm/amt/admin/domains
       serviceURI: api/v1/admin/domains
     - externalURI: /v1/projects/{projectName}/dm/amt/admin/domains/{domainName}
-      serviceURI: api/v1/admin/domains/{domainName}
+      serviceURI: api/v1/admin/domains/{profileName}
