@@ -12,7 +12,7 @@ spec:
   specGenEnabled: true
   repoConf:
     url: "https://github.com/open-edge-platform/infra-core.git"
-    tag: "apiv2/v0.2.0"
+    tag: "apiv2/v0.2.2"
     specFilePath: "apiv2/api/openapi/openapi.yaml"
   mappings:
     - externalURI: /v1/projects/{projectName}/regions
