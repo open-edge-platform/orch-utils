@@ -61,6 +61,12 @@ func ListHandler(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, errorMessage{Message: err.Error()})
 	}
 
+	// Validate the URL to prevent SSRF
+	if !strings.HasPrefix(url, config.Cfg.BackendService) {
+		log.Warn().Msgf("Blocked request to non-backend URL: %s", url)
+		return c.JSON(http.StatusBadRequest, errorMessage{Message: "Invalid backend URL"})
+	}
+
 	log.Debug().Msgf("Making a request to: %s", url)
 	// Create a context with a timeout
 	ctx, cancel := context.WithTimeout(context.Background(), ctxTimeoutDurationConst)
@@ -102,6 +108,12 @@ func GetHandler(c echo.Context) error {
 	url, err := BuildURLFromParams(ec)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, errorMessage{Message: err.Error()})
+	}
+
+	// Validate the URL to prevent SSRF
+	if !strings.HasPrefix(url, config.Cfg.BackendService) {
+		log.Warn().Msgf("Blocked request to non-backend URL: %s", url)
+		return c.JSON(http.StatusBadRequest, errorMessage{Message: "Invalid backend URL"})
 	}
 
 	log.Debug().Msgf("Making a request to: %s", url)
@@ -242,6 +254,12 @@ func DeleteHandler(c echo.Context) error {
 	url, err := BuildURLFromParams(ec)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, errorMessage{Message: err.Error()})
+	}
+
+	// Validate the URL to prevent SSRF
+	if !strings.HasPrefix(url, config.Cfg.BackendService) {
+		log.Warn().Msgf("Blocked request to non-backend URL: %s", url)
+		return c.JSON(http.StatusBadRequest, errorMessage{Message: "Invalid backend URL"})
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), ctxTimeoutDurationConst)
