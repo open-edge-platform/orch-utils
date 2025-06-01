@@ -96,7 +96,7 @@ jobs:
           ref: ${{ github.head_ref }}
           persist-credentials: false
       - name: Install gitleaks
-        uses: open-edge-platform/orch-ci/.github/actions/bootstrap@31986a986cab0a87721ecb694388029e94e55ff7   # 0.1.8
+        uses: open-edge-platform/orch-ci/.github/actions/bootstrap@f0798a24b208c90bc09fffc3d4b8df7a04195e30   # 0.1.20
         with:
           bootstrap_tools: "gitleaks"
       - name: Get current timestamp
