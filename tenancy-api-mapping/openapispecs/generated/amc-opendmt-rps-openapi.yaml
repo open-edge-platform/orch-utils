@@ -179,7 +179,7 @@ paths:
       summary: Create Domain
       tags:
         - Domains
-  /v1/projects/{projectName}/dm/amt/admin/domains/{domainName}:
+  /v1/projects/{projectName}/dm/amt/admin/domains/{profileName}:
     delete:
       description: Removes the specific domain configuration profile
       operationId: RemoveDomain
@@ -193,12 +193,6 @@ paths:
         - description: unique projectName for the resource
           in: path
           name: projectName
-          required: true
-          schema:
-            type: string
-        - description: unique domainName for the resource
-          in: path
-          name: domainName
           required: true
           schema:
             type: string
@@ -233,12 +227,6 @@ paths:
         - description: unique projectName for the resource
           in: path
           name: projectName
-          required: true
-          schema:
-            type: string
-        - description: unique domainName for the resource
-          in: path
-          name: domainName
           required: true
           schema:
             type: string
