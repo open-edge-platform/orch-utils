@@ -5,7 +5,6 @@
 version: 2
 enable-beta-ecosystems: true
 updates:
-
   # Enable version updates for Go modules
   - package-ecosystem: "gomod"
     directories:
@@ -44,8 +43,14 @@ updates:
       - "/tenancy-manager"
       - "/tenancy-datamodel/test"
       - "/tenancy-datamodel"
+    # Only update patch versions to reduce the chance of regressions getting introduced
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
     schedule:
-      interval: "monthly"
+      interval: "weekly"
     commit-message:
       prefix: "go.mod"
     reviewers:
@@ -95,8 +100,14 @@ updates:
       - "/charts/copy-secret"
       - "/charts/squid-proxy"
       - "/charts/oci-secret"
+    # Only update patch versions to reduce the chance of regressions getting introduced
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
     schedule:
-      interval: "monthly"
+      interval: "weekly"
     commit-message:
       prefix: "Helm charts"
     reviewers:
@@ -120,8 +131,14 @@ updates:
       - "/tenancy-manager"
       - "/tenancy-datamodel"
       - "/squid-proxy"
+    # Only update patch versions to reduce the chance of regressions getting introduced
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
     schedule:
-      interval: "monthly"
+      interval: "weekly"
     commit-message:
       prefix: "Dockerfile"
     reviewers:
@@ -131,8 +148,14 @@ updates:
   # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
+    # Only update patch versions to reduce the chance of regressions getting introduced
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
     schedule:
-      interval: "monthly"
+      interval: "weekly"
     commit-message:
       prefix: "Github Actions"
     reviewers:
