@@ -179,6 +179,79 @@ paths:
       summary: Create Domain
       tags:
         - Domains
+  /v1/projects/{projectName}/dm/amt/admin/domains/{profileName}:
+    delete:
+      description: Removes the specific domain configuration profile
+      operationId: RemoveDomain
+      parameters:
+        - description: Name of domain profile to remove
+          in: path
+          name: profileName
+          required: true
+          schema:
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: successful operation
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: internal server error
+      summary: Remove Domain
+      tags:
+        - Domains
+    get:
+      description: Retrieves the specific domain configuration profile.
+      operationId: GetDomain
+      parameters:
+        - description: Name of domain profile to return
+          in: path
+          name: profileName
+          required: true
+          schema:
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainResponse'
+          description: successful operation
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: internal server error
+      summary: Get Domain
+      tags:
+        - Domains
 components:
   schemas:
     APIResponse:
