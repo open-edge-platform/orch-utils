@@ -9,5 +9,23 @@
 # Everything requires Platform team review by default
 * chris.thach@intel.com @mdbalvin @charlesmcchan @yi-tseng-intel @ashridatta @teone @callumnobleintel @daniele-moro @SeanCondon @pierventre john.oloughlin@intel.com gary.loughnane@intel.com @ahalimx86 andrei.palade@intel.com dmytro.yermolenko@intel.com patryk.iracki@intel.com diwan.chandrabose@intel.com sushil.lakra@intel.com @zdw
 
+# Dependabot is used to manage dependencies in this repository. It is configured to automatically open pull requests to
+# update dependencies when new versions are available. The following files are managed by Dependabot and do not require
+# manual review or approval for changes. However, if you want to review the changes made by Dependabot, you can do so
+# by checking the pull requests it opens. This workaround was shared in
+# https://github.com/orgs/community/discussions/23064#discussioncomment-8383923 and can be removed once GitHub properly
+# supports CODEOWNERS for GitHub apps.
+# Go modules dependencies
+**/*.mod
+**/*.sum
+# Helm dependencies
+**/Chart.yaml
+**/values.yaml
+# Docker dependencies
+**/Dockerfile
+# GitHub Actions dependencies
+/.github/workflows/*.yml
+/.github/workflows/*.yaml
+
 # All changes to Nexus framework must be reviewed by the Nexus team
 nexus/* @Rashika-Rajaraman @xmen4xp
