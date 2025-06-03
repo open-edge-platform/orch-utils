@@ -2,15 +2,16 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 ---
+{{- range .Values.controlplane.providers }}
 apiVersion: operator.cluster.x-k8s.io/v1alpha2
 kind: ControlPlaneProvider
 metadata:
-  name: {{ .Values.controlplane.name }}
-  namespace: {{ .Values.controlplane.namespace }}
+  name: {{ .name }}
+  namespace: {{ .namespace }}
 spec:
-  {{- toYaml .Values.controlplane.spec | nindent 2 }}
+  {{- toYaml .spec | nindent 2 }}
 ---
-{{- if .Values.controlplane.spec.additionalManifests }}
+{{- if .additionalManifests }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -30,4 +31,5 @@ data:
     {{- include "metricsservicemonitortemplate" (dict "name" (printf "%s-%s" "controlplane" .Values.controlplane.name) "namespace" .Values.controlplane.namespace) | nindent 4 }}
     {{- end }}
 {{- end }}
-
+---
+{{- end }}
