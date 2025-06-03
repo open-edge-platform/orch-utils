@@ -30,7 +30,8 @@ bootstrap:
       namespace: capi-k3s-bootstrap-system
       spec:
         version: v0.2.1
-        url: "https://github.com/k3s-io/cluster-api-k3s/releases/v0.2.1/bootstrap-components.yaml"
+        fetchConfig:
+          url: "https://github.com/k3s-io/cluster-api-k3s/releases/v0.2.1/bootstrap-components.yaml"
         configSecret:
           namespace: capi-variables
           name: capi-variables
@@ -48,7 +49,8 @@ controlplane:
       namespace: capi-k3s-control-plane-system
       spec:
         version: v0.2.1
-        url: "https://github.com/k3s-io/cluster-api-k3s/releases/v0.2.1/control-plane-components.yaml"
+        fetchConfig:
+          url: "https://github.com/k3s-io/cluster-api-k3s/releases/v0.2.1/control-plane-components.yaml"
         configSecret:
           namespace: capi-variables
           name: capi-variables
