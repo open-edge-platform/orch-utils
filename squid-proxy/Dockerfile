@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # Use a full-featured base image to build Squid
-FROM debian:trixie as build-stage
+FROM debian:trixie@sha256:8768d756a109ada44f627f3c0843685100356d54eb29f5190570694afc3e3946 as build-stage
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y --fix-missing \
@@ -30,7 +30,7 @@ RUN ldd /usr/sbin/squid | tr -s '[:space:]' '\n' | grep '^/' | \
     xargs -I {} cp -v --parents {} /deps
 
 # Use Distroless as the final base image
-FROM gcr.io/distroless/base-debian12:nonroot
+FROM gcr.io/distroless/base-debian12:nonroot@sha256:5c9b112e85b26632c6ba9ac874be9c6b20d61599f6087534ce2b9feeb7f6babf
 
 # Copy Squid binaries and configuration from the build stage
 COPY --from=build-stage /usr/sbin/squid /usr/sbin/squid

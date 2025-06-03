@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-FROM golang:1.24.2-bullseye AS builder
+FROM golang:1.24.2-bullseye@sha256:f50ff25f8331682b44c1582974eb9e620fcb08052fc6ed434f93ca24636fc4d6 AS builder
 
 ARG API_GW_COMPONENT_NAME
 ARG HTTP_PROXY
@@ -28,7 +28,7 @@ RUN set -x && \
     apt-get install -y --no-install-recommends netcat-openbsd=1.217-3 && \
     CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -buildvcs=false -o bin/${API_GW_COMPONENT_NAME}
 
-FROM gcr.io/distroless/static-debian12:nonroot
+FROM gcr.io/distroless/static-debian12:nonroot@sha256:188ddfb9e497f861177352057cb21913d840ecae6c843d39e00d44fa64daa51c
 # Run as non-privileged user
 USER nobody
 

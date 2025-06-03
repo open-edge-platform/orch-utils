@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-FROM golang:1.24.2 AS build
+FROM golang:1.24.2@sha256:30baaea08c5d1e858329c50f29fe381e9b7d7bced11a0f5f1f69a1504cdfbf5e AS build
 
 WORKDIR /workspace
 
@@ -33,7 +33,7 @@ RUN CGO_ENABLED=0 \
   -o ./build/app \
   ./secrets/cmd/config
 
-FROM gcr.io/distroless/static-debian11:nonroot
+FROM gcr.io/distroless/static-debian11:nonroot@sha256:63ebe035fbdd056ed682e6a87b286d07d3f05f12cb46f26b2b44fc10fc4a59ed
 
 COPY --from=build /workspace/build/app /app
 

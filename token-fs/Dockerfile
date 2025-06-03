@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-FROM golang:1.24.3 AS build
+FROM golang:1.24.3@sha256:81bf5927dc91aefb42e2bc3a5abdbe9bb3bae8ba8b107e2a4cf43ce3402534c6 AS build
 
 WORKDIR /workspace
 
@@ -32,7 +32,7 @@ RUN CGO_ENABLED=0 \
   -o ./build/app \
   ./token-fs/cmd/token-fs
 
-FROM gcr.io/distroless/static-debian11:nonroot
+FROM gcr.io/distroless/static-debian11:nonroot@sha256:63ebe035fbdd056ed682e6a87b286d07d3f05f12cb46f26b2b44fc10fc4a59ed
 
 COPY --from=build /workspace/build/app /app
 

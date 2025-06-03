@@ -161,3 +161,263 @@ updates:
     reviewers:
       - "se-chris-thach"
       - "dmytroye"
+
+  - package-ecosystem: docker
+    directory: /auth-service
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /auth-service
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /aws-sm-proxy
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /cert-synchronizer
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /cert-synchronizer
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /keycloak-tenant-controller
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /keycloak-tenant-controller/images
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /nexus-api-gw
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus-api-gw
+    schedule:
+      interval: daily
+
+  - package-ecosystem: pip
+    directory: /nexus-api-gw
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/common-library
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /nexus/compiler
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /nexus/compiler/builder
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/compiler/example/datamodel
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/compiler/example/output/generated
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/compiler/example/test-utils/array-type-child
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/compiler/example/test-utils/duplicated-uris-datamodel
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/compiler/example/test-utils/global-package
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/compiler/example/test-utils/group-name-with-hyphen-datamodel
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/compiler/example/test-utils/invalid-pkg-name-datamodel
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/compiler/example/test-utils/invalid-singleton-child
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/compiler/example/test-utils/invalid-type-name-datamodel
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/compiler/example/test-utils/map-type-child
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/compiler/example/test-utils/nexus-rest-api-gen-wrong-name
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/compiler/example/test-utils/non-singleton-root
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/compiler/example/test-utils/output-group-name-with-hyphen-datamodel
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/compiler/example/test-utils/pointer-type-datamodel
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/compiler/example/tests/custom_query_grpc_server
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/compiler/example/tests
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/compiler
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/gqlgen
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/install-validator
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/kube-openapi
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/nexus
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /nexus/openapi-generator
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /nexus/openapi-generator
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /secrets
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /squid-proxy
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /tenancy-api-mapping
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /tenancy-api-mapping
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /tenancy-api-mapping
+    schedule:
+      interval: daily
+
+  - package-ecosystem: pip
+    directory: /tenancy-api-mapping
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /tenancy-datamodel
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /tenancy-datamodel
+    schedule:
+      interval: daily
+
+  - package-ecosystem: pip
+    directory: /tenancy-datamodel
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /tenancy-datamodel/test
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /tenancy-manager
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /tenancy-manager
+    schedule:
+      interval: daily
+
+  - package-ecosystem: pip
+    directory: /tenancy-manager
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /token-fs
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /traefik-plugins/jwt-plugin
+    schedule:
+      interval: daily
