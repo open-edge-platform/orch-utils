@@ -35,7 +35,17 @@ OPENAPI_GENERATOR_DOCKER_IMAGE   ?= ${DOCKER_REGISTRY}nexus/${OPENAPI_GENERATOR_
 
 .PHONY: openapi.generator.docker
 openapi.generator.docker:
-	docker build --no-cache -t ${OPENAPI_GENERATOR_DOCKER_IMAGE} -f openapi-generator/Dockerfile .
+	docker build -t ${OPENAPI_GENERATOR_DOCKER_IMAGE} -f openapi-generator/Dockerfile .
+
+compiler-docker-list:
+	@make -C compiler docker-list
+
+docker-list: compiler-docker-list ## Print names of docker container images
+	@echo "  nexus/$(OPENAPI_GENERATOR_COMPONENT_NAME):"
+	@echo "    name: '$(OPENAPI_GENERATOR_DOCKER_IMAGE)'"
+	@echo "    version: '$(VERSION)'"
+	@echo "    gitTagPrefix: 'nexus/$(VERSION)'"
+	@echo "    buildTarget: 'docker-build-nexus/openapi-generator'"
 
 #### Help Target ####
 help: ## Print help for each target

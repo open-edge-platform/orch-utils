@@ -28,8 +28,8 @@ ifeq (${DOCKER_REGISTRY}, )
 BUILDER_DOCKER_VERSION  = ${BUILDER_NAME}:${BUILDER_VERSION}
 COMPILER_DOCKER_VERSION = ${COMPILER_NAME}:${VERSION}
 else
-BUILDER_DOCKER_VERSION  = ${DOCKER_REGISTRY}/${BUILDER_NAME}:${BUILDER_VERSION}
-COMPILER_DOCKER_VERSION = ${DOCKER_REGISTRY}/${COMPILER_NAME}:${VERSION}
+BUILDER_DOCKER_VERSION  = ${DOCKER_REGISTRY}${BUILDER_NAME}:${BUILDER_VERSION}
+COMPILER_DOCKER_VERSION = ${DOCKER_REGISTRY}${COMPILER_NAME}:${VERSION}
 endif
 
 DATAMODEL_PATH             ?= datamodel
@@ -311,7 +311,7 @@ show-image-name:
 .PHONY: publish
 publish:
 	docker tag ${IMAGE_NAME}:${VERSION} ${DOCKER_REGISTRY}/${IMAGE_NAME}:${VERSION}
-	docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${VERSION};
+	docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${VERSION}
 
 .PHONY: download_builder_image
 download_builder_image:
@@ -342,6 +342,13 @@ test_render_templates: render_templates
     	git diff;\
     	return 1;\
     fi
+
+docker-list: ## Print names of docker container images
+	@echo "  $(IMAGE_NAME):"
+	@echo "    name: '${DOCKER_REGISTRY}/${IMAGE_NAME}:${VERSION}'"
+	@echo "    version: '$(VERSION)'"
+	@echo "    gitTagPrefix: 'nexus/$(VERSION)'"
+	@echo "    buildTarget: 'docker-build-nexus/compiler'"
 
 #### Help Target ####
 help: ## Print help for each target
