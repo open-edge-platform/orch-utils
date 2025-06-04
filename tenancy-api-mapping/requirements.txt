@@ -1,11 +1,13 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
+#
 # SPDX-License-Identifier: Apache-2.0
 
 # OpenAPI validator
-openapi-spec-validator~=0.7.1
+openapi-spec-validator~=0.5.7
 
 # YAML linter
-yamllint~=1.35.1
+yamllint~=1.29.0
 
 # license checking
-reuse~=5.0.2
+python-debian==0.1.44
+reuse~=1.0.0

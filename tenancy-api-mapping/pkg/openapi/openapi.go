@@ -58,21 +58,15 @@ func (spec Spec) MarshalYAML() ([]byte, error) {
 }
 
 type SpecProcessor struct {
-	spec      *openapi3.T
-	mappingCR config.APIMappingConfig
-	cnfGlbl   config.Global
+	spec          *openapi3.T
+	localRepoPath string
+	mappingCR     config.APIMappingConfig
+	cnfGlbl       config.Global
 }
 
 func NewOpenAPISpecProcessor(mappingCR config.APIMappingConfig, cnfGlbl config.Global) (*SpecProcessor, error) {
-	fullSpecPath := ""
-
-	if mappingCR.Spec.RepoConf.SpecFilePath != "" { // openapi spec file is in a git repo
-		fullSpecPath = filepath.Join(cnfGlbl.LocalSubModsDir, mappingCR.Metadata.Name, mappingCR.Spec.RepoConf.SpecFilePath)
-	} else { // openapi spec file is downloaded
-		dlFilename := mappingCR.Metadata.Name + "_" + mappingCR.Spec.DownloadConf.Version + ".yaml"
-		fullSpecPath = filepath.Join(cnfGlbl.LocalDownloadsDir, dlFilename)
-	}
-
+	localRepoPath := filepath.Join(cnfGlbl.LocalSubModsDir, mappingCR.Metadata.Name)
+	fullSpecPath := filepath.Join(localRepoPath, mappingCR.Spec.RepoConf.SpecFilePath)
 	data, err := os.ReadFile(fullSpecPath)
 	if err != nil {
 		return nil, err
@@ -85,9 +79,10 @@ func NewOpenAPISpecProcessor(mappingCR config.APIMappingConfig, cnfGlbl config.G
 	}
 
 	return &SpecProcessor{
-		spec:      spec,
-		mappingCR: mappingCR,
-		cnfGlbl:   cnfGlbl,
+		spec:          spec,
+		localRepoPath: localRepoPath,
+		mappingCR:     mappingCR,
+		cnfGlbl:       cnfGlbl,
 	}, nil
 }
 

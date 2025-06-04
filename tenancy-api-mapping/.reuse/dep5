@@ -1,0 +1,9 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+
+Files: trivy-* hadolint.yml VERSION README.md placeholder.txt Dockerfile .ssh/* .netrc .gitconfig .gitignore .gitmodules package.json package-lock.json go.sum .github/* artifacts/* deployments/* apimappingconfigcrs/* openapispec/* pkg/* build/* avvdat.ini
+Copyright: 2025 Intel Corporation
+License: Apache-2.0
+
+Files: */node_modules/* openapispecs/*
+Copyright: 2025 Intel Corporation
+License: Apache-2.0

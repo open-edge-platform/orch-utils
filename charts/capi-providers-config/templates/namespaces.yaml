@@ -2,13 +2,24 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 ---
-{{- $namespaces := list .Values.core.namespace .Values.bootstrap.namespace .Values.controlplane.namespace | uniq }}
-{{- range $namespace := $namespaces }}
-{{- if $namespace }}
+{{- $allNamespaces := dict }}
+{{- if .Values.core.namespace }}
+  {{- $_ := set $allNamespaces .Values.core.namespace true }}
+{{- end }}
+{{- range .Values.bootstrap.providers }}
+  {{- if .namespace }}
+    {{- $_ := set $allNamespaces .namespace true }}
+  {{- end }}
+{{- end }}
+{{- range .Values.controlplane.providers }}
+  {{- if .namespace }}
+    {{- $_ := set $allNamespaces .namespace true }}
+  {{- end }}
+{{- end }}
+{{- range $ns, $_ := $allNamespaces }}
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ $namespace }}
+  name: {{ $ns }}
 ---
-{{- end }}
 {{- end }}

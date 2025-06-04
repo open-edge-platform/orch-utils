@@ -8,8 +8,8 @@ SHELL   := bash -eu -o pipefail
 .DEFAULT_GOAL := help
 
 VERSION                       ?= $(shell cat VERSION)
-GIT_HASH_SHORT                := $(shell git rev-parse --abbrev-ref HEAD)
-VERSION_DEV_SUFFIX            := ${GIT_HASH_SHORT}
+GIT_HASH_SHORT     						:= $(shell git rev-parse --abbrev-ref HEAD)
+VERSION_DEV_SUFFIX 						:= ${GIT_HASH_SHORT}
 
 ifneq ($(GIT_HASH_SHORT), main)
 	ifeq ($(findstring -dev,$(VERSION)), -dev)
@@ -17,25 +17,27 @@ ifneq ($(GIT_HASH_SHORT), main)
 	endif
 endif
 
-DOCKER_REGISTRY_OEP           ?= registry-rs.edgeorchestration.intel.com
-DOCKER_REPOSITORY_OEP         ?= edge-orch/common
-IMG_NAME_OEP                  ?= tenancy-api-mapping
-IMG_VERSION_OEP               ?= ${VERSION}
+DOCKER_REGISTRY_OEP          	?= registry-rs.edgeorchestration.intel.com
+DOCKER_REPOSITORY_OEP	        ?= edge-orch/common
+IMG_NAME_OEP			            ?= tenancy-api-mapping
+IMG_VERSION_OEP		            ?= ${VERSION}
 TENANCY_API_MAPPING_DOCKER_IMAGE_OEP ?= ${DOCKER_REGISTRY_OEP}/${DOCKER_REPOSITORY_OEP}/${IMG_NAME_OEP}:${IMG_VERSION_OEP}
 OUT_DIR                       := out
 REPO_DIR                      := repos
-DOWNLOAD_DIR                  := downloads
 API_MAPPING_CONFIG_DIR        := apimappingconfigcrs
-
-# Go command invocation
-GOCMD                         := GOPRIVATE="github.com/open-edge-platform/*" go
 
 # directory creation
 $(OUT_DIR):
 	@mkdir -p $@
 
+# Go command invocation
+GOCMD                         := GOPRIVATE="github.com/open-edge-platform/*" go
+
+# tag for the datamodel openapi spec copy
+DM_REPO_TAG_VERSION           := main
+
 .PHONY: all
-all: lint build test ## Runs build, lint, test stages
+all: lint license build test ## Runs build, lint, test stages
 
 # virtualenv for python tools
 VENV_NAME = venv_apimapping
@@ -61,20 +63,15 @@ go-lint: ## lint all go code with golangci-lint
 	golangci-lint --version
 	golangci-lint run --timeout=3m --config .golangci.yml ./...
 
-.PHONY: go-fix
-go-fix:
-	golangci-lint run --fix --config .golangci.yml
-
 .PHONY: hadolint
 hadolint: ## lint Dockerfile with hadolint
 	hadolint Dockerfile
 
 YAML_FILES := $(shell find . -path './repos' -prune -o -type f \( -name '*.yaml' -o -name '*.yml' \) -print )
 .PHONY: yamllint
-yamllint: $(VENV_NAME)  ## Lint all yaml files
-	. ./$</bin/activate; set -u;\
-  yamllint --version ;\
-  yamllint -c yamllint_conf.yml -s $(YAML_FILES)
+yamllint: ## Lint all yaml files
+	yamllint --version
+	yamllint -c yamllint_conf.yml -s $(YAML_FILES)
 
 ### Docker targets ###
 .PHONY: build
@@ -113,16 +110,16 @@ openapi-lint: node_modules
 		--skip-rule=info-license \
 		--skip-rule=tag-description
 
-### targets to obtain APIs being mapped###
+### git checkout targets ###
 $(REPO_DIR):
 	@mkdir -p $@
 
 # Get list of directories to checkout repos, named per api mapping
-REPO_LIST := $(notdir $(shell grep -l repoConf $(API_MAPPING_CONFIG_DIR)/* ))
+REPO_LIST := $(shell ls $(API_MAPPING_CONFIG_DIR))
 REPOS := $(addprefix $(REPO_DIR)/, $(basename $(REPO_LIST)))
 
-checkout-repos: $(REPOS) ## checkout all git repos with OpenAPI specs
-	@echo "All repos checked out"
+checkout-repos: $(REPOS) ## checkout all repos
+	@ echo "All repos checked out"
 	@for repo in $(REPO_LIST); do \
     GIT_REF=$$(yq eval ".spec.repoConf.tag" "$(API_MAPPING_CONFIG_DIR)/$$repo" );\
     pushd "$(REPO_DIR)/$${repo%.*}" ;\
@@ -136,20 +133,8 @@ $(REPO_DIR)/%:
 	@REPO_URL=$$(yq eval ".spec.repoConf.url" "$(API_MAPPING_CONFIG_DIR)/$*.yaml" );\
   git clone -q "$$REPO_URL" $@
 
-# Get list of downloaded API sources, named per api mapping
-DOWNLOAD_APIS := $(shell grep -l downloadConf $(API_MAPPING_CONFIG_DIR)/* )
-
-.PHONY: refresh-downloads
-refresh-downloads: ## re-download OpenAPI specs
-	@for dlapi in $(DOWNLOAD_APIS); do \
-    DL_URL=$$(yq eval ".spec.downloadConf.url" "$$dlapi" ) ;\
-    DL_VERSION=$$(yq eval ".spec.downloadConf.version" "$$dlapi" ) ;\
-    DL_FILE="$$(yq eval ".metadata.name" $$dlapi)_$${DL_VERSION}.yaml";\
-    curl -H "Accept: application/yaml" -o "$(DOWNLOAD_DIR)/$${DL_FILE}" "$${DL_URL}" ;\
-    yq -i 'del(.servers)' "$(DOWNLOAD_DIR)/$${DL_FILE}" ;\
-  done
-
 ### Test targets ###
+
 .PHONY: test
 test: checkout-repos | $(OUT_DIR) ## Run go tests
 	$(GOCMD) test -coverprofile $(OUT_DIR)/coverage.out -coverpkg=$$(go list ./... | grep -v "pkg/git/" | grep -v "pkg/config/" | grep -v "pkg/openapi/" | tr '\n' ,)  -covermode atomic ./...
@@ -183,7 +168,7 @@ convert-and-combine:
 
 # Define a target to run the full workflow
 .PHONY: gen-convert-combine-all
-gen-convert-combine-all: install-deps checkout-repos specgen convert-and-combine
+gen-convert-combine-all: install-deps checkout-repos specgen convert-and-combine clean-all
 
 ### Cleanup ###
 
@@ -198,7 +183,7 @@ clean-submodules: # clean up checked out repos
 
 .PHONY: clean-all
 clean-all: clean-submodules clean-intermediate  ## Cleanup all build files
-	rm -rf $(VENV_NAME) $(OUT_DIR) vendor/
+	rm -rf $(VENV_NAME) $(OUT_DIR)
 
 #### Help Target ####
 help: ## Print help for each target
