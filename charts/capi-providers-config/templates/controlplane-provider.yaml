@@ -22,7 +22,7 @@ data:
     {{- if .additionalManifests.manifests }}
     {{- toYaml .additionalManifests.manifests | nindent 4 }}
     {{- end }}
-    {{- if .Values.metrics.enabled }}
+    {{- if $.Values.metrics.enabled }}
     ---
     {{- include "metricsservicetemplate" (dict "name" (printf "%s-%s" "controlplane" .name) "namespace" .namespace ) | nindent 4 }}
         selector:

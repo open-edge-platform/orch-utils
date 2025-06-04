@@ -11,7 +11,7 @@ core:
   name: cluster-api
   namespace: capi-system
   spec:
-    version: "v1.9.0"
+    version: "v1.9.7"
     configSecret:
       namespace: capi-variables
       name: capi-variables
