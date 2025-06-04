@@ -4,7 +4,6 @@
 
 global:
   localSubModsDir: "repos"
-  localDownloadsDir: "downloads"
   specOutputDir: "openapispecs/generated"
   apimappingconfigcrsdir: "apimappingconfigcrs"
 

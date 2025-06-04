@@ -8,4 +8,3 @@ repos/
 out/
 openapispecs/converted_specs/
 cmd/specgen/tests/
-vendor/

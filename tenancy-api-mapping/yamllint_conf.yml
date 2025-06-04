@@ -14,4 +14,3 @@ ignore:
   - .git/
   - node_modules/
   - repos/
-  - downloads/
