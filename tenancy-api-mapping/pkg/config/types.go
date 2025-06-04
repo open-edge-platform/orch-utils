@@ -25,7 +25,6 @@ type Config struct {
 type Global struct {
 	SpecOutputDir          string   `yaml:"specOutputDir"`
 	LocalSubModsDir        string   `yaml:"localSubModsDir"`
-	LocalDownloadsDir      string   `yaml:"localDownloadsDir"`
 	APImappingConfigCrsDir string   `yaml:"apimappingconfigcrsdir"`
 	Servers                []Server `yaml:"servers"`
 }
@@ -55,10 +54,7 @@ type APIMappingConfig struct {
 			Tag          string `yaml:"tag"`
 			SpecFilePath string `yaml:"specFilePath"`
 		} `yaml:"repoConf"`
-		DownloadConf struct {
-			Version string `yaml:"version"`
-			URL     string `yaml:"url"`
-		} `yaml:"downloadConf"`
+
 		Mappings []MappingTuple `yaml:"mappings"`
 	} `yaml:"spec"`
 }

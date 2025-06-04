@@ -7,7 +7,7 @@
 # someone opens a pull request. Use email address instead of GitHub user.
 
 # Everything requires Platform team review by default
-* chris.thach@intel.com @mdbalvin @charlesmcchan @yi-tseng-intel @ashridatta @teone @callumnobleintel @daniele-moro @SeanCondon @pierventre john.oloughlin@intel.com gary.loughnane@intel.com @ahalimx86 andrei.palade@intel.com dmytro.yermolenko@intel.com patryk.iracki@intel.com diwan.chandrabose@intel.com sushil.lakra@intel.com @zdw
+* chris.thach@intel.com @mdbalvin @charlesmcchan @yi-tseng-intel @ashridatta @teone @callumnobleintel @daniele-moro @SeanCondon @pierventre john.oloughlin@intel.com gary.loughnane@intel.com @ahalimx86 andrei.palade@intel.com dmytro.yermolenko@intel.com patryk.iracki@intel.com diwan.chandrabose@intel.com sushil.lakra@intel.com @zdw @cgoea
 
 # Dependabot is used to manage dependencies in this repository. It is configured to automatically open pull requests to
 # update dependencies when new versions are available. The following files are managed by Dependabot and do not require
@@ -29,3 +29,7 @@
 
 # All changes to Nexus framework must be reviewed by the Nexus team
 nexus/* @Rashika-Rajaraman @xmen4xp
+
+# Helm charts changes to Cluster Orchestrator reviewed by the CO team
+charts/capi-operator-pre/* @gcgirish @andybavier @hyunsun @jdanieck @jokuniew @eoghanlawless
+charts/capi-providers-config/* @gcgirish @andybavier @hyunsun @jdanieck @jokuniew @eoghanlawless
