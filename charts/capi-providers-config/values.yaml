@@ -11,7 +11,7 @@ core:
   name: cluster-api
   namespace: capi-system
   spec:
-    version: "v1.9.7"
+    version: "v1.9.0"
     configSecret:
       namespace: capi-variables
       name: capi-variables
@@ -35,6 +35,7 @@ bootstrap:
         configSecret:
           namespace: capi-variables
           name: capi-variables
+
 # https://doc.crds.dev/github.com/kubernetes-sigs/cluster-api-operator/operator.cluster.x-k8s.io/ControlPlaneProvider/v1alpha2@v0.15.1
 controlplane:
   providers:
@@ -54,6 +55,7 @@ controlplane:
         configSecret:
           namespace: capi-variables
           name: capi-variables
+
 # Configuration for enabling or disabling metrics
 # For all CAPI providers
 metrics:
