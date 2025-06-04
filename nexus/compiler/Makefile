@@ -25,11 +25,11 @@ BUILDER_NAME    ?= ${IMAGE_NAME}/builder/${GOARCH}
 COMPILER_NAME   ?= ${IMAGE_NAME}/${GOARCH}
 
 ifeq (${DOCKER_REGISTRY}, )
-BUILDER_DOCKER_VERSION  = ${BUILDER_NAME}:${BUILDER_VERSION}
-COMPILER_DOCKER_VERSION = ${COMPILER_NAME}:${VERSION}
+BUILDER_DOCKER_TAG  = ${BUILDER_NAME}:${BUILDER_VERSION}
+COMPILER_DOCKER_TAG = ${COMPILER_NAME}:${VERSION}
 else
-BUILDER_DOCKER_VERSION  = ${DOCKER_REGISTRY}/${BUILDER_NAME}:${BUILDER_VERSION}
-COMPILER_DOCKER_VERSION = ${DOCKER_REGISTRY}/${COMPILER_NAME}:${VERSION}
+BUILDER_DOCKER_TAG  = ${DOCKER_REGISTRY}/${BUILDER_NAME}:${BUILDER_VERSION}
+COMPILER_DOCKER_TAG = ${DOCKER_REGISTRY}/${COMPILER_NAME}:${VERSION}
 endif
 
 DATAMODEL_PATH             ?= datamodel
@@ -58,7 +58,7 @@ define run_in_container
   -e https_proxy=$(HTTPS_PROXY) \
   --user $(shell id -u):$(shell id -g) \
   -e GOCACHE=/tmp/go-build \
-  "${BUILDER_DOCKER_VERSION}" /bin/bash -c 'chown -R $(shell id -u) .; ${1}'
+  "${BUILDER_DOCKER_TAG}" /bin/bash -c 'chown -R $(shell id -u) .; ${1}'
 endef
 else
 define run_in_container
@@ -69,7 +69,7 @@ define run_in_container
  --env PKG_NAME=${PKG_NAME} \
  -e http_proxy=$(HTTP_PROXY) \
  -e https_proxy=$(HTTPS_PROXY) \
- "${BUILDER_DOCKER_VERSION}" /bin/bash -c "${1}"
+ "${BUILDER_DOCKER_TAG}" /bin/bash -c "${1}"
 endef
 endif
 
@@ -89,17 +89,17 @@ docker.builder:
 		--build-arg no_proxy=$(no_proxy) \
 		--platform ${DOCKER_BUILDER_PLATFORM} \
 		--no-cache \
-		-t ${BUILDER_DOCKER_VERSION} \
+		-t ${BUILDER_DOCKER_TAG} \
 		builder/
 
 .PHONY: docker.builder.publish
 docker.builder.publish:
-	docker push ${BUILDER_DOCKER_VERSION}
+	docker push ${BUILDER_DOCKER_TAG}
 
 .PHONY: docker.builder.image.exists
 docker.builder.image.exists:
-	@docker inspect ${BUILDER_DOCKER_VERSION} >/dev/null 2>&1 || \
-  (echo "Image  ${BUILDER_DOCKER_VERSION} does not exist. Run 'make compiler.builder' to generate it" && false)
+	@docker inspect ${BUILDER_DOCKER_TAG} >/dev/null 2>&1 || \
+  (echo "Image  ${BUILDER_DOCKER_TAG} does not exist. Run 'make compiler.builder' to generate it" && false)
 
 .PHONY: docker
 docker: docker.builder.image.exists init_submodules build_openapigen_in_container build_gqlgen_in_container build_install_validator_in_container
@@ -119,12 +119,12 @@ endif
 		--build-arg no_proxy=$(no_proxy) \
 		--platform ${DOCKER_BUILDER_PLATFORM} \
 		--no-cache \
-		--build-arg BUILDER_VERSION=${BUILDER_DOCKER_VERSION} \
-		-t ${COMPILER_DOCKER_VERSION} .
+		--build-arg BUILDER_TAG=${BUILDER_DOCKER_TAG} \
+		-t ${COMPILER_DOCKER_TAG} .
 
 .PHONY: docker.publish
 docker.publish:
-	docker push ${COMPILER_DOCKER_VERSION}
+	docker push ${COMPILER_DOCKER_TAG}
 
 .PHONY: tools
 tools:
