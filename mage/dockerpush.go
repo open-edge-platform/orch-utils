@@ -12,7 +12,7 @@ import (
 	"github.com/magefile/mage/sh"
 )
 
-func tryToCreateECRRepository(repositoryName string) error {
+func tryToCreateECRRepository(repositoryName string) error { //nolint:unparam // explicitly ignoring the error
 	cmd := fmt.Sprintf(
 		"aws ecr create-repository --region %s --repository-name %s",
 		AWSRegion, repositoryName,

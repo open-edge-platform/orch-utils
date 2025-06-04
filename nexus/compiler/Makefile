@@ -28,8 +28,8 @@ ifeq (${DOCKER_REGISTRY}, )
 BUILDER_DOCKER_VERSION  = ${BUILDER_NAME}:${BUILDER_VERSION}
 COMPILER_DOCKER_VERSION = ${COMPILER_NAME}:${VERSION}
 else
-BUILDER_DOCKER_VERSION  = ${DOCKER_REGISTRY}${BUILDER_NAME}:${BUILDER_VERSION}
-COMPILER_DOCKER_VERSION = ${DOCKER_REGISTRY}${COMPILER_NAME}:${VERSION}
+BUILDER_DOCKER_VERSION  = ${DOCKER_REGISTRY}/${BUILDER_NAME}:${BUILDER_VERSION}
+COMPILER_DOCKER_VERSION = ${DOCKER_REGISTRY}/${COMPILER_NAME}:${VERSION}
 endif
 
 DATAMODEL_PATH             ?= datamodel
@@ -52,7 +52,6 @@ ifeq ($(CONTAINER_ID),)
 define run_in_container
   docker run \
   --volume $(realpath .)/..:/go/src/github.com/vmware-tanzu/graph-framework-for-microservices/ \
-  --volume ~/.ssh:/root/.ssh \
   --network=host \
   --workdir ${PKG_NAME} \
   -e http_proxy=$(HTTP_PROXY) \
