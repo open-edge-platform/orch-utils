@@ -7509,7 +7509,7 @@ components:
 info:
   description: Tenancy aware APIs for the Open Edge Platform services
   title: Multi tenancy APIs
-  version: 1.5.6
+  version: 1.5.7
 openapi: 3.0.3
 paths:
   /v1/orgs:
