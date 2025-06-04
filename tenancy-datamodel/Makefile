@@ -1,50 +1,42 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
-#
 # SPDX-License-Identifier: Apache-2.0
 
+### configuration ###
+# safe shell invocations
+SHELL                     := bash -eu -o pipefail
 
-VERSION            				?= $(shell cat VERSION)
-GIT_HASH_SHORT     				:= $(shell git rev-parse --abbrev-ref HEAD)
-VERSION_DEV_SUFFIX 				:= ${GIT_HASH_SHORT}
+# default goal to show help
+.DEFAULT_GOAL             := help
+
+VERSION                     ?= $(shell cat VERSION)
+BUILD_DIR                   ?= build
+CRD_MODULE_PATH             ?= $(shell go list -m)/${BUILD_DIR}/
+DATAMODEL_LOCAL_PATH        ?= $(realpath .)
+
+CONTAINER_ID                ?= ""
+BUCKET                      ?= nexus-template-downloads
 
 
-# Add an identifying suffix for `-dev` builds only.
-# Release build versions are verified as unique by the CI build process.
-ifneq ($(GIT_HASH_SHORT), main)
-	ifeq ($(findstring -dev,$(VERSION)), -dev)
-		VERSION := $(VERSION)-$(VERSION_DEV_SUFFIX)
-	endif
-endif
-	
+DATAMODEL_BASE_DOCKER_IMAGE	= bitnami/kubectl:latest
+DATAMODEL_DOCKER_REGISTRY   ?= $(shell cat nexus.yaml | grep dockerRepo | awk '{print $$2}' | tr -d '"')
+DATAMODEL_GROUP_NAME        ?= $(shell cat nexus.yaml | grep groupName | awk '{print $$2}' | tr -d '"')
 
-BUILD_DIR 					?= build
-CRD_MODULE_PATH 				?= $(shell go list -m)/${BUILD_DIR}/
-CONTAINER_ID 					?= ""
-DATAMODEL_LOCAL_PATH 				?= $(realpath .)
-BUCKET 						?= nexus-template-downloads
-COMPILER_TAG 					?= latest
-OPENAPI_GENERATOR_TAG 				?= latest
-DATAMODEL_DOCKER_REGISTRY 			?= $(shell cat nexus.yaml | grep dockerRepo | awk '{print $$2}' | tr -d '"')
-DATAMODEL_GROUP_NAME 				?= $(shell cat nexus.yaml | grep groupName | awk '{print $$2}' | tr -d '"')
-NAMESPACE 					?= "default"
-HOST_KUBECONFIG 				?= ${HOME}/.kube/config
-MOUNTED_KUBECONFIG 				?= /etc/config/kubeconfig
-NEXUS_API_GW_K8S_NAMESPACE 			?= default
-DATAMODEL_BASE_DOCKER_IMAGE			=bitnami/kubectl:latest
-DOCKER_NETWORK 					?= nexus
-MOUNTED_KUBECONFIG 				?= /etc/config/kubeconfig
-TAG 						?= latest
+NAMESPACE                   ?= "default"
+HOST_KUBECONFIG             ?= ${HOME}/.kube/config
+MOUNTED_KUBECONFIG          ?= /etc/config/kubeconfig
 
-# Enviroment variable
-IMG_NAME_OEP      				:= tenancy-datamodel
-IMG_VERSION_OEP   				?= ${VERSION}
-DOCKER_REGISTRY_OEP         			?= registry-rs.edgeorchestration.intel.com
-DOCKER_REPOSITORY_OEP       			?= edge-orch/common
-TENANCY_DATAMODEL_DOCKER_IMAGE_OEP 		?= ${DOCKER_REGISTRY_OEP}/${DOCKER_REPOSITORY_OEP}/${IMG_NAME_OEP}:${IMG_VERSION_OEP}
+NEXUS_API_GW_K8S_NAMESPACE  ?= default
+DOCKER_NETWORK              ?= nexus
 
+# Environment variable
+IMG_NAME_OEP               := tenancy-datamodel
+IMG_VERSION_OEP            ?= ${VERSION}
+DOCKER_REGISTRY_OEP        ?= registry-rs.edgeorchestration.intel.com
+DOCKER_REPOSITORY_OEP      ?= edge-orch/common
+TENANCY_DATAMODEL_DOCKER_IMAGE_OEP  ?= ${DOCKER_REGISTRY_OEP}/${DOCKER_REPOSITORY_OEP}/${IMG_NAME_OEP}:${IMG_VERSION_OEP}
 
 # values for nexus datamodel upgrade
-FORCE 						?= true
+FORCE ?= true
 
 ifeq (,$(shell echo ${ARTIFACT_REPO}))
 ARTIFACT_REPO = $(shell cat nexus.yaml | grep artifactRepo | awk '{print $$2}' | tr -d '"')
@@ -76,18 +68,23 @@ else
 DATAMODEL_DOCKER_TAG=${DATAMODEL_DOCKER_REGISTRY}/tenancy-datamodel/${DATAMODEL_GROUP_NAME}:${TAG}
 endif
 
-COMPILER_DOCKER_REGISTRY ?= registry-rs.edgeorchestration.intel.com
-COMPILER_DOCKER_REPO ?= edge-orch/common
-IMAGE_NAME ?= nexus/compiler
-GOARCH ?= $(shell go env GOARCH)
-COMPILER_NAME ?= ${IMAGE_NAME}/${GOARCH}
-OPENAPI_GENERATOR_NAME ?= nexus/openapi-generator
+COMPILER_DOCKER_REGISTRY  ?=
+COMPILER_DOCKER_REPO      ?= edge-orch/common
+
+GOARCH            ?= $(shell go env GOARCH)
+
+COMPILER_NAME     ?= nexus/compiler/${GOARCH}
+COMPILER_VERSION  ?= 0.1.0-dev
+
+OPENAPI_GENERATOR_NAME      ?= nexus/openapi-generator
+OPENAPI_GENERATOR_VERSION   ?= 0.1.0-dev
+
 ifeq (${COMPILER_DOCKER_REGISTRY}, )
-COMPILER_DOCKER_TAG = ${COMPILER_NAME}:${COMPILER_TAG}
-OPENAPI_GENERATOR_DOCKER_TAG = ${OPENAPI_GENERATOR_NAME}:${OPENAPI_GENERATOR_TAG}
+COMPILER_DOCKER_TAG = ${COMPILER_NAME}:${COMPILER_VERSION}
+OPENAPI_GENERATOR_DOCKER_TAG = ${OPENAPI_GENERATOR_NAME}:${OPENAPI_GENERATOR_VERSION}
 else
-COMPILER_DOCKER_TAG = ${COMPILER_DOCKER_REGISTRY}/${COMPILER_DOCKER_REPO}/${COMPILER_NAME}:${COMPILER_TAG}
-OPENAPI_GENERATOR_DOCKER_TAG = ${COMPILER_DOCKER_REGISTRY}/${COMPILER_DOCKER_REPO}/${OPENAPI_GENERATOR_NAME}:${OPENAPI_GENERATOR_TAG}
+COMPILER_DOCKER_TAG = ${COMPILER_DOCKER_REGISTRY}/${COMPILER_DOCKER_REPO}/${COMPILER_NAME}:${COMPILER_VERSIOn}
+OPENAPI_GENERATOR_DOCKER_TAG = ${COMPILER_DOCKER_REGISTRY}/${COMPILER_DOCKER_REPO}/${OPENAPI_GENERATOR_NAME}:${OPENAPI_GENERATOR_VERSION}
 endif
 
 YAML_FILES := $(shell find . -path './venv_charts' -prune -o -type f \( -name '*.yaml' -o -name '*.yml' \) -print )
@@ -128,7 +125,7 @@ yamllint:
 	yamllint -c yamllint_conf.yml -s $(YAML_FILES)
 
 .PHONY: go-tidy
-go-tidy: 
+go-tidy:
 	go mod tidy
 
 .PHONY: datamodel_build
@@ -179,7 +176,6 @@ datamodel_build:
 	fi
 	make openapispec.generate
 
-#
 # Usage: DATAMODEL_DOCKER_REGISTRY=<registry> TAG=<tag-value> make docker.build
 # Tag and build datamodel docker image.
 #
@@ -199,7 +195,7 @@ endif
 	@echo "${DATAMODEL_DOCKER_TAG}" > IMAGE
 	@echo "${DATAMODEL_GROUP_NAME}" > NAME
 	docker build --build-arg DOCKER_BASE_IMAGE=${DATAMODEL_BASE_DOCKER_IMAGE} --build-arg IMAGE_NAME=${DATAMODEL_DOCKER_TAG} --build-arg NAME=${DATAMODEL_GROUP_NAME} -t ${DATAMODEL_DOCKER_TAG} . -f Dockerfile
-	
+
 
 .PHONY: docker.build-oep
 docker.build-oep:
@@ -292,25 +288,23 @@ dm.uninstall.helm:
 		@# Help: Run datamodel helm uninstall
 		cd helm-chart; helm uninstall iam
 
-
 test:
 	@# Help: Runs test stage
 	@echo "---MAKEFILE TEST---"
 	echo $@
 	@echo "---END MAKEFILE TEST---"
-	
+
 coverage:
 	@# Help: Runs coverage stage
 	@echo "---MAKEFILE COVERAGE---"
 	echo $@
 	@echo "---END MAKEFILE COVERAGE---"
-	
-help:	
-	@printf "%-20s %s\n" "Target" "Description"
-	@printf "%-20s %s\n" "------" "-----------"
-	@make -pqR : 2>/dev/null \
-        | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' \
-        | sort \
-        | egrep -v -e '^[^[:alnum:]]' -e '^$@$$' \
-        | xargs -I _ sh -c 'printf "%-20s " _; make _ -nB | (grep -i "^# Help:" || echo "") | tail -1 | sed "s/^# Help: //g"'
 
+#### Help Target ####
+help: ## Print help for each target
+	@echo $(PROJECT_NAME) make targets
+	@echo "Target               Makefile:Line    Description"
+	@echo "-------------------- ---------------- -----------------------------------------"
+	@grep -H -n '^[[:alnum:]_-]*:.* ##' $(MAKEFILE_LIST) \
+    | sort -t ":" -k 3 \
+    | awk 'BEGIN  {FS=":"}; {sub(".* ## ", "", $$4)}; {printf "%-20s %-16s %s\n", $$3, $$1 ":" $$2, $$4};'

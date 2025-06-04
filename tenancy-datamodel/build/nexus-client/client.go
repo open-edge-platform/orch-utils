@@ -3500,6 +3500,27 @@ func (group *ApimappingconfigEdgeV1) UpdateAPIMappingConfigByName(ctx context.Co
 		patch = append(patch, patchOpRepoConf)
 	}
 
+	rt = reflect.TypeOf(objToUpdate.Spec.DownloadConf)
+	if rt.Kind() == reflect.Slice || rt.Kind() == reflect.Array || rt.Kind() == reflect.Map {
+		if !reflect.ValueOf(objToUpdate.Spec.DownloadConf).IsNil() {
+			patchValueDownloadConf := objToUpdate.Spec.DownloadConf
+			patchOpDownloadConf := PatchOp{
+				Op:    "replace",
+				Path:  "/spec/downloadConf",
+				Value: patchValueDownloadConf,
+			}
+			patch = append(patch, patchOpDownloadConf)
+		}
+	} else {
+		patchValueDownloadConf := objToUpdate.Spec.DownloadConf
+		patchOpDownloadConf := PatchOp{
+			Op:    "replace",
+			Path:  "/spec/downloadConf",
+			Value: patchValueDownloadConf,
+		}
+		patch = append(patch, patchOpDownloadConf)
+	}
+
 	rt = reflect.TypeOf(objToUpdate.Spec.Mappings)
 	if rt.Kind() == reflect.Slice || rt.Kind() == reflect.Array || rt.Kind() == reflect.Map {
 		if !reflect.ValueOf(objToUpdate.Spec.Mappings).IsNil() {
