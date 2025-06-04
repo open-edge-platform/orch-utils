@@ -19,5 +19,7 @@ spec:
   mappings:
     - externalURI: /v1/projects/{projectName}/dm/amt/generalSettings/{guid}
       serviceURI: api/v1/amt/generalSettings/{guid}
+    - externalURI: /v1/projects/{projectName}/dm/amt/power/capabilities/{guid}
+      serviceURI: api/v1/amt/power/capabilities/{guid}
     - externalURI: /v1/projects/{projectName}/dm/devices/{guid}
       serviceURI: api/v1/devices/{guid}

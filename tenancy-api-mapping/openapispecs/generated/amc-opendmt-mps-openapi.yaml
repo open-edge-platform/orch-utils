@@ -73,6 +73,33 @@ paths:
       summary: Return Intel® AMT General Settings
       tags:
         - AMT
+  /v1/projects/{projectName}/dm/amt/power/capabilities/{guid}:
+    get:
+      description: View what OOB power actions are available for that device.
+      parameters:
+        - description: GUID of device
+          example: 123e4567-e89b-12d3-a456-426614174000
+          in: path
+          name: guid
+          required: true
+          schema:
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PowerCapabilitiesResponse'
+          description: Successful operation
+      summary: Return Available Power Actions
+      tags:
+        - AMT
   /v1/projects/{projectName}/dm/devices/{guid}:
     delete:
       description: Removes the device with a specific GUID and all device information from the database.  This will prevent the device from connecting to MPS, even if the device has not yet been unprovisioned.  Use the disconnect API after this call to remove a device and prevent it from reconnecting to the MPS.
