@@ -8,8 +8,8 @@ FROM golang:1.24.2
 RUN useradd -m -d /home/appuser appuser
 
 # Set environment variables
-ENV GOPATH /go
-ENV PATH $PATH:/usr/local/go/bin:/go/bin
+ENV GOPATH=/go
+ENV PATH=$PATH:/usr/local/go/bin:/go/bin
 ENV GO111MODULE=on
 ENV GOPROXY=""
 ENV GOFLAGS="-buildvcs=false"
