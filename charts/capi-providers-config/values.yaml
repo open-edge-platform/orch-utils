@@ -60,3 +60,7 @@ controlplane:
 # For all CAPI providers
 metrics:
   enabled: true
+
+# Labels to be applied to on namespaces created by this chart
+namespaceLabels:
+  istio-injection: enabled
