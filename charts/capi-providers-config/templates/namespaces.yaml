@@ -21,5 +21,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: {{ $ns }}
+  labels:
+{{ toYaml $.Values.namespaceLabels | indent 4 }}
 ---
 {{- end }}
