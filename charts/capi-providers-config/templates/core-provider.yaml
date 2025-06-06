@@ -21,7 +21,7 @@ data:
     {{- if .Values.core.additionalManifests }}
     {{- toYaml .Values.core.additionalManifests.manifests | nindent 4 }}
     {{- end }}
-    {{- if .Values.metrics.enabled }}
+    {{- if $.Values.metrics.enabled }}
     ---
     {{- include "metricsservicetemplate" (dict "name" (printf "%s-%s" "core" .Values.core.name) "namespace" .Values.core.namespace ) | nindent 4 }}
         selector:

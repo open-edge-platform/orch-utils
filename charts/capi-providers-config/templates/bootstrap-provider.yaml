@@ -9,26 +9,35 @@ metadata:
   name: {{ .name }}
   namespace: {{ .namespace }}
 spec:
-  {{- toYaml .spec | nindent 2 }}
+  {{- toYaml (omit .spec "manifestPatches") | nindent 2 }}
+  {{- with .spec.manifestPatches }}
+  manifestPatches:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- toYaml (omit .spec "additionalManifests") | nindent 2 }}
+  {{- with .spec.additionalManifests }}
+  additionalManifests:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 ---
-{{- if .additionalManifests }}
+{{- if .spec.additionalManifests }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .additionalManifests.name }}
-  namespace: {{ .additionalManifests.namespace | default .namespace }}
+  name: {{ .spec.additionalManifests.name }}
+  namespace: {{ .spec.additionalManifests.namespace | default .namespace }}
 data:
   manifests: |
-    {{- if .additionalManifests.manifests }}
-    {{- toYaml .additionalManifests.manifests | nindent 4 }}
+    {{- if .spec.additionalManifests.manifests }}
+    {{- toYaml .spec.additionalManifests.manifests | nindent 4 }}
     {{- end }}
-    {{- if .Values.metrics.enabled }}
+    {{- if $.Values.metrics.enabled }}
     ---
-    {{- include "metricsservicetemplate" (dict "name" (printf "%s-%s" "bootstrap" .name) "namespace" .namespace ) | nindent 4 }}
+    {{- include "metricsservicetemplate" (dict "name" (printf "%s-%s" "bootstrap" .spec.additionalManifests.name) "namespace" .spec.additionalManifests.namespace ) | nindent 4 }}
         selector:
-          cluster.x-k8s.io/provider: bootstrap-{{ .name }}
+          cluster.x-k8s.io/provider: bootstrap-{{ .spec.additionalManifests.name }}
     ---
-    {{- include "metricsservicemonitortemplate" (dict "name" (printf "%s-%s" "bootstrap" .name) "namespace" .namespace) | nindent 4 }}
+    {{- include "metricsservicemonitortemplate" (dict "name" (printf "%s-%s" "bootstrap" .spec.additionalManifests.name) "namespace" .spec.additionalManifests.namespace) | nindent 4 }}
     {{- end }}
 {{- end }}
 ---
