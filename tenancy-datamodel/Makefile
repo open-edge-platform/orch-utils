@@ -3,10 +3,10 @@
 
 ### configuration ###
 # safe shell invocations
-SHELL                     := bash -eu -o pipefail
+SHELL                       := bash -eu -o pipefail
 
 # default goal to show help
-.DEFAULT_GOAL             := help
+.DEFAULT_GOAL               := help
 
 VERSION                     ?= $(shell cat VERSION)
 BUILD_DIR                   ?= build
@@ -16,10 +16,18 @@ DATAMODEL_LOCAL_PATH        ?= $(realpath .)
 CONTAINER_ID                ?= ""
 BUCKET                      ?= nexus-template-downloads
 
+DATAMODEL_IMAGE_NAME        = tenancy-datamodel
+DATAMODEL_DOCKER_REGISTRY   ?= registry-rs.edgeorchestration.intel.com
+DATAMODEL_GROUP_NAME        ?= edge-orch/common
+DATAMODEL_VERSION           ?= ${VERSION}
 
-DATAMODEL_BASE_DOCKER_IMAGE	= bitnami/kubectl:latest
-DATAMODEL_DOCKER_REGISTRY   ?= $(shell cat nexus.yaml | grep dockerRepo | awk '{print $$2}' | tr -d '"')
-DATAMODEL_GROUP_NAME        ?= $(shell cat nexus.yaml | grep groupName | awk '{print $$2}' | tr -d '"')
+ifeq (${DATAMODEL_DOCKER_REGISTRY}, )
+DATAMODEL_DOCKER_TAG=${DATAMODEL_GROUP_NAME}/tenancy-datamodel:${DATAMODEL_VERSION}
+else
+DATAMODEL_DOCKER_TAG=${DATAMODEL_DOCKER_REGISTRY}/${DATAMODEL_GROUP_NAME}/tenancy-datamodel:${DATAMODEL_VERSION}
+endif
+
+DATAMODEL_BASE_DOCKER_IMAGE = bitnami/kubectl:latest
 
 NAMESPACE                   ?= "default"
 HOST_KUBECONFIG             ?= ${HOME}/.kube/config
@@ -28,53 +36,24 @@ MOUNTED_KUBECONFIG          ?= /etc/config/kubeconfig
 NEXUS_API_GW_K8S_NAMESPACE  ?= default
 DOCKER_NETWORK              ?= nexus
 
-# Environment variable
-IMG_NAME_OEP               := tenancy-datamodel
-IMG_VERSION_OEP            ?= ${VERSION}
-DOCKER_REGISTRY_OEP        ?= registry-rs.edgeorchestration.intel.com
-DOCKER_REPOSITORY_OEP      ?= edge-orch/common
-TENANCY_DATAMODEL_DOCKER_IMAGE_OEP  ?= ${DOCKER_REGISTRY_OEP}/${DOCKER_REPOSITORY_OEP}/${IMG_NAME_OEP}:${IMG_VERSION_OEP}
-
 # values for nexus datamodel upgrade
-FORCE ?= true
-
-ifeq (,$(shell echo ${ARTIFACT_REPO}))
-ARTIFACT_REPO = $(shell cat nexus.yaml | grep artifactRepo | awk '{print $$2}' | tr -d '"')
-endif
+FORCE                       ?= true
+ARTIFACT_REPO               ?= $(shell cat nexus.yaml | grep artifactRepo | awk '{print $$2}' | tr -d '"')
 
 ifneq (,$(shell echo ${PREV_SPEC_BRANCH}))
 # backward compatability check is required.
 FORCE=false
-
-# check if ARTIFACT_REPO is configured
-ifeq (,$(shell echo ${ARTIFACT_REPO}))
-# Error and exit because user provided the branch and artifact repo details are not available
-$(error Unable to determine ARTIFACT_REPO to validate backward compatibility with ${PREV_SPEC_BRANCH} branch)
 endif
 
-TARGET_REPO_NAME = $(shell echo ${ARTIFACT_REPO} | awk -F'/' '{print $$2}' | tr -d '"'| awk -F'.git' '{print $$1}')
+TARGET_REPO_NAME     := $(shell echo ${ARTIFACT_REPO} | awk -F'/' '{print $$2}' | tr -d '"'| awk -F'.git' '{print $$1}')
+ARTIFACT_REPO_GITCMD := $(shell echo git -C $(shell realpath ${TARGET_REPO_NAME}) pull origin $(shell echo ${PREV_SPEC_BRANCH}))
 
-ifeq (,$(shell echo $(shell realpath ${TARGET_REPO_NAME}/crds)))
-ARTIFACT_REPO_GITCMD=$(shell echo git clone $(shell echo ${ARTIFACT_REPO}) --branch $(shell echo ${PREV_SPEC_BRANCH}) --single-branch $(shell echo ${TARGET_REPO_NAME}))
-else
-ARTIFACT_REPO_GITCMD=$(shell echo git -C $(shell realpath ${TARGET_REPO_NAME}) pull origin $(shell echo ${PREV_SPEC_BRANCH}))
-endif
+COMPILER_DOCKER_REGISTRY    ?=
+COMPILER_DOCKER_REPO        ?= edge-orch/common
 
-endif
-
-ifeq (${DATAMODEL_DOCKER_REGISTRY}, )
-DATAMODEL_DOCKER_TAG=tenancy-datamodel/${DATAMODEL_GROUP_NAME}:${TAG}
-else
-DATAMODEL_DOCKER_TAG=${DATAMODEL_DOCKER_REGISTRY}/tenancy-datamodel/${DATAMODEL_GROUP_NAME}:${TAG}
-endif
-
-COMPILER_DOCKER_REGISTRY  ?=
-COMPILER_DOCKER_REPO      ?= edge-orch/common
-
-GOARCH            ?= $(shell go env GOARCH)
-
-COMPILER_NAME     ?= nexus/compiler/${GOARCH}
-COMPILER_VERSION  ?= 0.1.0-dev
+GOARCH                      ?= $(shell go env GOARCH)
+COMPILER_NAME               ?= nexus/compiler/${GOARCH}
+COMPILER_VERSION            ?= 0.1.0-dev
 
 OPENAPI_GENERATOR_NAME      ?= nexus/openapi-generator
 OPENAPI_GENERATOR_VERSION   ?= 0.1.0-dev
@@ -99,10 +78,10 @@ $(VENV_NAME): requirements.txt
 	python3 -m pip install -r requirements.txt
 
 .PHONY: lint
-lint: go-lint hadolint yamllint
+lint: go-lint hadolint license shellcheck yamllint
 
 .PHONY: lint-ci
-lint-ci: go-lint hadolint license
+lint-ci: go-lint hadolint license shellcheck
 
 .PHONY: license
 license: $(VENV_NAME) ## Check licensing with the reuse tool.
@@ -123,6 +102,13 @@ go-lint: ## lint checks using the make targets
 yamllint:
 	yamllint --version
 	yamllint -c yamllint_conf.yml -s $(YAML_FILES)
+
+.PHONY: shellcheck
+# https://github.com/koalaman/shellcheck
+SH_FILES := $(shell find . -type f \( -name '*.sh' \) -print )
+shellcheck: ## lint shell scripts with shellcheck
+	shellcheck --version
+	shellcheck -x -S style $(SH_FILES)
 
 .PHONY: go-tidy
 go-tidy:
@@ -176,55 +162,6 @@ datamodel_build:
 	fi
 	make openapispec.generate
 
-# Usage: DATAMODEL_DOCKER_REGISTRY=<registry> TAG=<tag-value> make docker.build
-# Tag and build datamodel docker image.
-#
-# Example: DATAMODEL_DOCKER_REGISTRY=822995803632.dkr.ecr.us-west-2.amazonaws.com TAG=letstest make docker.build
-#
-.PHONY: build
-build: docker.build-oep
-
-.PHONY: docker.build
-docker.build:
-ifeq ($(DATAMODEL_DOCKER_REGISTRY),)
-$(error ERROR: DATAMODEL_DOCKER_REGISTRY is a mandatory argument. Configure it to point to container registry.)
-endif
-ifeq ($(DATAMODEL_DOCKER_TAG),)
-$(error ERROR: TAG is a mandatory argument. It should contain datamodel container image tag.)
-endif
-	@echo "${DATAMODEL_DOCKER_TAG}" > IMAGE
-	@echo "${DATAMODEL_GROUP_NAME}" > NAME
-	docker build --build-arg DOCKER_BASE_IMAGE=${DATAMODEL_BASE_DOCKER_IMAGE} --build-arg IMAGE_NAME=${DATAMODEL_DOCKER_TAG} --build-arg NAME=${DATAMODEL_GROUP_NAME} -t ${DATAMODEL_DOCKER_TAG} . -f Dockerfile
-
-
-.PHONY: docker.build-oep
-docker.build-oep:
-ifeq ($(DATAMODEL_DOCKER_REGISTRY),)
-$(error ERROR: DATAMODEL_DOCKER_REGISTRY is a mandatory argument. Configure it to point to container registry.)
-endif
-ifeq ($(DATAMODEL_DOCKER_TAG),)
-$(error ERROR: TAG is a mandatory argument. It should contain datamodel container image tag.)
-endif
-	@echo "${DATAMODEL_DOCKER_TAG}" > IMAGE
-	@echo "${DATAMODEL_GROUP_NAME}" > NAME
-	docker build --build-arg DOCKER_BASE_IMAGE=${DATAMODEL_BASE_DOCKER_IMAGE} --build-arg IMAGE_NAME=${DATAMODEL_DOCKER_TAG} --build-arg NAME=${DATAMODEL_GROUP_NAME} -t ${TENANCY_DATAMODEL_DOCKER_IMAGE_OEP} . -f Dockerfile
-#
-# Usage: DATAMODEL_DOCKER_REGISTRY=<registry> TAG=<tag-value> make docker.publish
-# Tag and publish datamodel docker image.
-#
-# Example: DATAMODEL_DOCKER_REGISTRY=822995803632.dkr.ecr.us-west-2.amazonaws.com TAG=letstest make docker.publish
-#
-# .PHONY: docker.publish
-# docker.publish:
-# 	docker push $(TENANCY_DATAMODEL_DOCKER_IMAGE_OEP)
-.PHONY: release
-release: docker.publish.oep
-
-.PHONY: docker.publish.oep
-docker.publish.oep:
-	@# Help: Publish datamodel docker image in oep registry
-	docker push $(TENANCY_DATAMODEL_DOCKER_IMAGE_OEP)
-
 .PHONY: openapispec.generate
 openapispec.generate:
 	docker run \
@@ -234,21 +171,35 @@ openapispec.generate:
 		${OPENAPI_GENERATOR_DOCKER_TAG} \
 		--yamls-path /datamodel/build/crds --datamodel-path /datamodel/nexus.yaml --datamodel-name ${DATAMODEL_GROUP_NAME} --output-file-path /datamodel/build/openapi/edge-orchestrator.intel.com.json
 
-#
-# Usage: DATAMODEL_DOCKER_REGISTRY=<registry> TAG=<tag-value> make docker.build
+# Usage: DATAMODEL_DOCKER_REGISTRY=<registry> make docker.build
 # Tag and build datamodel docker image.
 #
-# Example: DATAMODEL_DOCKER_REGISTRY=822995803632.dkr.ecr.us-west-2.amazonaws.com TAG=letstest make docker.build
-#
+# Example: DATAMODEL_DOCKER_REGISTRY=822995803632.dkr.ecr.us-west-2.amazonaws.com make docker.build
+
+.PHONY: build
+build: docker.build
+
 .PHONY: build.all
-build.all: datamodel_build
-ifeq ($(DATAMODEL_DOCKER_REGISTRY),)
-$(error ERROR: DATAMODEL_DOCKER_REGISTRY is a mandatory argument. Configure it to point to container registry.)
-endif
-ifeq ($(DATAMODEL_DOCKER_TAG),)
-$(error ERROR: TAG is a mandatory argument. It should contain datamodel container image tag.)
-endif
-	docker build --build-arg DOCKER_BASE_IMAGE=${DATAMODEL_BASE_DOCKER_IMAGE} --build-arg IMAGE_NAME=${DATAMODEL_DOCKER_TAG} --build-arg NAME=${DATAMODEL_GROUP_NAME} -t ${DATAMODEL_DOCKER_TAG} . -f Dockerfile
+build.all: docker.build
+
+.PHONY: docker.build
+docker.build:
+	@echo "${DATAMODEL_DOCKER_TAG}" > IMAGE
+	@echo "${DATAMODEL_GROUP_NAME}" > NAME
+	docker build -t ${DATAMODEL_DOCKER_TAG} . -f Dockerfile
+
+# Usage: DATAMODEL_DOCKER_REGISTRY=<registry> TAG=<tag-value> make docker.publish
+# Tag and publish datamodel docker image.
+#
+# Example: DATAMODEL_DOCKER_REGISTRY=822995803632.dkr.ecr.us-west-2.amazonaws.com make docker.publish
+
+.PHONY: release
+release: docker.publish
+
+.PHONY: docker.publish
+docker.publish:
+	@# Help: Publish datamodel docker image in oep registry
+	docker push ${DATAMODEL_DOCKER_TAG}
 
 .PHONY: dm.install
 dm.install:
@@ -266,22 +217,9 @@ dm.install:
                 -e HTTP_PROXY= \
 		${DATAMODEL_DOCKER_TAG}
 
-#
-# Usage: DATAMODEL_DOCKER_REGISTRY=<registry> TAG=<tag-value> make dm.install.helm
-# Install datamodel using helm
-#
-# Example: DATAMODEL_DOCKER_REGISTRY=822995803632.dkr.ecr.us-west-2.amazonaws.com TAG=letstest make dm.install.helm
-#
 .PHONY: dm.install.helm
 dm.install.helm:
-	@# Help: Run datamodel helm install
-	ifeq ($(DATAMODEL_DOCKER_REGISTRY),)
-	$(info ERROR: DATAMODEL_DOCKER_REGISTRY is a mandatory argument. Configure it to point to container registry.)
-	endif
-	ifeq ($(DATAMODEL_DOCKER_TAG),)
-	$(info ERROR: TAG is a mandatory argument. It should contain datamodel container image tag.)
-	endif
-			cd helm-chart; helm install iam --set global.datamodelName=iam --set namespace=${NEXUS_API_GW_K8S_NAMESPACE} --set image=${DATAMODEL_DOCKER_TAG} --set serviceAccountName=datamodel-installer .
+	cd helm-chart; helm install iam --set global.datamodelName=iam --set namespace=${NEXUS_API_GW_K8S_NAMESPACE} --set image=${DATAMODEL_DOCKER_TAG} --set serviceAccountName=datamodel-installer .
 
 .PHONY: dm.uninstall.helm
 dm.uninstall.helm:
