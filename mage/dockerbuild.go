@@ -246,18 +246,16 @@ func keycloakTenantControllerBuild() error {
 
 // Builds the Nexus compiler container image.
 func datamodelCompilerBuild() error {
-	TAG := getNexusCompilerTag()
 	// build compiler builder
-	cmdBuilderBuild := fmt.Sprintf("cd nexus/compiler; DOCKER_REGISTRY=%s BUILDER_TAG=%s make docker.builder",
-		OpenEdgePlatformContainerRegistry, TAG)
+	cmdBuilderBuild := fmt.Sprintf("cd nexus/compiler; DOCKER_REGISTRY=%s make docker.builder",
+		OpenEdgePlatformContainerRegistry)
 
 	if err := runCommand(cmdBuilderBuild); err != nil {
 		return err
 	}
 	// build compiler
-	cmdCompilerBuild := fmt.Sprintf(
-		"cd nexus/compiler; DOCKER_REGISTRY=%s BUILDER_TAG=%s TAG=%s make docker",
-		OpenEdgePlatformContainerRegistry, TAG, TAG)
+	cmdCompilerBuild := fmt.Sprintf("cd nexus/compiler; DOCKER_REGISTRY=%s make docker",
+		OpenEdgePlatformContainerRegistry)
 	return runCommand(cmdCompilerBuild)
 }
 
@@ -384,30 +382,10 @@ func nexusAPIGatewayBuild() error {
 
 // Builds the openapi-generator container image.
 func openAPIGeneratorBuild() error {
-	TAG := getNexusCompilerTag()
-
-	g0 := sh.OutCmd("git")
-	commitID, err := g0("rev-parse", "HEAD")
-	if err != nil {
-		fmt.Printf("error running git rev-parse HEAD = %s", err)
-	}
-	gitarg := "OPENAPI_GEN_GIT_COMMIT=" + commitID
-	fmt.Printf("Git Arg = %s", gitarg)
-	return sh.RunV(
-		"docker",
-		"build",
-		"--load",
-		"--build-arg", strings.Trim(gitarg, ""),
-		"--build-arg", "HTTPS_PROXY="+os.Getenv("HTTPS_PROXY"),
-		"--build-arg", "HTTP_PROXY="+os.Getenv("HTTP_PROXY"),
-		"--build-arg", "NO_PROXY="+os.Getenv("NO_PROXY"),
-		"--build-arg", "https_proxy="+os.Getenv("https_proxy"),
-		"--build-arg", "http_proxy="+os.Getenv("http_proxy"),
-		"--build-arg", "no_proxy="+os.Getenv("no_proxy"),
-		"--tag", OpenEdgePlatformContainerRegistry+"/nexus/openapi-generator:"+TAG,
-		"--file", filepath.Join("nexus", "openapi-generator", "Dockerfile"),
-		"./nexus",
-	)
+	// build compiler
+	openAPIGenBuild := fmt.Sprintf("cd nexus; DOCKER_REGISTRY=%s/ make openapi.generator.docker",
+		OpenEdgePlatformContainerRegistry)
+	return runCommand(openAPIGenBuild)
 }
 
 func listContainers() error {
@@ -454,21 +432,15 @@ func listTaggedContainers() error {
 }
 
 func listNexusContainers() error {
-	nver := getNexusCompilerTag()
-
-	nimages := []string{
-		"nexus-compiler",
-		"nexus-compiler/builder",
-		"nexus/openapi-generator",
+	env := map[string]string{
+		"DOCKER_REGISTRY": OpenEdgePlatformContainerRegistry,
 	}
 
-	for _, nimage := range nimages {
-		fmt.Printf("  %s:\n", nimage)
-		fmt.Printf("    tag: '%s'\n", OpenEdgePlatformContainerRegistry+"/"+nimage+":"+nver)
-		fmt.Printf("    version: '%s'\n", nver)
-		fmt.Printf("    gitTagPrefix: '%s/v'\n", nimage)
-		fmt.Printf("    buildTarget: 'docker-build-%s'\n", nimage)
-	}
-
-	return nil
+	return sh.RunWithV(
+		env,
+		"make",
+		"-C",
+		"nexus",
+		"docker-list",
+	)
 }

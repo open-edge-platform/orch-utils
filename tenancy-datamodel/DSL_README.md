@@ -73,7 +73,7 @@ type Gns struct {
                                                                      To make a field optional, omitempty tag should be added.
 
     F3 CustomType                                               <--- Defines a field of custom type. The type definition can in the same go package or
-                                                                     can be imported from other packages. It should be resolvable by Go compiler.   
+                                                                     can be imported from other packages. It should be resolvable by Go compiler.
 
     C1 ChildType1 `nexus:"child"`                               <--- Declares:
                                                                      * a child of type "ChildType1"
@@ -94,7 +94,7 @@ type Gns struct {
 
                                                                      C2 is the handle through which multiple objects of type ChildType2 can be accessed.
                                                                      Objects in C2 are queryable by name.
-    
+
     L1 LinkType1 `nexus:"link"`                                 <--- Declares:
                                                                      * a link of type "LinkType1"
                                                                      * field L1 through which a specific instance/object of type "LinkType1" can be accessed

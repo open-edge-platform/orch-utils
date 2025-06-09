@@ -51,6 +51,16 @@ spec:
                 - service
                 - port
                 type: object
+              downloadConf:
+                properties:
+                  url:
+                    type: string
+                  version:
+                    type: string
+                required:
+                - version
+                - url
+                type: object
               mappings:
                 items:
                   properties:
@@ -80,7 +90,6 @@ spec:
                 type: boolean
             required:
             - specGenEnabled
-            - repoConf
             - mappings
             - backend
             type: object

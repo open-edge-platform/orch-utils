@@ -1,40 +1,43 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
-SHELL := /bin/bash
+# safe shell invocations
+SHELL         := bash -eu -o pipefail
 
-DEBUG ?= FALSE
-LOG_LEVEL ?= error
+# default goal to show help
+.DEFAULT_GOAL := help
 
-GO_PROJECT_NAME ?= compiler
-GOOS ?= $(shell go env GOOS)
-GOARCH ?= $(shell go env GOARCH)
+DEBUG         ?= FALSE
+LOG_LEVEL     ?= error
+
+GO_PROJECT_NAME         ?= compiler
+GOOS                    ?= $(shell go env GOOS)
+GOARCH                  ?= $(shell go env GOARCH)
 DOCKER_BUILDER_PLATFORM ?= linux/${GOARCH}
-PKG_NAME?=/go/src/github.com/vmware-tanzu/graph-framework-for-microservices/${GO_PROJECT_NAME}
 
+PKG_NAME        ?= /go/src/github.com/vmware-tanzu/graph-framework-for-microservices/${GO_PROJECT_NAME}
 
-IMAGE_NAME ?= nexus/compiler
-TAG ?= $(shell git rev-parse --verify --short=8 HEAD)
+VERSION         ?= $(shell cat ../VERSION)
+BUILDER_VERSION ?= ${VERSION}
 
-BUILDER_NAME ?= ${IMAGE_NAME}/builder/${GOARCH}
-COMPILER_NAME ?= ${IMAGE_NAME}/${GOARCH}
-BUILDER_TAG ?= $(shell md5sum builder/Dockerfile | awk '{ print $1 }' | head -c 8)
+IMAGE_NAME      ?= nexus/compiler
+BUILDER_NAME    ?= ${IMAGE_NAME}/builder/${GOARCH}
+COMPILER_NAME   ?= ${IMAGE_NAME}/${GOARCH}
 
 ifeq (${DOCKER_REGISTRY}, )
-BUILDER_DOCKER_TAG = ${BUILDER_NAME}:${BUILDER_TAG}
-COMPILER_DOCKER_TAG = ${COMPILER_NAME}:${TAG}
+BUILDER_DOCKER_TAG  = ${BUILDER_NAME}:${BUILDER_VERSION}
+COMPILER_DOCKER_TAG = ${COMPILER_NAME}:${VERSION}
 else
-BUILDER_DOCKER_TAG = ${DOCKER_REGISTRY}/${BUILDER_NAME}:${BUILDER_TAG}
-COMPILER_DOCKER_TAG = ${DOCKER_REGISTRY}/${COMPILER_NAME}:${TAG}
+BUILDER_DOCKER_TAG  = ${DOCKER_REGISTRY}/${BUILDER_NAME}:${BUILDER_VERSION}
+COMPILER_DOCKER_TAG = ${DOCKER_REGISTRY}/${COMPILER_NAME}:${VERSION}
 endif
 
-
-DATAMODEL_PATH ?= datamodel
-CONFIG_FILE ?= ""
+DATAMODEL_PATH             ?= datamodel
+CONFIG_FILE                ?= ""
 GENERATED_OUTPUT_DIRECTORY ?= generated
-COMPILER_SRC_DIRECTORY ?= ""
-FORCE ?= false
-PREPARSER_MODPATH ?= model
+COMPILER_SRC_DIRECTORY     ?= ""
+FORCE                      ?= false
+PREPARSER_MODPATH          ?= model
 
 NEXUS_KUBEOPENAPI_VERSION ?= 7416bd4754d3c0dd8b3fa37fff53d36594f11607
 NEXUS_GRAPHQLGEN_VERSION ?= 32f028bce22efeb70b47a640195bd969dbb337f0
@@ -49,7 +52,6 @@ ifeq ($(CONTAINER_ID),)
 define run_in_container
   docker run \
   --volume $(realpath .)/..:/go/src/github.com/vmware-tanzu/graph-framework-for-microservices/ \
-  --volume ~/.ssh:/root/.ssh \
   --network=host \
   --workdir ${PKG_NAME} \
   -e http_proxy=$(HTTP_PROXY) \
@@ -97,7 +99,7 @@ docker.builder.publish:
 .PHONY: docker.builder.image.exists
 docker.builder.image.exists:
 	@docker inspect ${BUILDER_DOCKER_TAG} >/dev/null 2>&1 || \
-                (echo "Image  ${BUILDER_DOCKER_TAG} does not exist. Run 'make compiler.builder' to generate it" && false)
+  (echo "Image  ${BUILDER_DOCKER_TAG} does not exist. Run 'make compiler.builder' to generate it" && false)
 
 .PHONY: docker
 docker: docker.builder.image.exists init_submodules build_openapigen_in_container build_gqlgen_in_container build_install_validator_in_container
@@ -108,7 +110,6 @@ else
 endif
 	cd .. && tar -rf compiler/compiler.tar ../.git
 	tar -rf compiler.tar _deps ../gqlgen ../kube-openapi ../nexus ../install-validator ../common-library
-	
 	docker build --load \
 		--build-arg HTTPS_PROXY=$(HTTPS_PROXY) \
 		--build-arg HTTP_PROXY=$(HTTP_PROXY) \
@@ -228,8 +229,8 @@ generate_code:
 	@echo "Nexus Compiler: Running compiler code generation"
 	@echo "Cleaning up generated files"
 	rm -rf _generated
-	@echo "Cleaning up workdir"
-	rm -rf ${GOPATH}/src/nexustempmodule
+	# @echo "Cleaning up workdir"
+	# rm -rf ${GOPATH}/src/nexustempmodule
 	@echo "Copying generated_base_structure to create directory structure"
 	@echo "COMPILER_SRC_DIRECTORY: ${COMPILER_SRC_DIRECTORY}"
 	cp -R _generated_base_structure _generated
@@ -243,7 +244,7 @@ generate_code:
 	CRD_MODULE_PATH=${CRD_MODULE_PATH} go run cmd/nexus-sdk/main.go -config-file ${CONFIG_FILE} -dsl ${DATAMODEL_PATH} -crd-output _generated -log-level ${LOG_LEVEL}
 	mv _generated/api_names.sh scripts/
 	@echo "Nexus Compiler: Resolving datamodel dependencies"
-	cd _generated && ls -l && ../scripts/pin_deps.sh ${COMPILER_SRC_DIRECTORY} && cat go.mod && go mod tidy -e 
+	cd _generated && ls -l && ../scripts/pin_deps.sh ${COMPILER_SRC_DIRECTORY} && cat go.mod && go mod tidy -e
 	@echo "Nexus Compiler: Generating kuberenetes APIs"
 	./scripts/generate_k8s_api.sh
 	@echo "Nexus Compiler: Generating openapi schema"
@@ -276,7 +277,7 @@ generate_code:
 	find . -name "*.bak" -type f -delete
 	@echo "Nexus Compiler: Moving files to output directory"
 	mkdir -p ${GENERATED_OUTPUT_DIRECTORY}/install-validator
-	cp -r ${GOPATH}/src/github.com/vmware-tanzu/graph-framework-for-microservices/install-validator/install.so ${GENERATED_OUTPUT_DIRECTORY}/install-validator/install.so || echo "Could not find install.so file, skipping"
+	# cp -r ${GOPATH}/src/github.com/vmware-tanzu/graph-framework-for-microservices/install-validator/install.so ${GENERATED_OUTPUT_DIRECTORY}/install-validator/install.so || echo "Could not find install.so file, skipping"
 	cp -r _generated/{client,apis,crds,common,clusterroles,nexus-client,helper,nexus-gql,tsm-nexus-gql,model} ${GENERATED_OUTPUT_DIRECTORY}
 	@echo "Nexus Compiler: Compiler code generation completed"
 
@@ -304,43 +305,25 @@ generate_example:
 
 .PHONY: show-image-name
 show-image-name:
-	@echo ${DOCKER_REGISTRY}/${IMAGE_NAME}:${TAG}
+	@echo ${DOCKER_REGISTRY}/${IMAGE_NAME}:${VERSION}
 
 .PHONY: publish
 publish:
-	docker tag ${IMAGE_NAME}:${TAG} ${DOCKER_REGISTRY}/${IMAGE_NAME}:${TAG}
-	docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${TAG};
+	docker tag ${IMAGE_NAME}:${VERSION} ${DOCKER_REGISTRY}/${IMAGE_NAME}:${VERSION}
+	docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${VERSION}
 
 .PHONY: download_builder_image
 download_builder_image:
-	docker pull ${DOCKER_REGISTRY}/${BUILDER_NAME}:${BUILDER_TAG}
-	docker tag ${DOCKER_REGISTRY}/${BUILDER_NAME}:${BUILDER_TAG} ${BUILDER_NAME}:${BUILDER_TAG}
+	docker pull ${DOCKER_REGISTRY}/${BUILDER_NAME}:${BUILDER_VERSION}
+	docker tag ${DOCKER_REGISTRY}/${BUILDER_NAME}:${BUILDER_VERSION} ${BUILDER_NAME}:${BUILDER_VERSION}
 
 .PHONY: publish_builder_image
 publish_builder_image:
-	docker tag ${BUILDER_NAME}:${BUILDER_TAG} ${DOCKER_REGISTRY}/${BUILDER_NAME}:${BUILDER_TAG}
-	docker push ${DOCKER_REGISTRY}/${BUILDER_NAME}:${BUILDER_TAG}
-
-# Target to set the proxy for Git
-set_git_proxy:
-	@echo "Setting Git proxy configuration..."
-	@if [ -n "$(HTTP_PROXY)" ]; then \
-		echo "Using HTTP_PROXY: $(HTTP_PROXY)"; \
-		git config --global http.proxy $(HTTP_PROXY); \
-	else \
-		echo "HTTP_PROXY is not set. Skipping HTTP proxy configuration."; \
-	fi
-	@if [ -n "$(HTTPS_PROXY)" ]; then \
-		echo "Using HTTPS_PROXY: $(HTTPS_PROXY)"; \
-		git config --global https.proxy $(HTTPS_PROXY); \
-	else \
-		echo "HTTPS_PROXY is not set. Skipping HTTPS proxy configuration."; \
-	fi
-	@echo "Git proxy configuration set."
+	docker tag ${BUILDER_NAME}:${BUILDER_VERSION} ${DOCKER_REGISTRY}/${BUILDER_NAME}:${BUILDER_VERSION}
+	docker push ${DOCKER_REGISTRY}/${BUILDER_NAME}:${BUILDER_VERSION}
 
 .PHONY: init_submodules
-init_submodules: set_git_proxy
-	
+init_submodules:
 	@if [ ! -d "_deps/github.com/kubernetes/code-generator/.git" ]; then\
     	echo "Cloning kubernetes/code-generator repo ...";\
 	git clone https://github.com/kubernetes/code-generator.git _deps/github.com/kubernetes/code-generator;\
@@ -358,3 +341,20 @@ test_render_templates: render_templates
     	git diff;\
     	return 1;\
     fi
+
+docker-list: ## Print names of docker container images
+	@echo "  $(IMAGE_NAME):"
+	@echo "    name: '${DOCKER_REGISTRY}/${IMAGE_NAME}:${VERSION}'"
+	@echo "    version: '$(VERSION)'"
+	@echo "    gitTagPrefix: 'nexus/$(VERSION)'"
+	@echo "    buildTarget: 'docker-build-nexus/compiler'"
+
+#### Help Target ####
+help: ## Print help for each target
+	@echo $(PROJECT_NAME) make targets
+	@echo "Target               Makefile:Line    Description"
+	@echo "-------------------- ---------------- -----------------------------------------"
+	@grep -H -n '^[[:alnum:]_-]*:.* ##' $(MAKEFILE_LIST) \
+    | sort -t ":" -k 3 \
+    | awk 'BEGIN  {FS=":"}; {sub(".* ## ", "", $$4)}; {printf "%-20s %-16s %s\n", $$3, $$1 ":" $$2, $$4};'
+
