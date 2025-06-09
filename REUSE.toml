@@ -16,7 +16,6 @@ path = [
   "**/.tool-versions",
   "tenancy-datamodel/IMAGE",
   "tenancy-datamodel/NAME",
-  "nexus/TAG",
   "nexus/compiler/example/output/generated/nexus-gql/server",
   "nexus/docs/Nexus-Config-Propagation-Calculator.csv",
 ]

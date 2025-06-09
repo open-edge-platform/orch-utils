@@ -1,13 +1,11 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
-#
-# SPDX-License-Identifier: Apache-2.0
-
 #!/bin/sh
 
-set -ex
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+set -eux
 
 NAME=${NAME:-}
-DATAMODEL_IMAGE=${IMAGE}
 IMAGE="file://${NAME}"
 TITLE=${TITLE:-}
 SKIP_CRD_INSTALLATION=${SKIP_CRD_INSTALLATION:-false}
