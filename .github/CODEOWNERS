@@ -27,8 +27,8 @@
 /.github/workflows/*.yml
 /.github/workflows/*.yaml
 
-# All changes to Nexus framework must be reviewed by the Nexus team
-nexus/* @Rashika-Rajaraman @xmen4xp
+# All changes to Nexus framework must be reviewed by the Nexus maintainers
+nexus/* @Rashika-Rajaraman @zdw @SushilLakra
 
 # Helm charts changes to Cluster Orchestrator reviewed by the CO team
 charts/capi-operator-pre/** @gcgirish @andybavier @hyunsun @jdanieck @jokuniew @eoghanlawless
