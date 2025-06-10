@@ -37,8 +37,6 @@ spec:
       serviceURI: catalog.orchestrator.apis/v3/deployment_packages/{deploymentPackageName}/versions
     - externalURI: /v3/projects/{projectName}/catalog/deployment_packages/{deploymentPackageName}/versions/{version}
       serviceURI: catalog.orchestrator.apis/v3/deployment_packages/{deploymentPackageName}/versions/{version}
-    - externalURI: /v3/projects/{projectName}/catalog/deployment_packages/{deploymentPackageName}/versions/{version}/download
-      serviceURI: catalog.orchestrator.apis/v3/deployment_packages/{deploymentPackageName}/versions/{version}/download
     - externalURI: /v3/projects/{projectName}/catalog/registries
       serviceURI: catalog.orchestrator.apis/v3/registries
     - externalURI: /v3/projects/{projectName}/catalog/registries/{registryName}
