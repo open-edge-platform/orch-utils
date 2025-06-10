@@ -35,7 +35,7 @@ OPENAPI_GENERATOR_DOCKER_IMAGE   ?= ${DOCKER_REGISTRY}nexus/${OPENAPI_GENERATOR_
 
 .PHONY: openapi.generator.docker
 openapi.generator.docker:
-	docker build -t ${OPENAPI_GENERATOR_DOCKER_IMAGE} -f openapi-generator/Dockerfile .
+	docker build --load -t ${OPENAPI_GENERATOR_DOCKER_IMAGE} -f openapi-generator/Dockerfile .
 
 compiler-docker-list:
 	@make -C compiler docker-list
