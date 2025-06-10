@@ -76,7 +76,7 @@ yamllint: $(VENV_NAME) ## Lint all yaml files
   yamllint --version ;\
   yamllint -c yamllint_conf.yml -s $(YAML_FILES)
 
-.PHONY: yamllint
+.PHONY: checkov
 checkov: $(VENV_NAME) ## Perform checkov scans on generated APIs
 	. ./$</bin/activate; set -u;\
   checkov -v ;\
