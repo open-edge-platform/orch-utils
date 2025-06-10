@@ -71,10 +71,16 @@ hadolint: ## lint Dockerfile with hadolint
 
 YAML_FILES := $(shell find . -path './repos' -prune -o -type f \( -name '*.yaml' -o -name '*.yml' \) -print )
 .PHONY: yamllint
-yamllint: $(VENV_NAME)  ## Lint all yaml files
+yamllint: $(VENV_NAME) ## Lint all yaml files
 	. ./$</bin/activate; set -u;\
   yamllint --version ;\
   yamllint -c yamllint_conf.yml -s $(YAML_FILES)
+
+.PHONY: yamllint
+checkov: $(VENV_NAME) ## Perform checkov scans on generated APIs
+	. ./$</bin/activate; set -u;\
+  checkov -v ;\
+  checkov -d openapispecs/generated/
 
 ### Docker targets ###
 .PHONY: build
