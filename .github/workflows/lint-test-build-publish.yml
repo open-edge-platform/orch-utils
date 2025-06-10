@@ -11,6 +11,7 @@ on:
   push:
     branches:
       - main
+      - fix
 
   # Trigger workflow on PRs to all branches
   pull_request:
