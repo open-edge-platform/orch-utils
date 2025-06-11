@@ -48,6 +48,40 @@ paths:
       summary: GetRegistryCharts
       tags:
         - CatalogService
+  /v3/projects/{projectName}/catalog/deployment_packages/{deploymentPackageName}/versions/{version}/download:
+    get:
+      description: Gets a specific deployment package and downloads it as a tarball.
+      operationId: CatalogService_DownloadDeploymentPackage
+      parameters:
+        - description: Name of the DeploymentPackage.
+          in: path
+          name: deploymentPackageName
+          required: true
+          schema:
+            type: string
+        - description: Version of the DeploymentPackage.
+          in: path
+          name: version
+          required: true
+          schema:
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: OK
+      summary: DownloadDeploymentPackage
+      tags:
+        - CatalogService
   /v3/projects/{projectName}/catalog/upload:
     post:
       description: Allows uploading of a YAML files containing various application catalog entities.
