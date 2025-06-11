@@ -9,3 +9,6 @@ yamllint~=1.35.1
 
 # license checking
 reuse~=5.0.2
+
+# security scanner
+checkov~=3.2.439
