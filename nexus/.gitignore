@@ -1,6 +1,16 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
+# test generated files
+prelude.resolvers.go
+prelude.custom.go
+
+# gqlgen test/build output
+gqlgen/plugin/federation/testdata/*/generated
+gqlgen/plugin/modelgen/out*
+gqlgen/plugin/resolvergen/testdata/*/out
+
+# compiler test/build output
 compiler/**/*.coverprofile
 compiler/cmd/nexus-sdk/nexus-sdk
 compiler/cmd/nexus-openapi-gen

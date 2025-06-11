@@ -63,6 +63,16 @@ docker-build-tenancy-manager:
 docker-build-token-fs:
 	mage build:tokenFS
 
+ginkgo:
+	make -C auth-service        ginkgo
+	make -C aws-sm-proxy        ginkgo
+	make -C internal            ginkgo
+	make -C nexus-api-gw        ginkgo
+	make -C nexus               ginkgo
+	make -C secrets             ginkgo
+	make -C tenancy-manager     ginkgo
+	# make -C tenancy-api-mapping ginkgo  # needs to be fixed
+
 #### Help Target ####
 help: ## print help for each target
 	@echo orch-utils make targets

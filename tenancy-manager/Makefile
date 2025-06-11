@@ -169,6 +169,10 @@ clean-testdata:
 test-fuzz: clean-testdata
 	$(GOCMD) test ./fuzztest -fuzz FuzzTenancyOrgProjectCreate -fuzztime=${FUZZ_SECONDS}s
 
+.PHONY: ginkgo
+ginkgo: ## run ginkgo tests
+	ginkgo run -v -r -p --race -randomize-all -randomize-suites
+
 help:
 	@printf "%-20s %s\n" "Target" "Description"
 	@printf "%-20s %s\n" "------" "-----------"

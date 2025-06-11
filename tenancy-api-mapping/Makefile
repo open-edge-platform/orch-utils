@@ -164,6 +164,10 @@ test: checkout-repos | $(OUT_DIR) ## Run go tests
 	$(GOCMD) tool cover -func $(OUT_DIR)/coverage.out -o $(OUT_DIR)/function_coverage.log
 	@echo "test run completed"
 
+.PHONY: ginkgo
+ginkgo: ## run ginkgo tests
+	ginkgo run -v -r -p --race -randomize-all -randomize-suites
+
 coverage: ## Run coverage
 	echo  "See output of test"
 
