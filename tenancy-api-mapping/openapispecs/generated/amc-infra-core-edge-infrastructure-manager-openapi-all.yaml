@@ -49,6 +49,8 @@ tags:
     name: TelemetryMetricsProfileService
   - description: LocalAccount.
     name: LocalAccountService
+  - description: CustomConfig.
+    name: CustomConfigService
   - description: OS Update Policy.
     name: OSUpdatePolicy
   - description: OS Update Run.
@@ -1610,6 +1612,183 @@ paths:
       summary: GetWorkloadMember
       tags:
         - WorkloadMemberService
+  /v1/projects/{projectName}/customConfigs:
+    get:
+      description: Get a list of custom configurations.
+      operationId: CustomConfigService_ListCustomConfigs
+      parameters:
+        - description: |-
+            Optional comma separated list of fields to specify a sorting order.
+             See https://google.aip.dev/132 for details.
+          in: query
+          name: orderBy
+          schema:
+            description: |-
+              (OPTIONAL) Optional comma separated list of fields to specify a sorting order.
+               See https://google.aip.dev/132 for details.
+            maxLength: 1000
+            pattern: ^$|^[a-zA-Z-_0-9., ]+$
+            title: order_by
+            type: string
+        - description: |-
+            Optional filter to return only item of interest.
+             See https://google.aip.dev/160 for details.
+          in: query
+          name: filter
+          schema:
+            description: |-
+              (OPTIONAL) Optional filter to return only item of interest.
+               See https://google.aip.dev/160 for details.
+            maxLength: 1000
+            pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}"' ]+$
+            title: filter
+            type: string
+        - description: |-
+            Defines the amount of items to be contained in a single page.
+             Default of 20.
+          in: query
+          name: pageSize
+          schema:
+            description: |-
+              (OPTIONAL) Defines the amount of items to be contained in a single page.
+               Default of 20.
+            format: int32
+            maximum: 100
+            minimum: 1
+            title: page_size
+            type: integer
+        - description: Index of the first item to return. This allows skipping items.
+          in: query
+          name: offset
+          schema:
+            description: (OPTIONAL) Index of the first item to return. This allows skipping items.
+            format: int32
+            maximum: 10000
+            title: offset
+            type: integer
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCustomConfigsResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: ListCustomConfigs
+      tags:
+        - CustomConfigService
+    post:
+      description: Create a custom configuration.
+      operationId: CustomConfigService_CreateCustomConfig
+      parameters:
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomConfigResource'
+        description: The custom configuration to create.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomConfigResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: CreateCustomConfig
+      tags:
+        - CustomConfigService
+  /v1/projects/{projectName}/customConfigs/{resourceId}:
+    delete:
+      description: Delete a custom configuration.
+      operationId: CustomConfigService_DeleteCustomConfig
+      parameters:
+        - description: Name of the customconfig to be deleted.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the customconfig to be deleted.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteCustomConfigResponse'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: DeleteCustomConfig
+      tags:
+        - CustomConfigService
+    get:
+      description: Get a specific custom configuration.
+      operationId: CustomConfigService_GetCustomConfig
+      parameters:
+        - description: Name of the requested custom configuration.
+          in: path
+          name: resourceId
+          required: true
+          schema:
+            description: Name of the requested custom configuration.
+            title: resourceId
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomConfigResource'
+          description: Success
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/connect.error'
+          description: Error
+      summary: GetCustomConfig
+      tags:
+        - CustomConfigService
   /v1/projects/{projectName}/localAccounts:
     get:
       description: Get a list of providers.
@@ -4116,6 +4295,26 @@ components:
         - BAREMETAL_CONTROLLER_KIND_PDU
       title: BaremetalControllerKind
       type: string
+    CreateCustomConfigRequest:
+      additionalProperties: false
+      description: Request message for the CreateCustomConfig method.
+      properties:
+        customConfig:
+          $ref: '#/components/schemas/CustomConfigResource'
+      required:
+        - customConfig
+      title: CreateCustomConfigRequest
+      type: object
+    CreateCustomConfigResponse:
+      additionalProperties: false
+      description: Response message for the CreateCustomConfig method.
+      properties:
+        customConfig:
+          $ref: '#/components/schemas/CustomConfigResource'
+      required:
+        - customConfig
+      title: CreateCustomConfigResponse
+      type: object
     CreateHostRequest:
       additionalProperties: false
       description: Request message for the CreateHost method.
@@ -4456,6 +4655,58 @@ components:
         - workload
       title: CreateWorkloadResponse
       type: object
+    CustomConfigResource:
+      additionalProperties: false
+      properties:
+        configContent:
+          description: Config content
+          maxLength: 16384
+          title: config_content
+          type: string
+        description:
+          description: (OPTIONAL) Config description
+          maxLength: 256
+          minLength: 1
+          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()" ]+$
+          title: description
+          type: string
+        name:
+          description: Config provided by admin
+          maxLength: 32
+          pattern: ^[a-z][a-z0-9-]{0,31}$
+          title: name
+          type: string
+        resourceId:
+          description: resource identifier
+          maxLength: 21
+          pattern: ^customconfig-[0-9a-f]{8}$
+          readOnly: true
+          title: resource_id
+          type: string
+        timestamps:
+          $ref: '#/components/schemas/Timestamps'
+      required:
+        - name
+        - configContent
+      title: CustomConfigResource
+      type: object
+    DeleteCustomConfigRequest:
+      additionalProperties: false
+      description: Request message for DeleteCustomConfig.
+      properties:
+        resourceId:
+          description: Name of the customconfig to be deleted.
+          title: resourceId
+          type: string
+      required:
+        - resourceId
+      title: DeleteCustomConfigRequest
+      type: object
+    DeleteCustomConfigResponse:
+      additionalProperties: false
+      description: Response message for DeleteCustomConfig.
+      title: DeleteCustomConfigResponse
+      type: object
     DeleteHostRequest:
       additionalProperties: false
       description: Request message for DeleteHost.
@@ -4744,6 +4995,28 @@ components:
       additionalProperties: false
       description: Response message for DeleteWorkload.
       title: DeleteWorkloadResponse
+      type: object
+    GetCustomConfigRequest:
+      additionalProperties: false
+      description: Request message for the GetCustomConfig method.
+      properties:
+        resourceId:
+          description: Name of the requested custom configuration.
+          title: resourceId
+          type: string
+      required:
+        - resourceId
+      title: GetCustomConfigRequest
+      type: object
+    GetCustomConfigResponse:
+      additionalProperties: false
+      description: Response message for the GetCustomConfig method.
+      properties:
+        customConfig:
+          $ref: '#/components/schemas/CustomConfigResource'
+      required:
+        - customConfig
+      title: GetCustomConfigResponse
       type: object
     GetHostRequest:
       additionalProperties: false
@@ -5720,6 +5993,25 @@ components:
           $ref: '#/components/schemas/OperatingSystemResource'
         currentState:
           $ref: '#/components/schemas/InstanceState'
+        customConfig:
+          description: The list of custom config associated with the instance.
+          items:
+            $ref: '#/components/schemas/CustomConfigResource'
+          readOnly: true
+          title: custom_config
+          type: array
+        customConfigID:
+          description: The list of custom config associated with the instance.
+          items:
+            maxLength: 21
+            pattern: ^customconfig-[0-9a-f]{8}$
+            type: string
+            writeOnly: true
+          maxLength: 21
+          pattern: ^customconfig-[0-9a-f]{8}$
+          title: custom_configID
+          type: array
+          writeOnly: true
         desiredOs:
           $ref: '#/components/schemas/OperatingSystemResource'
         desiredState:
@@ -5936,6 +6228,68 @@ components:
         - NETWORK_INTERFACE_LINK_STATE_DOWN
       title: LinkState
       type: string
+    ListCustomConfigsRequest:
+      additionalProperties: false
+      description: Request message for the ListCustomConfigs method.
+      properties:
+        filter:
+          description: |-
+            (OPTIONAL) Optional filter to return only item of interest.
+             See https://google.aip.dev/160 for details.
+          maxLength: 1000
+          pattern: ^$|^[a-zA-Z-_0-9.,:/=*(){}"' ]+$
+          title: filter
+          type: string
+        offset:
+          description: (OPTIONAL) Index of the first item to return. This allows skipping items.
+          format: int32
+          maximum: 10000
+          title: offset
+          type: integer
+        orderBy:
+          description: |-
+            (OPTIONAL) Optional comma separated list of fields to specify a sorting order.
+             See https://google.aip.dev/132 for details.
+          maxLength: 1000
+          pattern: ^$|^[a-zA-Z-_0-9., ]+$
+          title: order_by
+          type: string
+        pageSize:
+          description: |-
+            (OPTIONAL) Defines the amount of items to be contained in a single page.
+             Default of 20.
+          format: int32
+          maximum: 100
+          minimum: 1
+          title: page_size
+          type: integer
+      title: ListCustomConfigsRequest
+      type: object
+    ListCustomConfigsResponse:
+      additionalProperties: false
+      description: Response message for the ListCustomConfigs method.
+      properties:
+        customConfigs:
+          description: Sorted and filtered list of customconfigs.
+          items:
+            $ref: '#/components/schemas/CustomConfigResource'
+          title: custom_configs
+          type: array
+        hasNext:
+          description: Inform if there are more elements
+          title: has_next
+          type: boolean
+        totalElements:
+          description: Count of items in the entire list, regardless of pagination.
+          format: int32
+          title: total_elements
+          type: integer
+      required:
+        - customConfigs
+        - totalElements
+        - hasNext
+      title: ListCustomConfigsResponse
+      type: object
     ListHostsRequest:
       additionalProperties: false
       description: Request message for the ListHosts method.
@@ -7276,6 +7630,13 @@ components:
           type: string
         targetOs:
           $ref: '#/components/schemas/OperatingSystemResource'
+        targetOsId:
+          description: The unique identifier of target OS will be associated with the OS Update policy.
+          maxLength: 11
+          pattern: ^os-[0-9a-f]{8}$
+          title: target_os_id
+          type: string
+          writeOnly: true
         timestamps:
           $ref: '#/components/schemas/Timestamps'
         updatePolicy:
@@ -7735,7 +8096,7 @@ components:
           items:
             maxItems: 100
             maxLength: 500
-            pattern: ^$|^[a-zA-Z-_0-9./:;=?@!#,<>*() ]+$
+            pattern: ^$|^[a-zA-Z-_0-9.\/:;=?@!#,<>*(){}"\\ ]+$
             type: string
           maxItems: 100
           title: api_credentials
@@ -7749,7 +8110,7 @@ components:
         config:
           description: Opaque provider configuration.
           maxLength: 2000
-          pattern: ^$|^[a-zA-Z-_0-9./:;=?@!#,<>*() ]+$
+          pattern: ^$|^[a-zA-Z-_0-9.\/:;=?@!#,<>*(){}"\\ ]+$
           title: config
           type: string
         name:
@@ -9051,9 +9412,6 @@ components:
          the Joda Time's [`ISODateTimeFormat.dateTime()`](
          http://joda-time.sourceforge.net/apidocs/org/joda/time/format/ISODateTimeFormat.html#dateTime()
          ) to obtain a formatter capable of generating timestamps in this format.
-      examples:
-        - 1s
-        - 1.000340012s
       format: date-time
       type: string
   securitySchemes:
