@@ -258,14 +258,6 @@ func (Push) NexusAPIGateway() error {
 	return pushImage("nexus-api-gw", "nexus-api-gw")
 }
 
-// Namespace contains test targets.
-type Test mg.Namespace
-
-// Test Go source files.
-func (t Test) Golang() error {
-	return t.golang()
-}
-
 // Namespace contains clean targets.
 type Clean mg.Namespace
 
