@@ -63,7 +63,7 @@ docker-build-tenancy-manager:
 docker-build-token-fs:
 	mage build:tokenFS
 
-ginkgo:
+ginkgo: ## Run all ginkgo tests in sub-projects
 	make -C auth-service        ginkgo
 	make -C aws-sm-proxy        ginkgo
 	make -C internal            ginkgo
