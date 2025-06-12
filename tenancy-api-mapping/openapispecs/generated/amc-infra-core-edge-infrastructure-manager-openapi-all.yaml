@@ -1652,7 +1652,6 @@ paths:
             description: |-
               (OPTIONAL) Defines the amount of items to be contained in a single page.
                Default of 20.
-            format: int32
             maximum: 100
             minimum: 1
             title: page_size
@@ -1662,7 +1661,6 @@ paths:
           name: offset
           schema:
             description: (OPTIONAL) Index of the first item to return. This allows skipping items.
-            format: int32
             maximum: 10000
             title: offset
             type: integer
@@ -4658,10 +4656,10 @@ components:
     CustomConfigResource:
       additionalProperties: false
       properties:
-        configContent:
+        config:
           description: Config content
           maxLength: 16384
-          title: config_content
+          title: config
           type: string
         description:
           description: (OPTIONAL) Config description
@@ -4672,7 +4670,7 @@ components:
           type: string
         name:
           description: Config provided by admin
-          maxLength: 32
+          maxLength: 40
           pattern: ^[a-z][a-z0-9-]{0,31}$
           title: name
           type: string
@@ -4687,7 +4685,7 @@ components:
           $ref: '#/components/schemas/Timestamps'
       required:
         - name
-        - configContent
+        - config
       title: CustomConfigResource
       type: object
     DeleteCustomConfigRequest:
@@ -6019,7 +6017,7 @@ components:
         existingCves:
           description: The CVEs that are currently present on the Instance, encoded as a JSON list.
           maxLength: 20000
-          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\ \n{}[]]+$
+          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\\ \\n\{\}\[\]]+$
           readOnly: true
           title: existing_cves
           type: string
@@ -6088,7 +6086,7 @@ components:
         osUpdateAvailable:
           description: Details about OS Updates available for this Instance. If empty, there are no updates available.
           maxLength: 10000
-          pattern: ^$|^[a-zA-Z-_0-9./:;=?@!#,<>*()"\ \n]+$
+          pattern: ^$|^[a-zA-Z-_0-9./:;=?@!#,<>*()"\\ \\n]+$
           readOnly: true
           title: os_update_available
           type: string
@@ -6121,7 +6119,7 @@ components:
         runtimePackages:
           description: The packages available on the Instance at runtime, represented as a JSON list.
           maxLength: 500000
-          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\ \n{}[]]+$
+          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\\ \\n\{\}\[\]]+$
           readOnly: true
           title: runtime_packages
           type: string
@@ -6242,7 +6240,6 @@ components:
           type: string
         offset:
           description: (OPTIONAL) Index of the first item to return. This allows skipping items.
-          format: int32
           maximum: 10000
           title: offset
           type: integer
@@ -6258,7 +6255,6 @@ components:
           description: |-
             (OPTIONAL) Defines the amount of items to be contained in a single page.
              Default of 20.
-          format: int32
           maximum: 100
           minimum: 1
           title: page_size
@@ -7647,8 +7643,10 @@ components:
              Should be in 'DEB822 Source Format' for Debian style OSs.
              Applies only to Mutable OSes.
           items:
-            pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+()"\ \n]+$
+            maxItems: 100
+            pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+()" \\n]+$
             type: string
+          maxItems: 100
           title: update_sources
           type: array
       required:
@@ -7740,27 +7738,27 @@ components:
         existingCves:
           description: The CVEs that are currently present on the Operating System, encoded as a JSON list.
           maxLength: 20000
-          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\ \n{}[]]+$
+          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\\ \\n\{\}\[\]]+$
           readOnly: true
           title: existing_cves
           type: string
         existingCvesUrl:
-          description: URL of the file containing information about the existing CVEs on the Operating System.
+          description: (IMMUTABLE) URL of the file containing information about the existing CVEs on the Operating System.
+          format: uri-ref
           maxLength: 500
-          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()"\ ]+$
           title: existing_cves_url
           type: string
         fixedCves:
           description: The CVEs that have been fixed by this OS Resource version, encoded as a JSON list.
           maxLength: 20000
-          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\ \n{}[]]+$
+          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\\ \\n\{\}\[\]]+$
           readOnly: true
           title: fixed_cves
           type: string
         fixedCvesUrl:
-          description: URL of the file containing information about the CVEs that have been fixed by this OS Resource version.
+          description: (IMMUTABLE) URL of the file containing information about the CVEs that have been fixed by this OS Resource version.
+          format: uri-ref
           maxLength: 500
-          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()"\ ]+$
           title: fixed_cves_url
           type: string
         imageId:
@@ -7786,8 +7784,8 @@ components:
           description: |-
             (IMMUTABLE) The URL of the OS manifest which contains install packages details. This will be used to fill the installed_packages field
              for the advance use case to allow manual creation of OSProfiles when supported from backend.
+          format: uri-ref
           maxLength: 200
-          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()"\ ]+$
           title: installed_packages_url
           type: string
         kernelCommand:
@@ -7797,9 +7795,9 @@ components:
           title: kernel_command
           type: string
         metadata:
-          description: Opaque JSON field storing metadata associated to this OS resource.
+          description: Opaque JSON field storing metadata associated to this OS resource. Expected to be a JSON object with string keys and values, or an empty string.
           maxLength: 500
-          pattern: ^$|^[a-z0-9.-_:/"\ \n{}]+$
+          pattern: ^$|^[a-z0-9,.\-_:/"\\ \\n{}\[\]]+$
           title: metadata
           type: string
         name:
@@ -8078,6 +8076,7 @@ components:
         - POWER_STATE_SLEEP
         - POWER_STATE_HIBERNATE
         - POWER_STATE_RESET
+        - POWER_STATE_POWER_CYCLE
       title: PowerState
       type: string
     ProviderKind:
