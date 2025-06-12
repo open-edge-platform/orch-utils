@@ -18,8 +18,6 @@ ifneq ($(GIT_HASH_SHORT), main)
 	endif
 endif
 
-
-
 API_GW_COMPONENT_NAME 				?= api-gw
 NAMESPACE 					?= default
 CWD 						?= $(shell pwd)
@@ -123,6 +121,10 @@ check.prereq: check.prereq.git check.prereq.go check.prereq.docker
 fmt: ## Run go fmt against code.
 	go fmt ./...
 
+.PHONY: test-fmt
+test-fmt:
+	test -z $$(goimports -w -l cmd pkg)
+
 .PHONY: vet
 vet: ## Run go vet against code.
 	go vet ./...
@@ -177,16 +179,16 @@ init-unit-test:
         rm envtest-bins.tar.gz; \
   	fi
 
+.PHONY: test
+test: go-build race-unit-test ## Runs unit test
+
 .PHONY: race-unit-test
 race-unit-test: init-unit-test
 	${GOCMD_TEST} test -coverprofile ${BUILD_DIR}/coverage.out -coverpkg=$$(go list ./... | tr '\n' ,)  -covermode atomic ./...
 
-.PHONY: test-fmt
-test-fmt:
-	test -z $$(goimports -w -l cmd pkg)
-
-.PHONY: test
-test: go-build race-unit-test  ## Runs unit test
+.PHONY: ginkgo
+ginkgo: ## run ginkgo tests
+	ginkgo run -v -r -p --race -randomize-all -randomize-suites
 
 clean-testdata:
 	rm -rf ./pkg/apiremap/testdata

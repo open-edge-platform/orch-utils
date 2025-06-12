@@ -270,7 +270,7 @@ jobs:
       contents: read
     name: Test Go
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     needs:
       - lint-go
       - check-license
@@ -302,7 +302,7 @@ jobs:
         run: find . -name "go.mod" -execdir go mod download -x \;
 
       - name: Run tests
-        run: mage test:golang
+        run: make ginkgo
 
   build-containers:
     permissions:
