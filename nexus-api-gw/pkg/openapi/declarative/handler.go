@@ -74,10 +74,10 @@ func ListHandler(c echo.Context) error {
 	}
 
 	// Execute the request
-	resp, err := httpClient.Do(req)
+	resp, err := executeRequestWithoutCtxt(c, req)
 	if err != nil {
 		log.Warn().Msg(err.Error())
-		return c.NoContent(http.StatusInternalServerError)
+		return err
 	}
 	defer resp.Body.Close()
 
@@ -117,10 +117,10 @@ func GetHandler(c echo.Context) error {
 	}
 
 	// Execute the request
-	resp, err := httpClient.Do(req)
+	resp, err := executeRequestWithoutCtxt(c, req)
 	if err != nil {
 		log.Warn().Msg(err.Error())
-		return c.NoContent(http.StatusInternalServerError)
+		return err
 	}
 	defer resp.Body.Close()
 
@@ -231,6 +231,17 @@ func executeRequest(c echo.Context, req *http.Request) error {
 	return c.JSON(resp.StatusCode, respBody)
 }
 
+func executeRequestWithoutCtxt(c echo.Context, req *http.Request) (*http.Response, error) {
+	log.Debug().Msgf("Making a request to: %s", req.URL.String())
+
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Warn().Msg(err.Error())
+		return nil, c.NoContent(http.StatusInternalServerError)
+	}
+	return resp, nil
+}
+
 func DeleteHandler(c echo.Context) error {
 	ec, ok := c.(*EndpointContext)
 	if !ok {
@@ -256,11 +267,10 @@ func DeleteHandler(c echo.Context) error {
 
 	log.Debug().Msgf("Making a request to: %s", url)
 
-	httpClient := &http.Client{}
-	resp, err := httpClient.Do(req)
+	resp, err := executeRequestWithoutCtxt(c, req)
 	if err != nil {
 		log.InfraErr(err).Msg("")
-		return c.NoContent(http.StatusInternalServerError)
+		return err
 	}
 	defer resp.Body.Close()
 	return c.NoContent(resp.StatusCode)
