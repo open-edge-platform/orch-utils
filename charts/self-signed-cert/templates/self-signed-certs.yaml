@@ -181,10 +181,10 @@ data:
     - onboarding-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - onboarding-stream.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - alerting-monitor.{{ required "A valid certDomain entry required!" .Values.certDomain }}
-    - mps-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
-    - rps-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
-    - mps-webport-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
-    - rps-webport-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
+    - mps.{{ required "A valid certDomain entry required!" .Values.certDomain }}
+    - rps.{{ required "A valid certDomain entry required!" .Values.certDomain }}
+    - mps-wss.{{ required "A valid certDomain entry required!" .Values.certDomain }}
+    - rps-wss.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - connect-gateway.{{ required "A valid certDomain entry required!" .Values.certDomain }}
 ---
 # FIXME: The following ClusterRole and ClusterRoleBinding should be installed by CTM chart.

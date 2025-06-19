@@ -12,7 +12,7 @@ import (
 	"github.com/magefile/mage/sh"
 )
 
-func tryToCreateECRRepository(repositoryName string) error {
+func tryToCreateECRRepository(repositoryName string) error { //nolint:unparam // explicitly ignoring the error
 	cmd := fmt.Sprintf(
 		"aws ecr create-repository --region %s --repository-name %s",
 		AWSRegion, repositoryName,
@@ -58,21 +58,17 @@ func pushImage(imageName string, chartName string) error {
 }
 
 func pushNexusCompilerImage() error {
-	appVersion := getNexusCompilerTag()
+	appVersion := getNexusVersion()
 	imageName := "nexus/compiler/amd64"
 	registry := OpenEdgePlatformContainerRegistry
-	if err := tryToCreateECRRepository(fmt.Sprintf("edge-orch/common/%s", imageName)); err != nil {
-		return err
-	}
+
 	return inspectAndPushImage(registry, imageName, appVersion)
 }
 
 func pushOpenAPIGeneratorImage() error {
-	appVersion := getNexusCompilerTag()
+	appVersion := getNexusVersion()
 	imageName := "nexus/openapi-generator"
 	registry := OpenEdgePlatformContainerRegistry
-	if err := tryToCreateECRRepository(fmt.Sprintf("edge-orch/common/%s", imageName)); err != nil {
-		return err
-	}
+
 	return inspectAndPushImage(registry, imageName, appVersion)
 }

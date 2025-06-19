@@ -25,6 +25,7 @@ type Config struct {
 type Global struct {
 	SpecOutputDir          string   `yaml:"specOutputDir"`
 	LocalSubModsDir        string   `yaml:"localSubModsDir"`
+	LocalDownloadsDir      string   `yaml:"localDownloadsDir"`
 	APImappingConfigCrsDir string   `yaml:"apimappingconfigcrsdir"`
 	Servers                []Server `yaml:"servers"`
 }
@@ -38,6 +39,10 @@ type Variable struct {
 	Key   string `yaml:"key"`
 	Value string `yaml:"value"`
 }
+
+// NOTE: This struct must be kept in sync with the same config in
+// tenancy-datamodel/config/apimappingconfig/apimappingconfig.go (which has
+// JSON format struct tags instead of YAML)
 
 // APIMappingConfig represents the structure of the CR YAML file.
 type APIMappingConfig struct {
@@ -54,7 +59,10 @@ type APIMappingConfig struct {
 			Tag          string `yaml:"tag"`
 			SpecFilePath string `yaml:"specFilePath"`
 		} `yaml:"repoConf"`
-
+		DownloadConf struct {
+			Version string `yaml:"version"`
+			URL     string `yaml:"url"`
+		} `yaml:"downloadConf"`
 		Mappings []MappingTuple `yaml:"mappings"`
 	} `yaml:"spec"`
 }

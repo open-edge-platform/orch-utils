@@ -12,13 +12,10 @@ import (
 	"strings"
 )
 
-func getNexusCompilerTag() string {
-	if tag := os.Getenv("NEXUS_COMPILER_TAG"); tag != "" {
-		return tag
-	}
-	data, err := os.ReadFile("./nexus/TAG")
+func getNexusVersion() string {
+	data, err := os.ReadFile("./nexus/VERSION")
 	if err != nil {
-		fmt.Printf("Error reading TAG file: %v\n", err)
+		fmt.Printf("Error reading nexus/VERSION file: %v\n", err)
 		os.Exit(1)
 	}
 	return strings.TrimSpace(string(data))

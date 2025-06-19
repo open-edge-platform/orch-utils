@@ -2,32 +2,43 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 ---
+{{- range .Values.controlplane.providers }}
 apiVersion: operator.cluster.x-k8s.io/v1alpha2
 kind: ControlPlaneProvider
 metadata:
-  name: {{ .Values.controlplane.name }}
-  namespace: {{ .Values.controlplane.namespace }}
+  name: {{ .name }}
+  namespace: {{ .namespace }}
 spec:
-  {{- toYaml .Values.controlplane.spec | nindent 2 }}
+  {{- toYaml (omit .spec "manifestPatches") | nindent 2 }}
+  {{- with .spec.manifestPatches }}
+  manifestPatches:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- toYaml (omit .spec "additionalManifests") | nindent 2 }}
+  {{- with .spec.additionalManifests }}
+  additionalManifests:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 ---
-{{- if .Values.controlplane.spec.additionalManifests }}
+{{- if .spec.additionalManifests }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.controlplane.spec.additionalManifests.name }}
-  namespace: {{ .Values.controlplane.spec.additionalManifests.namespace | default .Values.controlplane.namespace }}
+  name: {{ .spec.additionalManifests.name }}
+  namespace: {{ .spec.additionalManifests.namespace | default .namespace }}
 data:
   manifests: |
-    {{- if .Values.controlplane.additionalManifests }}
-    {{- toYaml .Values.controlplane.additionalManifests.manifests | nindent 4 }}
+    {{- if .spec.additionalManifests.manifests }}
+    {{- toYaml .additionalManifests.manifests | nindent 4 }}
     {{- end }}
-    {{- if .Values.metrics.enabled }}
+    {{- if $.Values.metrics.enabled }}
     ---
-    {{- include "metricsservicetemplate" (dict "name" (printf "%s-%s" "controlplane" .Values.controlplane.name) "namespace" .Values.controlplane.namespace ) | nindent 4 }}
+    {{- include "metricsservicetemplate" (dict "name" (printf "%s-%s" "controlplane" .spec.additionalManifests.name) "namespace" .spec.additionalManifests.namespace ) | nindent 4 }}
         selector:
-          cluster.x-k8s.io/provider: control-plane-{{ .Values.bootstrap.name }}
+          cluster.x-k8s.io/provider: control-plane-{{ .name }}
     ---
-    {{- include "metricsservicemonitortemplate" (dict "name" (printf "%s-%s" "controlplane" .Values.controlplane.name) "namespace" .Values.controlplane.namespace) | nindent 4 }}
+    {{- include "metricsservicemonitortemplate" (dict "name" (printf "%s-%s" "controlplane" .spec.additionalManifests.name) "namespace" .spec.additionalManifests.namespace) | nindent 4 }}
     {{- end }}
 {{- end }}
-
+---
+{{- end }}

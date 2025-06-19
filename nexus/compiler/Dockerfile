@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
-ARG BUILDER_TAG
+ARG BUILDER_TAG=nexus/compiler/builder/amd64:latest
 
 # hadolint ignore=DL3006
 FROM $BUILDER_TAG

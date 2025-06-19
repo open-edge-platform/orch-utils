@@ -70,10 +70,11 @@ func (c *APIMappingConfig) DisplayName() string {
 
 // +k8s:openapi-gen=true
 type APIMappingConfigSpec struct {
-	SpecGenEnabled bool      `json:"specGenEnabled" yaml:"specGenEnabled"`
-	RepoConf       RepoConf  `json:"repoConf" yaml:"repoConf"`
-	Mappings       []Mapping `json:"mappings" yaml:"mappings"`
-	Backend        Backend   `json:"backend" yaml:"backend"`
+	SpecGenEnabled bool         `json:"specGenEnabled" yaml:"specGenEnabled"`
+	RepoConf       RepoConf     `json:"repoConf,omitempty" yaml:"repoConf,omitempty"`
+	DownloadConf   DownloadConf `json:"downloadConf,omitempty" yaml:"downloadConf,omitempty"`
+	Mappings       []Mapping    `json:"mappings" yaml:"mappings"`
+	Backend        Backend      `json:"backend" yaml:"backend"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -88,6 +89,12 @@ type RepoConf struct {
 	URL          string `json:"url" yaml:"uRL"`
 	Tag          string `json:"tag" yaml:"tag"`
 	SpecFilePath string `json:"specFilePath" yaml:"specFilePath"`
+}
+
+// +k8s:openapi-gen=true
+type DownloadConf struct {
+	Version string `json:"version" yaml:"version"`
+	URL     string `json:"url" yaml:"uRL"`
 }
 
 // +k8s:openapi-gen=true
