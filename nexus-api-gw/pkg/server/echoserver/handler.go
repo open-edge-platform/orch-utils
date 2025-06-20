@@ -985,11 +985,55 @@ func (s *EchoServer) tenancyapiHandler(c echo.Context) error {
 
 	log.Debug().Msgf("Custom Header in Proxy Request: %#v", c.Request().Header)
 
-	httpCode, msg, respBody := proxy.APIGwToProxy(c, output)
+	httpCode, msg, respBody, respHeader := proxy.APIGwToProxy(c, output)
 	if httpCode == http.StatusInternalServerError && msg != "" {
 		log.Error().Msgf("Failed APIGwToProxy with status: %d, msg: %s", httpCode, msg)
 		return c.JSON(httpCode, msg)
 	}
 
-	return c.JSONBlob(httpCode, respBody)
+	/* Note: For some APIs, such as catalog download, it is necessary to propagate the content-type
+	 * and content-disposition headers.
+	 */
+
+	/* Extract the CententType from the response */
+	contentHeader := respHeader.Get("Content-Type")
+	if contentHeader == "" {
+		contentHeader = "application/json" // default content-type
+	}
+
+	/* allowedHeaders is a list of other headers we want to propagate from the response */
+	allowedHeaders := []string{"Content-Disposition"}
+	for _, key := range allowedHeaders {
+		if val := respHeader.Get(key); val != "" {
+			c.Response().Header().Set(key, val)
+		}
+	}
+
+	/*
+		allowedHeaders := []string{"Content-Disposition"}
+
+		contentHeader := "application/json" // default content-type
+		if respHeader != nil {
+			for k, v := range respHeader {
+				if strings.EqualFold(k, "Content-Type") {
+					contentHeader = v[0]
+					continue
+				}
+				allowed := false
+				for _, allowedHeader := range allowedHeaders {
+					if strings.EqualFold(k, allowedHeader) {
+						allowed = true
+					}
+				}
+				if !allowed {
+					continue
+				}
+				// We're only setting the first header value.
+				// This is fine for Content-Disposition, but if we add more headers, then reconsider.
+				c.Response().Header().Set(k, v[0])
+			}
+		}
+	*/
+
+	return c.Blob(httpCode, contentHeader, respBody)
 }
