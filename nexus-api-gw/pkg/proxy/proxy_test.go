@@ -67,7 +67,7 @@ func TestApiGwToProxy(t *testing.T) {
 	}
 
 	// Invoke proxy.
-	status, msg, _ := proxy.APIGwToProxy(c, apiremapOutput)
+	status, msg, _, _ := proxy.APIGwToProxy(c, apiremapOutput)
 	fmt.Println("status :", status)
 	fmt.Println("msg :", msg)
 
@@ -87,7 +87,7 @@ func TestApiGwToProxy(t *testing.T) {
 	}
 
 	// Invoke Proxy.
-	status, msg, response := proxy.APIGwToProxy(c, apiremapOutput)
+	status, msg, response, _ := proxy.APIGwToProxy(c, apiremapOutput)
 
 	// Assertion that proxy returns success.
 	assert.Equal(t, http.StatusOK, status)
