@@ -1002,6 +1002,7 @@ func (s *EchoServer) tenancyapiHandler(c echo.Context) error {
 	}
 
 	/* allowedHeaders is a list of other headers we want to propagate from the response */
+	/* TODO: allowedHeaders should be specified in apiremapping / global config rather than hardcoded here. */
 	allowedHeaders := []string{"Content-Disposition"}
 	for _, key := range allowedHeaders {
 		if val := respHeader.Get(key); val != "" {
