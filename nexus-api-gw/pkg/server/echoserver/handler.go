@@ -1009,31 +1009,5 @@ func (s *EchoServer) tenancyapiHandler(c echo.Context) error {
 		}
 	}
 
-	/*
-		allowedHeaders := []string{"Content-Disposition"}
-
-		contentHeader := "application/json" // default content-type
-		if respHeader != nil {
-			for k, v := range respHeader {
-				if strings.EqualFold(k, "Content-Type") {
-					contentHeader = v[0]
-					continue
-				}
-				allowed := false
-				for _, allowedHeader := range allowedHeaders {
-					if strings.EqualFold(k, allowedHeader) {
-						allowed = true
-					}
-				}
-				if !allowed {
-					continue
-				}
-				// We're only setting the first header value.
-				// This is fine for Content-Disposition, but if we add more headers, then reconsider.
-				c.Response().Header().Set(k, v[0])
-			}
-		}
-	*/
-
 	return c.Blob(httpCode, contentHeader, respBody)
 }
