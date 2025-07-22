@@ -672,6 +672,14 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
+  name: tcp-rate-limit
+spec:
+  inFlightConn:
+    amount: {{ required "A valid tcpLimit.connectionLimit entry required!" .Values.tcpLimit.connectionLimit }} 
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
   name: limit-request-size
 spec:
   buffering:
