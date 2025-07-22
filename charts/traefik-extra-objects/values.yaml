@@ -32,6 +32,9 @@ clusterOrchNodeMatchHost: "cluster-orch-node.domain"
 logsNodeMatchHost: "logs-node.domain"
 metricsNodeMatchHost: "metrics-node.domain"
 giteaMatchHost: "gitea.domain"
+# Connection limit for raw tcp port
+tcpLimit:
+  connectionLimit: 10
 # specify default values for Traefik rate limiter;
 # when average=0, Traefik is not limiting any requests
 rateLimit:
