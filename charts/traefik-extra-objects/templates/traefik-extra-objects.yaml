@@ -670,7 +670,7 @@ spec:
         excludedIPs: {{ required "A valid rateLimit.excludedIps entry required!" .Values.rateLimit.excludedIps }}
 ---
 apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
+kind: MiddlewareTCP
 metadata:
   name: tcp-rate-limit
 spec:
