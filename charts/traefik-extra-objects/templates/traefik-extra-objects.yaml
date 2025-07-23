@@ -673,6 +673,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: MiddlewareTCP
 metadata:
   name: tcp-rate-limit
+  namespace: orch-gateway
 spec:
   inFlightConn:
     amount: {{ required "A valid tcpLimit.connectionLimit entry required!" .Values.tcpLimit.connectionLimit }} 
