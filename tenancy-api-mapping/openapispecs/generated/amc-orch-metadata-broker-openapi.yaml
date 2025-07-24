@@ -107,6 +107,7 @@ components:
         metadata:
           items:
             $ref: '#/components/schemas/Metadata'
+          maxItems: 100
           type: array
       required:
         - metadata
@@ -116,6 +117,7 @@ components:
         metadata:
           items:
             $ref: '#/components/schemas/StoredMetadata'
+          maxItems: 100
           type: array
       required:
         - metadata
@@ -128,6 +130,7 @@ components:
         values:
           items:
             type: string
+          maxItems: 100
           type: array
       required:
         - key

@@ -307,6 +307,7 @@ components:
           description: Fully qualified domain name (FQDN) for external access.
           items:
             $ref: '#/components/schemas/Fqdn'
+          maxItems: 100
           readOnly: true
           type: array
         id:
@@ -325,6 +326,7 @@ components:
           description: List of ports exposed by a service for external access
           items:
             $ref: '#/components/schemas/Port'
+          maxItems: 100
           readOnly: true
           type: array
       type: object
@@ -471,6 +473,7 @@ components:
           description: List of services.
           items:
             $ref: '#/components/schemas/AppEndpoint'
+          maxItems: 100
           readOnly: true
           type: array
       type: object
@@ -481,6 +484,7 @@ components:
           description: A list of virtual machines.
           items:
             $ref: '#/components/schemas/AppWorkload'
+          maxItems: 100
           type: array
       type: object
     Pod:
@@ -490,6 +494,7 @@ components:
           description: containers list of containers per pod
           items:
             $ref: '#/components/schemas/Container'
+          maxItems: 100
           type: array
         status:
           $ref: '#/components/schemas/PodStatus'
