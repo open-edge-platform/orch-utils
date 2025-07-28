@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
+ignoreRules:
+  - id: AVD-KSV-0114
+    paths:
+      - charts/vertical-pod-autoscaler/templates/cluster-role.yaml
+    comment: Required for VPA admission controller to inject pod resource recommendations

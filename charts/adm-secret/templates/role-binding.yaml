@@ -6,11 +6,13 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: adm-secret
+  namespace: orch-platform
 subjects:
   - kind: ServiceAccount
     name: adm-secret
+    namespace: orch-platform
 roleRef:
-  kind: ClusterRole
+  kind: Role
   name: adm-secret
   apiGroup: rbac.authorization.k8s.io
 ---
