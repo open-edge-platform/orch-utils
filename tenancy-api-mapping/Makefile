@@ -27,12 +27,18 @@ REPO_DIR                      := repos
 DOWNLOAD_DIR                  := downloads
 API_MAPPING_CONFIG_DIR        := apimappingconfigcrs
 
-# Go command invocation
-GOCMD                         := GOPRIVATE="github.com/open-edge-platform/*" go
+# Go command invocation with proper cache directories
+GOCMD                         := GOPRIVATE="github.com/open-edge-platform/*" GOCACHE=/tmp/gocache GOMODCACHE=/tmp/gomodcache go
 
 # directory creation
 $(OUT_DIR):
 	@mkdir -p $@
+
+# Ensure Go cache directories exist with proper permissions
+.PHONY: setup-go-cache
+setup-go-cache:
+	@mkdir -p /tmp/gocache /tmp/gomodcache
+	@chmod 755 /tmp/gocache /tmp/gomodcache
 
 .PHONY: all
 all: lint build test ## Runs build, lint, test stages
@@ -157,7 +163,7 @@ refresh-downloads: ## re-download OpenAPI specs
 
 ### Test targets ###
 .PHONY: test
-test: checkout-repos | $(OUT_DIR) ## Run go tests
+test: checkout-repos setup-go-cache | $(OUT_DIR) ## Run go tests
 	$(GOCMD) test -coverprofile $(OUT_DIR)/coverage.out -coverpkg=$$(go list ./... | grep -v "pkg/git/" | grep -v "pkg/config/" | grep -v "pkg/openapi/" | tr '\n' ,)  -covermode atomic ./...
 	gocover-cobertura < $(OUT_DIR)/coverage.out > $(OUT_DIR)/coverage.xml
 	$(GOCMD) tool cover -html=$(OUT_DIR)/coverage.out -o $(OUT_DIR)/coverage.html
@@ -178,18 +184,18 @@ coverage: ## Run coverage
 specgen: generate-specs
 
 .PHONY: generate-specs
-generate-specs:  ## Generate openapi specs from apimapping
+generate-specs: setup-go-cache ## Generate openapi specs from apimapping
 	@echo "---Running the spec generation..."
-	@go run cmd/specgen/specgen.go
+	@GOCACHE=/tmp/gocache GOMODCACHE=/tmp/gomodcache go run cmd/specgen/specgen.go
 	@echo "---spec gen complete."
 	./scripts/copyDatamodelOpenAPISpec.sh
 
 # Define a target to convert the oas version of all the files
 # and combine into one 'openapispecs/combined/combined_spec.yaml'
 .PHONY: convert-and-combine
-convert-and-combine:
+convert-and-combine: setup-go-cache
 	@echo "---Running the conversion and combination script..."
-	@go run cmd/convertandcombinespec/main.go
+	@GOCACHE=/tmp/gocache GOMODCACHE=/tmp/gomodcache go run cmd/convertandcombinespec/main.go
 
 # Define a target to run the full workflow
 .PHONY: gen-convert-combine-all
@@ -206,8 +212,12 @@ clean-intermediate:
 clean-submodules: # clean up checked out repos
 	rm -rf $(REPO_DIR)
 
+.PHONY: clean-cache
+clean-cache: ## Clean Go cache directories
+	rm -rf /tmp/gocache /tmp/gomodcache
+
 .PHONY: clean-all
-clean-all: clean-submodules clean-intermediate  ## Cleanup all build files
+clean-all: clean-submodules clean-intermediate clean-cache ## Cleanup all build files
 	rm -rf $(VENV_NAME) $(OUT_DIR) vendor/
 
 #### Help Target ####

@@ -7,3 +7,5 @@ jq 1.7.1
 mage 1.15.0
 oras 1.2.2
 yamllint 1.37.0
+nodejs 23.6.1
+yq 4.34.2

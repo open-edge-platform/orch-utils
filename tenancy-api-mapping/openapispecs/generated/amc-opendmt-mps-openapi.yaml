@@ -312,6 +312,7 @@ components:
                   VersionString:
                     type: string
                 type: object
+              maxItems: 100
               type: array
             status:
               type: integer
@@ -347,6 +348,7 @@ components:
         tags:
           items:
             type: string
+          maxItems: 100
           type: array
       required:
         - guid
@@ -423,6 +425,7 @@ components:
         tags:
           items:
             type: string
+          maxItems: 100
           type: array
         tenantID:
           type: string
@@ -478,6 +481,7 @@ components:
             data:
               items:
                 type: integer
+              maxItems: 100
               type: array
             type:
               type: string
@@ -508,6 +512,7 @@ components:
         data:
           items:
             $ref: '#/components/schemas/Device'
+          maxItems: 100
           type: array
         totalCount:
           type: integer
@@ -628,6 +633,7 @@ components:
         tags:
           items:
             type: string
+          maxItems: 100
           type: array
         tenantid:
           type: string
@@ -693,6 +699,7 @@ components:
         tags:
           items:
             type: string
+          maxItems: 100
           type: array
       required:
         - guid
@@ -767,6 +774,7 @@ components:
         tags:
           items:
             type: string
+          maxItems: 100
           type: array
         tenantID:
           type: string
@@ -818,6 +826,7 @@ components:
         EventData:
           items:
             type: integer
+          maxItems: 100
           type: array
         EventOffset:
           type: integer
@@ -1449,6 +1458,7 @@ components:
                   Version:
                     type: string
                 type: object
+              maxItems: 100
               type: array
             status:
               type: integer
@@ -1511,6 +1521,7 @@ components:
                   Capabilities:
                     items:
                       type: integer
+                    maxItems: 100
                     type: array
                   CreationClassName:
                     type: string
@@ -1535,6 +1546,7 @@ components:
                   SystemName:
                     type: string
                 type: object
+              maxItems: 100
               type: array
             status:
               type: integer
@@ -1567,6 +1579,7 @@ components:
                   Tag:
                     type: integer
                 type: object
+              maxItems: 100
               type: array
             status:
               type: integer
@@ -1599,6 +1612,7 @@ components:
                   Version:
                     type: string
                 type: object
+              maxItems: 100
               type: array
             status:
               type: integer
@@ -1643,6 +1657,7 @@ components:
                   UpgradeMethod:
                     type: integer
                 type: object
+              maxItems: 100
               type: array
             status:
               type: integer
