@@ -76,6 +76,7 @@ paths:
                 oneOf:
                   - items:
                       $ref: '#/components/schemas/DomainResponse'
+                    maxItems: 100
                     type: array
                   - $ref: '#/components/schemas/CountDomainResponse'
           description: successful operation
@@ -431,6 +432,7 @@ components:
         data:
           items:
             $ref: '#/components/schemas/CIRAConfigResponse'
+          maxItems: 100
           type: array
         totalCount:
           type: integer
@@ -441,6 +443,7 @@ components:
         data:
           items:
             $ref: '#/components/schemas/DomainResponse'
+          maxItems: 100
           type: array
         totalCount:
           type: integer
@@ -451,6 +454,7 @@ components:
         data:
           items:
             $ref: '#/components/schemas/IEEE8021xConfigResponse'
+          maxItems: 100
           type: array
         totalCount:
           type: integer
@@ -461,6 +465,7 @@ components:
         data:
           items:
             $ref: '#/components/schemas/ProfileResponse'
+          maxItems: 100
           type: array
         totalCount:
           type: integer
@@ -471,6 +476,7 @@ components:
         data:
           items:
             $ref: '#/components/schemas/WirelessConfigResponse'
+          maxItems: 100
           type: array
         totalCount:
           type: integer
@@ -639,6 +645,7 @@ components:
               - 5
               - 10
             type: integer
+          maxItems: 100
           type: array
         profileName:
           type: string
@@ -674,6 +681,7 @@ components:
               - 5
               - 10
             type: integer
+          maxItems: 100
           type: array
         profileName:
           type: string
@@ -709,6 +717,7 @@ components:
               - 5
               - 10
             type: integer
+          maxItems: 100
           type: array
         profileName:
           type: string
@@ -790,6 +799,7 @@ components:
         tags:
           items:
             type: string
+          maxItems: 100
           type: array
         tlsMode:
           description: Server Authentication Only (1), Server and Non-TLS Authentication (2)
@@ -811,6 +821,7 @@ components:
         wifiConfigs:
           items:
             type: object
+          maxItems: 100
           type: array
       required:
         - profileName
@@ -892,6 +903,7 @@ components:
         tags:
           items:
             type: string
+          maxItems: 100
           type: array
         tlsMode:
           description: Server Authentication Only (1), Server and Non-TLS Authentication (2)
@@ -911,6 +923,7 @@ components:
         wifiConfigs:
           items:
             type: object
+          maxItems: 100
           type: array
       required:
         - profileName
@@ -977,6 +990,7 @@ components:
         tags:
           items:
             type: string
+          maxItems: 100
           type: array
         tenantId:
           type: string
@@ -993,6 +1007,7 @@ components:
         wifiConfigs:
           items:
             type: object
+          maxItems: 100
           type: array
       required:
         - profileName
@@ -1053,6 +1068,7 @@ components:
               - 16
               - 224
             type: integer
+          maxItems: 100
           type: array
         profileName:
           type: string
@@ -1097,6 +1113,7 @@ components:
               - 16
               - 224
             type: integer
+          maxItems: 100
           type: array
         profileName:
           type: string
@@ -1135,6 +1152,7 @@ components:
         linkPolicy:
           items:
             type: integer
+          maxItems: 100
           type: array
         profileName:
           type: string

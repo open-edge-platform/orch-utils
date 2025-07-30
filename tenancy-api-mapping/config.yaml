@@ -7,6 +7,7 @@ global:
   localDownloadsDir: "downloads"
   specOutputDir: "openapispecs/generated"
   apimappingconfigcrsdir: "apimappingconfigcrs"
+  defaultMaxItems: 100  # Default maxItems for arrays without explicit limits
 
   servers:
     - url: "{apiRoot}"

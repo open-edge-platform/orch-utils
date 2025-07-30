@@ -5884,6 +5884,7 @@ components:
           description: Back-reference to attached host GPU resources.
           items:
             $ref: '#/components/schemas/HostgpuResource'
+          maxItems: 100
           readOnly: true
           title: host_gpus
           type: array
@@ -5891,6 +5892,7 @@ components:
           description: Back-reference to attached host NIC resources.
           items:
             $ref: '#/components/schemas/HostnicResource'
+          maxItems: 100
           readOnly: true
           title: host_nics
           type: array
@@ -5911,6 +5913,7 @@ components:
           description: Back-reference to attached host storage resources.
           items:
             $ref: '#/components/schemas/HoststorageResource'
+          maxItems: 100
           readOnly: true
           title: host_storages
           type: array
@@ -5918,6 +5921,7 @@ components:
           description: Back-reference to attached host USB resources.
           items:
             $ref: '#/components/schemas/HostusbResource'
+          maxItems: 100
           readOnly: true
           title: host_usbs
           type: array
@@ -5930,6 +5934,7 @@ components:
           description: The metadata inherited by the host, represented by a list of key:value pairs, rendered by location and logical structures.
           items:
             $ref: '#/components/schemas/MetadataItem'
+          maxItems: 100
           readOnly: true
           title: inherited_metadata
           type: array
@@ -6066,6 +6071,7 @@ components:
           items:
             readOnly: true
             type: string
+          maxItems: 100
           readOnly: true
           title: capabilities
           type: array
@@ -6116,6 +6122,7 @@ components:
           description: The interface's IP address list.
           items:
             $ref: '#/components/schemas/IPAddressResource'
+          maxItems: 100
           readOnly: true
           title: ipaddresses
           type: array
@@ -6313,6 +6320,7 @@ components:
           description: The list of custom config associated with the instance.
           items:
             $ref: '#/components/schemas/CustomConfigResource'
+          maxItems: 100
           readOnly: true
           title: custom_config
           type: array
@@ -6323,6 +6331,7 @@ components:
             pattern: ^customconfig-[0-9a-f]{8}$
             type: string
             writeOnly: true
+          maxItems: 100
           maxLength: 21
           pattern: ^customconfig-[0-9a-f]{8}$
           title: custom_configID
@@ -6483,6 +6492,7 @@ components:
           description: The workload members associated with the instance. back-reference to the Workload Members associated to this Instance
           items:
             $ref: '#/components/schemas/WorkloadMember'
+          maxItems: 100
           readOnly: true
           title: workload_members
           type: array
@@ -6587,6 +6597,7 @@ components:
           description: Sorted and filtered list of customconfigs.
           items:
             $ref: '#/components/schemas/CustomConfigResource'
+          maxItems: 100
           title: custom_configs
           type: array
         hasNext:
@@ -6651,6 +6662,7 @@ components:
           description: Sorted and filtered list of hosts.
           items:
             $ref: '#/components/schemas/HostResource'
+          maxItems: 100
           title: hosts
           type: array
         totalElements:
@@ -6711,6 +6723,7 @@ components:
           description: Sorted and filtered list of instances.
           items:
             $ref: '#/components/schemas/InstanceResource'
+          maxItems: 100
           title: instances
           type: array
         totalElements:
@@ -6771,6 +6784,7 @@ components:
           description: Sorted and filtered list of localaccounts.
           items:
             $ref: '#/components/schemas/LocalAccountResource'
+          maxItems: 100
           title: local_accounts
           type: array
         totalElements:
@@ -6812,6 +6826,7 @@ components:
           description: Sorted and filtered list of regions.
           items:
             $ref: '#/components/schemas/ListLocationsResponse.LocationNode'
+          maxItems: 100
           title: nodes
           type: array
         outputElements:
@@ -6910,6 +6925,7 @@ components:
           description: Sorted and filtered list of OS Update Policies.
           items:
             $ref: '#/components/schemas/OSUpdatePolicy'
+          maxItems: 100
           title: os_update_policies
           type: array
         totalElements:
@@ -6970,6 +6986,7 @@ components:
           description: Sorted and filtered list of os update runs.
           items:
             $ref: '#/components/schemas/OSUpdateRun'
+          maxItems: 100
           title: os_update_runs
           type: array
         totalElements:
@@ -7026,6 +7043,7 @@ components:
           description: Sorted and filtered list of oss.
           items:
             $ref: '#/components/schemas/OperatingSystemResource'
+          maxItems: 100
           title: Operating_system_resources
           type: array
         hasNext:
@@ -7090,6 +7108,7 @@ components:
           description: Sorted and filtered list of providers.
           items:
             $ref: '#/components/schemas/ProviderResource'
+          maxItems: 100
           title: providers
           type: array
         totalElements:
@@ -7154,6 +7173,7 @@ components:
           description: Sorted and filtered list of regions.
           items:
             $ref: '#/components/schemas/RegionResource'
+          maxItems: 100
           title: regions
           type: array
         totalElements:
@@ -7231,6 +7251,7 @@ components:
           description: Sorted and filtered list of repeated_schedules.
           items:
             $ref: '#/components/schemas/RepeatedScheduleResource'
+          maxItems: 100
           title: repeated_schedules
           type: array
         totalElements:
@@ -7308,12 +7329,14 @@ components:
           description: Sorted and filtered list of repeated_schedules.
           items:
             $ref: '#/components/schemas/RepeatedScheduleResource'
+          maxItems: 100
           title: repeated_schedules
           type: array
         singleSchedules:
           description: Sorted and filtered list of single_schedules.
           items:
             $ref: '#/components/schemas/SingleScheduleResource'
+          maxItems: 100
           title: single_schedules
           type: array
         totalElements:
@@ -7392,6 +7415,7 @@ components:
           description: Sorted and filtered list of single_schedules.
           items:
             $ref: '#/components/schemas/SingleScheduleResource'
+          maxItems: 100
           title: single_schedules
           type: array
         totalElements:
@@ -7452,6 +7476,7 @@ components:
           description: Sorted and filtered list of sites.
           items:
             $ref: '#/components/schemas/SiteResource'
+          maxItems: 100
           title: sites
           type: array
         totalElements:
@@ -7504,6 +7529,7 @@ components:
           description: Sorted and filtered list of telemetry_logs_groups.
           items:
             $ref: '#/components/schemas/TelemetryLogsGroupResource'
+          maxItems: 100
           title: telemetry_logs_groups
           type: array
         totalElements:
@@ -7579,6 +7605,7 @@ components:
           description: Sorted and filtered list of telemetry_logs_profiles.
           items:
             $ref: '#/components/schemas/TelemetryLogsProfileResource'
+          maxItems: 100
           title: telemetry_logs_profiles
           type: array
         totalElements:
@@ -7631,6 +7658,7 @@ components:
           description: Sorted and filtered list of telemetry_metrics_groups.
           items:
             $ref: '#/components/schemas/TelemetryMetricsGroupResource'
+          maxItems: 100
           title: telemetry_metrics_groups
           type: array
         totalElements:
@@ -7706,6 +7734,7 @@ components:
           description: Sorted and filtered list of telemetry_metrics_profiles.
           items:
             $ref: '#/components/schemas/TelemetryMetricsProfileResource'
+          maxItems: 100
           title: telemetry_metrics_profiles
           type: array
         totalElements:
@@ -7771,6 +7800,7 @@ components:
           description: Sorted and filtered list of workload_members.
           items:
             $ref: '#/components/schemas/WorkloadMember'
+          maxItems: 100
           title: workload_members
           type: array
       required:
@@ -7831,6 +7861,7 @@ components:
           description: Sorted and filtered list of workloads.
           items:
             $ref: '#/components/schemas/WorkloadResource'
+          maxItems: 100
           title: workloads
           type: array
       required:
@@ -8481,6 +8512,7 @@ components:
              This field can not be used in filter.
           items:
             $ref: '#/components/schemas/MetadataItem'
+          maxItems: 100
           readOnly: true
           title: inherited_metadata
           type: array
@@ -8778,6 +8810,7 @@ components:
              This field can not be used in filter.
           items:
             $ref: '#/components/schemas/MetadataItem'
+          maxItems: 100
           readOnly: true
           title: inherited_metadata
           type: array
@@ -9333,6 +9366,7 @@ components:
           description: The members of the workload.
           items:
             $ref: '#/components/schemas/WorkloadMember'
+          maxItems: 100
           readOnly: true
           title: members
           type: array

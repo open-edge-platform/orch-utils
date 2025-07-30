@@ -24,6 +24,7 @@ const (
 	bearerAuthSecName string      = "BearerAuth"
 	defaultFileMode   fs.FileMode = 0o600
 	defaultDirMode    fs.FileMode = 0o755
+	defaultMaxItems   uint64      = 100 // Default maximum items for arrays without explicit maxItems
 )
 
 type Spec struct {
@@ -99,6 +100,7 @@ func (p *SpecProcessor) Process() error {
 	p.updateServers()
 	p.removeParameterDefinition("ActiveProjectIdHeader")
 	p.removeParameterDefinition("Authorization")
+	p.addMaxItemsToArrays()
 
 	customSpecObj := Spec{
 		OpenAPI:    p.spec.OpenAPI,
@@ -385,6 +387,150 @@ func RemoveDeprecatedOperations(doc *openapi3.T) {
 		if len(pathItem.Operations()) == 0 {
 			fmt.Printf("removed path %s, as there are no active operations\n", path)
 			delete(doc.Paths.Map(), path)
+		}
+	}
+}
+
+// addMaxItemsToArrays adds maxItems constraint to array schemas that don't have one
+func (p *SpecProcessor) addMaxItemsToArrays() {
+	fmt.Println("Adding maxItems constraints to array schemas...")
+	
+	// Use configured maxItems or default
+	maxItems := p.cnfGlbl.DefaultMaxItems
+	if maxItems == 0 {
+		maxItems = defaultMaxItems // fallback to constant default
+	}
+	
+	processed := make(map[*openapi3.Schema]bool) // Track processed schemas to avoid infinite recursion
+	
+	// Process schemas in components
+	if p.spec.Components != nil && p.spec.Components.Schemas != nil {
+		fmt.Printf("Processing %d component schemas...\n", len(p.spec.Components.Schemas))
+		for schemaName, schemaRef := range p.spec.Components.Schemas {
+			if schemaRef.Value != nil {
+				p.processSchemaForMaxItems(schemaRef.Value, fmt.Sprintf("components.schemas.%s", schemaName), maxItems, processed)
+			}
+		}
+	}
+	
+	// Process schemas in paths (request/response bodies, parameters)
+	if p.spec.Paths != nil {
+		fmt.Printf("Processing %d paths...\n", p.spec.Paths.Len())
+		pathCount := 0
+		for pathName, pathItem := range p.spec.Paths.Map() {
+			pathCount++
+			if pathCount%5 == 0 {
+				fmt.Printf("  Processed %d/%d paths\n", pathCount, p.spec.Paths.Len())
+			}
+			if pathItem != nil {
+				p.processPathItemForMaxItems(pathItem, pathName, maxItems, processed)
+			}
+		}
+	}
+	
+	fmt.Println("Completed adding maxItems constraints.")
+}
+
+// processSchemaForMaxItems recursively processes a schema to add maxItems to arrays
+func (p *SpecProcessor) processSchemaForMaxItems(schema *openapi3.Schema, schemaPath string, maxItems uint64, processed map[*openapi3.Schema]bool) {
+	if schema == nil || processed[schema] {
+		return // Avoid infinite recursion
+	}
+	processed[schema] = true
+	
+	// If this is an array schema without maxItems, add it
+	if schema.Type.Is("array") && schema.MaxItems == nil {
+		schema.MaxItems = &maxItems
+		fmt.Printf("Added maxItems=%d to array schema at %s\n", maxItems, schemaPath)
+	}
+	
+	// Process array items
+	if schema.Items != nil && schema.Items.Value != nil {
+		p.processSchemaForMaxItems(schema.Items.Value, schemaPath+".items", maxItems, processed)
+	}
+	
+	// Process object properties (limit depth to avoid excessive recursion)
+	if schema.Properties != nil && len(schemaPath) < 200 { // Depth limit
+		for propName, propSchemaRef := range schema.Properties {
+			if propSchemaRef.Value != nil {
+				p.processSchemaForMaxItems(propSchemaRef.Value, fmt.Sprintf("%s.properties.%s", schemaPath, propName), maxItems, processed)
+			}
+		}
+	}
+	
+	// Process allOf, anyOf, oneOf (with limits)
+	if len(schema.AllOf) > 0 && len(schema.AllOf) < 10 { // Limit processing
+		for i, schemaRef := range schema.AllOf {
+			if schemaRef.Value != nil {
+				p.processSchemaForMaxItems(schemaRef.Value, fmt.Sprintf("%s.allOf[%d]", schemaPath, i), maxItems, processed)
+			}
+		}
+	}
+	
+	if len(schema.AnyOf) > 0 && len(schema.AnyOf) < 10 { // Limit processing
+		for i, schemaRef := range schema.AnyOf {
+			if schemaRef.Value != nil {
+				p.processSchemaForMaxItems(schemaRef.Value, fmt.Sprintf("%s.anyOf[%d]", schemaPath, i), maxItems, processed)
+			}
+		}
+	}
+	
+	if len(schema.OneOf) > 0 && len(schema.OneOf) < 10 { // Limit processing
+		for i, schemaRef := range schema.OneOf {
+			if schemaRef.Value != nil {
+				p.processSchemaForMaxItems(schemaRef.Value, fmt.Sprintf("%s.oneOf[%d]", schemaPath, i), maxItems, processed)
+			}
+		}
+	}
+	
+	// Process additionalProperties
+	if schema.AdditionalProperties.Schema != nil && schema.AdditionalProperties.Schema.Value != nil {
+		p.processSchemaForMaxItems(schema.AdditionalProperties.Schema.Value, schemaPath+".additionalProperties", maxItems, processed)
+	}
+}
+
+// processPathItemForMaxItems processes all schemas in a path item
+func (p *SpecProcessor) processPathItemForMaxItems(pathItem *openapi3.PathItem, pathName string, maxItems uint64, processed map[*openapi3.Schema]bool) {
+	// Process parameters
+	for i, paramRef := range pathItem.Parameters {
+		if paramRef.Value != nil && paramRef.Value.Schema != nil && paramRef.Value.Schema.Value != nil {
+			p.processSchemaForMaxItems(paramRef.Value.Schema.Value, fmt.Sprintf("paths.%s.parameters[%d].schema", pathName, i), maxItems, processed)
+		}
+	}
+	
+	// Process operations
+	for method, operation := range pathItem.Operations() {
+		if operation == nil {
+			continue
+		}
+		
+		// Process operation parameters
+		for i, paramRef := range operation.Parameters {
+			if paramRef.Value != nil && paramRef.Value.Schema != nil && paramRef.Value.Schema.Value != nil {
+				p.processSchemaForMaxItems(paramRef.Value.Schema.Value, fmt.Sprintf("paths.%s.%s.parameters[%d].schema", pathName, method, i), maxItems, processed)
+			}
+		}
+		
+		// Process request body
+		if operation.RequestBody != nil && operation.RequestBody.Value != nil {
+			for mediaType, mediaTypeObj := range operation.RequestBody.Value.Content {
+				if mediaTypeObj.Schema != nil && mediaTypeObj.Schema.Value != nil {
+					p.processSchemaForMaxItems(mediaTypeObj.Schema.Value, fmt.Sprintf("paths.%s.%s.requestBody.content.%s.schema", pathName, method, mediaType), maxItems, processed)
+				}
+			}
+		}
+		
+		// Process responses
+		if operation.Responses != nil {
+			for status, responseRef := range operation.Responses.Map() {
+				if responseRef.Value != nil && responseRef.Value.Content != nil {
+					for mediaType, mediaTypeObj := range responseRef.Value.Content {
+						if mediaTypeObj.Schema != nil && mediaTypeObj.Schema.Value != nil {
+							p.processSchemaForMaxItems(mediaTypeObj.Schema.Value, fmt.Sprintf("paths.%s.%s.responses.%s.content.%s.schema", pathName, method, status, mediaType), maxItems, processed)
+						}
+					}
+				}
+			}
 		}
 	}
 }

@@ -467,6 +467,7 @@ components:
                   VersionString:
                     type: string
                 type: object
+              maxItems: 100
               type: array
             status:
               type: integer
@@ -522,6 +523,7 @@ components:
         tags:
           items:
             type: string
+          maxItems: 100
           type: array
       required:
         - guid
@@ -598,6 +600,7 @@ components:
         tags:
           items:
             type: string
+          maxItems: 100
           type: array
         tenantID:
           type: string
@@ -678,6 +681,7 @@ components:
         alertDefinitions:
           items:
             $ref: '#/components/schemas/AlertDefinition'
+          maxItems: 100
           type: array
       type: object
     AlertDefinitionTemplate:
@@ -702,6 +706,7 @@ components:
         alerts:
           items:
             $ref: '#/components/schemas/Alert'
+          maxItems: 100
           type: array
       type: object
     AmtState:
@@ -736,6 +741,7 @@ components:
           description: Fully qualified domain name (FQDN) for external access.
           items:
             $ref: '#/components/schemas/Fqdn'
+          maxItems: 100
           readOnly: true
           type: array
         id:
@@ -754,6 +760,7 @@ components:
           description: List of ports exposed by a service for external access
           items:
             $ref: '#/components/schemas/Port'
+          maxItems: 100
           readOnly: true
           type: array
       type: object
@@ -837,6 +844,7 @@ components:
           description: List of Kubernetes resources that must be ignored during the application deployment.
           items:
             $ref: '#/components/schemas/ResourceReference'
+          maxItems: 100
           type: array
         imageRegistryName:
           description: ID of the project's registry where the Docker image of the application is available for download.
@@ -859,6 +867,7 @@ components:
           description: Set of profiles that can be used when deploying the application.
           items:
             $ref: '#/components/schemas/Profile'
+          maxItems: 100
           type: array
         updateTime:
           description: The last update time of the application.
@@ -1018,6 +1027,7 @@ components:
             data:
               items:
                 type: integer
+              maxItems: 100
               type: array
             type:
               type: string
@@ -1224,6 +1234,7 @@ components:
           description: Apps has per-app details.
           items:
             $ref: '#/components/schemas/App'
+          maxItems: 100
           readOnly: true
           type: array
         id:
@@ -1256,6 +1267,7 @@ components:
         nodes:
           items:
             $ref: '#/components/schemas/NodeInfo'
+          maxItems: 100
           type: array
         providerStatus:
           $ref: '#/components/schemas/GenericStatus'
@@ -1319,6 +1331,7 @@ components:
         nodes:
           items:
             $ref: '#/components/schemas/NodeSpec'
+          maxItems: 100
           type: array
         template:
           maxLength: 63
@@ -1446,6 +1459,7 @@ components:
         data:
           items:
             $ref: '#/components/schemas/CIRAConfigResponse'
+          maxItems: 100
           type: array
         totalCount:
           type: integer
@@ -1456,6 +1470,7 @@ components:
         data:
           items:
             $ref: '#/components/schemas/Device'
+          maxItems: 100
           type: array
         totalCount:
           type: integer
@@ -1466,6 +1481,7 @@ components:
         data:
           items:
             $ref: '#/components/schemas/DomainResponse'
+          maxItems: 100
           type: array
         totalCount:
           type: integer
@@ -1476,6 +1492,7 @@ components:
         data:
           items:
             $ref: '#/components/schemas/IEEE8021xConfigResponse'
+          maxItems: 100
           type: array
         totalCount:
           type: integer
@@ -1486,6 +1503,7 @@ components:
         data:
           items:
             $ref: '#/components/schemas/ProfileResponse'
+          maxItems: 100
           type: array
         totalCount:
           type: integer
@@ -1496,6 +1514,7 @@ components:
         data:
           items:
             $ref: '#/components/schemas/WirelessConfigResponse'
+          maxItems: 100
           type: array
         totalCount:
           type: integer
@@ -2324,6 +2343,7 @@ components:
           description: Application details.
           items:
             $ref: '#/components/schemas/App'
+          maxItems: 100
           readOnly: true
           type: array
         createTime:
@@ -2356,6 +2376,7 @@ components:
           description: The Override values can be used to override any of the base profile values based on Deployment scenario.
           items:
             $ref: '#/components/schemas/OverrideValues'
+          maxItems: 100
           type: array
         profileName:
           description: The selected profile name to be used for the base Helm values of the different applications in the deployment package
@@ -2366,6 +2387,7 @@ components:
         serviceExports:
           items:
             $ref: '#/components/schemas/ServiceExport'
+          maxItems: 100
           type: array
         status:
           $ref: '#/components/schemas/Deployment_Status'
@@ -2373,6 +2395,7 @@ components:
           description: Cluster labels on which we want to deploy the application.
           items:
             $ref: '#/components/schemas/TargetClusters'
+          maxItems: 100
           type: array
       required:
         - appName
@@ -2407,6 +2430,7 @@ components:
           description: Apps has per-app details.
           items:
             $ref: '#/components/schemas/App'
+          maxItems: 100
           readOnly: true
           type: array
         deploymentDisplayName:
@@ -2430,11 +2454,13 @@ components:
           description: Optional set of application deployment dependencies, expressed as (name, requires) pairs of edges in the deployment order dependency graph.
           items:
             $ref: '#/components/schemas/ApplicationDependency'
+          maxItems: 100
           type: array
         applicationReferences:
           description: List of applications comprising this deployment package. Expressed as (name, version) pairs.
           items:
             $ref: '#/components/schemas/ApplicationReference'
+          maxItems: 100
           type: array
         artifacts:
           description: Optional list of artifacts required for displaying or deploying this package. For example, icon or thumbnail artifacts can be used by the UI; Grafana\* dashboard definitions can be used by the deployment manager.
@@ -2497,11 +2523,13 @@ components:
           description: Namespace definitions to be created before resources are deployed. This allows complex namespaces to be defined with predefined labels and annotations. If not defined, simple namespaces will be created as needed.
           items:
             $ref: '#/components/schemas/Namespace'
+          maxItems: 100
           type: array
         profiles:
           description: Set of deployment profiles to choose from when deploying this package.
           items:
             $ref: '#/components/schemas/DeploymentProfile'
+          maxItems: 100
           type: array
         updateTime:
           description: The last update time of the deployment package.
@@ -2650,6 +2678,7 @@ components:
         tags:
           items:
             type: string
+          maxItems: 100
           type: array
         tenantid:
           type: string
@@ -2806,6 +2835,7 @@ components:
         tags:
           items:
             type: string
+          maxItems: 100
           type: array
       required:
         - guid
@@ -2880,6 +2910,7 @@ components:
         tags:
           items:
             type: string
+          maxItems: 100
           type: array
         tenantID:
           type: string
@@ -2925,6 +2956,7 @@ components:
     EmailRecipientList:
       items:
         $ref: '#/components/schemas/Email'
+      maxItems: 100
       type: array
     Endpoint:
       description: Endpoint represents an application service endpoint.
@@ -3015,6 +3047,7 @@ components:
         EventData:
           items:
             type: integer
+          maxItems: 100
           type: array
         EventOffset:
           type: integer
@@ -3245,6 +3278,7 @@ components:
           description: A list of applications with the same project and name.
           items:
             $ref: '#/components/schemas/Application'
+          maxItems: 100
           type: array
       required:
         - application
@@ -3300,6 +3334,7 @@ components:
           description: A list of DeploymentPackages with the same project and name.
           items:
             $ref: '#/components/schemas/DeploymentPackage'
+          maxItems: 100
           type: array
       required:
         - deploymentPackages
@@ -4240,6 +4275,7 @@ components:
                   Version:
                     type: string
                 type: object
+              maxItems: 100
               type: array
             status:
               type: integer
@@ -4302,6 +4338,7 @@ components:
                   Capabilities:
                     items:
                       type: integer
+                    maxItems: 100
                     type: array
                   CreationClassName:
                     type: string
@@ -4326,6 +4363,7 @@ components:
                   SystemName:
                     type: string
                 type: object
+              maxItems: 100
               type: array
             status:
               type: integer
@@ -4358,6 +4396,7 @@ components:
                   Tag:
                     type: integer
                 type: object
+              maxItems: 100
               type: array
             status:
               type: integer
@@ -4390,6 +4429,7 @@ components:
                   Version:
                     type: string
                 type: object
+              maxItems: 100
               type: array
             status:
               type: integer
@@ -4434,6 +4474,7 @@ components:
                   UpgradeMethod:
                     type: integer
                 type: object
+              maxItems: 100
               type: array
             status:
               type: integer
@@ -4680,6 +4721,7 @@ components:
           description: Back-reference to attached host GPU resources.
           items:
             $ref: '#/components/schemas/HostgpuResource'
+          maxItems: 100
           readOnly: true
           title: host_gpus
           type: array
@@ -4687,6 +4729,7 @@ components:
           description: Back-reference to attached host NIC resources.
           items:
             $ref: '#/components/schemas/HostnicResource'
+          maxItems: 100
           readOnly: true
           title: host_nics
           type: array
@@ -4707,6 +4750,7 @@ components:
           description: Back-reference to attached host storage resources.
           items:
             $ref: '#/components/schemas/HoststorageResource'
+          maxItems: 100
           readOnly: true
           title: host_storages
           type: array
@@ -4714,6 +4758,7 @@ components:
           description: Back-reference to attached host USB resources.
           items:
             $ref: '#/components/schemas/HostusbResource'
+          maxItems: 100
           readOnly: true
           title: host_usbs
           type: array
@@ -4726,6 +4771,7 @@ components:
           description: The metadata inherited by the host, represented by a list of key:value pairs, rendered by location and logical structures.
           items:
             $ref: '#/components/schemas/MetadataItem'
+          maxItems: 100
           readOnly: true
           title: inherited_metadata
           type: array
@@ -4862,6 +4908,7 @@ components:
           items:
             readOnly: true
             type: string
+          maxItems: 100
           readOnly: true
           title: capabilities
           type: array
@@ -4912,6 +4959,7 @@ components:
           description: The interface's IP address list.
           items:
             $ref: '#/components/schemas/IPAddressResource'
+          maxItems: 100
           readOnly: true
           title: ipaddresses
           type: array
@@ -5061,6 +5109,7 @@ components:
               - 5
               - 10
             type: integer
+          maxItems: 100
           type: array
         profileName:
           type: string
@@ -5096,6 +5145,7 @@ components:
               - 5
               - 10
             type: integer
+          maxItems: 100
           type: array
         profileName:
           type: string
@@ -5131,6 +5181,7 @@ components:
               - 5
               - 10
             type: integer
+          maxItems: 100
           type: array
         profileName:
           type: string
@@ -5214,6 +5265,7 @@ components:
           description: Any error messages encountered either during chart parsing or entity creation or update.
           items:
             type: string
+          maxItems: 100
           type: array
       type: object
     InstanceKind:
@@ -5237,6 +5289,7 @@ components:
           description: The list of custom config associated with the instance.
           items:
             $ref: '#/components/schemas/CustomConfigResource'
+          maxItems: 100
           readOnly: true
           title: custom_config
           type: array
@@ -5247,6 +5300,7 @@ components:
             pattern: ^customconfig-[0-9a-f]{8}$
             type: string
             writeOnly: true
+          maxItems: 100
           maxLength: 21
           pattern: ^customconfig-[0-9a-f]{8}$
           title: custom_configID
@@ -5407,6 +5461,7 @@ components:
           description: The workload members associated with the instance. back-reference to the Workload Members associated to this Instance
           items:
             $ref: '#/components/schemas/WorkloadMember'
+          maxItems: 100
           readOnly: true
           title: workload_members
           type: array
@@ -5482,6 +5537,7 @@ components:
           description: List of services.
           items:
             $ref: '#/components/schemas/AppEndpoint'
+          maxItems: 100
           readOnly: true
           type: array
       type: object
@@ -5492,6 +5548,7 @@ components:
           description: A list of virtual machines.
           items:
             $ref: '#/components/schemas/AppWorkload'
+          maxItems: 100
           type: array
       type: object
     ListApplicationsResponse:
@@ -5501,6 +5558,7 @@ components:
           description: A list of applications.
           items:
             $ref: '#/components/schemas/Application'
+          maxItems: 100
           type: array
         totalElements:
           description: Count of items in the entire list, regardless of pagination.
@@ -5517,6 +5575,7 @@ components:
           description: A list of artifacts.
           items:
             $ref: '#/components/schemas/Artifact'
+          maxItems: 100
           type: array
         totalElements:
           description: Count of items in the entire list, regardless of pagination.
@@ -5533,6 +5592,7 @@ components:
           description: A list of Cluster Objects.
           items:
             $ref: '#/components/schemas/ClusterInfo'
+          maxItems: 100
           type: array
         totalElements:
           format: int32
@@ -5584,6 +5644,7 @@ components:
           description: Sorted and filtered list of customconfigs.
           items:
             $ref: '#/components/schemas/CustomConfigResource'
+          maxItems: 100
           title: custom_configs
           type: array
         hasNext:
@@ -5607,6 +5668,7 @@ components:
         clusters:
           items:
             $ref: '#/components/schemas/Cluster'
+          maxItems: 100
           type: array
         totalElements:
           format: int32
@@ -5622,6 +5684,7 @@ components:
           description: A list of DeploymentPackages.
           items:
             $ref: '#/components/schemas/DeploymentPackage'
+          maxItems: 100
           type: array
         totalElements:
           description: Count of items in the entire list, regardless of pagination.
@@ -5638,6 +5701,7 @@ components:
           description: A list of Deployment Instance Cluster Objects.
           items:
             $ref: '#/components/schemas/DeploymentInstancesCluster'
+          maxItems: 100
           type: array
         totalElements:
           format: int32
@@ -5653,6 +5717,7 @@ components:
           description: A list of Deployment Objects.
           items:
             $ref: '#/components/schemas/Deployment'
+          maxItems: 100
           type: array
         totalElements:
           format: int32
@@ -5708,6 +5773,7 @@ components:
           description: Sorted and filtered list of hosts.
           items:
             $ref: '#/components/schemas/HostResource'
+          maxItems: 100
           title: hosts
           type: array
         totalElements:
@@ -5768,6 +5834,7 @@ components:
           description: Sorted and filtered list of instances.
           items:
             $ref: '#/components/schemas/InstanceResource'
+          maxItems: 100
           title: instances
           type: array
         totalElements:
@@ -5828,6 +5895,7 @@ components:
           description: Sorted and filtered list of localaccounts.
           items:
             $ref: '#/components/schemas/LocalAccountResource'
+          maxItems: 100
           title: local_accounts
           type: array
         totalElements:
@@ -5869,6 +5937,7 @@ components:
           description: Sorted and filtered list of regions.
           items:
             $ref: '#/components/schemas/ListLocationsResponse.LocationNode'
+          maxItems: 100
           title: nodes
           type: array
         outputElements:
@@ -5967,6 +6036,7 @@ components:
           description: Sorted and filtered list of OS Update Policies.
           items:
             $ref: '#/components/schemas/OSUpdatePolicy'
+          maxItems: 100
           title: os_update_policies
           type: array
         totalElements:
@@ -6027,6 +6097,7 @@ components:
           description: Sorted and filtered list of os update runs.
           items:
             $ref: '#/components/schemas/OSUpdateRun'
+          maxItems: 100
           title: os_update_runs
           type: array
         totalElements:
@@ -6083,6 +6154,7 @@ components:
           description: Sorted and filtered list of oss.
           items:
             $ref: '#/components/schemas/OperatingSystemResource'
+          maxItems: 100
           title: Operating_system_resources
           type: array
         hasNext:
@@ -6147,6 +6219,7 @@ components:
           description: Sorted and filtered list of providers.
           items:
             $ref: '#/components/schemas/ProviderResource'
+          maxItems: 100
           title: providers
           type: array
         totalElements:
@@ -6211,6 +6284,7 @@ components:
           description: Sorted and filtered list of regions.
           items:
             $ref: '#/components/schemas/RegionResource'
+          maxItems: 100
           title: regions
           type: array
         totalElements:
@@ -6231,6 +6305,7 @@ components:
           description: A list of registries.
           items:
             $ref: '#/components/schemas/Registry'
+          maxItems: 100
           type: array
         totalElements:
           description: Count of items in the entire list, regardless of pagination.
@@ -6304,6 +6379,7 @@ components:
           description: Sorted and filtered list of repeated_schedules.
           items:
             $ref: '#/components/schemas/RepeatedScheduleResource'
+          maxItems: 100
           title: repeated_schedules
           type: array
         totalElements:
@@ -6381,12 +6457,14 @@ components:
           description: Sorted and filtered list of repeated_schedules.
           items:
             $ref: '#/components/schemas/RepeatedScheduleResource'
+          maxItems: 100
           title: repeated_schedules
           type: array
         singleSchedules:
           description: Sorted and filtered list of single_schedules.
           items:
             $ref: '#/components/schemas/SingleScheduleResource'
+          maxItems: 100
           title: single_schedules
           type: array
         totalElements:
@@ -6465,6 +6543,7 @@ components:
           description: Sorted and filtered list of single_schedules.
           items:
             $ref: '#/components/schemas/SingleScheduleResource'
+          maxItems: 100
           title: single_schedules
           type: array
         totalElements:
@@ -6525,6 +6604,7 @@ components:
           description: Sorted and filtered list of sites.
           items:
             $ref: '#/components/schemas/SiteResource'
+          maxItems: 100
           title: sites
           type: array
         totalElements:
@@ -6577,6 +6657,7 @@ components:
           description: Sorted and filtered list of telemetry_logs_groups.
           items:
             $ref: '#/components/schemas/TelemetryLogsGroupResource'
+          maxItems: 100
           title: telemetry_logs_groups
           type: array
         totalElements:
@@ -6652,6 +6733,7 @@ components:
           description: Sorted and filtered list of telemetry_logs_profiles.
           items:
             $ref: '#/components/schemas/TelemetryLogsProfileResource'
+          maxItems: 100
           title: telemetry_logs_profiles
           type: array
         totalElements:
@@ -6704,6 +6786,7 @@ components:
           description: Sorted and filtered list of telemetry_metrics_groups.
           items:
             $ref: '#/components/schemas/TelemetryMetricsGroupResource'
+          maxItems: 100
           title: telemetry_metrics_groups
           type: array
         totalElements:
@@ -6779,6 +6862,7 @@ components:
           description: Sorted and filtered list of telemetry_metrics_profiles.
           items:
             $ref: '#/components/schemas/TelemetryMetricsProfileResource'
+          maxItems: 100
           title: telemetry_metrics_profiles
           type: array
         totalElements:
@@ -6799,6 +6883,7 @@ components:
           description: A list of UIExtensions.
           items:
             $ref: '#/components/schemas/UIExtension'
+          maxItems: 100
           type: array
       required:
         - uiExtensions
@@ -6855,6 +6940,7 @@ components:
           description: Sorted and filtered list of workload_members.
           items:
             $ref: '#/components/schemas/WorkloadMember'
+          maxItems: 100
           title: workload_members
           type: array
       required:
@@ -6915,6 +7001,7 @@ components:
           description: Sorted and filtered list of workloads.
           items:
             $ref: '#/components/schemas/WorkloadResource'
+          maxItems: 100
           title: workloads
           type: array
       required:
@@ -6996,6 +7083,7 @@ components:
         metadata:
           items:
             $ref: '#/components/schemas/Metadata'
+          maxItems: 100
           type: array
       required:
         - metadata
@@ -7005,6 +7093,7 @@ components:
         metadata:
           items:
             $ref: '#/components/schemas/StoredMetadata'
+          maxItems: 100
           type: array
       required:
         - metadata
@@ -7045,6 +7134,7 @@ components:
           items:
             pattern: ^(?:[0-9]{1,3}\.){3}[0-9]{1,3}/(?:[0-9]|[1-2][0-9]|3[0-2])$
             type: string
+          maxItems: 100
           type: array
       required:
         - cidrBlocks
@@ -7616,6 +7706,7 @@ components:
           description: containers list of containers per pod
           items:
             $ref: '#/components/schemas/Container'
+          maxItems: 100
           type: array
         status:
           $ref: '#/components/schemas/PodStatus'
@@ -7804,6 +7895,7 @@ components:
           description: List of deployment requirements for this profile.
           items:
             $ref: '#/components/schemas/DeploymentRequirement'
+          maxItems: 100
           type: array
         description:
           description: Description of the profile. Displayed on user interfaces.
@@ -7824,6 +7916,7 @@ components:
           description: Parameter templates available for this profile.
           items:
             $ref: '#/components/schemas/ParameterTemplate'
+          maxItems: 100
           type: array
         updateTime:
           description: The last update time of the profile.
@@ -7894,6 +7987,7 @@ components:
         tags:
           items:
             type: string
+          maxItems: 100
           type: array
         tlsMode:
           description: Server Authentication Only (1), Server and Non-TLS Authentication (2)
@@ -7915,6 +8009,7 @@ components:
         wifiConfigs:
           items:
             type: object
+          maxItems: 100
           type: array
       required:
         - profileName
@@ -7996,6 +8091,7 @@ components:
         tags:
           items:
             type: string
+          maxItems: 100
           type: array
         tlsMode:
           description: Server Authentication Only (1), Server and Non-TLS Authentication (2)
@@ -8015,6 +8111,7 @@ components:
         wifiConfigs:
           items:
             type: object
+          maxItems: 100
           type: array
       required:
         - profileName
@@ -8081,6 +8178,7 @@ components:
         tags:
           items:
             type: string
+          maxItems: 100
           type: array
         tenantId:
           type: string
@@ -8097,6 +8195,7 @@ components:
         wifiConfigs:
           items:
             type: object
+          maxItems: 100
           type: array
       required:
         - profileName
@@ -8206,6 +8305,7 @@ components:
         receivers:
           items:
             $ref: '#/components/schemas/Receiver'
+          maxItems: 100
           type: array
       type: object
     RedirectStatus:
@@ -8241,6 +8341,7 @@ components:
              This field can not be used in filter.
           items:
             $ref: '#/components/schemas/MetadataItem'
+          maxItems: 100
           readOnly: true
           title: inherited_metadata
           type: array
@@ -8708,6 +8809,7 @@ components:
              This field can not be used in filter.
           items:
             $ref: '#/components/schemas/MetadataItem'
+          maxItems: 100
           readOnly: true
           title: inherited_metadata
           type: array
@@ -8849,6 +8951,7 @@ components:
         values:
           items:
             type: string
+          maxItems: 100
           type: array
       required:
         - key
@@ -9220,6 +9323,7 @@ components:
         templateInfoList:
           items:
             $ref: '#/components/schemas/TemplateInfo'
+          maxItems: 100
           type: array
         totalElements:
           description: The count of items in the entire list, regardless of pagination.
@@ -9451,6 +9555,7 @@ components:
           description: Any error messages encountered either during YAML parsing or entity creation or update.
           items:
             type: string
+          maxItems: 100
           type: array
         sessionId:
           description: Session ID, generated by the server after the first upload request has been processed.
@@ -9514,6 +9619,7 @@ components:
             maxLength: 2048
             minLength: 1
             type: string
+          maxItems: 100
           type: array
       type: object
     VersionResponse:
@@ -9589,6 +9695,7 @@ components:
               - 16
               - 224
             type: integer
+          maxItems: 100
           type: array
         profileName:
           type: string
@@ -9633,6 +9740,7 @@ components:
               - 16
               - 224
             type: integer
+          maxItems: 100
           type: array
         profileName:
           type: string
@@ -9671,6 +9779,7 @@ components:
         linkPolicy:
           items:
             type: integer
+          maxItems: 100
           type: array
         profileName:
           type: string
@@ -9771,6 +9880,7 @@ components:
           description: The members of the workload.
           items:
             $ref: '#/components/schemas/WorkloadMember'
+          maxItems: 100
           readOnly: true
           title: members
           type: array
@@ -10393,7 +10503,7 @@ components:
 info:
   description: Tenancy aware APIs for the Open Edge Platform services
   title: Multi tenancy APIs
-  version: 1.8.1
+  version: 1.8.2
 openapi: 3.0.3
 paths:
   /v1/orgs:
@@ -10951,6 +11061,7 @@ paths:
           schema:
             items:
               type: string
+            maxItems: 100
             type: array
         - description: Optional. Select field and order based on which cluster list will be sorted.
           in: query
@@ -11028,6 +11139,7 @@ paths:
           schema:
             items:
               type: string
+            maxItems: 100
             type: array
         - description: Optional. Select field and order based on which Deployment list will be sorted.
           in: query
@@ -12976,6 +13088,7 @@ paths:
           schema:
             items:
               type: string
+            maxItems: 100
             type: array
         - description: Optional. Select field and order based on which Deployment list will be sorted.
           in: query
@@ -13049,6 +13162,7 @@ paths:
                 oneOf:
                   - items:
                       $ref: '#/components/schemas/DomainResponse'
+                    maxItems: 100
                     type: array
                   - $ref: '#/components/schemas/CountDomainResponse'
           description: successful operation
@@ -15514,6 +15628,7 @@ paths:
           schema:
             items:
               type: string
+            maxItems: 100
             type: array
         - description: unique projectName for the resource
           in: path
@@ -16500,6 +16615,7 @@ paths:
           schema:
             items:
               type: string
+            maxItems: 100
             type: array
         - description: unique projectName for the resource
           in: path
@@ -16604,6 +16720,7 @@ paths:
                   clusters:
                     items:
                       $ref: '#/components/schemas/ClusterInfo'
+                    maxItems: 100
                     type: array
                   totalElements:
                     description: The count of items in the entire list, regardless of pagination.
@@ -16790,6 +16907,7 @@ paths:
             schema:
               items:
                 $ref: '#/components/schemas/NodeSpec'
+              maxItems: 100
               type: array
       responses:
         "200":
@@ -17205,6 +17323,7 @@ paths:
                 - KIND_ADDON
               format: enum
               type: string
+            maxItems: 100
             type: array
         - description: unique projectName for the resource
           in: path
@@ -17577,6 +17696,7 @@ paths:
               schema:
                 items:
                   type: string
+                maxItems: 100
                 type: array
           description: OK
       summary: GetRegistryCharts
@@ -17620,6 +17740,7 @@ paths:
                 - KIND_ADDON
               format: enum
               type: string
+            maxItems: 100
             type: array
         - description: unique projectName for the resource
           in: path
@@ -18065,6 +18186,7 @@ paths:
                   items:
                     format: binary
                     type: string
+                  maxItems: 100
                   type: array
               type: object
       responses:
@@ -18077,12 +18199,14 @@ paths:
                     errorMessages:
                       items:
                         type: string
+                      maxItems: 100
                       type: array
                     sessionID:
                       type: string
                     uploadNumber:
                       type: integer
                   type: object
+                maxItems: 100
                 type: array
           description: OK
       summary: BulkCatalogUpload

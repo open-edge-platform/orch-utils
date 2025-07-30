@@ -43,6 +43,7 @@ paths:
               schema:
                 items:
                   type: string
+                maxItems: 100
                 type: array
           description: OK
       summary: GetRegistryCharts
@@ -102,6 +103,7 @@ paths:
                   items:
                     format: binary
                     type: string
+                  maxItems: 100
                   type: array
               type: object
       responses:
@@ -114,12 +116,14 @@ paths:
                     errorMessages:
                       items:
                         type: string
+                      maxItems: 100
                       type: array
                     sessionID:
                       type: string
                     uploadNumber:
                       type: integer
                   type: object
+                maxItems: 100
                 type: array
           description: OK
       summary: BulkCatalogUpload
