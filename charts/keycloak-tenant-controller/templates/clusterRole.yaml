@@ -8,9 +8,26 @@ metadata:
   name: {{ .Values.serviceAccount.name }}-permission
   namespace: {{ .Values.namespace }}
 rules:
-- apiGroups: ["*"]
-  resources: ["*"]
-  verbs: ["*"]
+# Access to organization and project CRDs
+- apiGroups: ["orgactivewatcher.edge-orchestrator.intel.com"]
+  resources: ["orgactivewatchers"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["orgwatcher.edge-orchestrator.intel.com"]
+  resources: ["orgwatchers"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["projectactivewatcher.edge-orchestrator.intel.com"]
+  resources: ["projectactivewatchers"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["projectwatcher.edge-orchestrator.intel.com"]
+  resources: ["projectwatchers"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+# Access to runtime org and project resources
+- apiGroups: ["runtimeorg.edge-orchestrator.intel.com"]
+  resources: ["runtimeorgs"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["runtimeproject.edge-orchestrator.intel.com"]
+  resources: ["runtimeprojects"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
