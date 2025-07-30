@@ -2,8 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-ignoreRules:
+misconfigurations:
   - id: AVD-KSV-0114
     paths:
-      - charts/vertical-pod-autoscaler/templates/cluster-role.yaml
-    comment: Required for VPA admission controller to inject pod resource recommendations
+      - "charts/vertical-pod-autoscaler/templates/cluster-role.yaml"
+    statement: Required for VPA admission controller to inject pod resource recommendations
