@@ -6,4 +6,19 @@ misconfigurations:
   - id: AVD-KSV-0114
     paths:
       - "charts/vertical-pod-autoscaler/templates/cluster-role.yaml"
-    statement: Required for VPA admission controller to inject pod resource recommendations
+    statement: mutatingwebhookconfigurations required for VPA admission controller to inject pod resource recommendations
+
+  - id: AVD-DS-0002
+    paths:
+      - "aws-sm-proxy/Dockerfile"
+      - "cert-synchronizer/Dockerfile"
+      - "keycloak-tenant-controller/images/Dockerfile"
+      - "secrets/Dockerfile"
+      - "squid-proxy/Dockerfile"
+      - "token-fs/Dockerfile"
+    statement: Distroless:nonroot images have no root user. USER command not required.
+
+  - id: AVD-DS-0002
+    paths:
+      - "auth-service/Dockerfile"
+    statement: Scratch images have no user. USER command would break the image.

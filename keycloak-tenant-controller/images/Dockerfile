@@ -28,8 +28,7 @@ RUN	apt-get update && apt-get -y install --no-install-recommends -o APT::Keep-Do
 	&& go install github.com/magefile/mage@latest \
 	&& mage binary:build
 
-# hadolint ignore=DL3006
-FROM gcr.io/distroless/base
+FROM gcr.io/distroless/base:nonroot
 
 COPY --from=builder /usr/src/keycloak-tenant-controller/bin/* /bin/
 COPY ./images/entrypoint.sh /oep/keycloak-tenant-controller/
