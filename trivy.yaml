@@ -1,0 +1,20 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
+
+# NOTE: .trivyignore.yaml support is currently experimental in Trivy v0.60
+#
+# The YAML ignore format allows for more granular ignore rules, such as ignoring
+# specific findings in specific files. This is an improvement over the legacy
+# .trivyignore format, which only allowed ignoring rules globally or ignoring all 
+# findings in a file.
+#
+# In future Trivy versions, .trivyignore.yaml should be picked up automatically.
+# For now, the only reliable way to enable it is by specifying it in this config file.
+#
+# References:
+#   - https://trivy.dev/v0.60/docs/configuration/filtering/#trivyignoreyaml
+#   - https://github.com/aquasecurity/trivy-action/issues/284
+
+ignorefile: ./.trivyignore.yaml
