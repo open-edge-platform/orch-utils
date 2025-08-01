@@ -41,7 +41,7 @@ openapi.generator.docker:
 ## Note: should fix/enable these tests
 ginkgo: ## run ginkgo tests
 	ginkgo run -v -r -p --race -randomize-all -randomize-suites \
-  --skip-package="compiler/example/tests,compiler/pkg/generator,compiler/pkg/openapi_generator,compiler/pkg/parser,compiler/pkg/parser/rest,compiler/pkg/preparser,gqlgen/api,gqlgen/codegen/templates,gqlgen/codegen/testserver/followschema,gqlgen/codegen/testserver/singlefile,gqlgen/internal/code,gqlgen/internal/rewrite,gqlgen/graphql/handler/transport,gqlgen/plugin/federation,gqlgen/plugin/modelgen,gqlgen/plugin/resolvergen,kube-openapi/pkg/idl,kube-openapi/pkg/util/proto,kube-openapi/pkg/util/proto/validation,kube-openapi/test/integration,install-validator/pkg/dir"
+  --skip-package="compiler/example/tests,compiler/pkg/generator,compiler/pkg/openapi_generator,compiler/pkg/parser,compiler/pkg/parser/rest,compiler/pkg/preparser,gqlgen/api,gqlgen/codegen/templates,gqlgen/codegen/testserver/followschema,gqlgen/codegen/testserver/singlefile,gqlgen/internal/code,gqlgen/internal/rewrite,gqlgen/graphql/handler/transport,gqlgen/plugin/federation,gqlgen/plugin/modelgen,gqlgen/plugin/resolvergen,kube-openapi/pkg/idl,kube-openapi/pkg/util/proto,kube-openapi/pkg/util/proto/validation,kube-openapi/test/integration,install-validator/pkg/dir" --timeout=10m
 
 compiler-docker-list:
 	@make -C compiler docker-list

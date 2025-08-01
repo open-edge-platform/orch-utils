@@ -9,7 +9,7 @@ SHELL	:= bash -eu -o pipefail
 test: ginkgo ## Run all tests
 
 ginkgo:
-	ginkgo run -v -r -p --race -randomize-all -randomize-suites
+	ginkgo run -v -r -p --race -randomize-all -randomize-suites --timeout=10m
 
 #### Help Target ####
 help: ## print help for each target

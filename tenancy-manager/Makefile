@@ -172,7 +172,7 @@ test-fuzz: clean-testdata
 .PHONY: ginkgo
 ginkgo: ## run ginkgo tests
 	ginkgo run -v -r -p --race -randomize-all -randomize-suites \
-		--skip-package="fuzztest"
+		--skip-package="fuzztest" --timeout=10m
 
 help:
 	@printf "%-20s %s\n" "Target" "Description"
