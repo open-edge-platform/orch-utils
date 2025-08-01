@@ -65,7 +65,8 @@ func SetupContext(uri, method string, item *openapi3.Operation) *EndpointContext
 	if item.RequestBody != nil && item.RequestBody.Value != nil {
 		mediaType := item.RequestBody.Value.Content.Get("application/json")
 		if mediaType != nil {
-			schemaName = openapi3.DefaultRefNameResolver(mediaType.Schema.Ref)
+			refParts := strings.Split(mediaType.Schema.Ref, "/")
+			schemaName = refParts[len(refParts)-1]
 		}
 	}
 
@@ -95,7 +96,7 @@ func IsArrayResponse(op *openapi3.Operation) bool {
 		return false
 	}
 
-	resp := op.Responses.Get(http.StatusOK)
+	resp := op.Responses.Status(http.StatusOK)
 	if resp == nil {
 		return false
 	}
@@ -105,7 +106,7 @@ func IsArrayResponse(op *openapi3.Operation) bool {
 		return false
 	}
 
-	if mediaType.Schema.Value.Type == "array" {
+	if mediaType.Schema.Value.Type.Is(openapi3.TypeArray) {
 		return true
 	}
 
