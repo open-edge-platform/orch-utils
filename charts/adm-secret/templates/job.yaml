@@ -18,6 +18,17 @@ spec:
     spec:
       containers:
         - name: adm-secret
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
           image: "bitnami/kubectl:1.28.4"
           command: ["/bin/bash", "/tmp/bin/run.sh"]
           volumeMounts:
