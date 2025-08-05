@@ -35,6 +35,7 @@ spec:
             - ALL
           seccompProfile:
             type: RuntimeDefault
+          readOnlyRootFilesystem: true
         {{- with .resources }}
         resources:
           {{- toYaml . | nindent 10 }}

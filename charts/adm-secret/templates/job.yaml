@@ -51,6 +51,8 @@ spec:
                   key: password
             - name: SEC_NAMESPACE
               value: {{ $secretNamespace }}
+          securityContext:
+            readOnlyRootFilesystem: true
       restartPolicy: Never
       serviceAccountName: adm-secret
       volumes:

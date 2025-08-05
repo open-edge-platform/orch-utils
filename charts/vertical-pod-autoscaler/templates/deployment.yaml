@@ -40,6 +40,8 @@ spec:
           ports:
             - name: prometheus
               containerPort: 8943
+          securityContext:
+            readOnlyRootFilesystem: true
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -74,6 +76,8 @@ spec:
         ports:
         - name: prometheus
           containerPort: 8942
+        securityContext:
+          readOnlyRootFilesystem: true
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -128,6 +132,8 @@ spec:
             - containerPort: 8000
             - name: prometheus
               containerPort: 8944
+          securityContext:
+            readOnlyRootFilesystem: true
       volumes:
         - name: tls-certs
           secret:

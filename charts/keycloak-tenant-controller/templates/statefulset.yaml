@@ -31,6 +31,7 @@ spec:
         - name: ktc-creds-cntr
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
+            readOnlyRootFilesystem: true
           image: badouralix/curl-jq@sha256:fe8a5ee49f613495df3b57afa86b39f081bd1b3b9ed61248f46c3d3d7df56092
           command: ["/bin/sh"]
           args: ["/ktc-credentials.sh", "http://platform-keycloak.{{ .Values.namespace }}.svc:8080", "http://vault.{{ .Values.namespace }}.svc:8200"]
@@ -56,6 +57,7 @@ spec:
           image: bitnami/kubectl
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
+            readOnlyRootFilesystem: true
           command: ["/bin/sh", "-c"]
           args:
           - |
