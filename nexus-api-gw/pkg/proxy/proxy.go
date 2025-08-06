@@ -50,6 +50,7 @@ func APIGwToProxy(c echo.Context, apiremapOp apiremap.Output) (int, string, []by
 		return http.StatusInternalServerError, "PortStr is not a string", nil, nil
 	}
 	url := fmt.Sprintf("http://%s:%s/%s", tenancysvcName, tenancyPortStr, apiremapOp.ServiceURI)
+	log.Info().Msgf("Resolved ServiceURI: %s\n", url)
 
 	// Read the body from the original request
 	body, err := io.ReadAll(c.Request().Body)
