@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"math"
 	"strconv"
 )
 
@@ -20,14 +21,35 @@ func UnmarshalUint(v interface{}) (uint, error) {
 	switch v := v.(type) {
 	case string:
 		u64, err := strconv.ParseUint(v, 10, 64)
-		return uint(u64), err
+		if err != nil {
+			return 0, err
+		}
+		if u64 > math.MaxUint {
+			return 0, fmt.Errorf("value %d exceeds maximum uint range", u64)
+		}
+		return uint(u64), nil
 	case int:
+		if v < 0 {
+			return 0, fmt.Errorf("negative value %d cannot be converted to uint", v)
+		}
 		return uint(v), nil
 	case int64:
+		if v < 0 {
+			return 0, fmt.Errorf("negative value %d cannot be converted to uint", v)
+		}
+		if uint64(v) > math.MaxUint {
+			return 0, fmt.Errorf("value %d exceeds maximum uint range", v)
+		}
 		return uint(v), nil
 	case json.Number:
 		u64, err := strconv.ParseUint(string(v), 10, 64)
-		return uint(u64), err
+		if err != nil {
+			return 0, err
+		}
+		if u64 > math.MaxUint {
+			return 0, fmt.Errorf("value %d exceeds maximum uint range", u64)
+		}
+		return uint(u64), nil
 	default:
 		return 0, fmt.Errorf("%T is not an uint", v)
 	}
