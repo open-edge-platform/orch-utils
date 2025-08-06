@@ -40,7 +40,11 @@ var _ = ginkgo.Describe("Cache", func() {
 			})
 			ginkgo.It("should retrieve the value using Get for GlobalProjectCache", func() {
 				key := "projNameKey"
-				value := common.Project{Name: "projectName", UID: "project-uid", Org: common.Org{Name: "orgName", UID: "org-uid"}}
+				value := common.Project{
+					Name: "projectName",
+					UID:  "project-uid",
+					Org:  common.Org{Name: "orgName", UID: "org-uid"},
+				}
 				GlobalProjectCache.Set(key, value)
 
 				retrievedValue, ok := GlobalProjectCache.Get(key)
