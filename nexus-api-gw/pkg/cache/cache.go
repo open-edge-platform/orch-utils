@@ -107,7 +107,7 @@ func GetAllAPIRemapCache() []struct {
 	return entries
 }
 
-// getParameterCount counts the number of path parameters in a URL template
+// getParameterCount counts the number of path parameters in a URL template.
 func getParameterCount(template string) int {
 	count := 0
 	parts := strings.Split(template, "/")
@@ -119,7 +119,7 @@ func getParameterCount(template string) int {
 	return count
 }
 
-// GetSortedAPIRemapCache returns pre-sorted cache entries (no per-request sorting)
+// GetSortedAPIRemapCache returns pre-sorted cache entries (no per-request sorting).
 func GetSortedAPIRemapCache() []struct {
 	ExternalURI string
 	ServiceURI  string
@@ -127,7 +127,7 @@ func GetSortedAPIRemapCache() []struct {
 } {
 	sortedCacheMutex.RLock()
 	defer sortedCacheMutex.RUnlock()
-	
+
 	// Return a copy to avoid race conditions
 	result := make([]struct {
 		ExternalURI string
@@ -138,18 +138,18 @@ func GetSortedAPIRemapCache() []struct {
 	return result
 }
 
-// RefreshSortedCache rebuilds and sorts the cache (called only when cache changes)
+// RefreshSortedCache rebuilds and sorts the cache (called only when cache changes).
 func RefreshSortedCache() {
 	sortedCacheMutex.Lock()
 	defer sortedCacheMutex.Unlock()
-	
+
 	// Get all entries
 	var entries []struct {
 		ExternalURI string
 		ServiceURI  string
 		Backend     amcV1.Backend
 	}
-	
+
 	APIRemapCache.store.Range(func(key, value interface{}) bool {
 		keyInString, ok := key.(string)
 		if !ok {
@@ -170,11 +170,11 @@ func RefreshSortedCache() {
 		})
 		return true
 	})
-	
+
 	// Sort by specificity (fewer parameters = higher priority)
 	sort.Slice(entries, func(i, j int) bool {
 		return getParameterCount(entries[i].ExternalURI) < getParameterCount(entries[j].ExternalURI)
 	})
-	
+
 	sortedCache = entries
 }

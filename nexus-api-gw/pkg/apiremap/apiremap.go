@@ -63,7 +63,7 @@ func TenancyAPIRemapping(input Input) (Output, error) {
 	return Output{}, errors.New("API mapping not found")
 }
 
-// Enhanced matching algorithm with pre-sorted cache access
+// Enhanced matching algorithm with pre-sorted cache access.
 func matchTemplate(inputURL string) (Output, bool) {
 	entries := cache.GetSortedAPIRemapCache()
 

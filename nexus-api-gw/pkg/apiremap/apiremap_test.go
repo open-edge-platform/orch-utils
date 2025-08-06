@@ -196,7 +196,7 @@ var _ = ginkgo.Describe("APIMappingsEventsSubscription", func() {
 	})
 })
 
-// FuzzTenancyAPIRemapping provides fuzz testing for the API remapping functionality
+// FuzzTenancyAPIRemapping provides fuzz testing for the API remapping functionality.
 func FuzzTenancyAPIRemapping(f *testing.F) {
 	// Seed corpus
 	f.Add("/v1/projects/default/resources/123")
