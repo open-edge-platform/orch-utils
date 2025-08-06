@@ -63,9 +63,11 @@ func TenancyAPIRemapping(input Input) (Output, error) {
 	return Output{}, errors.New("API mapping not found")
 }
 
-// TODO: enhance matching algo.
+// Enhanced matching algorithm with pre-sorted cache access
 func matchTemplate(inputURL string) (Output, bool) {
-	for _, entry := range cache.GetAllAPIRemapCache() {
+	entries := cache.GetSortedAPIRemapCache()
+
+	for _, entry := range entries {
 		params, matched := match(entry.ExternalURI, inputURL)
 		if matched {
 			result := Output{
@@ -150,6 +152,9 @@ func StoreMappingToCache(amc *tenancy_nexus_client.ApimappingconfigAPIMappingCon
 		})
 	}
 
+	// Refresh the sorted cache after adding mappings
+	cache.RefreshSortedCache()
+
 	log.Debug().Msgf("storeMappingToCache | Size of cache : %d", len(cache.GetAllAPIRemapCache()))
 }
 
@@ -159,5 +164,9 @@ func removeMappingFromCache(amc *tenancy_nexus_client.ApimappingconfigAPIMapping
 	for _, mapping := range amc.Spec.Mappings {
 		cache.APIRemapCache.Delete(mapping.ExternalURI)
 	}
+
+	// Refresh the sorted cache after removing mappings
+	cache.RefreshSortedCache()
+
 	log.Debug().Msgf("removeMappingFromCache | Size of cache : %d", len(cache.GetAllAPIRemapCache()))
 }
