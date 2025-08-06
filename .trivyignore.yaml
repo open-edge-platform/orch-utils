@@ -22,3 +22,23 @@ misconfigurations:
     paths:
       - "auth-service/Dockerfile"
     statement: Scratch images have no user. USER command would break the image.
+
+  - id: AVD-KSV-0014
+    paths:
+      - "charts/adm-secret/templates/job.yaml"
+      - "charts/auth-service/templates/deployment.yaml"
+      - "charts/deployment-wait/templates/job.yaml"
+      - "charts/keycloak-tenant-controller/templates/statefulset.yaml"
+      - "charts/secret-wait/templates/job.yaml"
+      - "charts/statefulset-wait/templates/job.yaml"
+      - "charts/token-fs/templates/deployment.yaml"
+      - "charts/vertical-pod-autoscaler/templates/deployment.yaml"
+    statement: readOnlyRootFilesystem is injected by Kyverno policy in charts/kyverno-extra-policies/templates/restricted-policy-orch.yaml
+
+  - id: AVD-KSV-0118
+    paths:
+      - "charts/adm-secret/templates/job.yaml"
+      - "charts/token-fs/templates/deployment.yaml"
+      - "charts/auth-service/templates/deployment.yaml"
+      - "charts/k8s-metrics-server/templates/components.yaml"
+    statement: Security context is injected by Kyverno policy in charts/kyverno-extra-policies/templates/restricted-policy-orch.yaml
