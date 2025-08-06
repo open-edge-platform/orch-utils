@@ -55,8 +55,8 @@ spec:
       serviceAccountName: adm-secret
       volumes:
         - name: script
-          configMap:
-            name: adm-secret
+          secret:
+            secretName: adm-secret
             defaultMode: 0755
         - name: orch-svc-token
           secret:
