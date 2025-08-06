@@ -136,6 +136,13 @@ spec:
       labels:
         k8s-app: metrics-server
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - args:
         - --cert-dir=/tmp
@@ -181,16 +188,6 @@ spec:
           requests:
             cpu: 100m
             memory: 200Mi
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          runAsUser: 1000
-          seccompProfile:
-            type: RuntimeDefault
         volumeMounts:
         - mountPath: /tmp
           name: tmp-dir

@@ -22,9 +22,3 @@ misconfigurations:
     paths:
       - "auth-service/Dockerfile"
     statement: Scratch images have no user. USER command would break the image.
-
-  - id: AVD-KSV-0118
-    paths:
-      - "charts/token-fs/templates/deployment.yaml"
-      - "charts/auth-service/templates/deployment.yaml"
-    statement: False positives. SecurityContext is being set in charts/token-fs/values.yaml and charts/auth-service/values.yaml
