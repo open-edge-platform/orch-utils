@@ -678,8 +678,6 @@ data:
     withSub(sub string) *LogEvent {\n\tlogEvent.Sub = sub\n\treturn logEvent\n}\n"
 kind: ConfigMap
 metadata:
-  annotations:
-    trivy.aquasec.com/ignore: AVD-KSV-0109
   creationTimestamp: null
   name: jwt-plugin
   namespace: orch-gateway
