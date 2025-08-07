@@ -11,7 +11,3 @@ rules:
 - apiGroups: [""]
   resources: ["pods"]
   verbs: ["get", "list"]
-- apiGroups: [""]
-  resources: ["pods/exec"]
-  verbs: ["create"]
-  resourceNames: ["vault-0"]  # Restrict to specific pod

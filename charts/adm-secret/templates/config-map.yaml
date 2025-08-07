@@ -8,30 +8,43 @@ metadata:
   name: adm-secret
 data:
   run.sh: |
-    export TOKEN=$(jq -r .root_token <<< "${VAULT_KEYS}")
+    #!/bin/sh
+    export TOKEN=$(echo "${VAULT_KEYS}" | sed -n 's/.*"root_token":"\([^"]*\)".*/\1/p')
     export HARBOR_CRT=$(base64 -w 0 /tmp/bin/intel-harbor-ca.crt)
+    export VAULT_ADDR="http://vault-0.orch-platform.svc.cluster.local:8200"
 
-    ### No envsubst, use eval to replace variables
-    SCRIPT=`eval "echo \"$(cat /tmp/bin/vault-bootstrap.sh)\""`
-
-    kubectl exec vault-0 -n orch-platform -- sh -c "${SCRIPT}"
-
-  vault-bootstrap.sh: |
-    vault login ${TOKEN}
+    echo "Verifying Vault token..."
+    curl -s -X POST "${VAULT_ADDR}/v1/auth/token/lookup-self" \
+      -H "X-Vault-Token: ${TOKEN}" || exit 1
 
     echo "------------------------------"
     echo "Loading Gitea credentials into Vault"
     echo ""
 
-    vault kv put -mount=secret ma_git_service username='${APP_GITEA_USER}' password='${APP_GITEA_PASS}'
-    vault kv get -mount=secret ma_git_service
-    vault kv put -mount=secret mc_git_service username='${CLUSTER_GITEA_USER}' password='${CLUSTER_GITEA_PASS}'
-    vault kv get -mount=secret mc_git_service
+    curl -s -X POST "${VAULT_ADDR}/v1/secret/data/ma_git_service" \
+      -H "X-Vault-Token: ${TOKEN}" \
+      -H "Content-Type: application/json" \
+      -d "{\"data\":{\"username\":\"${APP_GITEA_USER}\",\"password\":\"${APP_GITEA_PASS}\"}}"
+
+    curl -s -X GET "${VAULT_ADDR}/v1/secret/data/ma_git_service" \
+      -H "X-Vault-Token: ${TOKEN}"
+
+    curl -s -X POST "${VAULT_ADDR}/v1/secret/data/mc_git_service" \
+      -H "X-Vault-Token: ${TOKEN}" \
+      -H "Content-Type: application/json" \
+      -d "{\"data\":{\"username\":\"${CLUSTER_GITEA_USER}\",\"password\":\"${CLUSTER_GITEA_PASS}\"}}"
+
+    curl -s -X GET "${VAULT_ADDR}/v1/secret/data/mc_git_service" \
+      -H "X-Vault-Token: ${TOKEN}"
 
     echo "------------------------------"
     echo "Loading Harbor credentials into Vault"
     echo ""
-    vault kv put -mount=secret ma_harbor_service cacerts="${HARBOR_CRT}"
+
+    curl -s -X POST "${VAULT_ADDR}/v1/secret/data/ma_harbor_service" \
+      -H "X-Vault-Token: ${TOKEN}" \
+      -H "Content-Type: application/json" \
+      -d "{\"data\":{\"cacerts\":\"${HARBOR_CRT}\"}}"
 
   # FIXME: Dynamically pull the AMR CA as part of the scipt rather than hardcode in a file.
   intel-harbor-ca.crt: |
