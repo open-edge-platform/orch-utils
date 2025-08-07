@@ -42,3 +42,8 @@ misconfigurations:
       - "charts/auth-service/templates/deployment.yaml"
       - "charts/k8s-metrics-server/templates/components.yaml"
     statement: Security context is injected by Kyverno policy in charts/kyverno-extra-policies/templates/restricted-policy-orch.yaml
+
+  - id: AVD-KSV-0109
+    paths:
+      - "charts/traefik-pre/templates/jwt-plugin-configmap-generated.yaml"
+    statement: ConfigMap contains Go source code with 'jwtToken' variable names, not actual secrets
