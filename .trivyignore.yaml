@@ -47,3 +47,8 @@ misconfigurations:
     paths:
       - "charts/traefik-pre/templates/jwt-plugin-configmap-generated.yaml"
     statement: ConfigMap contains Go source code with 'jwtToken' variable names, not actual secrets
+
+  - id: AVD-KSV-0109
+    paths:
+      - "charts/keycloak-tenant-controller/templates/configmap.yaml"
+    statement: ConfigMap contains bash script with variable placeholders, tokens are fetched dynamically at runtime, not hardcoded secrets

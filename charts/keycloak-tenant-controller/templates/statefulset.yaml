@@ -68,8 +68,8 @@ spec:
             done
       volumes:
         - name: ktc-credentials
-          secret:
-            secretName: ktc-credentials
+          configMap:
+            name: ktc-credentials
             defaultMode: 0777
       containers:
         - name: keycloak-tenant-controller-pod
