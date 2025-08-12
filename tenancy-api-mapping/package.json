@@ -16,6 +16,6 @@
   },
   "dependencies": {
     "@redocly/openapi-cli": "^0.12.16",
-    "openapi-format": "^1.27.2"
+    "openapi-format": "^1.27.3"
   }
 }
