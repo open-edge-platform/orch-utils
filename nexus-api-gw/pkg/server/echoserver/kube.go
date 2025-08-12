@@ -64,7 +64,7 @@ func kubeSetupProxy(e *echo.Echo) *httputil.ReverseProxy {
 				MaxVersion:         tls.VersionTLS13,
 				RootCAs:            caCertPool,
 				Certificates:       []tls.Certificate{cert},
-				InsecureSkipVerify: true, // #nosec G402: TLS InsecureSkipVerify set true
+				InsecureSkipVerify: false,
 			},
 		}
 		proxy.Transport = &httpTransport
