@@ -77,7 +77,7 @@ func Load(data []byte) error {
 	Schemas = doc.Components.Schemas
 	Schema = *doc
 
-	for uri, pathInfo := range doc.Paths {
+	for uri, pathInfo := range doc.Paths.Map() {
 		if !ValidateNexusAnnotations(pathInfo) {
 			continue
 		}
@@ -212,18 +212,18 @@ func parseSchema(schemaName string, wg *sync.WaitGroup) {
 }
 
 func parseField(schemaName string, val *openapi3.SchemaRef) interface{} {
-	switch val.Value.Type {
-	case constStrString:
+	switch {
+	case val.Value.Type.Is(openapi3.TypeString):
 		return parseStringField(val)
-	case "boolean":
+	case val.Value.Type.Is(openapi3.TypeBoolean):
 		return true
-	case "number":
+	case val.Value.Type.Is(openapi3.TypeNumber):
 		return constNumber
-	case "integer":
+	case val.Value.Type.Is(openapi3.TypeInteger):
 		return constInt
-	case constStrArray:
+	case val.Value.Type.Is(openapi3.TypeArray):
 		return parseArrayField(schemaName, val)
-	case constStrObject:
+	case val.Value.Type.Is(openapi3.TypeObject):
 		return constStrObject
 	default:
 		return parseRefField(schemaName, val)
@@ -239,7 +239,8 @@ func parseStringField(val *openapi3.SchemaRef) interface{} {
 
 func parseArrayField(schemaName string, val *openapi3.SchemaRef) interface{} {
 	if val.Value.Items.Ref != "" {
-		ref := openapi3.DefaultRefNameResolver(val.Value.Items.Ref)
+		refParts := strings.Split(val.Value.Items.Ref, "/")
+		ref := refParts[len(refParts)-1]
 		if ref == schemaName {
 			return constStrObject
 		}
@@ -247,15 +248,16 @@ func parseArrayField(schemaName string, val *openapi3.SchemaRef) interface{} {
 			"ref":  ref,
 			"type": constStrArray,
 		}
-	} else if val.Value.Items.Value.Type == constStrString {
-		return []string{val.Value.Items.Value.Type}
+	} else if val.Value.Items.Value.Type.Is(openapi3.TypeString) {
+		return []string{openapi3.TypeString}
 	}
 	return nil
 }
 
 func parseRefField(schemaName string, val *openapi3.SchemaRef) interface{} {
 	if val.Ref != "" {
-		ref := openapi3.DefaultRefNameResolver(val.Ref)
+		refParts := strings.Split(val.Ref, "/")
+		ref := refParts[len(refParts)-1]
 		if ref == schemaName {
 			return constStrObject
 		}

@@ -58,10 +58,10 @@ var _ = ginkgo.Describe("OpenAPI tests", ginkgo.Ordered, func() {
 		api.New("vmware.org")
 		api.AddPath(restURI, "vmware.org")
 		gomega.Expect(api.Schemas["vmware.org"].
-			Paths[restURI.Uri].Get.Parameters[0].Value.Name).
+			Paths.Value(restURI.Uri).Get.Parameters[0].Value.Name).
 			To(gomega.Equal("orgchart.Leader"))
 		gomega.Expect(api.Schemas["vmware.org"].
-			Paths[restURI.Uri].Get.Parameters[0].Value.Description).
+			Paths.Value(restURI.Uri).Get.Parameters[0].Value.Description).
 			To(gomega.Equal("my custom description"))
 	})
 
@@ -84,9 +84,9 @@ var _ = ginkgo.Describe("OpenAPI tests", ginkgo.Ordered, func() {
 		model.ConstructMapCRDTypeToSpec(model.Upsert, "leaders.orgchart.vmware.org", crd.Spec)
 		api.New("vmware.org")
 		api.AddPath(restURI, "vmware.org")
-		gomega.Expect(api.Schemas["vmware.org"].Paths[restURI.Uri].Get.Parameters[0].Value.Name).
+		gomega.Expect(api.Schemas["vmware.org"].Paths.Value(restURI.Uri).Get.Parameters[0].Value.Name).
 			To(gomega.Equal("orgchart.Leader"))
-		gomega.Expect(api.Schemas["vmware.org"].Paths[restURI.Uri].Get.Parameters[0].Value.Description).
+		gomega.Expect(api.Schemas["vmware.org"].Paths.Value(restURI.Uri).Get.Parameters[0].Value.Description).
 			To(gomega.Equal("Name of the orgchart.Leader node"))
 	})
 
@@ -109,7 +109,7 @@ var _ = ginkgo.Describe("OpenAPI tests", ginkgo.Ordered, func() {
 		model.ConstructMapCRDTypeToSpec(model.Upsert, "leaders.orgchart.vmware.org", crd.Spec)
 		api.New("vmware.org")
 		api.AddPath(restURI, "vmware.org")
-		gomega.Expect(api.Schemas["vmware.org"].Paths[restURI.Uri].Get).To(gomega.Not(gomega.BeNil()))
+		gomega.Expect(api.Schemas["vmware.org"].Paths.Value(restURI.Uri).Get).To(gomega.Not(gomega.BeNil()))
 	})
 
 	ginkgo.It("should add PATCH endpoint", func() {
@@ -135,7 +135,7 @@ var _ = ginkgo.Describe("OpenAPI tests", ginkgo.Ordered, func() {
 		model.ConstructMapCRDTypeToSpec(model.Upsert, "leaders.orgchart.vmware.org", crd.Spec)
 		api.New("vmware.org")
 		api.AddPath(restURI, "vmware.org")
-		gomega.Expect(api.Schemas["vmware.org"].Paths[restURI.Uri].Patch).To(gomega.Not(gomega.BeNil()))
+		gomega.Expect(api.Schemas["vmware.org"].Paths.Value(restURI.Uri).Patch).To(gomega.Not(gomega.BeNil()))
 	})
 
 	ginkgo.It("should add GET, PUT and PATCH status endpoints", func() {
@@ -171,9 +171,9 @@ var _ = ginkgo.Describe("OpenAPI tests", ginkgo.Ordered, func() {
 		model.ConstructMapCRDTypeToSpec(model.Upsert, "leaders.orgchart.vmware.org", crd.Spec)
 		api.New("vmware.org")
 		api.AddPath(restURI, "vmware.org")
-		gomega.Expect(api.Schemas["vmware.org"].Paths[restURI.Uri].Get).To(gomega.Not(gomega.BeNil()))
-		gomega.Expect(api.Schemas["vmware.org"].Paths[restURI.Uri].Put).To(gomega.Not(gomega.BeNil()))
-		gomega.Expect(api.Schemas["vmware.org"].Paths[restURI.Uri].Patch).To(gomega.Not(gomega.BeNil()))
+		gomega.Expect(api.Schemas["vmware.org"].Paths.Value(restURI.Uri).Get).To(gomega.Not(gomega.BeNil()))
+		gomega.Expect(api.Schemas["vmware.org"].Paths.Value(restURI.Uri).Put).To(gomega.Not(gomega.BeNil()))
+		gomega.Expect(api.Schemas["vmware.org"].Paths.Value(restURI.Uri).Patch).To(gomega.Not(gomega.BeNil()))
 	})
 
 	ginkgo.It("should test Recreate func", func() {
