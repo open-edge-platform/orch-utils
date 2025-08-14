@@ -4,9 +4,7 @@
 
 module nexus/openapi-generator
 
-go 1.23.2
-
-toolchain go1.24.1
+go 1.24.6
 
 require (
 	github.com/getkin/kin-openapi v0.131.0
