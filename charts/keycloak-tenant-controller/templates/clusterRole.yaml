@@ -28,7 +28,7 @@ rules:
 - apiGroups: ["runtimeproject.edge-orchestrator.intel.com"]
   resources: ["runtimeprojects"]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
-# Access to org resources that are causing the current error
+# Access to org resources
 - apiGroups: ["org.edge-orchestrator.intel.com"]
   resources: ["orgs"]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
