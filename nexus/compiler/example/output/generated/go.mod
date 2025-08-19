@@ -4,7 +4,7 @@
 
 module github.com/vmware-tanzu/graph-framework-for-microservices/compiler/example/output/generated
 
-go 1.23.0
+go 1.24.6
 
 toolchain go1.24.1
 

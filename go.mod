@@ -4,9 +4,7 @@
 
 module github.com/open-edge-platform/orch-utils
 
-go 1.24
-
-toolchain go1.24.1
+go 1.24.6
 
 require (
 	github.com/aws/aws-sdk-go v1.55.6

@@ -4,9 +4,7 @@
 
 module github.com/open-edge-platform/orch-utils/keycloak-tenant-controller
 
-go 1.23.2
-
-toolchain go1.23.6
+go 1.24.6
 
 require (
 	github.com/Clarilab/gocloaksession v1.14.0

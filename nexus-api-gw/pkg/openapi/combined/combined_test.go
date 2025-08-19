@@ -67,10 +67,10 @@ var _ = ginkgo.Describe("Combined OpenAPI tests", ginkgo.Ordered, func() {
 		model.ConstructMapCRDTypeToSpec(model.Upsert, "leaders.orgchart.vmware.org", crd.Spec)
 		api.New("vmware.org")
 		api.AddPath(restURI, "vmware.org")
-		gomega.Expect(api.Schemas["vmware.org"].Paths[restURI.Uri].
+		gomega.Expect(api.Schemas["vmware.org"].Paths.Value(restURI.Uri).
 			Get.Parameters[0].Value.Name).
 			To(gomega.Equal("orgchart.Leader"))
-		gomega.Expect(api.Schemas["vmware.org"].Paths[restURI.Uri].
+		gomega.Expect(api.Schemas["vmware.org"].Paths.Value(restURI.Uri).
 			Get.Parameters[0].Value.Description).
 			To(gomega.Equal("my custom description"))
 	})

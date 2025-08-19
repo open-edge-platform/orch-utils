@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-FROM golang:1.24.2 AS builder
+FROM golang:1.24.6 AS builder
 ARG KTC_GIT_COMMIT
 
 # Set proxy environment variables using build arguments
@@ -22,7 +22,7 @@ COPY . /usr/src/keycloak-tenant-controller/
 WORKDIR /usr/src/keycloak-tenant-controller/
 
 RUN echo "Using commit ID $KTC_GIT_COMMIT"
-RUN	apt-get update && apt-get -y install --no-install-recommends -o APT::Keep-Downloaded-Packages=false build-essential=12.* sudo=1.9.* \
+RUN	apt-get update && apt-get -y install --no-install-recommends -o APT::Keep-Downloaded-Packages=false build-essential=12.12 sudo=1.9.16p2-3 \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& go install github.com/magefile/mage@latest \
