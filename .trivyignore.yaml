@@ -42,3 +42,15 @@ misconfigurations:
       - "charts/auth-service/templates/deployment.yaml"
       - "charts/k8s-metrics-server/templates/components.yaml"
     statement: Security context is injected by Kyverno policy in charts/kyverno-extra-policies/templates/restricted-policy-orch.yaml
+
+  - id: AVD-KSV-0053
+    paths:
+      - "charts/adm-secret/templates/cluster-role.yaml"
+    statement: pods/exec access required for vault-0 pod initialization and secret management operations
+
+  - id: AVD-KSV-0109
+    paths:
+      - "charts/adm-secret/templates/config-map.yaml"
+      - "charts/keycloak-tenant-controller/templates/configmap.yaml"
+      - "charts/traefik-pre/templates/jwt-plugin-configmap-generated.yaml"
+    statement: ConfigMaps contain legitimate scripts and configuration templates, not actual secrets in production

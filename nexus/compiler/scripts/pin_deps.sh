@@ -5,8 +5,28 @@
 
 set -e
 
-DEFAULT_CLIENT_NAME="$(yq eval .k8s_clients.default $( dirname "$0" )/../manifest.yaml)"
-DEFAULT_CLIENT_VERSION_TAG=$(printf "%s" $(yq eval -o=json .k8s_clients.versioned $( dirname "$0" )/../manifest.yaml | jq -c  '.[]' | while read i; do
+# Find manifest.yaml in multiple possible locations
+MANIFEST_FILE=""
+for manifest_path in \
+  "$( dirname "$0" )/../manifest.yaml" \
+  "/go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler/manifest.yaml" \
+  "../manifest.yaml" \
+  "manifest.yaml" \
+  "../../manifest.yaml" \
+  "../../../manifest.yaml"; do
+  if [ -f "$manifest_path" ]; then
+    MANIFEST_FILE="$manifest_path"
+    break
+  fi
+done
+
+if [ -z "$MANIFEST_FILE" ]; then
+  echo "Could not find manifest.yaml file, exiting..."
+  exit 1
+fi
+
+DEFAULT_CLIENT_NAME="$(yq eval .k8s_clients.default "$MANIFEST_FILE")"
+DEFAULT_CLIENT_VERSION_TAG=$(printf "%s" $(yq eval -o=json .k8s_clients.versioned "$MANIFEST_FILE" | jq -c  '.[]' | while read i; do
   NAME=$( jq -r  '.name' <<< "${i}" )
   if [ $NAME = $DEFAULT_CLIENT_NAME ]; then
     echo $( jq -r  '.k8s_code_generator_git_tag' <<< "${i}" )

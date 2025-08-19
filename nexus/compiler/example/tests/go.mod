@@ -4,7 +4,7 @@
 
 module github.com/vmware-tanzu/graph-framework-for-microservices/compiler/example/tests
 
-go 1.23.2
+go 1.24.6
 
 replace github.com/vmware-tanzu/graph-framework-for-microservices/compiler/example/output/generated => ../output/generated
 

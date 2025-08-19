@@ -903,9 +903,9 @@ func schema_nexustempmodule_apis_configtsmtanzuvmwarecom_v1_TestValMarkers(ref c
 						SchemaProps: spec.SchemaProps{
 							Type:      []string{"string"},
 							Format:    "",
+							Pattern:   "ab",
 							MaxLength: IntPtr(8),
 							MinLength: IntPtr(2),
-							Pattern:   "ab",
 						},
 					},
 					"myInt": {
