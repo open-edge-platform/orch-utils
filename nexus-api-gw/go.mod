@@ -34,7 +34,7 @@ require (
 	github.com/stretchr/testify v1.10.0
 	github.com/vmware-tanzu/graph-framework-for-microservices/common-library v0.0.0-20221020140923-7deb4d75cfcf
 	github.com/vmware-tanzu/graph-framework-for-microservices/nexus v0.0.0-20230908154608-60c8916a498f
-	golang.org/x/crypto v0.36.0
+	golang.org/x/crypto v0.37.0
 	k8s.io/api v0.32.1
 	k8s.io/kube-aggregator v0.24.1
 	sigs.k8s.io/yaml v1.4.0
@@ -134,8 +134,8 @@ require (
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
 	golang.org/x/net v0.38.0 // indirect
 	golang.org/x/sys v0.32.0 // indirect
-	golang.org/x/term v0.30.0 // indirect
-	golang.org/x/text v0.23.0 // indirect
+	golang.org/x/term v0.31.0 // indirect
+	golang.org/x/text v0.24.0 // indirect
 	golang.org/x/time v0.11.0 // indirect
 	golang.org/x/tools v0.31.0 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.4.0 // indirect
