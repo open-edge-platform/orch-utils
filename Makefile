@@ -108,7 +108,7 @@ helm-build: ## build all helm charts
     mage chartsBuild
 
 helm-push: helm-build ## push helm charts (no-op by default; wire up if needed)
-    @echo "helm-push: no-op (implement chart publishing if desired)"
+	@echo "helm-push: no-op (implement chart publishing if desired)"
 
 # ------------------------------
 # Docker helpers
