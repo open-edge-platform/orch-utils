@@ -32,36 +32,36 @@ VERSION_SUFFIX ?=
 
 # Build containers for CI (uses ONLY_SERVICE or all)
 docker-build: ## Build Docker images (ONLY_SERVICE builds one; otherwise builds all SERVICES)
-    @if [ -n "$(ONLY_SERVICE)" ]; then \
-      svc="$(ONLY_SERVICE)"; \
-      echo "==> Building single service: $$svc"; \
-      case $$svc in \
-        authService)               $(MAKE) docker-build-auth-service ;; \
-        awsSmProxy)                $(MAKE) docker-build-aws-sm-proxy ;; \
-        certSynchronizer)          $(MAKE) docker-build-cert-synchronizer ;; \
-        secretsConfig)             $(MAKE) docker-build-secrets-config ;; \
-        squidProxy)                $(MAKE) docker-build-squid-proxy ;; \
-        tokenFS)                   $(MAKE) docker-build-token-fs ;; \
-        tenancyAPIMapping)         $(MAKE) docker-build-tenancy-api-mapping ;; \
-        tenancyManager)            $(MAKE) docker-build-tenancy-manager ;; \
-        tenancyDatamodel)          $(MAKE) docker-build-tenancy-datamodel ;; \
-        nexusAPIGateway)           $(MAKE) docker-build-nexus-api-gw ;; \
-        keycloakTenantController)  $(MAKE) docker-build-keycloak-tenant-controller ;; \
-        nexusCompiler)             $(MAKE) docker-build-nexus/compiler ;; \
-        openAPIGenerator)          $(MAKE) docker-build-nexus/openapi-generator ;; \
-        *) echo "Unknown service '$$svc'"; exit 2 ;; \
-      esac; \
-    else \
-      echo "==> Building all services: $(SERVICES)"; \
-      for svc in $(SERVICES); do \
-        ONLY_SERVICE="$$svc" $(MAKE) docker-build; \
-      done; \
-    fi
-    @if [ -n "$(VERSION_SUFFIX)" ]; then \
-      $(MAKE) retag-with-suffix; \
-    else \
-      echo "VERSION_SUFFIX empty; skipping retag."; \
-    fi
+	@if [ -n "$(ONLY_SERVICE)" ]; then \
+		svc="$(ONLY_SERVICE)"; \
+		echo "==> Building single service: $$svc"; \
+		case $$svc in \
+			authService)               $(MAKE) docker-build-auth-service ;; \
+			awsSmProxy)                $(MAKE) docker-build-aws-sm-proxy ;; \
+			certSynchronizer)          $(MAKE) docker-build-cert-synchronizer ;; \
+			secretsConfig)             $(MAKE) docker-build-secrets-config ;; \
+			squidProxy)                $(MAKE) docker-build-squid-proxy ;; \
+			tokenFS)                   $(MAKE) docker-build-token-fs ;; \
+			tenancyAPIMapping)         $(MAKE) docker-build-tenancy-api-mapping ;; \
+			tenancyManager)            $(MAKE) docker-build-tenancy-manager ;; \
+			tenancyDatamodel)          $(MAKE) docker-build-tenancy-datamodel ;; \
+			nexusAPIGateway)           $(MAKE) docker-build-nexus-api-gw ;; \
+			keycloakTenantController)  $(MAKE) docker-build-keycloak-tenant-controller ;; \
+			nexusCompiler)             $(MAKE) docker-build-nexus/compiler ;; \
+			openAPIGenerator)          $(MAKE) docker-build-nexus/openapi-generator ;; \
+			*) echo "Unknown service '$$svc'"; exit 2 ;; \
+		esac; \
+	else \
+		echo "==> Building all services: $(SERVICES)"; \
+		for svc in $(SERVICES); do \
+			ONLY_SERVICE="$$svc" $(MAKE) docker-build; \
+		done; \
+	fi
+	@if [ -n "$(VERSION_SUFFIX)" ]; then \
+		$(MAKE) retag-with-suffix; \
+	else \
+		echo "VERSION_SUFFIX empty; skipping retag."; \
+	fi
 
 # Push containers (uses ONLY_SERVICE or all) via mage
 docker-push: ## Push Docker images to registry (ONLY_SERVICE or all SERVICES) using mage push:<service>
