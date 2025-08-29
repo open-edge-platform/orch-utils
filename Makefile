@@ -65,13 +65,13 @@ docker-build: ## Build Docker images (ONLY_SERVICE builds one; otherwise builds 
 
 # Push containers (uses ONLY_SERVICE or all) via mage
 docker-push: ## Push Docker images to registry (ONLY_SERVICE or all SERVICES) using mage push:<service>
-    @if [ -n "$(ONLY_SERVICE)" ]; then \
-      echo "==> Pushing $(ONLY_SERVICE) via mage"; \
-      mage push:$(ONLY_SERVICE); \
-    else \
-      echo "==> Pushing all services via mage"; \
-      for svc in $(SERVICES); do mage push:$$svc; done; \
-    fi
+	@if [ -n "$(ONLY_SERVICE)" ]; then \
+		echo "==> Pushing $(ONLY_SERVICE) via mage"; \
+		mage push:$(ONLY_SERVICE); \
+	else \
+		echo "==> Pushing all services via mage"; \
+		for svc in $(SERVICES); do mage push:$$svc; done; \
+	fi
 
 # Retag built images with VERSION_SUFFIX using mage listContainers
 retag-with-suffix: docker-list ## Retag images discovered by 'mage listContainers' with VERSION_SUFFIX
