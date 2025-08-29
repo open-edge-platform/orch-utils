@@ -75,20 +75,20 @@ docker-push: ## Push Docker images to registry (ONLY_SERVICE or all SERVICES) us
 
 # Retag built images with VERSION_SUFFIX using mage listContainers
 retag-with-suffix: docker-list ## Retag images discovered by 'mage listContainers' with VERSION_SUFFIX
-    @set -euo pipefail; \
-    echo "==> Retagging with suffix '$(VERSION_SUFFIX)'"; \
-    images=$$(mage listContainers); \
-    if [ -z "$$images" ]; then echo "No images from mage listContainers"; exit 0; fi; \
-    echo "$$images" | while read -r line; do \
-      # Expect 'repo:tag' in the first column; skip anything else
-      name_tag=$$(echo "$$line" | awk '{print $$1}'); \
-      case "$$name_tag" in *:*) ;; *) echo "Skip: $$line"; continue ;; esac; \
-      repo=$${name_tag%:*}; \
-      tag=$${name_tag##*:}; \
-      new_tag="$$tag$(VERSION_SUFFIX)"; \
-      echo "Tagging $$repo:$$tag -> $$repo:$$new_tag"; \
-      docker tag "$$repo:$$tag" "$$repo:$$new_tag"; \
-    done
+	@set -euo pipefail; \
+	echo "==> Retagging with suffix '$(VERSION_SUFFIX)'"; \
+	images=$$(mage listContainers); \
+	if [ -z "$$images" ]; then echo "No images from mage listContainers"; exit 0; fi; \
+	echo "$$images" | while read -r line; do \
+		# Expect 'repo:tag' in the first column; skip anything else
+		name_tag=$$(echo "$$line" | awk '{print $$1}'); \
+		case "$$name_tag" in *:*) ;; *) echo "Skip: $$line"; continue ;; esac; \
+		repo=$${name_tag%:*}; \
+		tag=$${name_tag##*:}; \
+		new_tag="$$tag$(VERSION_SUFFIX)"; \
+		echo "Tagging $$repo:$$tag -> $$repo:$$new_tag"; \
+		docker tag "$$repo:$$tag" "$$repo:$$new_tag"; \
+	done
 
 # ------------------------------
 # Helm helpers
