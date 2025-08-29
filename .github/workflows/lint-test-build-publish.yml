@@ -63,7 +63,7 @@ jobs:
       run_helm_push: false
       version_suffix: "-pr-${{ github.event.number }}"
       trivy_config_path: ".trivy.yaml"
-      #trivy_image_skip: "${{ vars.TRIVY_IMAGE_SKIP }}" use if needed
+      # trivy_image_skip: "${{ vars.TRIVY_IMAGE_SKIP }}" # use if needed
 
   lint-go:
     permissions:
