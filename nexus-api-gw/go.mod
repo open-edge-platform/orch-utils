@@ -17,7 +17,7 @@ require (
 	golang.org/x/oauth2 v0.27.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0
 	k8s.io/apiextensions-apiserver v0.31.0
-	k8s.io/apimachinery v0.32.1
+	k8s.io/apimachinery v0.32.8
 	k8s.io/client-go v0.32.1
 	sigs.k8s.io/controller-runtime v0.19.0
 )
