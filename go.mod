@@ -9,7 +9,7 @@ go 1.24.6
 require (
 	github.com/aws/aws-sdk-go v1.55.6
 	github.com/bitfield/script v0.24.1
-	github.com/golang-jwt/jwt/v5 v5.2.2
+	github.com/golang-jwt/jwt/v5 v5.2.3
 	github.com/hashicorp/vault/api v1.16.0
 	github.com/lestrrat-go/jwx/v2 v2.1.6
 	github.com/magefile/mage v1.15.0
