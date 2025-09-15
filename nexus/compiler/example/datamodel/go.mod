@@ -9,7 +9,7 @@ go 1.24.6
 require (
 	github.com/vmware-tanzu/cartographer v1.2.0
 	github.com/vmware-tanzu/graph-framework-for-microservices/nexus v0.0.0-20230226005144-24336fc988d5
-	k8s.io/apimachinery v0.25.4
+	k8s.io/apimachinery v0.25.16
 )
 
 require (
