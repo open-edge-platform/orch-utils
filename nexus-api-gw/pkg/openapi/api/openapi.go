@@ -59,11 +59,11 @@ func New(datamodel string) {
 				URL:         "https://localhost:5443",
 			},
 		},
-		Paths: openapi3.Paths{},
+		Paths: openapi3.NewPaths(),
 		Components: &openapi3.Components{
 			Schemas:       openapi3.Schemas{},
 			RequestBodies: openapi3.RequestBodies{},
-			Responses: openapi3.Responses{
+			Responses: openapi3.ResponseBodies{
 				"DefaultResponse": &openapi3.ResponseRef{
 					Value: openapi3.NewResponse().
 						WithDescription("Default response").
@@ -110,7 +110,7 @@ func AddPath(uri nexus.RestURIs, datamodel string) {
 	}
 
 	log.Info().Msgf("adding %s path to %s", uri.Uri, datamodel)
-	Schemas[datamodel].Paths[uri.Uri] = pathItem
+	Schemas[datamodel].Paths.Set(uri.Uri, pathItem)
 }
 
 func addOperationToPathItem(pathItem *openapi3.PathItem, method string, uri nexus.RestURIs,
@@ -143,12 +143,11 @@ func addListOperation(pathItem *openapi3.PathItem, opID string, nameParts []stri
 		OperationID: opID,
 		Tags:        []string{nameParts[1]},
 		Parameters:  params,
-		Responses: openapi3.Responses{
-			"200": &openapi3.ResponseRef{
-				Ref: "#/components/responses/List" + crdInfo.Name,
-			},
-		},
+		Responses:   openapi3.NewResponses(),
 	}
+	operation.Responses.Set("200", &openapi3.ResponseRef{
+		Ref: "#/components/responses/List" + crdInfo.Name,
+	})
 	pathItem.Get = operation
 }
 
@@ -163,36 +162,31 @@ func addGetOperation(pathItem *openapi3.PathItem, opID string, nameParts []strin
 	if uriInfo, ok := model.GetURIInfo(uri.Uri); ok {
 		switch uriInfo.TypeOfURI {
 		case model.StatusURI:
-			operation.Responses = openapi3.Responses{
-				"200": &openapi3.ResponseRef{
-					Ref: "#/components/responses/Get" + crdInfo.Name + ".Status",
-				},
-			}
+			operation.Responses = openapi3.NewResponses()
+			operation.Responses.Set("200", &openapi3.ResponseRef{
+				Ref: "#/components/responses/Get" + crdInfo.Name + ".Status",
+			})
 		case model.SingleLinkURI:
-			operation.Responses = openapi3.Responses{
-				"200": &openapi3.ResponseRef{
-					Ref: "#/components/responses/Get" + crdInfo.Name + ".SingleLink",
-				},
-			}
+			operation.Responses = openapi3.NewResponses()
+			operation.Responses.Set("200", &openapi3.ResponseRef{
+				Ref: "#/components/responses/Get" + crdInfo.Name + ".SingleLink",
+			})
 		case model.NamedLinkURI:
-			operation.Responses = openapi3.Responses{
-				"200": &openapi3.ResponseRef{
-					Ref: "#/components/responses/Get" + crdInfo.Name + ".NamedLink",
-				},
-			}
+			operation.Responses = openapi3.NewResponses()
+			operation.Responses.Set("200", &openapi3.ResponseRef{
+				Ref: "#/components/responses/Get" + crdInfo.Name + ".NamedLink",
+			})
 		default:
-			operation.Responses = openapi3.Responses{
-				"200": &openapi3.ResponseRef{
-					Ref: "#/components/responses/Get" + crdInfo.Name,
-				},
-			}
+			operation.Responses = openapi3.NewResponses()
+			operation.Responses.Set("200", &openapi3.ResponseRef{
+				Ref: "#/components/responses/Get" + crdInfo.Name,
+			})
 		}
 	} else {
-		operation.Responses = openapi3.Responses{
-			"200": &openapi3.ResponseRef{
-				Ref: "#/components/responses/DefaultResponse",
-			},
-		}
+		operation.Responses = openapi3.NewResponses()
+		operation.Responses.Set("200", &openapi3.ResponseRef{
+			Ref: "#/components/responses/DefaultResponse",
+		})
 	}
 	pathItem.Get = operation
 }
@@ -208,11 +202,10 @@ func addPutOperation(pathItem *openapi3.PathItem, opID string, nameParts []strin
 		operation.RequestBody = &openapi3.RequestBodyRef{
 			Ref: "#/components/requestBodies/Create" + crdInfo.Name + ".Status",
 		}
-		operation.Responses = openapi3.Responses{
-			"200": &openapi3.ResponseRef{
-				Ref: "#/components/responses/DefaultResponse",
-			},
-		}
+		operation.Responses = openapi3.NewResponses()
+		operation.Responses.Set("200", &openapi3.ResponseRef{
+			Ref: "#/components/responses/DefaultResponse",
+		})
 		operation.Parameters = params
 	} else {
 		p := constructUpdateParam()
@@ -224,11 +217,10 @@ func addPutOperation(pathItem *openapi3.PathItem, opID string, nameParts []strin
 		operation.RequestBody = &openapi3.RequestBodyRef{
 			Ref: "#/components/requestBodies/Create" + crdInfo.Name,
 		}
-		operation.Responses = openapi3.Responses{
-			"200": &openapi3.ResponseRef{
-				Ref: "#/components/responses/DefaultResponse",
-			},
-		}
+		operation.Responses = openapi3.NewResponses()
+		operation.Responses.Set("200", &openapi3.ResponseRef{
+			Ref: "#/components/responses/DefaultResponse",
+		})
 	}
 	pathItem.Put = operation
 }
@@ -241,14 +233,13 @@ func addPatchOperation(pathItem *openapi3.PathItem, opID string, nameParts []str
 		Tags:        []string{nameParts[1]},
 		Parameters:  params,
 	}
-	operation.Responses = openapi3.Responses{
-		"200": &openapi3.ResponseRef{
-			Ref: "#/components/responses/DefaultResponse",
-		},
-		"404": &openapi3.ResponseRef{
-			Ref: "#/components/responses/NotFoundResponse",
-		},
-	}
+	operation.Responses = openapi3.NewResponses()
+	operation.Responses.Set("200", &openapi3.ResponseRef{
+		Ref: "#/components/responses/DefaultResponse",
+	})
+	operation.Responses.Set("404", &openapi3.ResponseRef{
+		Ref: "#/components/responses/NotFoundResponse",
+	})
 	if uriInfo, ok := model.GetURIInfo(uri.Uri); ok && uriInfo.TypeOfURI == model.StatusURI {
 		operation.RequestBody = &openapi3.RequestBodyRef{
 			Ref: "#/components/requestBodies/Create" + crdInfo.Name + ".Status",
@@ -265,13 +256,12 @@ func addDeleteOperation(pathItem *openapi3.PathItem, opID string, nameParts []st
 	operation := &openapi3.Operation{
 		OperationID: opID,
 		Tags:        []string{nameParts[1]},
-		Responses: openapi3.Responses{
-			"200": &openapi3.ResponseRef{
-				Value: openapi3.NewResponse().WithDescription("No content"),
-			},
-		},
-		Parameters: params,
+		Responses:   openapi3.NewResponses(),
+		Parameters:  params,
 	}
+	operation.Responses.Set("200", &openapi3.ResponseRef{
+		Value: openapi3.NewResponse().WithDescription("No content"),
+	})
 	pathItem.Delete = operation
 }
 

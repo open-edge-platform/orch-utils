@@ -55,6 +55,7 @@ paths:
                 - KIND_ADDON
               format: enum
               type: string
+            maxItems: 100
             type: array
         - description: unique projectName for the resource
           in: path
@@ -437,6 +438,7 @@ paths:
                 - KIND_ADDON
               format: enum
               type: string
+            maxItems: 100
             type: array
         - description: unique projectName for the resource
           in: path
@@ -892,6 +894,7 @@ components:
           description: One or more API endpoints provided by the API extension.
           items:
             $ref: '#/components/schemas/Endpoint'
+          maxItems: 100
           type: array
         name:
           description: Name is a human-readable unique identifier for the API extension and must be unique for all extensions of a given deployment package.
@@ -950,6 +953,7 @@ components:
           description: List of Kubernetes resources that must be ignored during the application deployment.
           items:
             $ref: '#/components/schemas/ResourceReference'
+          maxItems: 100
           type: array
         imageRegistryName:
           description: ID of the project's registry where the Docker image of the application is available for download.
@@ -972,6 +976,7 @@ components:
           description: Set of profiles that can be used when deploying the application.
           items:
             $ref: '#/components/schemas/Profile'
+          maxItems: 100
           type: array
         updateTime:
           description: The last update time of the application.
@@ -1129,11 +1134,13 @@ components:
           description: Optional set of application deployment dependencies, expressed as (name, requires) pairs of edges in the deployment order dependency graph.
           items:
             $ref: '#/components/schemas/ApplicationDependency'
+          maxItems: 100
           type: array
         applicationReferences:
           description: List of applications comprising this deployment package. Expressed as (name, version) pairs.
           items:
             $ref: '#/components/schemas/ApplicationReference'
+          maxItems: 100
           type: array
         artifacts:
           description: Optional list of artifacts required for displaying or deploying this package. For example, icon or thumbnail artifacts can be used by the UI; Grafana\* dashboard definitions can be used by the deployment manager.
@@ -1196,11 +1203,13 @@ components:
           description: Namespace definitions to be created before resources are deployed. This allows complex namespaces to be defined with predefined labels and annotations. If not defined, simple namespaces will be created as needed.
           items:
             $ref: '#/components/schemas/Namespace'
+          maxItems: 100
           type: array
         profiles:
           description: Set of deployment profiles to choose from when deploying this package.
           items:
             $ref: '#/components/schemas/DeploymentProfile'
+          maxItems: 100
           type: array
         updateTime:
           description: The last update time of the deployment package.
@@ -1343,6 +1352,7 @@ components:
           description: A list of applications with the same project and name.
           items:
             $ref: '#/components/schemas/Application'
+          maxItems: 100
           type: array
       required:
         - application
@@ -1370,6 +1380,7 @@ components:
           description: A list of DeploymentPackages with the same project and name.
           items:
             $ref: '#/components/schemas/DeploymentPackage'
+          maxItems: 100
           type: array
       required:
         - deploymentPackages
@@ -1389,6 +1400,7 @@ components:
           description: Any error messages encountered either during chart parsing or entity creation or update.
           items:
             type: string
+          maxItems: 100
           type: array
       type: object
     ListApplicationsResponse:
@@ -1398,6 +1410,7 @@ components:
           description: A list of applications.
           items:
             $ref: '#/components/schemas/Application'
+          maxItems: 100
           type: array
         totalElements:
           description: Count of items in the entire list, regardless of pagination.
@@ -1414,6 +1427,7 @@ components:
           description: A list of artifacts.
           items:
             $ref: '#/components/schemas/Artifact'
+          maxItems: 100
           type: array
         totalElements:
           description: Count of items in the entire list, regardless of pagination.
@@ -1430,6 +1444,7 @@ components:
           description: A list of DeploymentPackages.
           items:
             $ref: '#/components/schemas/DeploymentPackage'
+          maxItems: 100
           type: array
         totalElements:
           description: Count of items in the entire list, regardless of pagination.
@@ -1446,6 +1461,7 @@ components:
           description: A list of registries.
           items:
             $ref: '#/components/schemas/Registry'
+          maxItems: 100
           type: array
         totalElements:
           description: Count of items in the entire list, regardless of pagination.
@@ -1536,6 +1552,7 @@ components:
           description: List of deployment requirements for this profile.
           items:
             $ref: '#/components/schemas/DeploymentRequirement'
+          maxItems: 100
           type: array
         description:
           description: Description of the profile. Displayed on user interfaces.
@@ -1556,6 +1573,7 @@ components:
           description: Parameter templates available for this profile.
           items:
             $ref: '#/components/schemas/ParameterTemplate'
+          maxItems: 100
           type: array
         updateTime:
           description: The last update time of the profile.
@@ -1717,6 +1735,7 @@ components:
           description: Any error messages encountered either during YAML parsing or entity creation or update.
           items:
             type: string
+          maxItems: 100
           type: array
         sessionId:
           description: Session ID, generated by the server after the first upload request has been processed.

@@ -28,6 +28,7 @@ type Global struct {
 	LocalDownloadsDir      string   `yaml:"localDownloadsDir"`
 	APImappingConfigCrsDir string   `yaml:"apimappingconfigcrsdir"`
 	Servers                []Server `yaml:"servers"`
+	DefaultMaxItems        uint64   `yaml:"defaultMaxItems,omitempty"` // Default maxItems for arrays without explicit limits
 }
 
 type Server struct {

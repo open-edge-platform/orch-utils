@@ -231,8 +231,8 @@ func (report *CustomReport) generateHumanDetailOutputModification(detail dyff.De
 		if fromType != toType {
 			_, _ = output.WriteString(yellow("%c type change from %s to %s\n",
 				dyff.MODIFICATION,
-				italic(fromType),
-				italic(toType),
+				italic("%s", fromType),
+				italic("%s", toType),
 			))
 
 		} else {
@@ -389,12 +389,12 @@ func (report *CustomReport) highlightByLine(from, to string) string {
 	if len(fromLines) == len(toLines) {
 		for i := range fromLines {
 			if fromLines[i] != toLines[i] {
-				fromLines[i] = red(fromLines[i])
-				toLines[i] = green(toLines[i])
+				fromLines[i] = red("%s", fromLines[i])
+				toLines[i] = green("%s", toLines[i])
 
 			} else {
-				fromLines[i] = lightred(fromLines[i])
-				toLines[i] = lightgreen(toLines[i])
+				fromLines[i] = lightred("%s", fromLines[i])
+				toLines[i] = lightgreen("%s", toLines[i])
 			}
 		}
 

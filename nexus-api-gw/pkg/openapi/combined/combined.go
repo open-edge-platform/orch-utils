@@ -53,10 +53,10 @@ func initializeSchema() openapi3.T {
 
 func mergePaths(newSchema *openapi3.T, schema openapi3.T) {
 	if newSchema.Paths == nil {
-		newSchema.Paths = openapi3.Paths{}
+		newSchema.Paths = openapi3.NewPaths()
 	}
-	for k, v := range schema.Paths {
-		newSchema.Paths[k] = v
+	for k, v := range schema.Paths.Map() {
+		newSchema.Paths.Set(k, v)
 	}
 }
 
@@ -65,7 +65,7 @@ func mergeComponents(newSchema *openapi3.T, schema openapi3.T) {
 	mergeParameters(&newSchema.Components.Parameters, schema.Components.Parameters)
 	mergeHeaders(&newSchema.Components.Headers, schema.Components.Headers)
 	mergeRequestBodies(&newSchema.Components.RequestBodies, schema.Components.RequestBodies)
-	mergeResponses(&newSchema.Components.Responses, schema.Components.Responses)
+	mergeResponseBodies(&newSchema.Components.Responses, schema.Components.Responses)
 	mergeSecuritySchemes(&newSchema.Components.SecuritySchemes, schema.Components.SecuritySchemes)
 	mergeExamples(&newSchema.Components.Examples, schema.Components.Examples)
 	mergeLinks(&newSchema.Components.Links, schema.Components.Links)
@@ -108,9 +108,9 @@ func mergeRequestBodies(dest *openapi3.RequestBodies, src openapi3.RequestBodies
 	}
 }
 
-func mergeResponses(dest *openapi3.Responses, src openapi3.Responses) {
+func mergeResponseBodies(dest *openapi3.ResponseBodies, src openapi3.ResponseBodies) {
 	if *dest == nil {
-		*dest = openapi3.Responses{}
+		*dest = openapi3.ResponseBodies{}
 	}
 	for k, v := range src {
 		(*dest)[k] = v

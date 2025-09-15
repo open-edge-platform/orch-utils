@@ -475,6 +475,7 @@ components:
         alertDefinitions:
           items:
             $ref: '#/components/schemas/AlertDefinition'
+          maxItems: 100
           type: array
       type: object
     AlertDefinitionTemplate:
@@ -499,6 +500,7 @@ components:
         alerts:
           items:
             $ref: '#/components/schemas/Alert'
+          maxItems: 100
           type: array
       type: object
     Email:
@@ -532,6 +534,7 @@ components:
     EmailRecipientList:
       items:
         $ref: '#/components/schemas/Email'
+      maxItems: 100
       type: array
     HttpError:
       properties:
@@ -562,6 +565,7 @@ components:
         receivers:
           items:
             $ref: '#/components/schemas/Receiver'
+          maxItems: 100
           type: array
       type: object
     ServiceStatus:

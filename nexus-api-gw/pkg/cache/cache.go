@@ -6,6 +6,8 @@
 package cache
 
 import (
+	"sort"
+	"strings"
 	"sync"
 
 	"github.com/open-edge-platform/orch-utils/nexus-api-gw/pkg/common"
@@ -47,6 +49,12 @@ var (
 	APIRemapCache      *Cache[string, common.APIMappingVO]
 	GlobalProjectCache *Cache[string, common.Project]
 	GlobalOrgCache     *Cache[string, common.Org]
+	sortedCache        []struct {
+		ExternalURI string
+		ServiceURI  string
+		Backend     amcV1.Backend
+	}
+	sortedCacheMutex sync.RWMutex
 )
 
 var GlobaltenancyCache *Cache[string, common.APIMappingVO]
@@ -97,4 +105,76 @@ func GetAllAPIRemapCache() []struct {
 		return true
 	})
 	return entries
+}
+
+// getParameterCount counts the number of path parameters in a URL template.
+func getParameterCount(template string) int {
+	count := 0
+	parts := strings.Split(template, "/")
+	for _, part := range parts {
+		if strings.HasPrefix(part, "{") && strings.HasSuffix(part, "}") {
+			count++
+		}
+	}
+	return count
+}
+
+// GetSortedAPIRemapCache returns pre-sorted cache entries (no per-request sorting).
+func GetSortedAPIRemapCache() []struct {
+	ExternalURI string
+	ServiceURI  string
+	Backend     amcV1.Backend
+} {
+	sortedCacheMutex.RLock()
+	defer sortedCacheMutex.RUnlock()
+
+	// Return a copy to avoid race conditions
+	result := make([]struct {
+		ExternalURI string
+		ServiceURI  string
+		Backend     amcV1.Backend
+	}, len(sortedCache))
+	copy(result, sortedCache)
+	return result
+}
+
+// RefreshSortedCache rebuilds and sorts the cache (called only when cache changes).
+func RefreshSortedCache() {
+	sortedCacheMutex.Lock()
+	defer sortedCacheMutex.Unlock()
+
+	// Get all entries
+	var entries []struct {
+		ExternalURI string
+		ServiceURI  string
+		Backend     amcV1.Backend
+	}
+
+	APIRemapCache.store.Range(func(key, value interface{}) bool {
+		keyInString, ok := key.(string)
+		if !ok {
+			return true
+		}
+		val, ok := value.(common.APIMappingVO)
+		if !ok {
+			return true
+		}
+		entries = append(entries, struct {
+			ExternalURI string
+			ServiceURI  string
+			Backend     amcV1.Backend
+		}{
+			ExternalURI: keyInString,
+			ServiceURI:  val.ServiceURI,
+			Backend:     val.Backend,
+		})
+		return true
+	})
+
+	// Sort by specificity (fewer parameters = higher priority)
+	sort.Slice(entries, func(i, j int) bool {
+		return getParameterCount(entries[i].ExternalURI) < getParameterCount(entries[j].ExternalURI)
+	})
+
+	sortedCache = entries
 }

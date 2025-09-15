@@ -1,0 +1,56 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
+misconfigurations:
+  - id: AVD-KSV-0114
+    paths:
+      - "charts/vertical-pod-autoscaler/templates/cluster-role.yaml"
+    statement: mutatingwebhookconfigurations required for VPA admission controller to inject pod resource recommendations
+
+  - id: AVD-DS-0002
+    paths:
+      - "aws-sm-proxy/Dockerfile"
+      - "cert-synchronizer/Dockerfile"
+      - "keycloak-tenant-controller/images/Dockerfile"
+      - "secrets/Dockerfile"
+      - "squid-proxy/Dockerfile"
+      - "token-fs/Dockerfile"
+    statement: Distroless:nonroot images have no root user. USER command not required.
+
+  - id: AVD-DS-0002
+    paths:
+      - "auth-service/Dockerfile"
+    statement: Scratch images have no user. USER command would break the image.
+
+  - id: AVD-KSV-0014
+    paths:
+      - "charts/adm-secret/templates/job.yaml"
+      - "charts/auth-service/templates/deployment.yaml"
+      - "charts/deployment-wait/templates/job.yaml"
+      - "charts/keycloak-tenant-controller/templates/statefulset.yaml"
+      - "charts/secret-wait/templates/job.yaml"
+      - "charts/statefulset-wait/templates/job.yaml"
+      - "charts/token-fs/templates/deployment.yaml"
+      - "charts/vertical-pod-autoscaler/templates/deployment.yaml"
+    statement: readOnlyRootFilesystem is injected by Kyverno policy in charts/kyverno-extra-policies/templates/restricted-policy-orch.yaml
+
+  - id: AVD-KSV-0118
+    paths:
+      - "charts/adm-secret/templates/job.yaml"
+      - "charts/token-fs/templates/deployment.yaml"
+      - "charts/auth-service/templates/deployment.yaml"
+      - "charts/k8s-metrics-server/templates/components.yaml"
+    statement: Security context is injected by Kyverno policy in charts/kyverno-extra-policies/templates/restricted-policy-orch.yaml
+
+  - id: AVD-KSV-0053
+    paths:
+      - "charts/adm-secret/templates/cluster-role.yaml"
+    statement: pods/exec access required for vault-0 pod initialization and secret management operations
+
+  - id: AVD-KSV-0109
+    paths:
+      - "charts/adm-secret/templates/config-map.yaml"
+      - "charts/keycloak-tenant-controller/templates/configmap.yaml"
+      - "charts/traefik-pre/templates/jwt-plugin-configmap-generated.yaml"
+    statement: ConfigMaps contain legitimate scripts and configuration templates, not actual secrets in production

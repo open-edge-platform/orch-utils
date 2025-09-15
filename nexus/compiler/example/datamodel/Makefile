@@ -96,11 +96,12 @@ datamodel_build:
 	if [ -z $(CONTAINER_ID) ]; then \
 		docker run --pull=missing\
 			--volume $(realpath .):/go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler/datamodel/ \
+			--volume $(realpath ../..):/go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler/ \
 			-v /go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler/datamodel/build/ \
 			--volume $(realpath .)/build:/go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler/generated/ \
 			--volume ~/.ssh:/root/.ssh \
-			--volume ${HOME}/.cache/go-build:/root/.cache/go-build \
-			-e GOCACHE=/root/.cache/go-build \
+			--volume ${HOME}/.cache/go-build:/home/appuser/.cache/go-build \
+			-e GOCACHE=/home/appuser/.cache/go-build \
 			-e CRD_MODULE_PATH=${CRD_MODULE_PATH} \
 			-e CONFIG_FILE=datamodel/nexus.yaml \
 			-e GOPRIVATE=*.eng.vmware.com \

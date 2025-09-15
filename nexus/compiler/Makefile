@@ -239,7 +239,7 @@ generate_code:
 	@echo "Copying go.mod file of datamodel"
 	cp ${DATAMODEL_PATH}/go.mod _generated/go.mod
 	sed -i'.bak' -e "s|^module .*|module nexustempmodule|" _generated/go.mod
-	cd _generated/ && go mod edit -go=1.23.2
+	cd _generated/ && go mod edit -go=1.24.6
 	@echo "Nexus Compiler: Generating base nexus code structure"
 	CRD_MODULE_PATH=${CRD_MODULE_PATH} go run cmd/nexus-sdk/main.go -config-file ${CONFIG_FILE} -dsl ${DATAMODEL_PATH} -crd-output _generated -log-level ${LOG_LEVEL}
 	mv _generated/api_names.sh scripts/

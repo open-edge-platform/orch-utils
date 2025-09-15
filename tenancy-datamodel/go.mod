@@ -4,7 +4,7 @@
 
 module github.com/open-edge-platform/orch-utils/tenancy-datamodel
 
-go 1.23.2
+go 1.24.6
 
 require (
 	github.com/elliotchance/orderedmap v1.8.0
@@ -36,7 +36,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	golang.org/x/net v0.38.0 // indirect
-	golang.org/x/oauth2 v0.23.0 // indirect
+	golang.org/x/oauth2 v0.27.0 // indirect
 	golang.org/x/sys v0.31.0 // indirect
 	golang.org/x/term v0.30.0 // indirect
 	golang.org/x/text v0.23.0 // indirect

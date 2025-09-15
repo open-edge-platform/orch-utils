@@ -72,27 +72,27 @@ func render(format string, a ...interface{}) string {
 }
 
 func green(format string, a ...interface{}) string {
-	return colored(additionGreen, render(format, a...))
+	return colored(additionGreen, "%s", render(format, a...))
 }
 
 func red(format string, a ...interface{}) string {
-	return colored(removalRed, render(format, a...))
+	return colored(removalRed, "%s", render(format, a...))
 }
 
 func yellow(format string, a ...interface{}) string {
-	return colored(modificationYellow, render(format, a...))
+	return colored(modificationYellow, "%s", render(format, a...))
 }
 
 func lightgreen(format string, a ...interface{}) string {
-	return colored(bunt.LightGreen, render(format, a...))
+	return colored(bunt.LightGreen, "%s", render(format, a...))
 }
 
 func lightred(format string, a ...interface{}) string {
-	return colored(bunt.LightSalmon, render(format, a...))
+	return colored(bunt.LightSalmon, "%s", render(format, a...))
 }
 
 func dimgray(format string, a ...interface{}) string {
-	return colored(bunt.DimGray, render(format, a...))
+	return colored(bunt.DimGray, "%s", render(format, a...))
 }
 
 func bold(format string, a ...interface{}) string {

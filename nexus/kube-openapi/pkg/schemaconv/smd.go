@@ -293,7 +293,7 @@ func (c *convert) VisitKind(k *proto.Kind) {
 
 	unions, err := makeUnions(k.GetExtensions())
 	if err != nil {
-		c.reportError(err.Error())
+		c.reportError("%s", err.Error())
 		return
 	}
 	// TODO: We should check that the fields and discriminator

@@ -129,7 +129,10 @@ metadata:
   name: system:vpa-target-reader
 rules:
   - apiGroups:
-    - '*'
+    - ""
+    - "apps"
+    - "batch"
+    - "extensions"
     resources:
     - '*/scale'
     verbs:
