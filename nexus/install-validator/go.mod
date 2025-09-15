@@ -6,8 +6,6 @@ module github.com/vmware-tanzu/graph-framework-for-microservices/install-validat
 
 go 1.24.6
 
-toolchain go1.24.1
-
 require (
 	github.com/golang/mock v1.6.0
 	github.com/onsi/ginkgo/v2 v2.23.4
@@ -15,7 +13,7 @@ require (
 	github.com/sirupsen/logrus v1.9.3
 	github.com/vmware-tanzu/graph-framework-for-microservices/common-library v0.0.0-20231031085545-baa1f0ece453
 	k8s.io/apiextensions-apiserver v0.32.3
-	k8s.io/apimachinery v0.32.3
+	k8s.io/apimachinery v0.32.8
 	k8s.io/client-go v0.32.3
 	sigs.k8s.io/yaml v1.4.0
 )
