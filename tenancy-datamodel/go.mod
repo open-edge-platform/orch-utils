@@ -9,7 +9,7 @@ go 1.24.6
 require (
 	github.com/elliotchance/orderedmap v1.8.0
 	github.com/sirupsen/logrus v1.9.3
-	k8s.io/apimachinery v0.32.8
+	k8s.io/apimachinery v0.32.9
 	k8s.io/client-go v0.32.1
 )
 
