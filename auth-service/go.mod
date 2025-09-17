@@ -13,7 +13,7 @@ require (
 	github.com/onsi/gomega v1.37.0
 	github.com/open-edge-platform/o11y-tenant-controller v0.6.0
 	github.com/tidwall/gjson v1.18.0
-	google.golang.org/grpc v1.71.0
+	google.golang.org/grpc v1.71.3
 )
 
 require (
