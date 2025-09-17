@@ -17,8 +17,8 @@ require (
 	golang.org/x/oauth2 v0.27.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0
 	k8s.io/apiextensions-apiserver v0.31.0
-	k8s.io/apimachinery v0.32.8
-	k8s.io/client-go v0.32.1
+	k8s.io/apimachinery v0.32.9
+	k8s.io/client-go v0.32.9
 	sigs.k8s.io/controller-runtime v0.19.0
 )
 
@@ -35,7 +35,7 @@ require (
 	github.com/vmware-tanzu/graph-framework-for-microservices/common-library v0.0.0-20221020140923-7deb4d75cfcf
 	github.com/vmware-tanzu/graph-framework-for-microservices/nexus v0.0.0-20230908154608-60c8916a498f
 	golang.org/x/crypto v0.36.0
-	k8s.io/api v0.32.1
+	k8s.io/api v0.32.9
 	k8s.io/kube-aggregator v0.24.1
 	sigs.k8s.io/yaml v1.4.0
 )
