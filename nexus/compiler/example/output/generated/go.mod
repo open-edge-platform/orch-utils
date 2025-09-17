@@ -22,7 +22,7 @@ require (
 	github.com/vmware-tanzu/graph-framework-for-microservices/nexus v0.0.0-00010101000000-000000000000
 	google.golang.org/grpc v1.71.3
 	k8s.io/apimachinery v0.26.15
-	k8s.io/client-go v0.26.3
+	k8s.io/client-go v0.26.15
 )
 
 require (
@@ -81,7 +81,7 @@ require (
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	k8s.io/api v0.26.3 // indirect
+	k8s.io/api v0.26.15 // indirect
 	k8s.io/apiextensions-apiserver v0.26.3 // indirect
 	k8s.io/klog/v2 v2.80.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20221207184640-f3cff1453715 // indirect
