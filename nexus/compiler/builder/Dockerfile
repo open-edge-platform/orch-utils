@@ -25,7 +25,7 @@ RUN git config --global --add safe.directory '*' \
     && apt-get install -y --no-install-recommends \
         make=4.4.1-2 \
         coreutils=9.7-3 \
-        openssh-client=1:10.0p1-7 \
+        openssh-client \
     && curl -Lo /usr/local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.7.1/jq-linux-amd64 \
     && chmod +x /usr/local/bin/jq \
     && go install github.com/onsi/ginkgo/ginkgo@v1.16.0 \
