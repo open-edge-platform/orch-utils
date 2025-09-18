@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-FROM golang:1.25.0-bullseye AS builder
+FROM golang:1.25.1-bookworm AS builder
 
 COPY cmd/jobapp /app
 COPY go.mod /app/go.mod
