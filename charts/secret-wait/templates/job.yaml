@@ -21,7 +21,7 @@ spec:
       serviceAccountName: {{ $serviceAccountName }}
       containers:
       - name: secret-wait
-        image: "bitnami/kubectl:1.28.4"
+        image: "bitnamilegacy/kubectl:1.28.4"
         command:
           - "timeout"
           - "240h"
