@@ -53,7 +53,7 @@ spec:
               subPath: ktc-credentials.sh
               name: ktc-credentials
         - name: wait-for-crd
-          image: bitnami/kubectl
+          image: bitnamilegacy/kubectl
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           command: ["/bin/sh", "-c"]
