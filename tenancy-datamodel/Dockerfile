@@ -8,7 +8,7 @@ USER nobody
 # Now copy the static shell into base image.
 COPY --from=busybox:1.37.0-uclibc /bin/sh /bin/sh
 
-COPY --from=bitnami/kubectl:1.31.1 /opt/bitnami/kubectl/bin/kubectl /usr/local/bin/kubectl
+COPY --from=bitnamilegacy/kubectl:1.31.1 /opt/bitnami/kubectl/bin/kubectl /usr/local/bin/kubectl
 
 # Set the working directory in the container
 WORKDIR /app

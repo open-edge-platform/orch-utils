@@ -38,7 +38,7 @@ spec:
       serviceAccountName: {{ include "iam.serviceAccountName" . }}
       initContainers:
       - name: wait-for-job
-        image: bitnami/kubectl
+        image: bitnamilegacy/kubectl
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
         command: ["/bin/sh", "-c"]
