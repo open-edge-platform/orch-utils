@@ -263,7 +263,7 @@ func datamodelCompilerBuild() error {
 func tenancyDatamodelBuild() error {
 	projectDir := "tenancy-datamodel"
 	nexusFile := "nexus.yaml"
-	baseImage := "bitnami/kubectl:latest"
+	baseImage := "rancher/kubectl:latest"
 
 	nexusConf := struct {
 		GroupName string `yaml:"groupName"`

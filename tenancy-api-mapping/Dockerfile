@@ -30,6 +30,6 @@ WORKDIR /bin
 
 # Copy the kubectl to runner
 # hadolint ignore=DL3022
-COPY --from=bitnami/kubectl:1.31.1 /opt/bitnami/kubectl/bin/kubectl kubectl
+COPY --from=rancher/kubectl:v1.31.1 /bin/kubectl kubectl
 
 ENTRYPOINT ["jobapp"]
