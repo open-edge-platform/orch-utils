@@ -21,7 +21,7 @@ spec:
       serviceAccountName: {{ $serviceAccountName }}
       containers:
       - name: statefulset-wait
-        image: "bitnami/kubectl:1.30.3"
+        image: "bitnamilegacy/kubectl:1.30.3"
         command:
           - "timeout"
           - "5m"
