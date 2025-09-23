@@ -35,7 +35,7 @@ spec:
       restartPolicy: Never
       initContainers:
       - name: job-wait-for-apimappingconfigs
-        image: bitnami/kubectl
+        image: bitnamilegacy/kubectl
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
         command: ["/bin/sh", "-c"]

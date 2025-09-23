@@ -27,7 +27,7 @@ else
 DATAMODEL_DOCKER_TAG=${DATAMODEL_DOCKER_REGISTRY}/${DATAMODEL_GROUP_NAME}/tenancy-datamodel:${DATAMODEL_VERSION}
 endif
 
-DATAMODEL_BASE_DOCKER_IMAGE = bitnami/kubectl:latest
+DATAMODEL_BASE_DOCKER_IMAGE = bitnamilegacy/kubectl:latest
 
 NAMESPACE                   ?= "default"
 HOST_KUBECONFIG             ?= ${HOME}/.kube/config
