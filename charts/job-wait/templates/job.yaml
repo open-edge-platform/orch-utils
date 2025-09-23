@@ -17,7 +17,7 @@ spec:
       restartPolicy: Never
       containers:
       - name: job-wait-container
-        image: "bitnami/kubectl:1.28.4"
+        image: "bitnamilegacy/kubectl:1.28.4"
         command: ["/bin/sh", "-c"]
         args:
         - |

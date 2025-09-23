@@ -7,23 +7,23 @@ module github.com/open-edge-platform/orch-utils/auth-service
 go 1.24.6
 
 require (
-	github.com/golang-jwt/jwt/v5 v5.2.2
-	github.com/lestrrat-go/jwx/v2 v2.1.3
+	github.com/golang-jwt/jwt/v5 v5.2.3
+	github.com/lestrrat-go/jwx/v2 v2.1.6
 	github.com/onsi/ginkgo/v2 v2.23.4
 	github.com/onsi/gomega v1.37.0
 	github.com/open-edge-platform/o11y-tenant-controller v0.6.0
 	github.com/tidwall/gjson v1.18.0
-	google.golang.org/grpc v1.71.0
+	google.golang.org/grpc v1.71.3
 )
 
 require (
-	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.3.0 // indirect
+	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.0 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-task/slim-sprig/v3 v3.0.0 // indirect
 	github.com/goccy/go-json v0.10.4 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/pprof v0.0.0-20250403155104-27863c87afa6 // indirect
-	github.com/lestrrat-go/blackmagic v1.0.2 // indirect
+	github.com/lestrrat-go/blackmagic v1.0.3 // indirect
 	github.com/lestrrat-go/httpcc v1.0.1 // indirect
 	github.com/lestrrat-go/httprc v1.0.6 // indirect
 	github.com/lestrrat-go/iter v1.0.2 // indirect
