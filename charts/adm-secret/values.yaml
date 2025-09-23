@@ -2,12 +2,6 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 ---
-# Default values for admin-secret.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-httpsProxy:
-noProxy:
-
 secretNamespace: "orch-app"
 codecommit:
   gitSecretName: "codecommit-git-auth"

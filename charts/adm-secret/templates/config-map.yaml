@@ -8,7 +8,7 @@ metadata:
   name: adm-secret
 data:
   run.sh: |
-    export TOKEN=$(echo "${VAULT_KEYS}" | /usr/local/sbin/jq -r .root_token )
+    export TOKEN=$(echo "${VAULT_KEYS}" | sed 's/.*"root_token":"\([^"]*\)".*/\1/')
     export HARBOR_CRT=$(base64 -w 0 /tmp/bin/intel-harbor-ca.crt)
 
     ### No envsubst, use eval to replace variables
