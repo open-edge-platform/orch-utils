@@ -16,13 +16,48 @@ metadata:
 spec:
   template:
     spec:
+      initContainers:
+        - name: install-dependencies
+          image: alpine:3.22.1
+          command: ["/bin/sh", "-c"]
+          args:
+          - |
+            set -e
+            apk add --no-cache curl
+            curl -L -o /shared/jq https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-linux64
+            chmod +x /shared/jq
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            seccompProfile:
+              type: RuntimeDefault
+            env:
+            {{- with .Values.httpsProxy }}
+            - name: HTTPS_PROXY
+              value: {{ . }}
+            {{- end }}
+            {{- with .Values.noProxy }}
+            - name: NO_PROXY
+              value: {{ . }}
+            {{- end }}
+          volumeMounts:
+          - name: shared-bin
+            mountPath: /shared
       containers:
         - name: adm-secret
-          image: "bitnamilegacy/kubectl:1.28.4"
-          command: ["/bin/bash", "/tmp/bin/run.sh"]
+          image: "alpine/kubectl:1.34.1"
+          command: ["/bin/sh", "/tmp/bin/run.sh"]
+          securityContext:
+            runAsUser: 1001
+            runAsGroup: 1001
+            runAsNonRoot: true
           volumeMounts:
             - name: script
               mountPath: /tmp/bin
+            - name: shared-bin
+              mountPath: /usr/local/sbin
           env:
             - name: VAULT_KEYS
               valueFrom:
@@ -54,6 +89,8 @@ spec:
       restartPolicy: Never
       serviceAccountName: adm-secret
       volumes:
+        - name: shared-bin
+          emptyDir: {}
         - name: script
           configMap:
             name: adm-secret
