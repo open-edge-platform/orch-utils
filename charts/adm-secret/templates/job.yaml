@@ -43,7 +43,7 @@ spec:
               value: {{ . }}
             {{- end }}
           volumeMounts:
-          - name: shared-bin
+          - name: shared
             mountPath: /shared
       containers:
         - name: adm-secret
@@ -53,10 +53,16 @@ spec:
             runAsUser: 1001
             runAsGroup: 1001
             runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            seccompProfile:
+              type: RuntimeDefault
           volumeMounts:
             - name: script
               mountPath: /tmp/bin
-            - name: shared-bin
+            - name: shared
               mountPath: /usr/local/sbin
           env:
             - name: VAULT_KEYS
@@ -89,7 +95,7 @@ spec:
       restartPolicy: Never
       serviceAccountName: adm-secret
       volumes:
-        - name: shared-bin
+        - name: shared
           emptyDir: {}
         - name: script
           configMap:
