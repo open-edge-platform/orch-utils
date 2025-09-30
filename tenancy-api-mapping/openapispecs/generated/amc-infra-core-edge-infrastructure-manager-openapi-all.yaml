@@ -5780,6 +5780,10 @@ components:
           pattern: ^([A-Za-z0-9]{5,20})?$
           title: serial_number
           type: string
+        userLvmSize:
+          description: LVM size in GB
+          title: user_lvm_size
+          type: integer
         uuid:
           description: The host UUID.
           maxLength: 36
@@ -6042,6 +6046,11 @@ components:
           writeOnly: true
         timestamps:
           $ref: '#/components/schemas/Timestamps'
+        userLvmSize:
+          description: LVM size in GB.
+          readOnly: true
+          title: user_lvm_size
+          type: integer
         uuid:
           description: (OPTIONAL) The host UUID identifier; UUID is unique and immutable.
           maxLength: 36
@@ -8015,7 +8024,10 @@ components:
           title: description
           type: string
         endTime:
-          $ref: '#/components/schemas/google.protobuf.Timestamp'
+          description: UTC timestamp of OS Update ended.
+          readOnly: true
+          title: end_time
+          type: integer
         instance:
           $ref: '#/components/schemas/InstanceResource'
         name:
@@ -8032,7 +8044,10 @@ components:
           title: resource_id
           type: string
         startTime:
-          $ref: '#/components/schemas/google.protobuf.Timestamp'
+          description: UTC timestamp of OS Update started.
+          readOnly: true
+          title: start_time
+          type: integer
         status:
           description: Short message that describes what happened during the OS Update.
           maxLength: 1024
@@ -8048,7 +8063,10 @@ components:
         statusIndicator:
           $ref: '#/components/schemas/StatusIndication'
         statusTimestamp:
-          $ref: '#/components/schemas/google.protobuf.Timestamp'
+          description: UTC timestamp of OS Update status reported.
+          readOnly: true
+          title: status_timestamp
+          type: integer
         timestamps:
           $ref: '#/components/schemas/Timestamps'
       title: OSUpdateRun
@@ -8126,7 +8144,6 @@ components:
           description: List of installed packages, encoded as a JSON list.
           maxLength: 500000
           pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()" \\\n]+$
-          readOnly: true
           title: installed_packages
           type: string
         installedPackagesUrl:
