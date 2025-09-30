@@ -30,7 +30,7 @@ spec:
   privateKey:
     algorithm: RSA
     encoding: PKCS1
-    size: 4096
+    size: 3072
   usages:
     - digital signature
     - server auth
