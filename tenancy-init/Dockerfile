@@ -4,15 +4,14 @@
 
 FROM golang:1.24.6-bullseye AS builder
 
-COPY cmd/tenant-init /app
-COPY go.mod /app/go.mod
-
+COPY . /app
 WORKDIR /app
+
 ENV GOPRIVATE=github.com/open-edge-platform/*
 RUN set -x && \
     go mod tidy && \
     go mod download && \
-    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -buildvcs=false -o bin/tenantinit
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -buildvcs=false -o bin/tenantinit ./cmd/tenant-init
 
 FROM gcr.io/distroless/static-debian12:nonroot
 
