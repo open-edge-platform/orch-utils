@@ -27,4 +27,6 @@ WORKDIR /bin
 # hadolint ignore=DL3022
 COPY --from=alpine/kubectl:1.34.1 /usr/local/bin/kubectl kubectl
 
+# No HEALTHCHECK needed for job containers
+# trivy:ignore:DS026
 ENTRYPOINT ["tenantinit"]
