@@ -166,6 +166,11 @@ func (Build) TenancyAPIMapping() error {
 	return tenancyAPIMappingBuild()
 }
 
+// Builds the Tenancy API Mapping container image.
+func (Build) TenancyInit() error {
+	return tenancyInitBuild()
+}
+
 // Builds the Tenancy Manager container image.
 func (Build) TenancyManager() error {
 	return tenancyManagerBuild()
