@@ -42,5 +42,8 @@ nodeSelector: {}
 
 podAnnotations: {}
 
-# loglevel of FDO-MFG container
 logLevel: info
+
+tenant:
+  orgName: ""
+  projectName: ""

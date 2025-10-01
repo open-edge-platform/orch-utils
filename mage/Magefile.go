@@ -253,6 +253,11 @@ func (Push) TenancyAPIMapping() error {
 	return pushImage("tenancy-api-mapping", "tenancy-api-mapping")
 }
 
+// Push the Tenancy API Mapping container image to the registry.
+func (Push) TenancyInit() error {
+	return pushImage("tenancy-init", "tenancy-init")
+}
+
 // Push the Tenancy Manager container image to the registry.
 func (Push) TenancyManager() error {
 	return pushImage("tenancy-manager", "tenancy-manager")
