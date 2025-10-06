@@ -4592,6 +4592,13 @@ paths:
         - TelemetryMetricsProfileService
 components:
   schemas:
+    AmtSku:
+      enum:
+        - AMT_SKU_UNSPECIFIED
+        - AMT_SKU_AMT
+        - AMT_SKU_ISM
+      title: AmtSku
+      type: string
     AmtState:
       description: The state of the AMT (Active Management Technology) component.
       enum:
@@ -5797,11 +5804,7 @@ components:
       description: A Host resource.
       properties:
         amtSku:
-          description: coming from device introspection
-          maxLength: 96
-          readOnly: true
-          title: amt_sku
-          type: string
+          $ref: '#/components/schemas/AmtSku'
         amtStatus:
           description: coming from device introspection. Set only by the DM RM.
           maxLength: 1024
@@ -7959,7 +7962,7 @@ components:
             Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information.
              Applies only to Mutable OSes.
           maxLength: 500000
-          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\ \n{}[]]+$
+          pattern: ^$|^[A-Za-z0-9._/:;=@?!#,<>\-*+~()\[\]{} \n]+$
           title: install_packages
           type: string
         kernelCommand:
