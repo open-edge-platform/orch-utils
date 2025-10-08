@@ -45,5 +45,5 @@ podAnnotations: {}
 logLevel: info
 
 tenant:
-  orgName: ""
-  projectName: ""
+  orgName: "default"
+  projectName: "default"
