@@ -62,7 +62,7 @@ spec:
               echo "CRD $CRD is available."
             done
             echo "Checking for KTC pod existence"
-            until kubectl get po -l app=keycloak-tenant-controller-pod -A; do
+            until kubectl get po -l app=keycloak-tenant-controller-pod -A | grep -qv "No resources found"; do
               echo "KTC pod not found, waiting..."
               sleep 30
             done
