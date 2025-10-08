@@ -61,11 +61,15 @@ spec:
             done
             echo "CRD $CRD is available."
             done
+            echo "Checking for KTC status"
+            kubectl wait --for=condition=Ready po -l app=keycloak-tenant-controller-pod -A
+            echo "KTC is running. Exiting init container."
       containers:
       - name: {{ .Chart.Name }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
-        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        # image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        image: localhost:5000/tenancy-init:25.2.1
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         args:
           - "--org={{ .Values.tenant.orgName }}"
