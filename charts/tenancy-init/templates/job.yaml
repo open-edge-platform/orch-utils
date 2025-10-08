@@ -54,14 +54,19 @@ spec:
                       "projectwatchers.projectwatcher.edge-orchestrator.intel.com" \
                       "projectactivewatchers.projectactivewatcher.edge-orchestrator.intel.com" \
                       "runtimeprojects.runtimeproject.edge-orchestrator.intel.com"; do
-            echo "Checking for CRD: $CRD"
-            until kubectl get crd $CRD; do
-              echo "CRD $CRD not found, waiting..."
+              echo "Checking for CRD: $CRD"
+                until kubectl get crd $CRD; do
+                  echo "CRD $CRD not found, waiting..."
+                  sleep 30
+                done
+              echo "CRD $CRD is available."
+            done
+            echo "Checking for KTC pod existence"
+            until kubectl get po -l app=keycloak-tenant-controller-pod -A; do
+              echo "KTC pod not found, waiting..."
               sleep 30
             done
-            echo "CRD $CRD is available."
-            done
-            echo "Checking for KTC status"
+            echo "KTC pod found. Checking for KTC status"
             kubectl wait --for=condition=Ready po -l app=keycloak-tenant-controller-pod -A
             echo "KTC is running. Exiting init container."
       containers:
