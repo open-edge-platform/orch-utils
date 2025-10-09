@@ -18,7 +18,6 @@ metadata:
   namespace: {{ default  .Release.Namespace .Values.global.namespace }}
   annotations:
     "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 spec:
   ttlSecondsAfterFinished: 600
   backoffLimit: 6
@@ -67,8 +66,9 @@ spec:
               sleep 30
             done
             echo "KTC pod found. Checking for KTC status"
-            kubectl wait --for=condition=Ready po -l app=keycloak-tenant-controller-pod -A
-            echo "KTC is running. Exiting init container."
+            while kubectl wait --for=condition=Ready po -l app=keycloak-tenant-controller-pod -A 2>&1 | grep -q "error: timed out waiting for the condition on pods"; do
+              echo "KTC pod not ready, retrying..."
+            done
       containers:
       - name: {{ .Chart.Name }}
         securityContext:
