@@ -6,3 +6,4 @@
 namespace: orch-database
 databases: []
 annotations: []
+host: "postgresql.orch-database"
