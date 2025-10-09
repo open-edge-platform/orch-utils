@@ -125,6 +125,13 @@ func CreateSingleTenant(ctx context.Context, orgName, projectName string) error 
 	}
 	log.Info().Msg("Project created successfully.")
 
+	log.Info().Msgf("Checking Project active watchers for project '%s'...\n", projectName)
+
+	_, err = WaitUntilProjectWatchersReady(ctx, orgName, projectName)
+	if err != nil {
+		return fmt.Errorf("failed to wait for project active watchers to be ready: %w", err)
+	}
+	log.Info().Msg("Project active watchers are ready.")
 	/* log.Info().Msgf("Creating edge infra users in project '%s'...\n", projectName)
 	err = CreateEdgeInfraUsers(ctx, orgName, projectName, projectName)
 	if err != nil {
