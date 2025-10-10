@@ -10,6 +10,9 @@ on:
     paths:
       - 'charts/**'
 
+permissions:
+  contents: write
+
 jobs:
   bump-chart:
     runs-on: ubuntu-latest
