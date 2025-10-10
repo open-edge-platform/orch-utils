@@ -7,7 +7,7 @@ module github.com/open-edge-platform/orch-utils
 go 1.24.6
 
 require (
-	github.com/aws/aws-sdk-go v1.55.6
+	github.com/aws/aws-sdk-go v1.55.8
 	github.com/bitfield/script v0.24.1
 	github.com/golang-jwt/jwt/v5 v5.2.3
 	github.com/hashicorp/vault/api v1.16.0
