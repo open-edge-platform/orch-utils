@@ -72,7 +72,6 @@ jobs:
               echo "Bumping $chart_name version from $current_version to $new_version"
               
               yq eval ".version = \"$new_version\"" -i "$CHART_FILE"
-              yq eval ".appVersion = \"$new_version\"" -i "$CHART_FILE"
               
               updated_charts="$updated_charts $chart_name"
             fi
