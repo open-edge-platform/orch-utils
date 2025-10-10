@@ -9,6 +9,11 @@ on:
     types: [opened, synchronize]
     paths:
       - 'charts/**'
+      - 'keycloak-tenant-controller/**'
+      - 'squid-proxy/**'
+      - 'cert-synchronizer/**'
+      - 'aws-sm-proxy/**'
+      - 'auth-service/**'
 
 permissions:
   contents: write
