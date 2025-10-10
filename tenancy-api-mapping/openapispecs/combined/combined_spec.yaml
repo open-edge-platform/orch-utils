@@ -7192,6 +7192,7 @@ components:
           description: |-
             Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information.
              Applies only to Mutable OSes.
+             Deprecated, will be removed in EMF v3.2.0, use update_packages field instead.
           maxLength: 500000
           pattern: ^$|^[A-Za-z0-9._/:;=@?!#,<>\-*+~()\[\]{} \n]+$
           title: install_packages
@@ -7200,6 +7201,7 @@ components:
           description: |-
             The OS resource's kernel Command Line Options.
              Applies only to Mutable OSes.
+             Deprecated, will be removed in EMF v3.2.0, use update_kernel_command field instead.
           maxLength: 500
           pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()" ]+$
           title: kernel_command
@@ -7227,6 +7229,22 @@ components:
           writeOnly: true
         timestamps:
           $ref: '#/components/schemas/Timestamps'
+        updateKernelCommand:
+          description: |-
+            The OS resource's kernel Command Line Options.
+             Applies only to Mutable OSes.
+          maxLength: 500
+          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()" ]+$
+          title: update_kernel_command
+          type: string
+        updatePackages:
+          description: |-
+            Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information.
+             Applies only to Mutable OSes.
+          maxLength: 500000
+          pattern: ^$|^[A-Za-z0-9._/:;=@?!#,<>\-*+~()\[\]{} \n]+$
+          title: update_packages
+          type: string
         updatePolicy:
           $ref: '#/components/schemas/UpdatePolicy'
         updateSources:
