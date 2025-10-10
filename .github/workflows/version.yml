@@ -170,6 +170,7 @@ jobs:
             
             if [ -f "$CHART_FILE" ]; then
               current_app_version=$(yq eval '.appVersion' "$CHART_FILE")
+              current_chart_version=$(yq eval '.version' "$CHART_FILE")
               
               # Simple patch version bump for appVersion
               IFS='.' read -ra VERSION_PARTS <<< "$current_app_version"
@@ -179,9 +180,19 @@ jobs:
               new_patch=$((patch + 1))
               new_app_version="${major}.${minor}.${new_patch}"
               
+              # Simple patch version bump for chart version
+              IFS='.' read -ra CHART_VERSION_PARTS <<< "$current_chart_version"
+              chart_major=${CHART_VERSION_PARTS[0]}
+              chart_minor=${CHART_VERSION_PARTS[1]}
+              chart_patch=${CHART_VERSION_PARTS[2]}
+              new_chart_patch=$((chart_patch + 1))
+              new_chart_version="${chart_major}.${chart_minor}.${new_chart_patch}"
+              
               echo "Bumping $app_name appVersion from $current_app_version to $new_app_version"
+              echo "Bumping $app_name chart version from $current_chart_version to $new_chart_version"
               
               yq eval ".appVersion = \"$new_app_version\"" -i "$CHART_FILE"
+              yq eval ".version = \"$new_chart_version\"" -i "$CHART_FILE"
               
               updated_apps="$updated_apps $app_name"
             fi
@@ -199,7 +210,7 @@ jobs:
           
           # Create commit message with all updated apps
           if [ -n "$updated_apps" ]; then
-            commit_msg="chore: bump app versions for:$updated_apps"
+            commit_msg="chore: bump app and chart versions for:$updated_apps"
             git commit -m "$commit_msg"
             git push origin ${{ github.head_ref }}
           fi
