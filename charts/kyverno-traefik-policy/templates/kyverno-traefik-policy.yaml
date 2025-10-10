@@ -18,7 +18,7 @@ spec:
         any:
         - resources:
             kinds:
-              - traefik.containo.us/v1alpha1/IngressRoute
+              - IngressRouteList
       validate:
         message: "An IngressRoute must include the 'validate-jwt' middleware."
         pattern:
@@ -48,7 +48,7 @@ spec:
         any:
         - resources:
             kinds:
-              - traefik.containo.us/v1alpha1/IngressRoute
+              - IngressRouteList
       validate:
         message: "An IngressRoute must include a middleware."
         pattern:
