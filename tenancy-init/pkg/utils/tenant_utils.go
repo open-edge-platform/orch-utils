@@ -497,8 +497,12 @@ func createKeycloakUser(ctx context.Context, client *gocloak.GoCloak, token *goc
 
 	userId, err := client.CreateUser(ctx, token.AccessToken, KeycloakRealm, *user)
 	if err != nil {
-		log.Error().Msgf("error creating user %s", tenantUser)
-		return "", "", err
+		// Add logic for already exists error
+		if !strings.Contains(err.Error(), "409") {
+			log.Error().Msgf("error creating user %s", tenantUser)
+			return "", "", err
+		}
+		log.Info().Msgf("User %s already exists..skipping user creation", tenantUser)
 	}
 
 	userPassword, err := generatePassword()
