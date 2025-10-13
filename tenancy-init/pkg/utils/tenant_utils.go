@@ -7,6 +7,7 @@ package utils
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"slices"
 	"strings"
@@ -24,16 +25,21 @@ import (
 	orgsv1 "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/org.edge-orchestrator.intel.com/v1"
 	projectv1 "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/project.edge-orchestrator.intel.com/v1"
 	nexus_client "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/nexus-client"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	ctrl "sigs.k8s.io/controller-runtime"
 )
 
 const (
-	KeycloakRealm = "master"
-	adminUser     = "admin"
-	tenantAdmin   = "tenant-admin"
-	charset       = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+|:<>?="
+	KeycloakRealm  = "master"
+	adminUser      = "admin"
+	tenantAdmin    = "tenant-admin"
+	uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	lowercaseChars = "abcdefghijklmnopqrstuvwxyz"
+	digitChars     = "0123456789"
+	specialChars   = "!@#$%^&*()_+|:<>?="
+	passwordLength = 16
 )
 
 var (
@@ -273,7 +279,7 @@ func GetKeycloakSecret() (string, error) {
 }
 
 func KeycloakLogin(ctx context.Context) (*gocloak.GoCloak, *gocloak.JWT, error) {
-	keycloakURL := "https://keycloak.orch-platform.svc.cluster.local"
+	keycloakURL := "http://platform-keycloak.orch-platform.svc.cluster.local:8080"
 
 	// retrieve admin user and password from keycloak secret
 	adminPass, err := GetKeycloakSecret()
@@ -495,7 +501,7 @@ func createKeycloakUser(ctx context.Context, client *gocloak.GoCloak, token *goc
 		return "", "", err
 	}
 
-	userPassword, err := generateRandomPassword(14)
+	userPassword, err := generatePassword()
 	if err != nil {
 		log.Error().Msgf("error generating password for user %s", tenantUser)
 		return "", "", err
@@ -507,20 +513,128 @@ func createKeycloakUser(ctx context.Context, client *gocloak.GoCloak, token *goc
 		return "", "", err
 	}
 
+	// Create secret with user password
+	err = createUserPasswordSecret(ctx, tenantUser, orgName, userPassword)
+	if err != nil {
+		log.Error().Msgf("error creating password secret for user %s: %v", tenantUser, err)
+		return "", "", err
+	}
+
 	log.Info().Msgf("created user %s\n", tenantUser)
 	return userId, orgId, nil
 }
 
-func generateRandomPassword(length int) (string, error) {
-	password := make([]byte, length)
-	max := big.NewInt(int64(len(charset)))
+// createUserPasswordSecret creates a Kubernetes secret containing the user's password
+func createUserPasswordSecret(ctx context.Context, username, orgName, password string) error {
+	config := ctrl.GetConfigOrDie()
+	clientset, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		return fmt.Errorf("error creating kubernetes client: %w", err)
+	}
 
-	for i := 0; i < length; i++ {
-		idx, err := rand.Int(rand.Reader, max)
+	// Get current namespace where the pod is running
+	namespace, err := getCurrentNamespace()
+	if err != nil {
+		return fmt.Errorf("error getting current namespace: %w", err)
+	}
+
+	secretName := fmt.Sprintf("%s-password", username)
+
+	secret := &corev1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      secretName,
+			Namespace: namespace,
+			Labels: map[string]string{
+				"app":      "tenant-init",
+				"org":      orgName,
+				"username": username,
+			},
+		},
+		Type: corev1.SecretTypeOpaque,
+		Data: map[string][]byte{
+			"admin-password": []byte(password),
+		},
+	}
+
+	_, err = clientset.CoreV1().Secrets(namespace).Create(ctx, secret, metav1.CreateOptions{})
+	if err != nil {
+		return fmt.Errorf("error creating secret %s: %w", secretName, err)
+	}
+
+	log.Info().Msgf("created password secret %s in namespace %s\n", secretName, namespace)
+	return nil
+}
+
+// getCurrentNamespace returns the namespace where the current pod is running
+func getCurrentNamespace() (string, error) {
+	// Try to read namespace from service account token (when running in pod)
+	if data, err := os.ReadFile("/var/run/secrets/kubernetes.io/serviceaccount/namespace"); err == nil {
+		return strings.TrimSpace(string(data)), nil
+	}
+
+	// Fallback to orch-iam namespace if not running in pod
+	return "orch-iam", nil
+}
+
+func secureRandomChar(charset string) (byte, error) {
+	max := big.NewInt(int64(len(charset)))
+	n, err := rand.Int(rand.Reader, max)
+	if err != nil {
+		return 0, err
+	}
+	return charset[n.Int64()], nil
+}
+
+func shuffleBytes(data []byte) error {
+	for i := len(data) - 1; i > 0; i-- {
+		jBig, err := rand.Int(rand.Reader, big.NewInt(int64(i+1)))
+		if err != nil {
+			return err
+		}
+		j := int(jBig.Int64())
+		data[i], data[j] = data[j], data[i]
+	}
+	return nil
+}
+
+func generatePassword() (string, error) {
+	if passwordLength < 4 {
+		return "", fmt.Errorf("password length must be at least 4 to fit character set requirements")
+	}
+
+	password := make([]byte, passwordLength)
+	var err error
+
+	// Guarantee one character from each category
+	password[0], err = secureRandomChar(uppercaseChars)
+	if err != nil {
+		return "", err
+	}
+	password[1], err = secureRandomChar(lowercaseChars)
+	if err != nil {
+		return "", err
+	}
+	password[2], err = secureRandomChar(digitChars)
+	if err != nil {
+		return "", err
+	}
+	password[3], err = secureRandomChar(specialChars)
+	if err != nil {
+		return "", err
+	}
+
+	allChars := uppercaseChars + lowercaseChars + digitChars + specialChars
+	for i := 4; i < passwordLength; i++ {
+		password[i], err = secureRandomChar(allChars)
 		if err != nil {
 			return "", err
 		}
-		password[i] = charset[idx.Int64()]
 	}
+
+	err = shuffleBytes(password)
+	if err != nil {
+		return "", err
+	}
+
 	return string(password), nil
 }
