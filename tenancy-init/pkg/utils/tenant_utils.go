@@ -31,20 +31,19 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 )
 
-const (
-	KeycloakRealm  = "master"
-	adminUser      = "admin"
-	tenantAdmin    = "tenant-admin"
-	uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	lowercaseChars = "abcdefghijklmnopqrstuvwxyz"
-	digitChars     = "0123456789"
-	specialChars   = "!@#$%^&*()_+|:<>?="
-	passwordLength = 16
+var (
+	log         = logging.GetLogger(AppName)
+	keycloakURL = fmt.Sprintf("http://%s.%s.svc.cluster.local:%s", getEnv("KEYCLOAK_SERVICE", defaultKeycloakService),
+		getEnv("KEYCLOAK_NAMESPACE", defaultKeycloakNamespace),
+		getEnv("KEYCLOAK_PORT", defaultKeycloakPort))
 )
 
-var (
-	log = logging.GetLogger("tenant-init-job")
-)
+func getEnv(key, defaultVal string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+	return defaultVal
+}
 
 // CreateSingleTenant creates one Org, one Project and one Project admin user for the Org.
 func CreateSingleTenant(ctx context.Context, orgName, projectName string) error {
@@ -279,8 +278,6 @@ func GetKeycloakSecret() (string, error) {
 }
 
 func KeycloakLogin(ctx context.Context) (*gocloak.GoCloak, *gocloak.JWT, error) {
-	keycloakURL := "http://platform-keycloak.orch-platform.svc.cluster.local:8080"
-
 	// retrieve admin user and password from keycloak secret
 	adminPass, err := GetKeycloakSecret()
 	if err != nil {

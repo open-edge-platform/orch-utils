@@ -11,7 +11,9 @@ SPDX-License-Identifier: Apache-2.0
 
 Tenant Initializer is a cloud-native job on the Edge Orchestrator. It
 provides a bootstrap tenant during startup if the user wishes to avoid manually 
-creating a tenant using scripts or commands. 
+creating a tenant using scripts or commands. The initializer automatically creates
+a tenant-admin user with a secure, randomly generated password that is stored as
+a Kubernetes secret for retrieval.
 
 ## Get Started
 
@@ -23,6 +25,42 @@ k8s cluster using following command.
 ```shell
 helm install -n orch-iam --create-namespace tenancy-init charts/tenancy-init
 ```
+
+## Tenant Admin Password Management
+
+The Tenant Initializer automatically generates a secure password for the `tenant-admin` user
+during the tenant creation process. The password is generated with the following characteristics:
+
+- 16 characters in length
+- Contains at least one uppercase letter, lowercase letter, digit, and special character
+- Uses cryptographically secure random generation
+- Characters are shuffled for additional security
+
+### Password Storage
+
+The generated password is automatically stored as a Kubernetes secret in the same namespace
+where the Tenant Initializer job runs (typically `orch-iam`). The secret is named 
+`tenant-admin-password` and includes labels for easy identification:
+
+- `app: tenant-init`
+- `org: <organization-name>`
+- `username: tenant-admin`
+
+### Retrieving the Password
+
+To retrieve the tenant-admin password after tenant initialization, use the following command:
+
+```shell
+kubectl get secret tenant-admin-password -n orch-iam -o jsonpath='{.data.admin-password}' | base64 -d
+```
+
+You can also view the secret details including labels:
+
+```shell
+kubectl describe secret tenant-admin-password -n orch-iam
+```
+
+**Note**: The password is base64 encoded in the secret and must be decoded for use.
 
 ## Contribute
 

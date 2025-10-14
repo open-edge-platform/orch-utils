@@ -47,3 +47,8 @@ logLevel: info
 tenant:
   orgName: "default"
   projectName: "default"
+keycloak:
+  service:
+    name: "platform-keycloak"
+    port: "8080"
+    namespace: "orch-platform"

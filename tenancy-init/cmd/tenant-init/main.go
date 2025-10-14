@@ -29,11 +29,11 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 )
 
-var log = logging.GetLogger("tenant-init-job")
+var log = logging.GetLogger(tenant.AppName)
 
 func parseFlags(orgName, projectName *string) {
-	flag.StringVar(orgName, "org", "", "The name of the organization.")
-	flag.StringVar(projectName, "project", "", "The name of the project.")
+	flag.StringVar(orgName, "org", "default", "The name of the organization.")
+	flag.StringVar(projectName, "project", "default", "The name of the project.")
 
 	flag.Parse()
 }

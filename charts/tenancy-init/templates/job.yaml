@@ -73,8 +73,7 @@ spec:
       - name: {{ .Chart.Name }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
-        # image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-        image: localhost:5000/tenancy-init:25.2.1
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         args:
           - "--org={{ .Values.tenant.orgName }}"
@@ -82,3 +81,9 @@ spec:
         env:
         - name: LOG_LEVEL
           value: {{ .Values.logLevel }}
+        - name: KEYCLOAK_SERVICE
+          value: {{ .Values.keycloak.service.name }}
+        - name: KEYCLOAK_PORT
+          value: "{{ .Values.keycloak.service.port }}"
+        - name: KEYCLOAK_NAMESPACE
+          value: {{ .Values.keycloak.service.namespace }}
