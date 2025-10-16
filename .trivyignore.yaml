@@ -33,6 +33,7 @@ misconfigurations:
       - "charts/statefulset-wait/templates/job.yaml"
       - "charts/token-fs/templates/deployment.yaml"
       - "charts/vertical-pod-autoscaler/templates/deployment.yaml"
+      - "charts/tenancy-init/templates/serviceAccount.yaml"
     statement: readOnlyRootFilesystem is injected by Kyverno policy in charts/kyverno-extra-policies/templates/restricted-policy-orch.yaml
 
   - id: AVD-KSV-0118
@@ -54,3 +55,11 @@ misconfigurations:
       - "charts/keycloak-tenant-controller/templates/configmap.yaml"
       - "charts/traefik-pre/templates/jwt-plugin-configmap-generated.yaml"
     statement: ConfigMaps contain legitimate scripts and configuration templates, not actual secrets in production
+  - id: AVD-KSV-0041
+    paths:
+      - "charts/tenancy-init/templates/serviceAccount.yaml"
+    statement: Cross-namespace secret access required for tenancy initialization
+  - id: AVD-KSV-0056
+    paths:
+      - "charts/tenancy-init/templates/serviceAccount.yaml"
+    statement: Service access required for pod communication and tenancy initialization operations
