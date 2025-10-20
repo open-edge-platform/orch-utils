@@ -54,6 +54,9 @@ docker-build-squid-proxy:
 docker-build-tenancy-api-mapping:
 	mage build:tenancyAPIMapping
 
+docker-build-tenancy-init:
+	mage build:tenancyInit
+
 docker-build-tenancy-datamodel:
 	mage build:tenancyDatamodel
 

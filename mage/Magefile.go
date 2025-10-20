@@ -166,6 +166,11 @@ func (Build) TenancyAPIMapping() error {
 	return tenancyAPIMappingBuild()
 }
 
+// Builds the Tenancy API Mapping container image.
+func (Build) TenancyInit() error {
+	return tenancyInitBuild()
+}
+
 // Builds the Tenancy Manager container image.
 func (Build) TenancyManager() error {
 	return tenancyManagerBuild()
@@ -246,6 +251,11 @@ func (Push) TenancyDatamodel() error {
 // Push the Tenancy API Mapping container image to the registry.
 func (Push) TenancyAPIMapping() error {
 	return pushImage("tenancy-api-mapping", "tenancy-api-mapping")
+}
+
+// Push the Tenancy API Mapping container image to the registry.
+func (Push) TenancyInit() error {
+	return pushImage("tenancy-init", "tenancy-init")
 }
 
 // Push the Tenancy Manager container image to the registry.
