@@ -322,6 +322,32 @@ func tenancyAPIMappingBuild() error {
 	)
 }
 
+// Builds the Tenancy Init container image.
+func tenancyInitBuild() error {
+	// some errors below are deliberately ignored to suppress “file already/doesn’t” exist errors
+	// Mage uses %v when formatting errors, so they cannot be unwrapped and handled on a case by case
+	projectDir := "tenancy-init"
+
+	appVersion, err := getChartAppVersion(projectDir)
+	if err != nil {
+		return err
+	}
+
+	// run go mod vendor in project directory
+	if err := sh.RunV("sh", "-c", fmt.Sprintf("cd %s && go mod vendor", projectDir)); err != nil {
+		return err
+	}
+
+	return sh.RunV(
+		"docker",
+		"build",
+		"--load",
+		"--tag", OpenEdgePlatformContainerRegistry+"/tenancy-init:"+appVersion,
+		"--file", filepath.Join(projectDir, "Dockerfile"),
+		projectDir,
+	)
+}
+
 // Builds the Tenancy Manager container image.
 func tenancyManagerBuild() error {
 	// some errors below are deliberately ignored to suppress “file already/doesn’t” exist errors
