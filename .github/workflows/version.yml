@@ -15,7 +15,7 @@ on:
       - 'aws-sm-proxy/**'
       - 'auth-service/**'
 
-
+permissions: read-all
 
 jobs:
   bump-app:
