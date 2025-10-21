@@ -15,93 +15,12 @@ on:
       - 'aws-sm-proxy/**'
       - 'auth-service/**'
 
-permissions:
-  contents: write
+
 
 jobs:
-  bump-chart:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.PAT_TOKEN || secrets.GITHUB_TOKEN }}
-          ref: ${{ github.head_ref }}
-          fetch-depth: 0  # Needed to get diff info
-
-      - name: Install yq
-        run: |
-          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
-          sudo chmod +x /usr/local/bin/yq
-
-      - name: Get changed charts
-        id: changed-charts
-        run: |
-          # Get the base branch for comparison
-          git fetch origin ${{ github.base_ref }}
-          
-          # Find all Chart.yaml files that have been modified or are in modified directories
-          changed_files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
-          
-          # Find chart directories that contain changes
-          changed_charts=""
-          for chart_dir in charts/*/; do
-            if [ -d "$chart_dir" ] && [ -f "${chart_dir}Chart.yaml" ]; then
-              chart_name=$(basename "$chart_dir")
-              # Check if any files in this chart directory have been modified
-              if echo "$changed_files" | grep -q "^${chart_dir}"; then
-                changed_charts="$changed_charts $chart_name"
-                echo "Found changes in chart: $chart_name"
-              fi
-            fi
-          done
-          
-          echo "changed_charts=$changed_charts" >> $GITHUB_OUTPUT
-
-      - name: Bump Chart Versions
-        if: steps.changed-charts.outputs.changed_charts != ''
-        run: |
-          changed_charts="${{ steps.changed-charts.outputs.changed_charts }}"
-          updated_charts=""
-          
-          for chart_name in $changed_charts; do
-            CHART_FILE="charts/$chart_name/Chart.yaml"
-            
-            if [ -f "$CHART_FILE" ]; then
-              current_version=$(yq eval '.version' "$CHART_FILE")
-              
-              # Simple patch version bump
-              IFS='.' read -ra VERSION_PARTS <<< "$current_version"
-              major=${VERSION_PARTS[0]}
-              minor=${VERSION_PARTS[1]}
-              patch=${VERSION_PARTS[2]}
-              new_patch=$((patch + 1))
-              new_version="${major}.${minor}.${new_patch}"
-              
-              echo "Bumping $chart_name version from $current_version to $new_version"
-              
-              yq eval ".version = \"$new_version\"" -i "$CHART_FILE"
-              
-              updated_charts="$updated_charts $chart_name"
-            fi
-          done
-          
-          # Check if there are changes to commit
-          if git diff --quiet charts/; then
-            echo "No version changes to commit"
-            exit 0
-          fi
-          
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add charts/
-          
-          # Create commit message with all updated charts
-          if [ -n "$updated_charts" ]; then
-            commit_msg="chore: bump chart versions for:$updated_charts"
-            git commit -m "$commit_msg"
-            git push origin ${{ github.head_ref }}
-          fi
   bump-app:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -211,6 +130,91 @@ jobs:
           # Create commit message with all updated apps
           if [ -n "$updated_apps" ]; then
             commit_msg="chore: bump app and chart versions for:$updated_apps"
+            git commit -m "$commit_msg"
+            git push origin ${{ github.head_ref }}
+          fi
+
+  bump-chart:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT_TOKEN || secrets.GITHUB_TOKEN }}
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0  # Needed to get diff info
+
+      - name: Install yq
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Get changed charts
+        id: changed-charts
+        run: |
+          # Get the base branch for comparison
+          git fetch origin ${{ github.base_ref }}
+          
+          # Find all Chart.yaml files that have been modified or are in modified directories
+          changed_files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+          
+          # Find chart directories that contain changes
+          changed_charts=""
+          for chart_dir in charts/*/; do
+            if [ -d "$chart_dir" ] && [ -f "${chart_dir}Chart.yaml" ]; then
+              chart_name=$(basename "$chart_dir")
+              # Check if any files in this chart directory have been modified
+              if echo "$changed_files" | grep -q "^${chart_dir}"; then
+                changed_charts="$changed_charts $chart_name"
+                echo "Found changes in chart: $chart_name"
+              fi
+            fi
+          done
+          
+          echo "changed_charts=$changed_charts" >> $GITHUB_OUTPUT
+
+      - name: Bump Chart Versions
+        if: steps.changed-charts.outputs.changed_charts != ''
+        run: |
+          changed_charts="${{ steps.changed-charts.outputs.changed_charts }}"
+          updated_charts=""
+          
+          for chart_name in $changed_charts; do
+            CHART_FILE="charts/$chart_name/Chart.yaml"
+            
+            if [ -f "$CHART_FILE" ]; then
+              current_version=$(yq eval '.version' "$CHART_FILE")
+              
+              # Simple patch version bump
+              IFS='.' read -ra VERSION_PARTS <<< "$current_version"
+              major=${VERSION_PARTS[0]}
+              minor=${VERSION_PARTS[1]}
+              patch=${VERSION_PARTS[2]}
+              new_patch=$((patch + 1))
+              new_version="${major}.${minor}.${new_patch}"
+              
+              echo "Bumping $chart_name version from $current_version to $new_version"
+              
+              yq eval ".version = \"$new_version\"" -i "$CHART_FILE"
+              
+              updated_charts="$updated_charts $chart_name"
+            fi
+          done
+          
+          # Check if there are changes to commit
+          if git diff --quiet charts/; then
+            echo "No version changes to commit"
+            exit 0
+          fi
+          
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add charts/
+          
+          # Create commit message with all updated charts
+          if [ -n "$updated_charts" ]; then
+            commit_msg="chore: bump chart versions for:$updated_charts"
             git commit -m "$commit_msg"
             git push origin ${{ github.head_ref }}
           fi
