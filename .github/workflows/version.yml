@@ -80,6 +80,8 @@ jobs:
 
       - name: Bump App Versions
         if: steps.changed-apps.outputs.changed_apps != ''
+        env:
+         BRANCH_NAME: ${{ github.head_ref }}
         run: |
           changed_apps="${{ steps.changed-apps.outputs.changed_apps }}"
           updated_apps=""
@@ -131,7 +133,7 @@ jobs:
           if [ -n "$updated_apps" ]; then
             commit_msg="chore: bump app and chart versions for:$updated_apps"
             git commit -m "$commit_msg"
-            git push origin ${{ github.head_ref }}
+            git push origin $BRANCH_NAME
           fi
 
   bump-chart:
@@ -176,6 +178,8 @@ jobs:
 
       - name: Bump Chart Versions
         if: steps.changed-charts.outputs.changed_charts != ''
+        env:
+         BRANCH_NAME: ${{ github.head_ref }}
         run: |
           changed_charts="${{ steps.changed-charts.outputs.changed_charts }}"
           updated_charts=""
@@ -216,5 +220,5 @@ jobs:
           if [ -n "$updated_charts" ]; then
             commit_msg="chore: bump chart versions for:$updated_charts"
             git commit -m "$commit_msg"
-            git push origin ${{ github.head_ref }}
+            git push origin $BRANCH_NAME
           fi
