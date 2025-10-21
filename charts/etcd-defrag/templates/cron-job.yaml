@@ -1,0 +1,150 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: etcd-defrag-cronjob
+  namespace: {{ .Values.namespace }}
+spec:
+  schedule: {{ .Values.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: etcd-defrag-sa
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+          initContainers:
+          - name: install-etcdctl
+            image: alpine:3.22.1
+            command: ["/bin/sh", "-c"]
+            args:
+            - |
+              {{- if .Values.proxy.enabled }}
+              echo "Configuring proxy settings..."
+              {{- if .Values.proxy.httpProxy }}
+              export http_proxy="{{ .Values.proxy.httpProxy }}"
+              export HTTP_PROXY="{{ .Values.proxy.httpProxy }}"
+              {{- end }}
+              {{- if .Values.proxy.httpsProxy }}
+              export https_proxy="{{ .Values.proxy.httpsProxy }}"
+              export HTTPS_PROXY="{{ .Values.proxy.httpsProxy }}"
+              {{- end }}
+              {{- if .Values.proxy.noProxy }}
+              export no_proxy="{{ .Values.proxy.noProxy }}"
+              export NO_PROXY="{{ .Values.proxy.noProxy }}"
+              {{- end }}
+              echo "Proxy settings configured"
+              {{- end }}
+              apk add wget
+              wget -q -O /tmp/etcd.tar.gz \
+                https://github.com/etcd-io/etcd/releases/download/{{ .Values.etcdVersion }}/etcd-{{ .Values.etcdVersion }}-linux-amd64.tar.gz
+              tar -xzf /tmp/etcd.tar.gz -C /tmp --strip-components=1
+              cp /tmp/etcdctl /shared/etcdctl
+              chmod +x /shared/etcdctl
+            env:
+            {{- if .Values.proxy }}
+            {{- if .Values.proxy.httpProxy }}
+            - name: HTTP_PROXY
+              value: "{{ .Values.proxy.httpProxy }}"
+            - name: http_proxy
+              value: "{{ .Values.proxy.httpProxy }}"
+            {{- end }}
+            {{- if .Values.proxy.httpsProxy }}
+            - name: HTTPS_PROXY
+              value: "{{ .Values.proxy.httpsProxy }}"
+            - name: https_proxy
+              value: "{{ .Values.proxy.httpsProxy }}"
+            {{- end }}
+            {{- if .Values.proxy.noProxy }}
+            - name: NO_PROXY
+              value: "{{ .Values.proxy.noProxy }}"
+            - name: no_proxy
+              value: "{{ .Values.proxy.noProxy }}"
+            {{- end }}
+            {{- end }}
+            volumeMounts:
+            - name: shared-bin
+              mountPath: /shared
+            securityContext:
+              runAsUser: 0
+              seccompProfile:
+                type: RuntimeDefault
+          containers:
+          - name: etcdctl
+            image: alpine:3.22.1
+            command:
+            - /bin/sh
+            - -c
+            - |
+              #!/bin/sh
+              # Set the threshold size in bytes (4GB in this case)
+              # 4GB is chosen based on etcd recommendations to avoid performance degradation and excessive disk usage.
+              threshold=$((4 * 1024 * 1024 * 1024)) 
+
+              current_size=$(ETCDCTL_API=3 etcdctl \
+                --endpoints=https://etcd-client.kube-system.svc.cluster.local:2379 --write-out="json" \
+                --cert="/etc/etcd/certs/server-client.crt" \
+                --key="/etc/etcd/certs/server-client.key" \
+                --cacert="/etc/etcd/certs/server-ca.crt" \
+                --insecure-skip-tls-verify \
+                --command-timeout=30s endpoint status | awk -F'dbSize":' '{split($2,a,","); print a[1]}')
+
+              # Check if the current size exceeds the threshold
+              if [ "$current_size" -gt "$threshold" ]; then
+                echo "Database size ($current_size) is greater than the threshold ($threshold). Running defragmentation..."
+                ETCDCTL_API=3 etcdctl \
+                  --endpoints=https://etcd-client.kube-system.svc.cluster.local:2379 \
+                  --cert="/etc/etcd/certs/server-client.crt" \
+                  --key="/etc/etcd/certs/server-client.key" \
+                  --cacert="/etc/etcd/certs/server-ca.crt" \
+                  --insecure-skip-tls-verify \
+                  defrag --command-timeout=30s
+              else
+                echo "Database size ($current_size) is below the threshold ($threshold). No action needed."
+              fi
+            securityContext:
+              runAsNonRoot: true
+              runAsUser: 1001
+              runAsGroup: 1001
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                - ALL
+              readOnlyRootFilesystem: true
+              seccompProfile:
+                type: RuntimeDefault
+            resources:
+              requests:
+                memory: "64Mi"
+                cpu: "50m"
+              limits:
+                memory: "128Mi"
+                cpu: "100m"
+            volumeMounts:
+            - name: shared-bin
+              mountPath: /usr/local/bin
+            - name: tmp
+              mountPath: /tmp
+            - name: etcd-certs
+              mountPath: /etc/etcd/certs
+              readOnly: true
+            env:
+            - name: PATH
+              value: "/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+          restartPolicy: OnFailure
+          volumes:
+          - name: shared-bin
+            emptyDir: {}
+          - name: tmp
+            emptyDir: {}
+          - name: etcd-certs
+            secret:
+              secretName: etcd-certs

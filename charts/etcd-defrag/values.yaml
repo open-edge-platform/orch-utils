@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
+namespace: kube-system
+
+# cronjob configuration
+schedule: "* * * * *"
+
+# etcd configuration
+etcdVersion: v3.5.19
+hostCertsPath: "/var/lib/rancher/rke2/server/tls/etcd"
+
+# Proxy configuration
+proxy:
+  enabled: true
+  httpProxy: "http://proxy-dmz.intel.com:912"
+  httpsProxy: "http://proxy-dmz.intel.com:912"
+  noProxy: "localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,.svc,.cluster.local"
