@@ -73,7 +73,7 @@ func CreateSingleTenant(ctx context.Context, orgName, projectName string) error 
 	log.Info().Msg("Assigned organization roles to project admin user successfully")
 
 	log.Info().Msgf("Creating project '%s' in organization '%s'...\n", projectName, orgName)
-	err = CreateProjectInOrg(ctx, orgName, projectName)
+	projectId, err := CreateProjectInOrg(ctx, orgName, projectName)
 	if err != nil {
 		return fmt.Errorf("failed to create project in org: %w", err)
 	}
@@ -86,6 +86,12 @@ func CreateSingleTenant(ctx context.Context, orgName, projectName string) error 
 		return fmt.Errorf("failed to wait for project active watchers to be ready: %w", err)
 	}
 	log.Info().Msg("Project active watchers are ready.")
+
+	err = AddProjectAdminUserToEdgeGroups(ctx, client, token, projectId, tenantAdminUserId)
+	if err != nil {
+		return fmt.Errorf("failed to assign project admin roles for org: %w", err)
+	}
+	log.Info().Msgf("Assigned Edge Manager, Onboarding, Operator and Host Manager roles to %s user successfully", tenantAdmin)
 
 	return nil
 }
@@ -224,6 +230,24 @@ func AddProjectAdminUserToOrg(ctx context.Context, client *gocloak.GoCloak, toke
 	return nil
 }
 
+// AddProjectAdminUserToEdgeGroups assigns Edge Manager, Edge Onboarding, Edge Operator and Host Manager Groups to a Project Admin user
+func AddProjectAdminUserToEdgeGroups(ctx context.Context, client *gocloak.GoCloak, token *gocloak.JWT, projectId string, projectAdminUserId string) error {
+	groups := []string{
+		projectId + "_Edge-Manager-Group",
+		projectId + "_Edge-Onboarding-Group",
+		projectId + "_Edge-Operator-Group",
+		projectId + "_Host-Manager-Group",
+	}
+
+	err := addUserToGroups(ctx, client, token, KeycloakRealm, groups, projectAdminUserId)
+	if err != nil {
+		log.Error().Msgf("error adding Edge and Host roles to user with id %s", projectAdminUserId)
+		return err
+	}
+
+	return nil
+}
+
 func addUserToGroups(ctx context.Context, client *gocloak.GoCloak, token *gocloak.JWT, realm string, groupsList []string, userId string) error {
 	for _, groupName := range groupsList {
 		group, err := getGroup(ctx, client, token, realm, groupName)
@@ -295,21 +319,21 @@ func KeycloakLogin(ctx context.Context) (*gocloak.GoCloak, *gocloak.JWT, error) 
 }
 
 // CreateProjectInOrg creates a Project in a given Org
-func CreateProjectInOrg(ctx context.Context, orgName string, projectName string) error {
+func CreateProjectInOrg(ctx context.Context, orgName string, projectName string) (string, error) {
 	config := ctrl.GetConfigOrDie()
 	nexusClient, err := nexus_client.NewForConfig(config)
 	if err != nil {
-		return fmt.Errorf("\nerror creating project (%s). Error: %w", projectName, err)
+		return "", fmt.Errorf("\nerror creating project (%s). Error: %w", projectName, err)
 	}
 	configNode := nexusClient.TenancyMultiTenancy().Config()
 	if configNode == nil {
-		return fmt.Errorf("\nerror creating project (%s). Error: %w", projectName, err)
+		return "", fmt.Errorf("\nerror creating project (%s). Error: %w", projectName, err)
 	}
 
 	org := configNode.Orgs(orgName)
 	if org == nil {
 		log.Info().Msgf("Org (%s) not found. Please create an org first\n", orgName)
-		return nil
+		return "", fmt.Errorf("org not found")
 	}
 
 	log.Info().Msgf("Creating Project (%s)\n", projectName)
@@ -322,7 +346,7 @@ func CreateProjectInOrg(ctx context.Context, orgName string, projectName string)
 	})
 
 	if err != nil && !nexus_client.IsAlreadyExists(err) {
-		return fmt.Errorf("\nerror creating project (%s). Error: %w", projectName, err)
+		return "", fmt.Errorf("\nerror creating project (%s). Error: %w", projectName, err)
 	}
 
 	_, err = folder.AddProjects(ctx, &projectv1.Project{
@@ -334,17 +358,17 @@ func CreateProjectInOrg(ctx context.Context, orgName string, projectName string)
 		},
 	})
 	if err != nil && !nexus_client.IsAlreadyExists(err) {
-		return fmt.Errorf("\nerror creating project (%s). Error: %w", projectName, err)
+		return "", fmt.Errorf("\nerror creating project (%s). Error: %w", projectName, err)
 	}
 
 	// wait until keycloak roles
 	nexusClient.SubscribeAll()
 	projectUUID, err := waitUntilProjectCreation(ctx, nexusClient, orgName, projectName)
 	if err != nil {
-		return fmt.Errorf("wait for project %s to go active failed with error %w", projectName, err)
+		return "", fmt.Errorf("wait for project %s to go active failed with error %w", projectName, err)
 	}
 	log.Info().Msgf("\nProject (%s) has UID: %s\n", projectName, projectUUID)
-	return nil
+	return projectUUID, nil
 }
 
 func waitUntilProjectCreation(ctx context.Context, nexusClient *nexus_client.Clientset, orgName, projectName string) (string, error) {
