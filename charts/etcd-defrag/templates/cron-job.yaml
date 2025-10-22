@@ -17,7 +17,7 @@ spec:
     spec:
       template:
         spec:
-          serviceAccountName: etcd-defrag-sa
+          hostNetwork: true
           securityContext:
             seccompProfile:
               type: RuntimeDefault
@@ -90,22 +90,20 @@ spec:
               threshold=$((4 * 1024 * 1024 * 1024)) 
 
               current_size=$(ETCDCTL_API=3 etcdctl \
-                --endpoints=https://etcd-client.kube-system.svc.cluster.local:2379 --write-out="json" \
+                --endpoints=https://localhost:2379 --write-out="json" \
                 --cert="/etc/etcd/certs/server-client.crt" \
                 --key="/etc/etcd/certs/server-client.key" \
                 --cacert="/etc/etcd/certs/server-ca.crt" \
-                --insecure-skip-tls-verify \
                 --command-timeout=30s endpoint status | awk -F'dbSize":' '{split($2,a,","); print a[1]}')
 
               # Check if the current size exceeds the threshold
               if [ "$current_size" -gt "$threshold" ]; then
                 echo "Database size ($current_size) is greater than the threshold ($threshold). Running defragmentation..."
                 ETCDCTL_API=3 etcdctl \
-                  --endpoints=https://etcd-client.kube-system.svc.cluster.local:2379 \
+                  --endpoints=https://localhost:2379 \
                   --cert="/etc/etcd/certs/server-client.crt" \
                   --key="/etc/etcd/certs/server-client.key" \
                   --cacert="/etc/etcd/certs/server-ca.crt" \
-                  --insecure-skip-tls-verify \
                   defrag --command-timeout=30s
               else
                 echo "Database size ($current_size) is below the threshold ($threshold). No action needed."
