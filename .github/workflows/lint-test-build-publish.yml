@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
-
+---
 name: Lint, Test, Build, and Publish
 
 on:
@@ -50,7 +50,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -84,7 +84,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -107,7 +107,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -129,7 +129,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -152,7 +152,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -174,7 +174,7 @@ jobs:
       BASEDIR: .
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -209,7 +209,7 @@ jobs:
       BASEDIR: .
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -277,7 +277,7 @@ jobs:
       - version-check
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -333,7 +333,7 @@ jobs:
       - lint-yaml
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -399,7 +399,7 @@ jobs:
       - version-check
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
