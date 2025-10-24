@@ -7,4 +7,4 @@ name: tenancy-init
 description: A Helm chart for bootstrapping the 'tenancy-init'
 type: application
 version: 25.2.6
-appVersion: "25.2.0"
+appVersion: "25.2.1"
