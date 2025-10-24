@@ -36,6 +36,22 @@ var (
 	keycloakURL = fmt.Sprintf("http://%s.%s.svc.cluster.local:%s", getEnv("KEYCLOAK_SERVICE", defaultKeycloakService),
 		getEnv("KEYCLOAK_NAMESPACE", defaultKeycloakNamespace),
 		getEnv("KEYCLOAK_PORT", defaultKeycloakPort))
+	adminGroups = func() []string {
+		projectAdminGroups := getEnv("PROJECT_ADMIN_GROUPS", defaultProjectAdminGroups)
+		groups := strings.Split(projectAdminGroups, ",")
+		for i, group := range groups {
+			groups[i] = "_" + strings.TrimSpace(group)
+		}
+		return groups
+	}()
+	edgeGroups = func() []string {
+		projectEdgeGroups := getEnv("PROJECT_EDGE_GROUPS", defaultProjectEdgeGroups)
+		groups := strings.Split(projectEdgeGroups, ",")
+		for i, group := range groups {
+			groups[i] = "_" + strings.TrimSpace(group)
+		}
+		return groups
+	}()
 )
 
 func getEnv(key, defaultVal string) string {
@@ -219,7 +235,10 @@ func getOrgId(ctx context.Context, orgName string) (string, error) {
 
 // AddProjectAdminUserToOrg assigns Org level access to a Project Admin user
 func AddProjectAdminUserToOrg(ctx context.Context, client *gocloak.GoCloak, token *gocloak.JWT, orgId string, projectAdminUserId string) error {
-	groups := []string{orgId + "_Project-Manager-Group"}
+	groups := []string{}
+	for _, group := range adminGroups {
+		groups = append(groups, orgId+group)
+	}
 
 	err := addUserToGroups(ctx, client, token, KeycloakRealm, groups, projectAdminUserId)
 	if err != nil {
@@ -232,11 +251,9 @@ func AddProjectAdminUserToOrg(ctx context.Context, client *gocloak.GoCloak, toke
 
 // AddProjectAdminUserToEdgeGroups assigns Edge Manager, Edge Onboarding, Edge Operator and Host Manager Groups to a Project Admin user
 func AddProjectAdminUserToEdgeGroups(ctx context.Context, client *gocloak.GoCloak, token *gocloak.JWT, projectId string, projectAdminUserId string) error {
-	groups := []string{
-		projectId + "_Edge-Manager-Group",
-		projectId + "_Edge-Onboarding-Group",
-		projectId + "_Edge-Operator-Group",
-		projectId + "_Host-Manager-Group",
+	groups := []string{}
+	for _, group := range edgeGroups {
+		groups = append(groups, projectId+group)
 	}
 
 	err := addUserToGroups(ctx, client, token, KeycloakRealm, groups, projectAdminUserId)
