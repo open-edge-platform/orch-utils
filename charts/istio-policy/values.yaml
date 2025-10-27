@@ -4,3 +4,6 @@
 ---
 
 enableDatabaseNamespace: true
+
+# Enable EnvoyFilter to increase header size limits for Grafana observability workloads
+enableGrafanaHeaderSizeLimits: false
