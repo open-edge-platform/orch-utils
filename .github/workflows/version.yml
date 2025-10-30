@@ -168,8 +168,23 @@ jobs:
               chart_name=$(basename "$chart_dir")
               # Check if any files in this chart directory have been modified
               if echo "$changed_files" | grep -q "^${chart_dir}"; then
-                changed_charts="$changed_charts $chart_name"
-                echo "Found changes in chart: $chart_name"
+                # Check if version was already changed in the PR
+                chart_file="${chart_dir}Chart.yaml"
+                version_already_changed=false
+
+                if echo "$changed_files" | grep -q "^$chart_file$"; then
+                  # Check if version field was actually changed
+                  version_diff=$(git diff origin/${{ github.base_ref }}...HEAD -- "$chart_file" | grep -E "^\+.*version:" || true)
+                  if [ -n "$version_diff" ]; then
+                    version_already_changed=true
+                    echo "Version already bumped for chart: $chart_name"
+                  fi
+                fi
+
+                if [ "$version_already_changed" = false ]; then
+                  changed_charts="$changed_charts $chart_name"
+                  echo "Found changes in chart: $chart_name (version not yet bumped)"
+                fi
               fi
             fi
           done
