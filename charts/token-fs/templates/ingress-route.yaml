@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: IngressRoute
 metadata:
   name: orch-secret-token
