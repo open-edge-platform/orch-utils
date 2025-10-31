@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 ---
-
+{{- $traefikApiGroup := .Values.traefikApiGroup }}
 # ## TODO: add policy for policy exceptions
 # ## https://kyverno.io/policies/other/policy-for-exceptions/policy-for-exceptions/
 apiVersion: kyverno.io/v1
@@ -18,7 +18,7 @@ spec:
         any:
         - resources:
             kinds:
-              - {{ .Values.traefikApiGroup }}/IngressRoute
+              - {{ $traefikApiGroup }}/IngressRoute
       validate:
         message: "An IngressRoute must include the 'validate-jwt' middleware."
         pattern:
@@ -48,7 +48,7 @@ spec:
         any:
         - resources:
             kinds:
-              - {{ .Values.traefikApiGroup }}/IngressRoute
+              - {{ $traefikApiGroup }}/IngressRoute
       validate:
         message: "An IngressRoute must include a middleware."
         pattern:
@@ -79,7 +79,7 @@ spec:
     any:
     - resources:
         kinds:
-          - {{ .Values.traefikApiGroup }}/IngressRoute
+          - {{ $traefikApiGroup }}/IngressRoute
         namespaces:
         - {{ .namespace }}
         names:
@@ -103,7 +103,7 @@ spec:
     any:
     - resources:
         kinds:
-          - {{ .Values.traefikApiGroup }}/IngressRoute
+          - {{ $traefikApiGroup }}/IngressRoute
         namespaces:
         - {{ .namespace }}
         names:
