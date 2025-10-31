@@ -78,3 +78,5 @@ tolerations: []
 affinity: {}
 
 tlsOption: "gateway-tls"
+
+traefikApiGroup: "traefik.containo.us/v1alpha1"

@@ -80,3 +80,5 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+traefikApiGroup: "traefik.containo.us/v1alpha1"

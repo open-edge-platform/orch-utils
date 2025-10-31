@@ -26,7 +26,7 @@ spec:
       interval: 30s
 {{- if .Values.tlsOption }}
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: TLSOption
 metadata:
   name: {{ .Values.tlsOption }}
@@ -40,7 +40,7 @@ spec:
   sniStrict: true
 {{- end }}
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
 metadata:
   name: validate-jwt
@@ -58,7 +58,7 @@ spec:
       JwtCookieKey: jwt
 {{- if .Values.cors.enabled }}
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
 metadata:
   name: cors
@@ -86,7 +86,7 @@ spec:
 {{- end }}
 ---
 
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
 metadata:
   name: svc-kubernetes-default-headers
@@ -96,7 +96,7 @@ spec:
     customRequestHeaders:
       host: kubernetes.default.svc
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
 metadata:
   name: svc-harbor-oci-headers
@@ -109,7 +109,7 @@ spec:
       X-Content-Type-Options: nosniff
       X-Frame-Options: DENY
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: IngressRoute
 metadata:
   name: harbor-oci
@@ -144,7 +144,7 @@ spec:
       namespace: orch-gateway
 {{- end }}
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
 metadata:
   name: api-stripprefix
@@ -154,7 +154,7 @@ spec:
     prefixes:
       - /api
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: IngressRoute
 metadata:
   name: edgenode-observability-grafana
@@ -178,7 +178,7 @@ spec:
       namespace: orch-gateway
 {{- end }}
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: IngressRoute
 metadata:
   name: orch-platform-grafana
@@ -202,7 +202,7 @@ spec:
       namespace: orch-gateway
 {{- end }}
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
 metadata:
   name: svc-observability-mimir-gateway-hostname
@@ -212,7 +212,7 @@ spec:
     customRequestHeaders:
       Host: edgenode-observability-mimir-gateway.orch-infra.svc
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
 metadata:
   name: svc-observability-opentelemetry-hostname
@@ -222,7 +222,7 @@ spec:
     customRequestHeaders:
       Host: edgenode-observability-opentelemetry-collector.orch-infra.svc
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: IngressRoute
 metadata:
   name: orch-platform-vault
@@ -246,7 +246,7 @@ spec:
       namespace: orch-gateway
 {{- end }}
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: IngressRoute
 metadata:
   name: orch-platform-keycloak
@@ -272,7 +272,7 @@ spec:
       namespace: orch-gateway
 {{- end }}
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
 metadata:
   name: svc-ecm-api-orch-cluster
@@ -282,7 +282,7 @@ spec:
     customRequestHeaders:
       Host: ecm-api.orch-cluster.svc
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
 metadata:
   name: ma-gitea
@@ -292,7 +292,7 @@ spec:
     customRequestHeaders:
       Host: gitea-http.orch-app.svc
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: IngressRoute
 metadata:
   name: ma-gitea
@@ -319,7 +319,7 @@ spec:
 {{- end }}
 ---
 
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
 metadata:
   name: secure-headers
@@ -403,7 +403,7 @@ spec:
       X-ruxit-JS-Agent: ""
 ---
 # Middleware for AppOrch App Service Proxy and VNC Proxy
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
 metadata:
   name: secure-headers-app-orch
@@ -488,7 +488,7 @@ spec:
       X-ruxit-JS-Agent: ""
 ---
 # Middleware for Keycloak. Does not include Content-Security-Policy
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
 metadata:
   name: secure-headers-keycloak
@@ -564,7 +564,7 @@ spec:
       X-dtInjectedServlet: ""
       X-ruxit-JS-Agent: ""
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: IngressRoute
 metadata:
   name: orch-platform-logs-node
@@ -592,7 +592,7 @@ spec:
       namespace: orch-gateway
 {{- end }}
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: IngressRoute
 metadata:
   name: orch-platform-metrics-node
@@ -620,7 +620,7 @@ spec:
       namespace: orch-gateway
 {{- end }}
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: ServersTransport
 metadata:
   name: fleet-transport
@@ -629,7 +629,7 @@ spec:
   serverName: kubernetes.default.svc.cluster.local
   insecureSkipVerify: true
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: IngressRoute
 metadata:
   name: svc-fleet-https
@@ -655,7 +655,7 @@ spec:
       namespace: orch-gateway
     {{- end }}
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
 metadata:
   name: rate-limit
@@ -669,7 +669,7 @@ spec:
         depth: {{ required "A valid rateLimit.ipStrategyDepth entry required!" .Values.rateLimit.ipStrategyDepth }}
         excludedIPs: {{ required "A valid rateLimit.excludedIps entry required!" .Values.rateLimit.excludedIps }}
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: MiddlewareTCP
 metadata:
   name: tcp-rate-limit
@@ -678,7 +678,7 @@ spec:
   inFlightConn:
     amount: {{ required "A valid tcpLimit.connectionLimit entry required!" .Values.tcpLimit.connectionLimit }} 
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
 metadata:
   name: limit-request-size
@@ -687,7 +687,7 @@ spec:
     maxRequestBodyBytes: {{ required "A valid RequestBodyBytesLimit entry required!" .Values.RequestBodyBytesLimit }}
 ---
 # Forward authentication to /verifyall
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
 metadata:
   name: forward-auth-service

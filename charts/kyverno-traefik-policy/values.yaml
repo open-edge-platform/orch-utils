@@ -14,3 +14,5 @@ anyMiddlewareException:
   - namespace: sample-ns3
     names:
       - sample-ingress-route-5
+
+traefikApiGroup: "traefik.containo.us/v1alpha1"
