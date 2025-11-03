@@ -263,7 +263,7 @@ func datamodelCompilerBuild() error {
 func tenancyDatamodelBuild() error {
 	projectDir := "tenancy-datamodel"
 	nexusFile := "nexus.yaml"
-	baseImage := "bitnamilegacy/kubectl:latest"
+	baseImage := "alpine/kubectl:1.34.1"
 
 	nexusConf := struct {
 		GroupName string `yaml:"groupName"`
@@ -317,6 +317,32 @@ func tenancyAPIMappingBuild() error {
 		"build",
 		"--load",
 		"--tag", OpenEdgePlatformContainerRegistry+"/tenancy-api-mapping:"+appVersion,
+		"--file", filepath.Join(projectDir, "Dockerfile"),
+		projectDir,
+	)
+}
+
+// Builds the Tenancy Init container image.
+func tenancyInitBuild() error {
+	// some errors below are deliberately ignored to suppress “file already/doesn’t” exist errors
+	// Mage uses %v when formatting errors, so they cannot be unwrapped and handled on a case by case
+	projectDir := "tenancy-init"
+
+	appVersion, err := getChartAppVersion(projectDir)
+	if err != nil {
+		return err
+	}
+
+	// run go mod vendor in project directory
+	if err := sh.RunV("sh", "-c", fmt.Sprintf("cd %s && go mod vendor", projectDir)); err != nil {
+		return err
+	}
+
+	return sh.RunV(
+		"docker",
+		"build",
+		"--load",
+		"--tag", OpenEdgePlatformContainerRegistry+"/tenancy-init:"+appVersion,
 		"--file", filepath.Join(projectDir, "Dockerfile"),
 		projectDir,
 	)

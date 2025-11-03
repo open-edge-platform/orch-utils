@@ -709,6 +709,13 @@ components:
           maxItems: 100
           type: array
       type: object
+    AmtSku:
+      enum:
+        - AMT_SKU_UNSPECIFIED
+        - AMT_SKU_AMT
+        - AMT_SKU_ISM
+      title: AmtSku
+      type: string
     AmtState:
       description: The state of the AMT (Active Management Technology) component.
       enum:
@@ -4617,6 +4624,10 @@ components:
           pattern: ^([A-Za-z0-9]{5,20})?$
           title: serial_number
           type: string
+        userLvmSize:
+          description: LVM size in GB
+          title: user_lvm_size
+          type: integer
         uuid:
           description: The host UUID.
           maxLength: 36
@@ -4630,11 +4641,7 @@ components:
       description: A Host resource.
       properties:
         amtSku:
-          description: coming from device introspection
-          maxLength: 96
-          readOnly: true
-          title: amt_sku
-          type: string
+          $ref: '#/components/schemas/AmtSku'
         amtStatus:
           description: coming from device introspection. Set only by the DM RM.
           maxLength: 1024
@@ -4879,6 +4886,11 @@ components:
           writeOnly: true
         timestamps:
           $ref: '#/components/schemas/Timestamps'
+        userLvmSize:
+          description: LVM size in GB.
+          readOnly: true
+          title: user_lvm_size
+          type: integer
         uuid:
           description: (OPTIONAL) The host UUID identifier; UUID is unique and immutable.
           maxLength: 36
@@ -7180,14 +7192,16 @@ components:
           description: |-
             Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information.
              Applies only to Mutable OSes.
+             Deprecated, will be removed in EMF v3.2.0, use update_packages field instead.
           maxLength: 500000
-          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\ \n{}[]]+$
+          pattern: ^$|^[A-Za-z0-9._/:;=@?!#,<>\-*+~()\[\]{} \n]+$
           title: install_packages
           type: string
         kernelCommand:
           description: |-
             The OS resource's kernel Command Line Options.
              Applies only to Mutable OSes.
+             Deprecated, will be removed in EMF v3.2.0, use update_kernel_command field instead.
           maxLength: 500
           pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()" ]+$
           title: kernel_command
@@ -7215,6 +7229,22 @@ components:
           writeOnly: true
         timestamps:
           $ref: '#/components/schemas/Timestamps'
+        updateKernelCommand:
+          description: |-
+            The OS resource's kernel Command Line Options.
+             Applies only to Mutable OSes.
+          maxLength: 500
+          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()" ]+$
+          title: update_kernel_command
+          type: string
+        updatePackages:
+          description: |-
+            Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information.
+             Applies only to Mutable OSes.
+          maxLength: 500000
+          pattern: ^$|^[A-Za-z0-9._/:;=@?!#,<>\-*+~()\[\]{} \n]+$
+          title: update_packages
+          type: string
         updatePolicy:
           $ref: '#/components/schemas/UpdatePolicy'
         updateSources:
@@ -7246,7 +7276,10 @@ components:
           title: description
           type: string
         endTime:
-          $ref: '#/components/schemas/google.protobuf.Timestamp'
+          description: UTC timestamp of OS Update ended.
+          readOnly: true
+          title: end_time
+          type: integer
         instance:
           $ref: '#/components/schemas/InstanceResource'
         name:
@@ -7263,7 +7296,10 @@ components:
           title: resource_id
           type: string
         startTime:
-          $ref: '#/components/schemas/google.protobuf.Timestamp'
+          description: UTC timestamp of OS Update started.
+          readOnly: true
+          title: start_time
+          type: integer
         status:
           description: Short message that describes what happened during the OS Update.
           maxLength: 1024
@@ -7279,7 +7315,10 @@ components:
         statusIndicator:
           $ref: '#/components/schemas/StatusIndication'
         statusTimestamp:
-          $ref: '#/components/schemas/google.protobuf.Timestamp'
+          description: UTC timestamp of OS Update status reported.
+          readOnly: true
+          title: status_timestamp
+          type: integer
         timestamps:
           $ref: '#/components/schemas/Timestamps'
       title: OSUpdateRun
@@ -7357,7 +7396,6 @@ components:
           description: List of installed packages, encoded as a JSON list.
           maxLength: 500000
           pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()" \\\n]+$
-          readOnly: true
           title: installed_packages
           type: string
         installedPackagesUrl:
@@ -10503,7 +10541,7 @@ components:
 info:
   description: Tenancy aware APIs for the Open Edge Platform services
   title: Multi tenancy APIs
-  version: 1.8.2
+  version: 1.8.4
 openapi: 3.0.3
 paths:
   /v1/orgs:

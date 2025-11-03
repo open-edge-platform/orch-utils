@@ -1,0 +1,10 @@
+---
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+apiVersion: v2
+name: tenancy-init
+description: A Helm chart for bootstrapping the 'tenancy-init'
+type: application
+version: 25.2.7
+appVersion: "25.2.1"

@@ -18,8 +18,18 @@ spec:
     spec:
       containers:
         - name: adm-secret
-          image: "bitnamilegacy/kubectl:1.28.4"
-          command: ["/bin/bash", "/tmp/bin/run.sh"]
+          image: alpine/kubectl:1.34.1
+          command: ["/bin/sh", "/tmp/bin/run.sh"]
+          securityContext:
+            runAsUser: 1001
+            runAsGroup: 1001
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            seccompProfile:
+              type: RuntimeDefault
           volumeMounts:
             - name: script
               mountPath: /tmp/bin

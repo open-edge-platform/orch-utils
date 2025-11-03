@@ -1,0 +1,22 @@
+// SPDX-FileCopyrightText: 2025 Intel Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
+package utils
+
+const (
+	AppName                   = "tenant-init-job"
+	KeycloakRealm             = "master"
+	adminUser                 = "admin"
+	tenantAdmin               = "tenant-admin"
+	uppercaseChars            = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	lowercaseChars            = "abcdefghijklmnopqrstuvwxyz"
+	digitChars                = "0123456789"
+	specialChars              = "!@#$%^&*()_+|:<>?="
+	passwordLength            = 16
+	defaultKeycloakService    = "platform-keycloak"
+	defaultKeycloakPort       = "8080"
+	defaultKeycloakNamespace  = "orch-platform"
+	defaultProjectAdminGroups = "Project-Manager-Group"
+	defaultProjectEdgeGroups  = "Edge-Manager-Group,Edge-Onboarding-Group,Edge-Operator-Group,Host-Manager-Group"
+)

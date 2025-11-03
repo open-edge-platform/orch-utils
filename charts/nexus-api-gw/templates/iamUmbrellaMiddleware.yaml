@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 {{- if .Values.traefikReverseProxy.middlewares.enabled }}
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
 metadata:
   name: iam-nexus-api-gw-http
@@ -13,7 +13,7 @@ spec:
     customRequestHeaders:
       Host: svc-iam-nexus-api-gw.{{ .Release.Namespace }}.svc
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
 metadata:
   name: iam-umbrella-api-docs-custom-headers
@@ -29,7 +29,7 @@ spec:
         https://metadata.kind.internal https://alerting-monitor.kind.internal
         https://orchestrator-license.kind.internal; upgrade-insecure-requests; block-all-mixed-content'
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
 metadata:
   name: iam-umbrella-api-docs-mw-ext-secure-headers

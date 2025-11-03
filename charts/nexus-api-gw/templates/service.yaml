@@ -49,7 +49,7 @@ spec:
 {{- end }}
 ---
 {{- if .Values.traefikReverseProxy.enabled }}
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: IngressRoute
 metadata:
   name: {{ include "iam.fullname" . }}-http
@@ -93,7 +93,7 @@ spec:
 {{- end }}
 ---
 {{- if .Values.traefikReverseProxy.enabled }}
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefikApiGroup }}
 kind: IngressRoute
 metadata:
   name: iam-umbrella-nexus-api-gw-api-docs
