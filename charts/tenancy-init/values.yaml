@@ -56,4 +56,4 @@ keycloak:
     admin:
       groups: "Project-Manager-Group"
     edge:
-      groups: "Edge-Manager-Group,Edge-Onboarding-Group,Edge-Operator-Group,Host-Manager-Group"
+      groups: "Edge-Manager-Group,Edge-Onboarding-Group,Edge-Operator-Group,Host-Manager-Group,Edge-Node-M2M-Service-Account"
