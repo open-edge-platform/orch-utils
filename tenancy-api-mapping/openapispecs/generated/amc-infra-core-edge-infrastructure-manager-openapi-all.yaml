@@ -6324,8 +6324,6 @@ components:
         InstanceResource describes an instantiated OS install, running on either a
          host or hypervisor.
       properties:
-        currentOs:
-          $ref: '#/components/schemas/OperatingSystemResource'
         currentState:
           $ref: '#/components/schemas/InstanceState'
         customConfig:
@@ -6349,14 +6347,12 @@ components:
           title: custom_configID
           type: array
           writeOnly: true
-        desiredOs:
-          $ref: '#/components/schemas/OperatingSystemResource'
         desiredState:
           $ref: '#/components/schemas/InstanceState'
         existingCves:
           description: The CVEs that are currently present on the Instance, encoded as a JSON list.
-          maxLength: 20000
-          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\\ \\n\{\}\[\]]+$
+          maxLength: 500000
+          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\\À-ÿ \\n\{\}\[\]]+$
           readOnly: true
           title: existing_cves
           type: string
@@ -6486,12 +6482,6 @@ components:
           maxLength: 1024
           readOnly: true
           title: update_status
-          type: string
-        updateStatusDetail:
-          description: Deprecated, will be removed in EMF v3.2.0, use OSUpdateRun instead. JSON field storing details of Instance update status. Set by RMs only. Beta, subject to change.
-          maxLength: 100000
-          readOnly: true
-          title: update_status_detail
           type: string
         updateStatusIndicator:
           $ref: '#/components/schemas/StatusIndication'
@@ -7957,24 +7947,6 @@ components:
           pattern: ^$|^[a-zA-Z-_0-9./:;=?@!#,<>*() ]+$
           title: description
           type: string
-        installPackages:
-          description: |-
-            Freeform text, OS-dependent. A list of package names, one per line (newline separated). Must not contain version information.
-             Applies only to Mutable OSes.
-             Deprecated, will be removed in EMF v3.2.0, use update_packages field instead.
-          maxLength: 500000
-          pattern: ^$|^[A-Za-z0-9._/:;=@?!#,<>\-*+~()\[\]{} \n]+$
-          title: install_packages
-          type: string
-        kernelCommand:
-          description: |-
-            The OS resource's kernel Command Line Options.
-             Applies only to Mutable OSes.
-             Deprecated, will be removed in EMF v3.2.0, use update_kernel_command field instead.
-          maxLength: 500
-          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()" ]+$
-          title: kernel_command
-          type: string
         name:
           description: User-provided, human-readable name.
           maxLength: 50
@@ -8125,8 +8097,8 @@ components:
           type: string
         existingCves:
           description: The CVEs that are currently present on the Operating System, encoded as a JSON list.
-          maxLength: 20000
-          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\\ \\n\{\}\[\]]+$
+          maxLength: 500000
+          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\\À-ÿ \\n\{\}\[\]]+$
           readOnly: true
           title: existing_cves
           type: string
@@ -8138,8 +8110,8 @@ components:
           type: string
         fixedCves:
           description: The CVEs that have been fixed by this OS Resource version, encoded as a JSON list.
-          maxLength: 20000
-          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+~()"\\ \\n\{\}\[\]]+$
+          maxLength: 500000
+          pattern: ^$|^[\p{L}\p{N}\p{P}\p{S}\p{Z}\n\{\}\[\]]+$
           readOnly: true
           title: fixed_cves
           type: string
@@ -8165,6 +8137,7 @@ components:
           description: List of installed packages, encoded as a JSON list.
           maxLength: 500000
           pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()" \\\n]+$
+          readOnly: true
           title: installed_packages
           type: string
         installedPackagesUrl:
@@ -8174,12 +8147,6 @@ components:
           format: uri-ref
           maxLength: 200
           title: installed_packages_url
-          type: string
-        kernelCommand:
-          description: Deprecated, will be removed in EMF v3.2.0, this has been moved to new resource OSUpdatePolicy. The OS resource's kernel Command Line Options.
-          maxLength: 500
-          pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*()" ]+$
-          title: kernel_command
           type: string
         metadata:
           description: Opaque JSON field storing metadata associated to this OS resource. Expected to be a JSON object with string keys and values, or an empty string.
@@ -8244,18 +8211,12 @@ components:
           type: string
         timestamps:
           $ref: '#/components/schemas/Timestamps'
-        updateSources:
-          description: |-
-            Deprecated, will be removed in EMF v3.2.0, this has been moved to new resource OSUpdatePolicy. The list of OS resource update sources.
-             Should be in 'DEB822 Source Format' for Debian style OSs
-          items:
-            maxItems: 100
-            maxLength: 10000
-            pattern: ^$|^[a-zA-Z-_0-9./:;=@?!#,<>*+()"\ \\\n]+$
-            type: string
-          maxItems: 100
-          title: update_sources
-          type: array
+        tlsCaCert:
+          description: user-provided, TLS CA Certificate
+          maxLength: 10000
+          pattern: ^$|^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$
+          title: tls_ca_cert
+          type: string
       required:
         - sha256
       title: OperatingSystemResource
@@ -8464,6 +8425,7 @@ components:
         - POWER_STATE_HIBERNATE
         - POWER_STATE_RESET
         - POWER_STATE_POWER_CYCLE
+        - POWER_STATE_RESET_REPEAT
       title: PowerState
       type: string
     ProviderKind:
