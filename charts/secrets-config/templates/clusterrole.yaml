@@ -6,17 +6,8 @@ metadata:
     {{- include "secrets-config.labels" . | nindent 4 }}
 rules:
 - apiGroups:
-  - apps
+  - "*"
   resources:
-  - statefulsets
+  - "*"
   verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - ""
-  resources:
-  - pods
-  verbs:
-  - get
-  - list
+  - "*"
