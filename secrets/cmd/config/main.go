@@ -49,6 +49,8 @@ func initializeConfigFromFlag(config *secrets.Config) {
 	flag.StringVar(&config.AuthOIDCIdPAddr, "authOIDCIdPAddr", "http://platform-keycloak", "OIDC identity provider base address")                                //nolint: lll
 	flag.StringVar(&config.AuthOIDCIdPDiscoveryURL, "authOIDCIdPDiscoveryURL", "http://platform-keycloak/realms/master", "OIDC identity provider discovery URL") //nolint: lll
 	flag.StringVar(&config.AuthOIDCRoleMaxTTL, "authOIDCRoleMaxTTL", "1h", "OIDC JWT token max TTL")
+	flag.StringVar(&config.AuthOIDCBoundIssuer, "authOIDCBoundIssuer", "", "Optional issuer to validate in JWT tokens")                                         //nolint: lll
+	flag.StringVar(&config.AuthOIDCIssuerURL, "authOIDCIssuerURL", "", "External issuer URL for token validation (use when discovery URL differs from issuer)") //nolint: lll
 	flag.Parse()
 }
 

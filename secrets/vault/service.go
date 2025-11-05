@@ -279,14 +279,26 @@ func (svc *ProviderService) CreateOIDCAuth() error {
 		return fmt.Errorf("writing secretsRoot role: %w", err)
 	}
 
+	// Build JWT config with optional parameters
+	jwtConfig := map[string]interface{}{
+		"oidc_discovery_url": svc.config.AuthOIDCIdPDiscoveryURL,
+		"oidc_client_id":     "", // Empty instructs Vault to perform JWT authentication flow only
+		"oidc_client_secret": "", // Empty instructs Vault to perform JWT authentication flow only
+		"default_role":       "secretsRoot",
+	}
+
+	// Add optional parameters if configured
+	if svc.config.AuthOIDCBoundIssuer != "" {
+		jwtConfig["bound_issuer"] = svc.config.AuthOIDCBoundIssuer
+	}
+	// Use external issuer URL if specified (for cases where discovery URL differs from token issuer)
+	if svc.config.AuthOIDCIssuerURL != "" {
+		jwtConfig["oidc_discovery_url"] = svc.config.AuthOIDCIssuerURL
+	}
+
 	if _, err := svc.client.Logical().Write(
 		"auth/jwt/config",
-		map[string]interface{}{
-			"oidc_discovery_url": svc.config.AuthOIDCIdPDiscoveryURL,
-			"oidc_client_id":     "", // Empty instructs Vault to perform JWT authentication flow only
-			"oidc_client_secret": "", // Empty instructs Vault to perform JWT authentication flow only
-			"default_role":       "secretsRoot",
-		},
+		jwtConfig,
 	); err != nil {
 		return fmt.Errorf("write JWT config: %w", err)
 	}

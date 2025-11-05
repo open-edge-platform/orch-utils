@@ -13,4 +13,6 @@ type Config struct {
 	AuthOIDCIdPAddr         string
 	AuthOIDCIdPDiscoveryURL string
 	AuthOIDCRoleMaxTTL      string
+	AuthOIDCBoundIssuer     string
+	AuthOIDCIssuerURL       string
 }

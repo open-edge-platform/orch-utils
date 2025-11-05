@@ -258,10 +258,10 @@ spec:
       - match: {{ required "A valid keycloakMatchHost entry required!" .Values.keycloakMatchHost }}
         kind: Rule
         services:
-          - name: platform-keycloak-headless
+          - name: {{ required "A valid keycloakServiceName required!" .Values.keycloakServiceName }}
             port: {{ required "A valid keycloakServicePort entry required!" .Values.keycloakServicePort }}
             scheme: http
-            namespace: orch-platform
+            namespace: {{ required "A valid keycloakServiceNamespace required!" .Values.keycloakServiceNamespace }}
         middlewares:
           - name: secure-headers-keycloak
   tls:
