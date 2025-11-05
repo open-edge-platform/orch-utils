@@ -43,6 +43,13 @@ spec:
             - -authOIDCIdPAddr={{ .Values.auth.oidc.idPAddr }}
             - -authOIDCIdPDiscoveryURL={{ .Values.auth.oidc.idPDiscoveryURL }}
             - -authOIDCRoleMaxTTL={{ .Values.auth.oidc.roleMaxTTL }}
+            {{- if and .Values.auth.oidc.boundIssuer (ne .Values.auth.oidc.boundIssuer "") }}
+            - -authOIDCBoundIssuer={{ .Values.auth.oidc.boundIssuer }}
+            {{- end }}
+            
+            {{- if and .Values.auth.oidc.issuerURL (ne .Values.auth.oidc.issuerURL "") }}
+            - -authOIDCIssuerURL={{ .Values.auth.oidc.issuerURL }}
+            {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
