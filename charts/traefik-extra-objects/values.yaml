@@ -7,6 +7,8 @@ orchSecretName: tls-orch
 keycloakJwksUrl: http://platform-keycloak.orch-platform.svc
 keycloakJwksPath: /realms/master/protocol/openid-connect/certs
 keycloakServicePort: 80
+keycloakServiceName: platform-keycloak
+keycloakServiceNamespace: keycloak-system
 fleetMatchHost: "fleet.domain"
 harborOciMatchHost: "registry-oci.domain"
 observabilityMatchHost: "observability-ui.domain"
