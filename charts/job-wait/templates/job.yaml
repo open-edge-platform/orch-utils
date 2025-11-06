@@ -23,6 +23,9 @@ spec:
         - |
          {{ include "job-wait-contents" . | nindent 10 }}
         securityContext:
+          runAsUser: 1001
+          runAsGroup: 1001
+          runAsNonRoot: true
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
           capabilities:
