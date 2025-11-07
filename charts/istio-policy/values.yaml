@@ -4,11 +4,3 @@
 ---
 
 enableDatabaseNamespace: true
-
-# Enable EnvoyFilter to increase header size limits for Grafana observability workloads
-enableGrafanaHeaderSizeLimits: false
-
-# Grafana header size limits configuration
-grafanaHeaderSizeLimits:
-  # Maximum request headers size in KB
-  maxRequestHeadersKb: 128
