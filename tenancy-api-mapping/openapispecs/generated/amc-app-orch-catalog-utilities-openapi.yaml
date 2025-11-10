@@ -24,11 +24,15 @@ paths:
           in: query
           name: registry
           schema:
+            maxLength: 100
+            pattern: ^[a-zA-Z0-9][a-zA-Z0-9\-\.]*[a-zA-Z0-9]$
             type: string
         - description: Optional name of the chart whose version list is desired.
           in: query
           name: chart
           schema:
+            maxLength: 100
+            pattern: ^[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9]$
             type: string
         - description: unique projectName for the resource
           in: path
@@ -59,12 +63,16 @@ paths:
           name: deploymentPackageName
           required: true
           schema:
+            maxLength: 100
+            pattern: ^[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9]$
             type: string
         - description: Version of the DeploymentPackage.
           in: path
           name: version
           required: true
           schema:
+            maxLength: 50
+            pattern: ^[a-zA-Z0-9][a-zA-Z0-9\-\.]*[a-zA-Z0-9]$
             type: string
         - description: unique projectName for the resource
           in: path
@@ -103,7 +111,7 @@ paths:
                   items:
                     format: binary
                     type: string
-                  maxItems: 100
+                  maxItems: 50
                   type: array
               type: object
       responses:
@@ -115,12 +123,16 @@ paths:
                   properties:
                     errorMessages:
                       items:
+                        maxLength: 500
                         type: string
                       maxItems: 100
                       type: array
                     sessionID:
+                      maxLength: 100
                       type: string
                     uploadNumber:
+                      maximum: 1000
+                      minimum: 0
                       type: integer
                   type: object
                 maxItems: 100

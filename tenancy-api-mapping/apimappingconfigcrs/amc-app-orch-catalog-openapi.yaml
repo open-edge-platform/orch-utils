@@ -12,7 +12,7 @@ spec:
   specGenEnabled: true
   repoConf:
     url: "https://github.com/open-edge-platform/app-orch-catalog.git"
-    tag: "v0.14.7"
+    tag: "v0.15.3"
     specFilePath: "api/spec/openapi.yaml"
   mappings:
     - externalURI: /v3/projects/{projectName}/catalog/applications
@@ -44,7 +44,7 @@ spec:
     - externalURI: /v3/projects/{projectName}/catalog/uploads
       serviceURI: catalog.orchestrator.apis/v3/uploads
     - externalURI: /v3/projects/{projectName}/catalog/import
-      serviceURI: catalog.orchestrator.apis/v3/import      
+      serviceURI: catalog.orchestrator.apis/v3/import
   backend:
     service: "app-orch-catalog-rest-proxy.orch-app.svc.cluster.local"
     port: 8081
