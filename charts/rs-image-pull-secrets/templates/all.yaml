@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 ---
-
+{{- $externalSecretsApiGroup := .Values.externalSecretsApiGroup }}
 {{- range .Values.namespaces }}
 ---
 apiVersion: v1
@@ -45,7 +45,7 @@ roleRef:
   name: {{ $.Release.Name }}-for-{{ . }}
   apiGroup: rbac.authorization.k8s.io
 ---
-apiVersion: {{ .Values.externalSecretsApiGroup }}
+apiVersion: {{ $externalSecretsApiGroup }}
 kind: SecretStore
 metadata:
   name: {{ $.Release.Name }}
@@ -65,7 +65,7 @@ spec:
         serviceAccount:
           name: {{ $.Release.Name }}-for-{{ . }}
 ---
-apiVersion: {{ .Values.externalSecretsApiGroup }}
+apiVersion: {{ $externalSecretsApiGroup }}
 kind: ExternalSecret
 metadata:
   name: {{ $.Release.Name }}
