@@ -120,3 +120,5 @@ probes:
   periodSeconds: 15
   successThreshold: 1
   timeoutSeconds: 10
+
+externalSecretsApiGroup: external-secrets.io/v1beta1
