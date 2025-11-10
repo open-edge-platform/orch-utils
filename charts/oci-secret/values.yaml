@@ -5,3 +5,5 @@
 
 remoteNamespace: orch-secret
 ociUrl: "default-oci-url"
+
+externalSecretsApiGroup: external-secrets.io/v1beta1
