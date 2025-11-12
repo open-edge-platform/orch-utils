@@ -10,7 +10,7 @@
 * @johnoloughlin @garyloug @palade @SushilLakra @eoghanlawless @hyunsun @soniabha-intc @sunil-parida @cjnolan @rranjan3
 
 # CI files
-.github/ @adimoft @daveroge @shanedonohue @manilk1x
+.github/ @adimoft @daveroge @shanedonohue @manilk1x @johnoloughlin @garyloug @palade @SushilLakra @eoghanlawless @hyunsun @soniabha-intc @sunil-parida @cjnolan @rranjan3
 
 # Dependabot is used to manage dependencies in this repository. It is configured to automatically open pull requests to
 # update dependencies when new versions are available. The following files are managed by Dependabot and do not require
