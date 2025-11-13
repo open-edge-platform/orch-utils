@@ -33,14 +33,14 @@ tags:
           used by multiple deployment packages.
 
        The API provides Create, Get, List, Update, Delete, and Watch operations for each of the above resources.
-    name: catalog.v3.CatalogService
+    name: CatalogService
 security:
   - BearerAuth: []
 paths:
   /v3/projects/{projectName}/catalog/applications:
     get:
       description: Gets a list of applications.
-      operationId: catalog.v3.CatalogService.ListApplications
+      operationId: CatalogService_ListApplications
       parameters:
         - description: Names the field to be used for ordering the returned results.
           in: query
@@ -95,18 +95,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/catalog.v3.ListApplicationsResponse'
           description: Success
-        default:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/connect.error'
-          description: Error
       summary: ListApplications
       tags:
-        - catalog.v3.CatalogService
+        - CatalogService
     post:
       description: Creates a new application.
-      operationId: catalog.v3.CatalogService.CreateApplication
+      operationId: CatalogService_CreateApplication
       parameters:
         - description: unique projectName for the resource
           in: path
@@ -127,19 +121,194 @@ paths:
               schema:
                 $ref: '#/components/schemas/catalog.v3.CreateApplicationResponse'
           description: Success
-        default:
+      summary: CreateApplication
+      tags:
+        - CatalogService
+  /v3/projects/{projectName}/catalog/applications/{application_name}/versions:
+    get:
+      description: Gets all versions of a named application.
+      operationId: CatalogService_GetApplicationVersions
+      parameters:
+        - description: Name of the application.
+          in: path
+          name: application_name
+          required: true
+          schema:
+            description: Name of the application.
+            title: application_name
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/connect.error'
-          description: Error
-      summary: CreateApplication
+                $ref: '#/components/schemas/catalog.v3.GetApplicationVersionsResponse'
+          description: Success
+      summary: GetApplicationVersions
       tags:
-        - catalog.v3.CatalogService
+        - CatalogService
+  /v3/projects/{projectName}/catalog/applications/{application_name}/versions/{version}:
+    delete:
+      description: Deletes an application.
+      operationId: CatalogService_DeleteApplication
+      parameters:
+        - description: Name of the application.
+          in: path
+          name: application_name
+          required: true
+          schema:
+            description: Name of the application.
+            title: application_name
+            type: string
+        - description: Version of the application.
+          in: path
+          name: version
+          required: true
+          schema:
+            description: Version of the application.
+            title: version
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.protobuf.Empty'
+          description: Success
+      summary: DeleteApplication
+      tags:
+        - CatalogService
+    get:
+      description: Gets a specific application.
+      operationId: CatalogService_GetApplication
+      parameters:
+        - description: Name of the application.
+          in: path
+          name: application_name
+          required: true
+          schema:
+            description: Name of the application.
+            title: application_name
+            type: string
+        - description: Version of the application.
+          in: path
+          name: version
+          required: true
+          schema:
+            description: Version of the application.
+            title: version
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/catalog.v3.GetApplicationResponse'
+          description: Success
+      summary: GetApplication
+      tags:
+        - CatalogService
+    put:
+      description: Updates an application.
+      operationId: CatalogService_UpdateApplication
+      parameters:
+        - description: Name of the application.
+          in: path
+          name: application_name
+          required: true
+          schema:
+            description: Name of the application.
+            title: application_name
+            type: string
+        - description: Version of the application.
+          in: path
+          name: version
+          required: true
+          schema:
+            description: Version of the application.
+            title: version
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/catalog.v3.Application'
+        description: The application update.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.protobuf.Empty'
+          description: Success
+      summary: UpdateApplication
+      tags:
+        - CatalogService
+  /v3/projects/{projectName}/catalog/applications/{application_name}/versions/{version}/reference_count:
+    get:
+      description: Gets application reference count - the number of deployment packages using this application.
+      operationId: CatalogService_GetApplicationReferenceCount
+      parameters:
+        - description: Name of the application.
+          in: path
+          name: application_name
+          required: true
+          schema:
+            description: Name of the application.
+            title: application_name
+            type: string
+        - description: Version of the application.
+          in: path
+          name: version
+          required: true
+          schema:
+            description: Version of the application.
+            title: version
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/catalog.v3.GetApplicationReferenceCountResponse'
+          description: Success
+      summary: GetApplicationReferenceCount
+      tags:
+        - CatalogService
   /v3/projects/{projectName}/catalog/artifacts:
     get:
       description: Gets a list of artifacts.
-      operationId: catalog.v3.CatalogService.ListArtifacts
+      operationId: CatalogService_ListArtifacts
       parameters:
         - description: Names the field to be used for ordering the returned results.
           in: query
@@ -184,18 +353,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/catalog.v3.ListArtifactsResponse'
           description: Success
-        default:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/connect.error'
-          description: Error
       summary: ListArtifacts
       tags:
-        - catalog.v3.CatalogService
+        - CatalogService
     post:
       description: Creates a new artifact.
-      operationId: catalog.v3.CatalogService.CreateArtifact
+      operationId: CatalogService_CreateArtifact
       parameters:
         - description: unique projectName for the resource
           in: path
@@ -216,19 +379,104 @@ paths:
               schema:
                 $ref: '#/components/schemas/catalog.v3.CreateArtifactResponse'
           description: Success
-        default:
+      summary: CreateArtifact
+      tags:
+        - CatalogService
+  /v3/projects/{projectName}/catalog/artifacts/{artifact_name}:
+    delete:
+      description: Deletes an artifact.
+      operationId: CatalogService_DeleteArtifact
+      parameters:
+        - description: Name of the artifact.
+          in: path
+          name: artifact_name
+          required: true
+          schema:
+            description: Name of the artifact.
+            title: artifact_name
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/connect.error'
-          description: Error
-      summary: CreateArtifact
+                $ref: '#/components/schemas/google.protobuf.Empty'
+          description: Success
+      summary: DeleteArtifact
       tags:
-        - catalog.v3.CatalogService
+        - CatalogService
+    get:
+      description: Gets a specific artifact.
+      operationId: CatalogService_GetArtifact
+      parameters:
+        - description: Name of the artifact.
+          in: path
+          name: artifact_name
+          required: true
+          schema:
+            description: Name of the artifact.
+            title: artifact_name
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/catalog.v3.GetArtifactResponse'
+          description: Success
+      summary: GetArtifact
+      tags:
+        - CatalogService
+    put:
+      description: Updates an artifact.
+      operationId: CatalogService_UpdateArtifact
+      parameters:
+        - description: Name of the artifact.
+          in: path
+          name: artifact_name
+          required: true
+          schema:
+            description: Name of the artifact.
+            title: artifact_name
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/catalog.v3.Artifact'
+        description: The artifact update.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.protobuf.Empty'
+          description: Success
+      summary: UpdateArtifact
+      tags:
+        - CatalogService
   /v3/projects/{projectName}/catalog/deployment_packages:
     get:
       description: Gets a list of deployment packages.
-      operationId: catalog.v3.CatalogService.ListDeploymentPackages
+      operationId: CatalogService_ListDeploymentPackages
       parameters:
         - description: Names the field to be used for ordering the returned results.
           in: query
@@ -283,18 +531,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/catalog.v3.ListDeploymentPackagesResponse'
           description: Success
-        default:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/connect.error'
-          description: Error
       summary: ListDeploymentPackages
       tags:
-        - catalog.v3.CatalogService
+        - CatalogService
     post:
       description: Creates a new deployment package.
-      operationId: catalog.v3.CatalogService.CreateDeploymentPackage
+      operationId: CatalogService_CreateDeploymentPackage
       parameters:
         - description: unique projectName for the resource
           in: path
@@ -315,21 +557,159 @@ paths:
               schema:
                 $ref: '#/components/schemas/catalog.v3.CreateDeploymentPackageResponse'
           description: Success
-        default:
+      summary: CreateDeploymentPackage
+      tags:
+        - CatalogService
+  /v3/projects/{projectName}/catalog/deployment_packages/{deployment_package_name}/versions:
+    get:
+      description: Gets all versions of a named deployment package.
+      operationId: CatalogService_GetDeploymentPackageVersions
+      parameters:
+        - description: Name of the DeploymentPackage.
+          in: path
+          name: deployment_package_name
+          required: true
+          schema:
+            description: Name of the DeploymentPackage.
+            title: deployment_package_name
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/connect.error'
-          description: Error
-      summary: CreateDeploymentPackage
+                $ref: '#/components/schemas/catalog.v3.GetDeploymentPackageVersionsResponse'
+          description: Success
+      summary: GetDeploymentPackageVersions
       tags:
-        - catalog.v3.CatalogService
+        - CatalogService
+  /v3/projects/{projectName}/catalog/deployment_packages/{deployment_package_name}/versions/{version}:
+    delete:
+      description: Deletes a deployment package.
+      operationId: CatalogService_DeleteDeploymentPackage
+      parameters:
+        - description: Name of the DeploymentPackage.
+          in: path
+          name: deployment_package_name
+          required: true
+          schema:
+            description: Name of the DeploymentPackage.
+            title: deployment_package_name
+            type: string
+        - description: Version of the DeploymentPackage.
+          in: path
+          name: version
+          required: true
+          schema:
+            description: Version of the DeploymentPackage.
+            title: version
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.protobuf.Empty'
+          description: Success
+      summary: DeleteDeploymentPackage
+      tags:
+        - CatalogService
+    get:
+      description: Gets a specific deployment package.
+      operationId: CatalogService_GetDeploymentPackage
+      parameters:
+        - description: Name of the DeploymentPackage.
+          in: path
+          name: deployment_package_name
+          required: true
+          schema:
+            description: Name of the DeploymentPackage.
+            title: deployment_package_name
+            type: string
+        - description: Version of the DeploymentPackage.
+          in: path
+          name: version
+          required: true
+          schema:
+            description: Version of the DeploymentPackage.
+            title: version
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/catalog.v3.GetDeploymentPackageResponse'
+          description: Success
+      summary: GetDeploymentPackage
+      tags:
+        - CatalogService
+    put:
+      description: Updates a deployment package.
+      operationId: CatalogService_UpdateDeploymentPackage
+      parameters:
+        - description: Name of the DeploymentPackage.
+          in: path
+          name: deployment_package_name
+          required: true
+          schema:
+            description: Name of the DeploymentPackage.
+            title: deployment_package_name
+            type: string
+        - description: Version of the DeploymentPackage.
+          in: path
+          name: version
+          required: true
+          schema:
+            description: Version of the DeploymentPackage.
+            title: version
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/catalog.v3.DeploymentPackage'
+        description: The DeploymentPackage update.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.protobuf.Empty'
+          description: Success
+      summary: UpdateDeploymentPackage
+      tags:
+        - CatalogService
   /v3/projects/{projectName}/catalog/import:
     post:
       description: |-
         Allows importing a deployment package from a Helm Chart. This is done as a single invocation with the URL
          of the asset to be imported.
-      operationId: catalog.v3.CatalogService.Import
+      operationId: CatalogService_Import
       parameters:
         - description: Required URL of Helm Chart to import
           in: query
@@ -420,19 +800,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/catalog.v3.ImportResponse'
           description: Success
-        default:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/connect.error'
-          description: Error
       summary: Import
       tags:
-        - catalog.v3.CatalogService
+        - CatalogService
   /v3/projects/{projectName}/catalog/registries:
     get:
       description: Gets a list of registries.
-      operationId: catalog.v3.CatalogService.ListRegistries
+      operationId: CatalogService_ListRegistries
       parameters:
         - description: Names the field to be used for ordering the returned results.
           in: query
@@ -484,18 +858,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/catalog.v3.ListRegistriesResponse'
           description: Success
-        default:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/connect.error'
-          description: Error
       summary: ListRegistries
       tags:
-        - catalog.v3.CatalogService
+        - CatalogService
     post:
       description: Creates a new registry.
-      operationId: catalog.v3.CatalogService.CreateRegistry
+      operationId: CatalogService_CreateRegistry
       parameters:
         - description: unique projectName for the resource
           in: path
@@ -516,23 +884,149 @@ paths:
               schema:
                 $ref: '#/components/schemas/catalog.v3.CreateRegistryResponse'
           description: Success
-        default:
+      summary: CreateRegistry
+      tags:
+        - CatalogService
+  /v3/projects/{projectName}/catalog/registries/{registry_name}:
+    delete:
+      description: Deletes a registry.
+      operationId: CatalogService_DeleteRegistry
+      parameters:
+        - description: Name of the registry.
+          in: path
+          name: registry_name
+          required: true
+          schema:
+            description: Name of the registry.
+            maxLength: 40
+            minLength: 1
+            pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+            title: registry_name
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/connect.error'
-          description: Error
-      summary: CreateRegistry
+                $ref: '#/components/schemas/google.protobuf.Empty'
+          description: Success
+      summary: DeleteRegistry
       tags:
-        - catalog.v3.CatalogService
+        - CatalogService
+    get:
+      description: Gets a specific registry.
+      operationId: CatalogService_GetRegistry
+      parameters:
+        - description: Name of the registry.
+          in: path
+          name: registry_name
+          required: true
+          schema:
+            description: Name of the registry.
+            maxLength: 40
+            minLength: 1
+            pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+            title: registry_name
+            type: string
+        - description: Request that sensitive information, such as username, auth_token, and CA certificates are included in the response.
+          in: query
+          name: showSensitiveInfo
+          schema:
+            description: (OPTIONAL) Request that sensitive information, such as username, auth_token, and CA certificates are included in the response.
+            title: show_sensitive_info
+            type: boolean
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/catalog.v3.GetRegistryResponse'
+          description: Success
+      summary: GetRegistry
+      tags:
+        - CatalogService
+    put:
+      description: Updates a registry.
+      operationId: CatalogService_UpdateRegistry
+      parameters:
+        - description: Name of the Registry.
+          in: path
+          name: registry_name
+          required: true
+          schema:
+            description: Name of the Registry.
+            maxLength: 40
+            minLength: 1
+            pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+            title: registry_name
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/catalog.v3.Registry'
+        description: The Registry update.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.protobuf.Empty'
+          description: Success
+      summary: UpdateRegistry
+      tags:
+        - CatalogService
   /v3/projects/{projectName}/catalog/uploads:
     post:
       description: |-
         Allows uploading of a YAML file containing various application catalog entities. Multiple RPC invocations
          tagged with the same upload session ID can be used to upload multiple files and to create or update several
          catalog entities as a single transaction.
-      operationId: catalog.v3.CatalogService.UploadCatalogEntities
+      operationId: CatalogService_UploadCatalogEntities
       parameters:
+        - description: |-
+            First upload request in the batch must not specify session ID. Subsequent upload requests must copy
+             the session ID from the previously issued response.
+          in: query
+          name: sessionId
+          schema:
+            description: |-
+              First upload request in the batch must not specify session ID. Subsequent upload requests must copy
+               the session ID from the previously issued response.
+            title: session_id
+            type: string
+        - description: 'Deprecated: Upload number must increase sequentially, starting with 1.'
+          in: query
+          name: uploadNumber
+          schema:
+            description: 'Deprecated: Upload number must increase sequentially, starting with 1.'
+            title: upload_number
+            type: integer
+        - description: Must be set to 'true' to perform load of all entity files uploaded as part of this session.
+          in: query
+          name: lastUpload
+          schema:
+            description: Must be set to 'true' to perform load of all entity files uploaded as part of this session.
+            title: last_upload
+            type: boolean
         - description: unique projectName for the resource
           in: path
           name: projectName
@@ -552,15 +1046,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/catalog.v3.UploadCatalogEntitiesResponse'
           description: Success
-        default:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/connect.error'
-          description: Error
       summary: UploadCatalogEntities
       tags:
-        - catalog.v3.CatalogService
+        - CatalogService
 components:
   schemas:
     catalog.v3.APIExtension:
@@ -625,7 +1113,7 @@ components:
           description: Helm chart version.
           maxLength: 53
           minLength: 1
-          pattern: ^[a-z0-9][a-z0-9-.]{0,51}[a-z0-9]{0,1}$
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9-.+]{0,51}[a-zA-Z0-9]{0,1}$
           title: chart_version
           type: string
         createTime:
@@ -756,7 +1244,9 @@ components:
          used by multiple deployment packages.
       properties:
         artifact:
-          description: Raw byte content of the artifact encoded as base64. The limits refer to the number of raw bytes.
+          description: |
+            Raw byte content of the artifact encoded as base64. The limits refer to the number of raw bytes.
+            bytes.const = []
           format: byte
           maxLength: 4000000
           minLength: 4
@@ -2375,50 +2865,6 @@ components:
         - event
         - registry
       title: WatchRegistriesResponse
-      type: object
-    connect.error:
-      additionalProperties: true
-      description: 'Error type returned by Connect: https://connectrpc.com/docs/go/errors/#http-representation'
-      properties:
-        code:
-          description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
-          enum:
-            - canceled
-            - unknown
-            - invalid_argument
-            - deadline_exceeded
-            - not_found
-            - already_exists
-            - permission_denied
-            - resource_exhausted
-            - failed_precondition
-            - aborted
-            - out_of_range
-            - unimplemented
-            - internal
-            - unavailable
-            - data_loss
-            - unauthenticated
-          type: string
-        detail:
-          $ref: '#/components/schemas/google.protobuf.Any'
-        message:
-          description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
-          type: string
-      title: Connect Error
-      type: object
-    google.protobuf.Any:
-      additionalProperties: true
-      description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
-      properties:
-        debug:
-          additionalProperties: true
-          type: object
-        type:
-          type: string
-        value:
-          format: binary
-          type: string
       type: object
     google.protobuf.Empty:
       description: |-
