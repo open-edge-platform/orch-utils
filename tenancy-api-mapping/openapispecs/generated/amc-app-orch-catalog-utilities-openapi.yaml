@@ -53,14 +53,14 @@ paths:
       summary: GetRegistryCharts
       tags:
         - CatalogService
-  /v3/projects/{projectName}/catalog/deployment_packages/{deploymentPackageName}/versions/{version}/download:
+  /v3/projects/{projectName}/catalog/deployment_packages/{deployment_package_name}/versions/{version}/download:
     get:
       description: Gets a specific deployment package and downloads it as a tarball.
       operationId: CatalogService_DownloadDeploymentPackage
       parameters:
         - description: Name of the DeploymentPackage.
           in: path
-          name: deploymentPackageName
+          name: deployment_package_name
           required: true
           schema:
             maxLength: 100
