@@ -33,7 +33,7 @@ jobs:
     if: github.event_name == 'pull_request'
     permissions:
       contents: read
-    uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@cf81328e4c9526e579181efb1f609af06071889b  # 0.1.53
+    uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@15fa19e8760a1d7954de69b7059433f3855bbd92  # 0.1.53
     with:
       orch_ci_repo_ref: cf81328e4c9526e579181efb1f609af06071889b
       run_version_check: false
