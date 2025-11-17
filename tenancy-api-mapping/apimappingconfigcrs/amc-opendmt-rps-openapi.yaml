@@ -23,3 +23,9 @@ spec:
       serviceURI: api/v1/admin/domains/{profileName}
     - externalURI: /v1/projects/{projectName}/dm/amt/admin/profiles
       serviceURI: api/v1/admin/profiles
+    - externalURI: /v1/projects/{projectName}/dm/amt/admin/profiles/{profileName}
+      serviceURI: api/v1/admin/profiles/{profileName}
+    - externalURI: /v1/projects/{projectName}/dm/amt/admin/ciraconfigs
+      serviceURI: api/v1/admin/ciraconfigs
+    - externalURI: /v1/projects/{projectName}/dm/amt/admin/ciraconfigs/{ciraConfigName}
+      serviceURI: api/v1/admin/ciraconfigs/{ciraConfigName}
