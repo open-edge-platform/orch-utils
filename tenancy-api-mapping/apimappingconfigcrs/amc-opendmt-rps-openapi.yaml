@@ -21,3 +21,5 @@ spec:
       serviceURI: api/v1/admin/domains
     - externalURI: /v1/projects/{projectName}/dm/amt/admin/domains/{profileName}
       serviceURI: api/v1/admin/domains/{profileName}
+    - externalURI: /v1/projects/{projectName}/dm/amt/admin/profiles
+      serviceURI: api/v1/admin/profiles
