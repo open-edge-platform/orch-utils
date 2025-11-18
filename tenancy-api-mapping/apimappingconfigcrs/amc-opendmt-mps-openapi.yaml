@@ -11,13 +11,19 @@ metadata:
 spec:
   specGenEnabled: true
   downloadConf:
-    version: "2.13.0"
     url: "https://api.swaggerhub.com/apis/rbheopenamt/mps/2.13.0/swagger.yaml"
-  backend:
-    service: "mps.orch-infra.svc.cluster.local"
-    port: 3000  # https://github.com/device-management-toolkit/mps
+    version: "2.13.0"
   mappings:
     - externalURI: /v1/projects/{projectName}/dm/amt/generalSettings/{guid}
       serviceURI: api/v1/amt/generalSettings/{guid}
     - externalURI: /v1/projects/{projectName}/dm/devices/{guid}
       serviceURI: api/v1/devices/{guid}
+    
+    # KVM-related endpoints
+    - externalURI: /v1/projects/{projectName}/dm/devices/{guid}/kvm/redirect-token
+      serviceURI: api/v1/authorize/redirection/{guid}
+    - externalURI: /v1/projects/{projectName}/dm/devices/{guid}/kvm/features
+      serviceURI: api/v1/amt/features/{guid}
+  backend:
+    service: "mps.orch-infra.svc.cluster.local"
+    port: 3000

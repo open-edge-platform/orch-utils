@@ -146,6 +146,71 @@ paths:
       summary: Find Device by GUID
       tags:
         - Devices
+  /v1/projects/{projectName}/dm/devices/{guid}/kvm/redirect-token:
+    get:
+      description: Retrieve a redirect token for KVM session
+      parameters:
+        - description: GUID of device
+          example: 123e4567-e89b-12d3-a456-426614174000
+          in: path
+          name: guid
+          required: true
+          schema:
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+          description: Successful operation
+        "404":
+          description: Device does not exist
+        "500":
+          description: Internal server error
+      summary: Get KVM Redirect Token
+      tags:
+        - AMT
+  /v1/projects/{projectName}/dm/devices/{guid}/kvm/features:
+    get:
+      description: Retrieve AMT features including KVM status
+      parameters:
+        - description: GUID of device
+          example: 123e4567-e89b-12d3-a456-426614174000
+          in: path
+          name: guid
+          required: true
+          schema:
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAMTFeaturesResponse'
+          description: Successful operation
+        "404":
+          description: Device does not exist
+        "500":
+          description: Internal server error
+      summary: Get AMT Features
+      tags:
+        - AMT
 components:
   schemas:
     AMTVersionResponse:
