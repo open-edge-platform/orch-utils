@@ -5,16 +5,23 @@
 package internal
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/secretsmanager"
-	"github.com/aws/aws-sdk-go/service/secretsmanager/secretsmanageriface"
+	"github.com/aws/aws-sdk-go-v2/service/secretsmanager"
 )
 
-func NewProxyAWSHandler(svc secretsmanageriface.SecretsManagerAPI) func(w http.ResponseWriter, r *http.Request) {
+type SecretsManagerAPI interface {
+	GetSecretValue(
+		ctx context.Context,
+		params *secretsmanager.GetSecretValueInput,
+		optFns ...func(*secretsmanager.Options),
+	) (*secretsmanager.GetSecretValueOutput, error)
+}
+
+func NewProxyAWSHandler(svc SecretsManagerAPI) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		secretName := r.URL.Query().Get("name")
 		if secretName == "" {
@@ -24,10 +31,10 @@ func NewProxyAWSHandler(svc secretsmanageriface.SecretsManagerAPI) func(w http.R
 		}
 		log.Println("handling request for secret:", secretName)
 		input := &secretsmanager.GetSecretValueInput{
-			SecretId: aws.String(secretName),
+			SecretId: &secretName,
 		}
 
-		result, err := svc.GetSecretValue(input)
+		result, err := svc.GetSecretValue(context.Background(), input)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Fprintln(w, err)
