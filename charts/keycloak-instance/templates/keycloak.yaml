@@ -1,0 +1,97 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  name: platform-keycloak
+  namespace: keycloak-system
+  labels:
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/instance: platform-keycloak
+    app.kubernetes.io/version: {{ index .Chart.Annotations "keycloak-upstream-version" | quote }}
+spec:
+  image: {{ .Values.keycloak.image }}
+  startOptimized: {{ .Values.keycloak.startOptimized }}
+  
+  bootstrapAdmin:
+    user:
+      secret: {{ .Values.keycloak.bootstrapAdmin.secret }}
+  
+  db:
+    vendor: {{ .Values.keycloak.database.vendor }}
+    host: {{ .Values.keycloak.database.host }}
+    port: {{ .Values.keycloak.database.port }}
+    database: {{ .Values.keycloak.database.database }}
+    usernameSecret:
+      name: {{ .Values.keycloak.database.usernameSecret.name }}
+      key: {{ .Values.keycloak.database.usernameSecret.key }}
+    passwordSecret:
+      name: {{ .Values.keycloak.database.passwordSecret.name }}
+      key: {{ .Values.keycloak.database.passwordSecret.key }}
+    poolInitialSize: {{ .Values.keycloak.database.poolInitialSize }}
+    poolMinSize: {{ .Values.keycloak.database.poolMinSize }}
+    poolMaxSize: {{ .Values.keycloak.database.poolMaxSize }}
+  
+  http:
+    httpEnabled: {{ .Values.keycloak.http.httpEnabled }}
+    httpPort: {{ .Values.keycloak.http.httpPort }}
+    annotations: {}
+    labels: {}
+  
+  ingress:
+    enabled: {{ .Values.keycloak.ingress.enabled }}
+  
+  proxy:
+    headers: {{ .Values.keycloak.proxy.headers }}
+  
+  resources:
+    {{- toYaml .Values.keycloak.resources | nindent 4 }}
+  
+  additionalOptions:
+    {{- toYaml .Values.keycloak.additionalOptions | nindent 4 }}
+  
+  instances: {{ .Values.keycloak.instances }}
+  
+  unsupported:
+    podTemplate:
+      spec:
+        securityContext:
+          runAsUser: {{ .Values.keycloak.podTemplate.securityContext.runAsUser }}
+          runAsGroup: {{ .Values.keycloak.podTemplate.securityContext.runAsGroup }}
+          fsGroup: {{ .Values.keycloak.podTemplate.securityContext.fsGroup }}
+          seccompProfile:
+            type: {{ .Values.keycloak.podTemplate.securityContext.seccompProfile.type }}
+        
+        initContainers:
+          {{- range .Values.keycloak.podTemplate.initContainers }}
+          - name: {{ .name }}
+            image: {{ .image }}
+            imagePullPolicy: {{ .imagePullPolicy }}
+            command:
+              {{- toYaml .command | nindent 14 }}
+            args:
+              {{- toYaml .args | nindent 14 }}
+            
+            securityContext:
+              {{- toYaml .securityContext | nindent 14 }}
+            
+            volumeMounts:
+              {{- toYaml .volumeMounts | nindent 14 }}
+            
+            resources:
+              {{- toYaml .resources | nindent 14 }}
+          {{- end }}
+        
+        containers:
+          - name: keycloak
+            imagePullPolicy: {{ .Values.keycloak.imagePullPolicy }}
+            securityContext:
+              {{- toYaml .Values.keycloak.podTemplate.containerSecurityContext | nindent 14 }}
+            
+            volumeMounts:
+              {{- toYaml .Values.keycloak.podTemplate.containerVolumeMounts | nindent 14 }}
+        
+        volumes:
+          {{- toYaml .Values.keycloak.podTemplate.volumes | nindent 10 }}
+
