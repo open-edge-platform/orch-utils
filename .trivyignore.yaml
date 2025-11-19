@@ -73,3 +73,18 @@ misconfigurations:
     paths:
       - "charts/keycloak-operator/templates/rbac-and-service.yaml"
     statement: Official Keycloak Operator v26.4.5 RBAC permissions. Required for operator to manage services, ingresses, and network policies. Scoped to keycloak-system namespace via RoleBinding. Acceptable risk in controlled K8s environments with admission controls.
+
+  - id: AVD-KSV-0113
+    paths:
+      - "charts/keycloak-instance/templates/rbac-config.yaml"
+    statement: Secret access limited to specific resourceNames (platform-keycloak, orch-database-postgresql). Required for Keycloak Operator to access configuration and database credentials. Read-only verbs (get, watch). Scoped to orch-platform namespace.
+
+  - id: AVD-KSV-0048
+    paths:
+      - "charts/keycloak-operator/templates/rbac-and-service.yaml"
+    statement: Official Keycloak Operator v26.4.5 RBAC permissions. Operator requires create/update/patch/delete on statefulsets and jobs to manage Keycloak pod lifecycle and configuration jobs. Limited to keycloak-system namespace via RoleBinding. Acceptable risk in controlled K8s environments.
+
+  - id: AVD-KSV-0113
+    paths:
+      - "charts/keycloak-operator/templates/rbac-and-service.yaml"
+    statement: Official Keycloak Operator v26.4.5 RBAC permissions. Operator requires secret access to read bootstrap admin credentials and manage Keycloak configuration. Scoped to keycloak-system namespace via RoleBinding. Acceptable risk in controlled K8s environments.
