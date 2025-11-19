@@ -147,8 +147,6 @@ metadata:
     app.kubernetes.io/version: 26.4.5
   name: keycloakcontroller-role
   namespace: keycloak-system
-  annotations:
-    description: "Upstream Keycloak operator permissions - required to create/manage services, ingresses, and network policies"
 rules:
   - apiGroups:
       - ""

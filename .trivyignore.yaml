@@ -63,3 +63,13 @@ misconfigurations:
     paths:
       - "charts/tenancy-init/templates/serviceAccount.yaml"
     statement: Service access required for pod communication and tenancy initialization operations
+
+  - id: AVD-KSV-0108
+    paths:
+      - "charts/keycloak-instance/templates/service-alias.yaml"
+    statement: ExternalName service type is used (not externalIPs). Not vulnerable to CVE-2020-8554. Safe DNS alias for keycloak-system/platform-keycloak.
+
+  - id: AVD-KSV-0056
+    paths:
+      - "charts/keycloak-operator/templates/rbac-and-service.yaml"
+    statement: Official Keycloak Operator v26.4.5 RBAC permissions. Required for operator to manage services, ingresses, and network policies. Scoped to keycloak-system namespace via RoleBinding. Acceptable risk in controlled K8s environments with admission controls.
