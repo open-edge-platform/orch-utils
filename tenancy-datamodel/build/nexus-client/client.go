@@ -4381,6 +4381,11 @@ func (group *OrgEdgeV1) SetOrgOrgStatusByName(ctx context.Context,
 
 		updatedObj, err := group.ForceReadOrgByName(newCtx, hashedName)
 		if err == nil {
+			// Check if desired state is already reached (idempotency)
+			if status != nil && updatedObj.Status.OrgStatus.StatusIndicator == status.StatusIndicator {
+				logger.Debugf("[SetOrgOrgStatusByName] Org node %s already has desired status %v, skipping update", hashedName, status.StatusIndicator)
+				break
+			}
 			obj.ObjectMeta = updatedObj.ObjectMeta
 			marshalledObj, _ := json.Marshal(&obj)
 			json.Unmarshal(marshalledObj, &mapInterface)
@@ -4391,7 +4396,12 @@ func (group *OrgEdgeV1) SetOrgOrgStatusByName(ctx context.Context,
 			logger.Fatalf("[SetOrgOrgStatusByName] Max retry exceeded for updating status for Org node: %s", hashedName)
 			return nil, err
 		}
-		time.Sleep(time.Second)
+		// Exponential backoff: 1s, 2s, 4s, 8s, 16s, 32s, 60s (max)
+		backoffDelay := time.Duration(1<<uint(retryCount)) * time.Second
+		if backoffDelay > 60*time.Second {
+			backoffDelay = 60 * time.Second
+		}
+		time.Sleep(backoffDelay)
 	}
 
 	/*
@@ -6548,6 +6558,11 @@ func (group *ProjectEdgeV1) SetProjectProjectStatusByName(ctx context.Context,
 
 		updatedObj, err := group.ForceReadProjectByName(newCtx, hashedName)
 		if err == nil {
+			// Check if desired state is already reached (idempotency)
+			if status != nil && updatedObj.Status.ProjectStatus.StatusIndicator == status.StatusIndicator {
+				logger.Debugf("[SetProjectProjectStatusByName] Project node %s already has desired status %v, skipping update", hashedName, status.StatusIndicator)
+				break
+			}
 			obj.ObjectMeta = updatedObj.ObjectMeta
 			marshalledObj, _ := json.Marshal(&obj)
 			json.Unmarshal(marshalledObj, &mapInterface)
@@ -6558,7 +6573,12 @@ func (group *ProjectEdgeV1) SetProjectProjectStatusByName(ctx context.Context,
 			logger.Fatalf("[SetProjectProjectStatusByName] Max retry exceeded for updating status for Project node: %s", hashedName)
 			return nil, err
 		}
-		time.Sleep(time.Second)
+		// Exponential backoff: 1s, 2s, 4s, 8s, 16s, 32s, 60s (max)
+		backoffDelay := time.Duration(1<<uint(retryCount)) * time.Second
+		if backoffDelay > 60*time.Second {
+			backoffDelay = 60 * time.Second
+		}
+		time.Sleep(backoffDelay)
 	}
 
 	/*
