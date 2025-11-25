@@ -616,7 +616,7 @@ func getConfigOrg(client *nexus_client.Clientset, name string) (*nexus_client.Or
 	}
 	
 	// Org not found after retries
-	return nil, ErrNotFound
+	return nil, lastErr
 }
 
 func getConfigProject(client *nexus_client.Clientset, orgName, folderName, projectName string,
@@ -649,7 +649,7 @@ func getConfigProject(client *nexus_client.Clientset, orgName, folderName, proje
 	}
 	
 	// Project not found after retries
-	return nil, ErrNotFound
+	return nil, lastErr
 }
 
 func getMapKeys(m map[string]struct{}) []string {
