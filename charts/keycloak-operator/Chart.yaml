@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
+apiVersion: v2
+name: keycloak-operator
+description: Keycloak Operator for managing Keycloak instances via CRDs
+type: application
+version: 25.2.0
+appVersion: "25.2.0"
+annotations:
+  keycloak-upstream-version: "26.4.5"
+  keycloak-upstream-image: "quay.io/keycloak/keycloak-operator:26.4.5"

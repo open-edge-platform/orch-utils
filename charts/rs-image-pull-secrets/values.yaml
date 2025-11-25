@@ -8,3 +8,5 @@ targetName: rsregcred
 refreshInterval:
 registryHost:
 namespaces: []
+
+externalSecretsApiGroup: external-secrets.io/v1beta1

@@ -23,7 +23,7 @@ RUN git config --global --add safe.directory '*' \
     && apt-get update \
     && apt-get install -y --no-install-recommends -t unstable wget \
     && apt-get install -y --no-install-recommends \
-        make=4.4.1-2 \
+        make=4.4.1-3 \
         coreutils=9.7-3 \
     && curl -Lo /usr/local/bin/jq https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-linux-amd64 \
     && chmod +x /usr/local/bin/jq \

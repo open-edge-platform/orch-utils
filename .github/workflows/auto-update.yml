@@ -14,7 +14,8 @@ on:
       - main
       - release-*
 
-permissions: {}
+permissions:
+  contents: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -29,7 +30,7 @@ jobs:
 
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -39,6 +40,6 @@ jobs:
           persist-credentials: false
 
       - name: Update pull requests
-        uses: open-edge-platform/orch-ci/.github/actions/pr_updater@76700c2fb6d547733b9218d9638dca43f5296399  # 0.1.52
+        uses: open-edge-platform/orch-ci/.github/actions/pr_updater@79c4381f9be567527d8782094317b0282493e45a  # 0.1.66
         with:
           github_token: ${{ secrets.SYS_ORCH_GITHUB }}
