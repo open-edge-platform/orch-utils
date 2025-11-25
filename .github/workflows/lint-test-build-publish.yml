@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
-
+---
 name: Lint, Test, Build, and Publish
 
 on:
@@ -27,14 +27,18 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
-permissions: {}
+
+permissions:
+  contents: read
+
 jobs:
   pre-merge:
     if: github.event_name == 'pull_request'
     permissions:
       contents: read
-    uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@e4fa54613527cfaad83ba8b625fd845a4ab8409d  # 0.1.53
+    uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@15fa19e8760a1d7954de69b7059433f3855bbd92  # 0.1.53
     with:
+      orch_ci_repo_ref: cf81328e4c9526e579181efb1f609af06071889b
       run_version_check: false
       run_build: false
       run_lint: false
@@ -50,7 +54,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -84,7 +88,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -107,7 +111,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -129,7 +133,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -152,7 +156,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -174,7 +178,7 @@ jobs:
       BASEDIR: .
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -209,7 +213,7 @@ jobs:
       BASEDIR: .
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -277,7 +281,7 @@ jobs:
       - version-check
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -333,7 +337,7 @@ jobs:
       - lint-yaml
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -399,7 +403,7 @@ jobs:
       - version-check
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -440,14 +444,12 @@ jobs:
       security-events: write
       id-token: write
     if: github.event_name == 'push' && ( github.ref == 'refs/heads/main' || github.ref == 'refs/heads/main-pass-validation' )
-    uses: open-edge-platform/orch-ci/.github/workflows/post-merge.yml@e4fa54613527cfaad83ba8b625fd845a4ab8409d  # 0.1.53
+    uses: open-edge-platform/orch-ci/.github/workflows/post-merge.yml@79c4381f9be567527d8782094317b0282493e45a  # 0.1.66
     with:
       run_build: false
       run_version_tag: false
     secrets:
       SYS_ORCH_GITHUB: ${{ secrets.SYS_ORCH_GITHUB }}
-      COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
-      COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
       NO_AUTH_ECR_PUSH_USERNAME: ${{ secrets.NO_AUTH_ECR_PUSH_USERNAME }}
       NO_AUTH_ECR_PUSH_PASSWD: ${{ secrets.NO_AUTH_ECR_PUSH_PASSWD }}
       MSTEAMS_WEBHOOK: ${{ secrets.TEAMS_WEBHOOK }}

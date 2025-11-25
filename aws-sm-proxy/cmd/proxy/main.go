@@ -5,6 +5,7 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"flag"
 	"fmt"
@@ -13,9 +14,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/secretsmanager"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/secretsmanager"
 
 	"github.com/open-edge-platform/orch-utils/aws-sm-proxy/internal"
 )
@@ -29,20 +29,21 @@ func main() {
 		fmt.Println("Missing required -region flag")
 		os.Exit(1)
 	}
-	awsConfig := &aws.Config{
-		Region: aws.String(region),
+
+	ctx := context.Background()
+	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion(region))
+	if err != nil {
+		fmt.Printf("not able to setup aws config: %v", err)
+		os.Exit(1)
 	}
+
 	if proxy := os.Getenv("HTTPS_PROXY"); proxy != "" {
 		log.Printf("https proxy value is: %s", proxy)
 		log.Printf("no proxy value is: %s", os.Getenv("NO_PROXY"))
-		awsConfig.HTTPClient = &http.Client{Timeout: 15 * time.Second}
+		cfg.HTTPClient = &http.Client{Timeout: 15 * time.Second}
 	}
-	sess, err := session.NewSession(awsConfig)
-	if err != nil {
-		fmt.Printf("not able to setup aws session: %v", err)
-		os.Exit(1)
-	}
-	svc := secretsmanager.New(sess)
+
+	svc := secretsmanager.NewFromConfig(cfg)
 
 	http.HandleFunc("/aws-secret", internal.NewProxyAWSHandler(svc))
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, _ *http.Request) {

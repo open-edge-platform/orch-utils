@@ -87,3 +87,7 @@ spec:
           value: "{{ .Values.keycloak.service.port }}"
         - name: KEYCLOAK_NAMESPACE
           value: {{ .Values.keycloak.service.namespace }}
+        - name: PROJECT_ADMIN_GROUPS
+          value: "{{ .Values.keycloak.roles.admin.groups }}"
+        - name: PROJECT_EDGE_GROUPS
+          value: "{{ .Values.keycloak.roles.edge.groups }}"

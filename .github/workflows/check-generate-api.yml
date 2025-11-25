@@ -9,7 +9,8 @@ on:
     paths:
       - 'tenancy-api-mapping/**'
 
-permissions: {}
+permissions:
+  contents: read
 
 jobs:
   check-generate:
@@ -19,7 +20,7 @@ jobs:
 
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
+        uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49  # v2.12.2
         with:
           egress-policy: audit
 
@@ -29,8 +30,9 @@ jobs:
           persist-credentials: false
 
       - name: Bootstrap CI environment
-        uses: open-edge-platform/orch-ci/.github/actions/bootstrap@e4fa54613527cfaad83ba8b625fd845a4ab8409d  # 0.1.9
+        uses: open-edge-platform/orch-ci/.github/actions/bootstrap@79c4381f9be567527d8782094317b0282493e45a  # 0.1.9
         with:
+          orch_ci_repo_ref: cf81328e4c9526e579181efb1f609af06071889b
           gh_token: ${{ secrets.SYS_ORCH_GITHUB }}
 
       - name: Generate OpenAPI specs and combined spec
