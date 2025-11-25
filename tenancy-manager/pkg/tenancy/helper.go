@@ -596,7 +596,6 @@ func getConfigOrg(client *nexus_client.Clientset, name string) (*nexus_client.Or
 	
 	// Retry logic for recently-created orgs that may not be in cache yet.
 	// The cache may lag slightly after org creation, so retry once with backoff.
-	var lastErr error
 	for attempt := 0; attempt < 2; attempt++ {
 		configOrg, err := config.GetOrgs(context.Background(), name)
 		if err == nil {
@@ -608,7 +607,6 @@ func getConfigOrg(client *nexus_client.Clientset, name string) (*nexus_client.Or
 			return nil, err
 		}
 		
-		lastErr = err
 		if attempt < 1 {
 			// Wait before retrying to allow informer to sync the newly created object
 			time.Sleep(100 * time.Millisecond)
@@ -616,7 +614,7 @@ func getConfigOrg(client *nexus_client.Clientset, name string) (*nexus_client.Or
 	}
 	
 	// Org not found after retries
-	return nil, lastErr
+	return nil, ErrNotFound
 }
 
 func getConfigProject(client *nexus_client.Clientset, orgName, folderName, projectName string,
@@ -628,7 +626,6 @@ func getConfigProject(client *nexus_client.Clientset, orgName, folderName, proje
 	
 	// Retry logic for recently-created projects that may not be in cache yet.
 	// The cache may lag slightly after project creation, so retry once with backoff.
-	var lastErr error
 	for attempt := 0; attempt < 2; attempt++ {
 		configProject, err := client.TenancyMultiTenancy().Config().Orgs(configOrg.DisplayName()).
 			Folders(folderName).GetProjects(context.Background(), projectName)
@@ -641,7 +638,6 @@ func getConfigProject(client *nexus_client.Clientset, orgName, folderName, proje
 			return nil, err
 		}
 		
-		lastErr = err
 		if attempt < 1 {
 			// Wait before retrying to allow informer to sync the newly created object
 			time.Sleep(100 * time.Millisecond)
@@ -649,7 +645,7 @@ func getConfigProject(client *nexus_client.Clientset, orgName, folderName, proje
 	}
 	
 	// Project not found after retries
-	return nil, lastErr
+	return nil, ErrNotFound
 }
 
 func getMapKeys(m map[string]struct{}) []string {
