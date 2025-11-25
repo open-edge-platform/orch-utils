@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-FROM golang:1.24.6-bullseye AS builder
+FROM golang:1.24.9-bookworm AS builder
 
 ARG API_GW_COMPONENT_NAME
 ARG HTTP_PROXY
@@ -25,7 +25,7 @@ WORKDIR /app
 ENV GOPRIVATE=github.com/open-edge-platform/*
 RUN set -x && \
     apt-get update -y && \
-    apt-get install -y --no-install-recommends netcat-openbsd=1.217-3 && \
+    apt-get install -y --no-install-recommends netcat-openbsd=1.219-1 && \
     CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -buildvcs=false -o bin/${API_GW_COMPONENT_NAME}
 
 FROM gcr.io/distroless/static-debian12:nonroot

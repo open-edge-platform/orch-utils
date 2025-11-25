@@ -12,11 +12,14 @@ spec:
   specGenEnabled: true
   repoConf:
     url: "https://github.com/open-edge-platform/app-orch-deployment.git"
-    tag: "app-resource-manager/v2.3.21"
+    tag: "app-resource-manager/v2.5.1"
     specFilePath: "app-resource-manager/api/nbi/v2/spec/v2/openapi.yaml"
   mappings:
+    # Pod Management
     - externalURI: /v1/projects/{projectName}/resource/workloads/pods/clusters/{clusterId}/namespaces/{namespace}/pods/{podName}/delete
       serviceURI: resource.orchestrator.apis/v2/workloads/pods/{clusterId}/{namespace}/{podName}/delete
+    
+    # Virtual Machine Management
     - externalURI: /v1/projects/{projectName}/resource/workloads/applications/{appId}/clusters/{clusterId}/virtual-machines/{virtualMachineId}/vnc
       serviceURI: resource.orchestrator.apis/v2/workloads/virtual-machines/{appId}/{clusterId}/{virtualMachineId}/vnc
     - externalURI: /v1/projects/{projectName}/resource/workloads/applications/{appId}/clusters/{clusterId}/virtual-machines/{virtualMachineId}/start
@@ -25,8 +28,12 @@ spec:
       serviceURI: resource.orchestrator.apis/v2/workloads/virtual-machines/{appId}/{clusterId}/{virtualMachineId}/stop
     - externalURI: /v1/projects/{projectName}/resource/workloads/applications/{appId}/clusters/{clusterId}/virtual-machines/{virtualMachineId}/restart
       serviceURI: resource.orchestrator.apis/v2/workloads/virtual-machines/{appId}/{clusterId}/{virtualMachineId}/restart
+    
+    # Workloads
     - externalURI: /v1/projects/{projectName}/resource/workloads/applications/{appId}/clusters/{clusterId}
       serviceURI: resource.orchestrator.apis/v2/workloads/{appId}/{clusterId}
+    
+    # Endpoints
     - externalURI: /v1/projects/{projectName}/resource/endpoints/applications/{appId}/clusters/{clusterId}
       serviceURI: resource.orchestrator.apis/v2/endpoints/{appId}/{clusterId}
   backend:

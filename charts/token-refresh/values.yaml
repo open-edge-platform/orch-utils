@@ -103,3 +103,5 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+externalSecretsApiGroup: external-secrets.io/v1beta1
