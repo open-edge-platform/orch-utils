@@ -5,6 +5,7 @@
 package internal_test
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -12,20 +13,20 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/secretsmanager"
-	"github.com/aws/aws-sdk-go/service/secretsmanager/secretsmanageriface"
+	"github.com/aws/aws-sdk-go-v2/service/secretsmanager"
 	"github.com/stretchr/testify/mock"
 
 	"github.com/open-edge-platform/orch-utils/aws-sm-proxy/internal"
 )
 
 type mockSMClient struct {
-	secretsmanageriface.SecretsManagerAPI
 	mock.Mock
 }
 
-func (m *mockSMClient) GetSecretValue(_ *secretsmanager.GetSecretValueInput,
+func (m *mockSMClient) GetSecretValue(
+	_ context.Context,
+	_ *secretsmanager.GetSecretValueInput,
+	_ ...func(*secretsmanager.Options),
 ) (*secretsmanager.GetSecretValueOutput, error) {
 	args := m.Called()
 	return args.Get(0).(*secretsmanager.GetSecretValueOutput), args.Error(1)
@@ -40,9 +41,10 @@ var _ = Describe("AWS Secrets Manager", func() {
 	})
 	Context("Secrets manager", func() {
 		It("should return the secret", func() {
+			secretString := "mockSecret"
 			client.On("GetSecretValue").Return(
 				&secretsmanager.GetSecretValueOutput{
-					SecretString: aws.String("mockSecret"),
+					SecretString: &secretString,
 				}, nil)
 			req, err := http.NewRequest("GET", "/aws-secret?name=mockName", nil)
 			Expect(err).ToNot(HaveOccurred())
@@ -56,9 +58,10 @@ var _ = Describe("AWS Secrets Manager", func() {
 		})
 
 		It("should return error when no secret name specified", func() {
+			secretString := "mockSecret"
 			client.On("GetSecretValue").Return(
 				&secretsmanager.GetSecretValueOutput{
-					SecretString: aws.String("mockSecret"),
+					SecretString: &secretString,
 				}, nil)
 			req, err := http.NewRequest("GET", "/aws-secret?xyz=bad-param", nil)
 			Expect(err).ToNot(HaveOccurred())

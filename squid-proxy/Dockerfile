@@ -7,7 +7,7 @@ FROM debian:trixie as build-stage
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y --fix-missing --no-install-recommends \
-    squid=6.13-2
+    squid=6.13-*
 
 # show squid version
 RUN echo "Squid version:" && squid -v

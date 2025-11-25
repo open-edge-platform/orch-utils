@@ -12,39 +12,52 @@ spec:
   specGenEnabled: true
   repoConf:
     url: "https://github.com/open-edge-platform/app-orch-catalog.git"
-    tag: "v0.14.7"
+    tag: "v0.15.4"
     specFilePath: "api/spec/openapi.yaml"
   mappings:
+    # Applications
     - externalURI: /v3/projects/{projectName}/catalog/applications
       serviceURI: catalog.orchestrator.apis/v3/applications
-    - externalURI: /v3/projects/{projectName}/catalog/applications/{applicationName}
-      serviceURI: catalog.orchestrator.apis/v3/applications/{applicationName}
-    - externalURI: /v3/projects/{projectName}/catalog/applications/{applicationName}/versions
-      serviceURI: catalog.orchestrator.apis/v3/applications/{applicationName}/versions
-    - externalURI: /v3/projects/{projectName}/catalog/applications/{applicationName}/versions/{version}
-      serviceURI: catalog.orchestrator.apis/v3/applications/{applicationName}/versions/{version}
-    - externalURI: /v3/projects/{projectName}/catalog/applications/{applicationName}/versions/{version}/reference_count
-      serviceURI: catalog.orchestrator.apis/v3/applications/{applicationName}/versions/{version}/reference_count
+    - externalURI: /v3/projects/{projectName}/catalog/applications/{application_name}
+      serviceURI: catalog.orchestrator.apis/v3/applications/{application_name}
+    - externalURI: /v3/projects/{projectName}/catalog/applications/{application_name}/versions
+      serviceURI: catalog.orchestrator.apis/v3/applications/{application_name}/versions
+    - externalURI: /v3/projects/{projectName}/catalog/applications/{application_name}/versions/{version}
+      serviceURI: catalog.orchestrator.apis/v3/applications/{application_name}/versions/{version}
+    - externalURI: /v3/projects/{projectName}/catalog/applications/{application_name}/versions/{version}/reference_count
+      serviceURI: catalog.orchestrator.apis/v3/applications/{application_name}/versions/{version}/reference_count
+    
+    # Artifacts
     - externalURI: /v3/projects/{projectName}/catalog/artifacts
       serviceURI: catalog.orchestrator.apis/v3/artifacts
-    - externalURI: /v3/projects/{projectName}/catalog/artifacts/{artifactName}
-      serviceURI: catalog.orchestrator.apis/v3/artifacts/{artifactName}
+    - externalURI: /v3/projects/{projectName}/catalog/artifacts/{artifact_name}
+      serviceURI: catalog.orchestrator.apis/v3/artifacts/{artifact_name}
+    
+    # Deployment Packages
     - externalURI: /v3/projects/{projectName}/catalog/deployment_packages
       serviceURI: catalog.orchestrator.apis/v3/deployment_packages
-    - externalURI: /v3/projects/{projectName}/catalog/deployment_packages/{deploymentPackageName}
-      serviceURI: catalog.orchestrator.apis/v3/deployment_packages/{deploymentPackageName}
-    - externalURI: /v3/projects/{projectName}/catalog/deployment_packages/{deploymentPackageName}/versions
-      serviceURI: catalog.orchestrator.apis/v3/deployment_packages/{deploymentPackageName}/versions
-    - externalURI: /v3/projects/{projectName}/catalog/deployment_packages/{deploymentPackageName}/versions/{version}
-      serviceURI: catalog.orchestrator.apis/v3/deployment_packages/{deploymentPackageName}/versions/{version}
+    - externalURI: /v3/projects/{projectName}/catalog/deployment_packages/{deployment_package_name}
+      serviceURI: catalog.orchestrator.apis/v3/deployment_packages/{deployment_package_name}
+    - externalURI: /v3/projects/{projectName}/catalog/deployment_packages/{deployment_package_name}/versions
+      serviceURI: catalog.orchestrator.apis/v3/deployment_packages/{deployment_package_name}/versions
+    - externalURI: /v3/projects/{projectName}/catalog/deployment_packages/{deployment_package_name}/versions/{version}
+      serviceURI: catalog.orchestrator.apis/v3/deployment_packages/{deployment_package_name}/versions/{version}
+    # MISSING - Download endpoint for deployment packages
+    - externalURI: /v3/projects/{projectName}/catalog/deployment_packages/{deployment_package_name}/versions/{version}/download
+      serviceURI: catalog.orchestrator.apis/v3/deployment_packages/{deployment_package_name}/versions/{version}/download
+    
+    # Registries
     - externalURI: /v3/projects/{projectName}/catalog/registries
       serviceURI: catalog.orchestrator.apis/v3/registries
-    - externalURI: /v3/projects/{projectName}/catalog/registries/{registryName}
-      serviceURI: catalog.orchestrator.apis/v3/registries/{registryName}
+    - externalURI: /v3/projects/{projectName}/catalog/registries/{registry_name}
+      serviceURI: catalog.orchestrator.apis/v3/registries/{registry_name}
+    
+    # Upload and Import
     - externalURI: /v3/projects/{projectName}/catalog/uploads
       serviceURI: catalog.orchestrator.apis/v3/uploads
     - externalURI: /v3/projects/{projectName}/catalog/import
-      serviceURI: catalog.orchestrator.apis/v3/import      
+      serviceURI: catalog.orchestrator.apis/v3/import
+      
   backend:
     service: "app-orch-catalog-rest-proxy.orch-app.svc.cluster.local"
     port: 8081
