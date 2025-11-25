@@ -16,3 +16,5 @@ sourceSecretName: "source-name"
 keyName:
   - source: "source-key"
     target: "target-key"
+
+externalSecretsApiGroup: external-secrets.io/v1beta1

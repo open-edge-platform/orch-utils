@@ -31,9 +31,10 @@ spec:
         - name: ktc-creds-cntr
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: badouralix/curl-jq@sha256:fe8a5ee49f613495df3b57afa86b39f081bd1b3b9ed61248f46c3d3d7df56092
+          image: "{{ .Values.curlImage.name }}:{{ .Values.curlImage.tag }}"
+          imagePullPolicy: {{ .Values.curlImage.pullPolicy }}
           command: ["/bin/sh"]
-          args: ["/ktc-credentials.sh", "http://platform-keycloak.{{ .Values.namespace }}.svc:8080", "http://vault.{{ .Values.namespace }}.svc:8200"]
+          args: ["/ktc-credentials.sh", "{{ .Values.keycloakAdmin.url }}", "http://vault.{{ .Values.namespace }}.svc:8200"]
           env:
             - name: VAULT_URL
               value: "http://vault.{{ .Values.namespace }}.svc.cluster.local:8200"
@@ -88,7 +89,7 @@ spec:
             - name: VAULT_PKI_ROLE
               value: {{ .Values.serviceAccount.name }}
             - name: KEYCLOAK_URL
-              value: "http://platform-keycloak.{{ .Values.namespace }}.svc:8080"
+              value: "{{ .Values.keycloakAdmin.url }}"
             - name: KTC_SERVER_LOG_LEVEL
               value: "info"
             - name: KEYCLOAK_REALM
