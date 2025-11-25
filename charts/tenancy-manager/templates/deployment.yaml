@@ -55,7 +55,7 @@ spec:
       - name: {{ include "iam.fullname" . }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
-        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        image: "gar-registry.caas.intel.com/ledgepark-iaas-software/nexus/tenancy-manager:25.2.2"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         resources:
             {{- toYaml .Values.resources | nindent 12 }}
