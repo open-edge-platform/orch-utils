@@ -103,6 +103,33 @@ func (c *Clientset) SubscribeAll() {
 	{{end}}
 }
 
+// WaitForCacheSync waits for all informers to synchronize with the etcd state
+func (c *Clientset) WaitForCacheSync(ctx context.Context, timeoutSeconds int) error {
+	timeout := time.Duration(timeoutSeconds) * time.Second
+	deadline, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+
+	var informers []cache.SharedIndexInformer
+	subscriptionMap.Range(func(key, value interface{}) bool {
+		if sub, ok := value.(subscription); ok {
+			informers = append(informers, sub.informer)
+		}
+		return true
+	})
+
+	if len(informers) == 0 {
+		logger.Debugf("[WaitForCacheSync] No informers registered")
+		return nil
+	}
+
+	if !cache.WaitForCacheSync(deadline.Done(), informers...) {
+		logger.Warnf("[WaitForCacheSync] Cache sync timeout after %v seconds", timeoutSeconds)
+		return fmt.Errorf("cache sync timeout")
+	}
+	logger.Debugf("[WaitForCacheSync] All caches synchronized successfully")
+	return nil
+}
+
 func (c *Clientset) UnsubscribeAll() {
     subscriptionMap.Range(func(key, s interface{})bool{
 		close(s.(subscription).stop)
@@ -243,6 +270,7 @@ func (group *{{$node.GroupTypeName}}) Get{{$node.BaseNodeName}}ByName(ctx contex
 	}
 
 	retryCount := 0
+	forceRefreshRetryCount := 0
 	for {
 		result, err := group.client.baseClient.
 		{{$node.GroupTypeName}}().
@@ -253,7 +281,26 @@ func (group *{{$node.GroupTypeName}}) Get{{$node.BaseNodeName}}ByName(ctx contex
 				{{$node.BaseNodeName}}: result,
 			}, nil
 		} else if errors.IsNotFound(err) {
-			logger.Debugf("[Get{{$node.BaseNodeName}}ByName]: object %v not found", hashedName)
+			logger.Debugf("[Get{{$node.BaseNodeName}}ByName]: object %v not found in cache, attempting force refresh", hashedName)
+			// Not found in cache - try direct API call to handle race condition
+			// Only do 1 retry with minimal delay to catch recently-created objects
+			// If object still not found after 1 retry, it likely doesn't exist
+			if forceRefreshRetryCount == 0 {
+				forceRefreshRetryCount++
+				// Short delay to allow informer to sync recently created objects
+				time.Sleep(500 * time.Millisecond)
+				forceResult, forceErr := group.ForceRead{{$node.BaseNodeName}}ByName(ctx, hashedName)
+				if forceErr == nil {
+					logger.Debugf("[Get{{$node.BaseNodeName}}ByName]: object %v found via force refresh after cache miss", hashedName)
+					return forceResult, nil
+				}
+				if errors.IsNotFound(forceErr) {
+					logger.Debugf("[Get{{$node.BaseNodeName}}ByName]: object %v confirmed not found (not created yet)", hashedName)
+					return nil, forceErr
+				}
+				logger.Debugf("[Get{{$node.BaseNodeName}}ByName]: force refresh failed with error: %v, falling back to original error", forceErr)
+			}
+			logger.Debugf("[Get{{$node.BaseNodeName}}ByName]: object %v not found after force refresh attempt", hashedName)
 			return nil, err
 		} else {
 			if errors.IsTimeout(err) || customerrors.Is(err, context.DeadlineExceeded){

@@ -593,15 +593,30 @@ func getConfigOrg(client *nexus_client.Clientset, name string) (*nexus_client.Or
 	if err != nil {
 		return nil, err
 	}
-	configOrg, err := config.GetOrgs(context.Background(), name)
-	if err != nil {
-		if nexus_client.IsChildNotFound(err) {
-			// simply return, do nothing.
-			return nil, ErrNotFound
+	
+	// Retry logic for recently-created orgs that may not be in cache yet.
+	// The cache may lag slightly after org creation, so retry once with backoff.
+	var lastErr error
+	for attempt := 0; attempt < 2; attempt++ {
+		configOrg, err := config.GetOrgs(context.Background(), name)
+		if err == nil {
+			return configOrg, nil
 		}
-		return nil, err
+		
+		// If it's not a "not found" error, return immediately (other errors shouldn't be retried)
+		if !nexus_client.IsChildNotFound(err) {
+			return nil, err
+		}
+		
+		lastErr = err
+		if attempt < 1 {
+			// Wait before retrying to allow informer to sync the newly created object
+			time.Sleep(100 * time.Millisecond)
+		}
 	}
-	return configOrg, nil
+	
+	// Org not found after retries
+	return nil, ErrNotFound
 }
 
 func getConfigProject(client *nexus_client.Clientset, orgName, folderName, projectName string,
@@ -610,16 +625,31 @@ func getConfigProject(client *nexus_client.Clientset, orgName, folderName, proje
 	if err != nil {
 		return nil, err
 	}
-	configProject, err := client.TenancyMultiTenancy().Config().Orgs(configOrg.DisplayName()).
-		Folders(folderName).GetProjects(context.Background(), projectName)
-	if err != nil {
-		if nexus_client.IsNotFound(err) {
-			// simply return, do nothing.
-			return nil, ErrNotFound
+	
+	// Retry logic for recently-created projects that may not be in cache yet.
+	// The cache may lag slightly after project creation, so retry once with backoff.
+	var lastErr error
+	for attempt := 0; attempt < 2; attempt++ {
+		configProject, err := client.TenancyMultiTenancy().Config().Orgs(configOrg.DisplayName()).
+			Folders(folderName).GetProjects(context.Background(), projectName)
+		if err == nil {
+			return configProject, nil
 		}
-		return nil, err
+		
+		// If it's not a "not found" error, return immediately (other errors shouldn't be retried)
+		if !nexus_client.IsNotFound(err) {
+			return nil, err
+		}
+		
+		lastErr = err
+		if attempt < 1 {
+			// Wait before retrying to allow informer to sync the newly created object
+			time.Sleep(100 * time.Millisecond)
+		}
 	}
-	return configProject, nil
+	
+	// Project not found after retries
+	return nil, ErrNotFound
 }
 
 func getMapKeys(m map[string]struct{}) []string {
