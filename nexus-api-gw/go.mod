@@ -8,9 +8,9 @@ go 1.24.9
 
 require (
 	github.com/getkin/kin-openapi v0.131.0
-	github.com/go-openapi/runtime v0.24.1
+	github.com/go-openapi/runtime v0.24.2
 	github.com/google/uuid v1.6.0 // indirect
-	github.com/labstack/echo/v4 v4.13.3
+	github.com/labstack/echo/v4 v4.13.4
 	github.com/onsi/ginkgo/v2 v2.23.4
 	github.com/onsi/gomega v1.37.0
 	github.com/sirupsen/logrus v1.9.3
@@ -27,14 +27,14 @@ require (
 	github.com/ghodss/yaml v1.0.0
 	github.com/golang-jwt/jwt/v5 v5.2.3
 	github.com/open-edge-platform/infra-core/inventory/v2 v2.23.0
-	github.com/open-edge-platform/orch-library/go v0.5.29
+	github.com/open-edge-platform/orch-library/go v0.5.31
 	github.com/open-edge-platform/orch-utils/tenancy-datamodel v0.0.0-20250401180309-9c2571c45857
 	github.com/open-policy-agent/opa v1.4.0
 	github.com/rs/zerolog v1.34.0
 	github.com/stretchr/testify v1.10.0
 	github.com/vmware-tanzu/graph-framework-for-microservices/common-library v0.0.0-20221020140923-7deb4d75cfcf
 	github.com/vmware-tanzu/graph-framework-for-microservices/nexus v0.0.0-20230908154608-60c8916a498f
-	golang.org/x/crypto v0.36.0
+	golang.org/x/crypto v0.38.0
 	k8s.io/api v0.32.9
 	k8s.io/kube-aggregator v0.24.1
 	sigs.k8s.io/yaml v1.4.0
@@ -132,10 +132,10 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
-	golang.org/x/net v0.38.0 // indirect
-	golang.org/x/sys v0.32.0 // indirect
-	golang.org/x/term v0.30.0 // indirect
-	golang.org/x/text v0.23.0 // indirect
+	golang.org/x/net v0.40.0 // indirect
+	golang.org/x/sys v0.33.0 // indirect
+	golang.org/x/term v0.32.0 // indirect
+	golang.org/x/text v0.25.0 // indirect
 	golang.org/x/time v0.11.0 // indirect
 	golang.org/x/tools v0.31.0 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.4.0 // indirect
