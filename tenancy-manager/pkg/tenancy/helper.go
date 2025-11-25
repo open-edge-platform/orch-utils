@@ -143,20 +143,6 @@ func verifyOrgStatus(client *nexus_client.Clientset, displayName, hashName strin
 		}
 		return
 	}
-	// Allow IDLE when expecting IN_PROGRESS (idempotency - already completed)
-	if status == orgsv1.StatusIndicationInProgress &&
-		updatedOrg.Status.OrgStatus.StatusIndicator == orgsv1.StatusIndicationIdle {
-		log.Debug().Msgf("Org %s (hashName: %s) already transitioned to IDLE, expected IN_PROGRESS (likely completed by another watcher)",
-			displayName, hashName)
-		return
-	}
-	// Allow IN_PROGRESS when expecting IDLE (still processing)
-	if status == orgsv1.StatusIndicationIdle &&
-		updatedOrg.Status.OrgStatus.StatusIndicator == orgsv1.StatusIndicationInProgress {
-		log.Warn().Msgf("Org %s (hashName: %s) still IN_PROGRESS, expected IDLE. Timestamp: %v. May need more time for watchers to complete.",
-			displayName, hashName, updatedOrg.Status.OrgStatus.TimeStamp)
-		return
-	}
 	if status != updatedOrg.Status.OrgStatus.StatusIndicator {
 		log.Error().Msgf("Expected Status: %v. Actual status of Org %s (hashName: %s): %v, Timestamp in Object: %v",
 			status, displayName, hashName, updatedOrg.Status.OrgStatus.StatusIndicator,
@@ -212,20 +198,6 @@ func verifyProjectStatus(client *nexus_client.Clientset, displayName, hashName s
 		if !errors.Is(err, ErrNotFound) {
 			log.Panic().Msgf("Failed to get config project %s object to add status: %v", displayName, err)
 		}
-		return
-	}
-	// Allow IDLE when expecting IN_PROGRESS (idempotency - already completed)
-	if status == projectv1.StatusIndicationInProgress &&
-		updatedProject.Status.ProjectStatus.StatusIndicator == projectv1.StatusIndicationIdle {
-		log.Debug().Msgf("Project %s (hashName: %s) already transitioned to IDLE, expected IN_PROGRESS (likely completed by another watcher)",
-			displayName, hashName)
-		return
-	}
-	// Allow IN_PROGRESS when expecting IDLE (still processing)
-	if status == projectv1.StatusIndicationIdle &&
-		updatedProject.Status.ProjectStatus.StatusIndicator == projectv1.StatusIndicationInProgress {
-		log.Warn().Msgf("Project %s (hashName: %s) still IN_PROGRESS, expected IDLE. Timestamp: %v. May need more time for watchers to complete.",
-			displayName, hashName, updatedProject.Status.ProjectStatus.TimeStamp)
 		return
 	}
 	if status != updatedProject.Status.ProjectStatus.StatusIndicator {
