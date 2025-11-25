@@ -36,7 +36,7 @@ require (
 	github.com/vmware-tanzu/graph-framework-for-microservices/nexus v0.0.0-20230908154608-60c8916a498f
 	golang.org/x/crypto v0.38.0
 	k8s.io/api v0.32.9
-	k8s.io/kube-aggregator v0.24.1
+	k8s.io/kube-aggregator v0.24.17
 	sigs.k8s.io/yaml v1.4.0
 )
 
