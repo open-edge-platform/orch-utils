@@ -8,7 +8,7 @@ go 1.24.9
 
 require (
 	github.com/getkin/kin-openapi v0.131.0
-	github.com/go-openapi/runtime v0.24.1
+	github.com/go-openapi/runtime v0.24.2
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/onsi/ginkgo/v2 v2.23.4
