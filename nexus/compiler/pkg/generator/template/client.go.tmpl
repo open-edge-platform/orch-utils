@@ -109,10 +109,10 @@ func (c *Clientset) WaitForCacheSync(ctx context.Context, timeoutSeconds int) er
 	deadline, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
-	var informers []cache.SharedIndexInformer
+	var informers []cache.InformerSynced
 	subscriptionMap.Range(func(key, value interface{}) bool {
 		if sub, ok := value.(subscription); ok {
-			informers = append(informers, sub.informer)
+			informers = append(informers, sub.informer.HasSynced)
 		}
 		return true
 	})
