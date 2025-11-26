@@ -41,6 +41,10 @@ const (
 	Delete Event = "DELETE"
 
 	pollInterval = 5 * time.Second
+	
+	// Retry configuration for handling optimistic lock conflicts
+	maxStatusUpdateRetries = 3
+	statusUpdateRetryDelay = 50 * time.Millisecond
 )
 
 var (
@@ -93,6 +97,101 @@ func getRuntimeProjectUID(c *nexus_client.Clientset, project *nexus_client.Proje
 	return uid
 }
 
+// setOrgStatusWithRetry attempts to set org status with retry logic for handling conflict errors
+func setOrgStatusWithRetry(client *nexus_client.Clientset, displayName, hashName string,
+	status orgsv1.TenancyRequestStatus, msg string, eventType Event,
+) error {
+	var lastErr error
+	
+	for attempt := 0; attempt < maxStatusUpdateRetries; attempt++ {
+		configOrg, err := getConfigOrg(client, displayName)
+		if err != nil {
+			return err
+		}
+		
+		err = configOrg.SetOrgStatus(context.Background(), &orgsv1.OrgStatus{
+			StatusIndicator: status,
+			Message:         msg,
+			TimeStamp:       safeUnixTime(),
+			UID:             getRuntimeOrgUID(client, configOrg),
+		})
+		
+		if err == nil {
+			log.Debug().Msgf("Successfully set OrgStatus of %s (hashName: %s) to %v after %d attempt(s)",
+				displayName, hashName, status, attempt+1)
+			return nil
+		}
+		
+		// Check if this is a conflict error that can be retried
+		if nexus_client.IsConflict(err) || nexus_client.IsAlreadyExists(err) {
+			lastErr = err
+			if attempt < maxStatusUpdateRetries-1 {
+				log.Debug().Msgf("Conflict updating OrgStatus of %s (hashName: %s), retrying (attempt %d/%d)",
+					displayName, hashName, attempt+1, maxStatusUpdateRetries)
+				time.Sleep(statusUpdateRetryDelay)
+				continue
+			}
+		}
+		
+		// For non-retryable errors, return immediately
+		log.Warn().Msgf("Failed to set OrgStatus of %s (hashName: %s) with non-retryable error: %v",
+			displayName, hashName, err)
+		return err
+	}
+	
+	log.Error().Msgf("Exhausted retries (%d) setting OrgStatus of %s (hashName: %s), last error: %v",
+		maxStatusUpdateRetries, displayName, hashName, lastErr)
+	return lastErr
+}
+
+// setProjectStatusWithRetry attempts to set project status with retry logic for handling conflict errors
+func setProjectStatusWithRetry(client *nexus_client.Clientset, displayName, hashName string,
+	parentOrgName, parentFolderName string,
+	status projectv1.TenancyRequestStatus, msg string, eventType Event,
+) error {
+	var lastErr error
+	
+	for attempt := 0; attempt < maxStatusUpdateRetries; attempt++ {
+		configProject, err := getConfigProject(client, parentOrgName, parentFolderName, displayName)
+		if err != nil {
+			return err
+		}
+		
+		err = configProject.SetProjectStatus(context.Background(), &projectv1.ProjectStatus{
+			StatusIndicator: status,
+			Message:         msg,
+			TimeStamp:       safeUnixTime(),
+			UID:             getRuntimeProjectUID(client, configProject),
+		})
+		
+		if err == nil {
+			log.Debug().Msgf("Successfully set ProjectStatus of %s (hashName: %s) to %v after %d attempt(s)",
+				displayName, hashName, status, attempt+1)
+			return nil
+		}
+		
+		// Check if this is a conflict error that can be retried
+		if nexus_client.IsConflict(err) || nexus_client.IsAlreadyExists(err) {
+			lastErr = err
+			if attempt < maxStatusUpdateRetries-1 {
+				log.Debug().Msgf("Conflict updating ProjectStatus of %s (hashName: %s), retrying (attempt %d/%d)",
+					displayName, hashName, attempt+1, maxStatusUpdateRetries)
+				time.Sleep(statusUpdateRetryDelay)
+				continue
+			}
+		}
+		
+		// For non-retryable errors, return immediately
+		log.Warn().Msgf("Failed to set ProjectStatus of %s (hashName: %s) with non-retryable error: %v",
+			displayName, hashName, err)
+		return err
+	}
+	
+	log.Error().Msgf("Exhausted retries (%d) setting ProjectStatus of %s (hashName: %s), last error: %v",
+		maxStatusUpdateRetries, displayName, hashName, lastErr)
+	return lastErr
+}
+
 func setOrgStatus(client *nexus_client.Clientset, displayName, hashName string,
 	status orgsv1.TenancyRequestStatus, msg string, eventType Event,
 ) {
@@ -119,12 +218,7 @@ func setOrgStatus(client *nexus_client.Clientset, displayName, hashName string,
 		return
 	}
 	log.Debug().Msgf("Setting OrgStatus of %s (hashName: %s) to %v", displayName, hashName, status)
-	err := configOrg.SetOrgStatus(context.Background(), &orgsv1.OrgStatus{
-		StatusIndicator: status,
-		Message:         msg,
-		TimeStamp:       safeUnixTime(),
-		UID:             getRuntimeOrgUID(client, configOrg),
-	})
+	err := setOrgStatusWithRetry(client, displayName, hashName, status, msg, eventType)
 	if err != nil {
 		log.Panic().Msgf("failed to set OrgStatus of %s to %v status due error: %v", hashName, status, err)
 	}
@@ -176,12 +270,7 @@ func setProjectStatus(client *nexus_client.Clientset, displayName, hashName stri
 		return
 	}
 	log.Debug().Msgf("Setting ProjectStatus of %s (hashName: %s) to %v", displayName, hashName, status)
-	err = configProject.SetProjectStatus(context.Background(), &projectv1.ProjectStatus{
-		StatusIndicator: status,
-		Message:         msg,
-		TimeStamp:       safeUnixTime(),
-		UID:             getRuntimeProjectUID(client, configProject),
-	})
+	err = setProjectStatusWithRetry(client, displayName, hashName, parentOrgName, parentFolderName, status, msg, eventType)
 	if err != nil {
 		log.Panic().Msgf("failed to set ProjectStatus of %s to %s, due error: %v", hashName, status, err)
 	}
@@ -467,11 +556,15 @@ func isOrgCreationSuccessful(client *nexus_client.Clientset,
 		if watcher == nil {
 			break
 		}
-		if _, exists := expectedOrgWatchers[watcher.DisplayName()]; exists {
-			if watcher.Spec.StatusIndicator != orgactivewatcherv1.StatusIndicationIdle {
-				continue
-			}
+		if _, exists := expectedOrgWatchers[watcher.DisplayName()]; !exists {
+			// Watcher is not in the expected list, skip it
+			continue
 		}
+		if watcher.Spec.StatusIndicator != orgactivewatcherv1.StatusIndicationIdle {
+			// Watcher is in expected list but not IDLE yet, keep it in the map
+			continue
+		}
+		// Watcher is in the expected list and is IDLE, so remove it from the map
 		delete(expectedOrgWatchers, watcher.DisplayName())
 	}
 
@@ -540,15 +633,19 @@ func isProjectCreationSuccessful(client *nexus_client.Clientset, displayName, or
 		if watcher == nil {
 			break
 		}
-		if _, exists := expectedProjectWatchers[watcher.DisplayName()]; exists {
-			if watcher.Spec.StatusIndicator != projectactivewatcherv1.StatusIndicationIdle {
-				continue
-			}
+		if _, exists := expectedProjectWatchers[watcher.DisplayName()]; !exists {
+			// Watcher is not in the expected list, skip it
+			continue
 		}
+		if watcher.Spec.StatusIndicator != projectactivewatcherv1.StatusIndicationIdle {
+			// Watcher is in expected list but not IDLE yet, keep it in the map
+			continue
+		}
+		// Watcher is in the expected list and is IDLE, so remove it from the map
 		delete(expectedProjectWatchers, watcher.DisplayName())
 	}
 
-	// If all watchers acknowledged the org, we can exit.
+	// If all watchers acknowledged the project, we can exit.
 	return len(expectedProjectWatchers) == 0, nil
 }
 
@@ -599,6 +696,9 @@ func getConfigOrg(client *nexus_client.Clientset, name string) (*nexus_client.Or
 	for attempt := 0; attempt < 2; attempt++ {
 		configOrg, err := config.GetOrgs(context.Background(), name)
 		if err == nil {
+			if attempt > 0 {
+				log.Debug().Msgf("Found org %s after %d retry attempt(s)", name, attempt)
+			}
 			return configOrg, nil
 		}
 		
@@ -609,11 +709,13 @@ func getConfigOrg(client *nexus_client.Clientset, name string) (*nexus_client.Or
 		
 		if attempt < 1 {
 			// Wait before retrying to allow informer to sync the newly created object
+			log.Debug().Msgf("Org %s not found in cache, retrying after backoff (attempt %d/2)", name, attempt+1)
 			time.Sleep(100 * time.Millisecond)
 		}
 	}
 	
 	// Org not found after retries
+	log.Debug().Msgf("Org %s not found after cache retry attempts", name)
 	return nil, ErrNotFound
 }
 
@@ -630,6 +732,9 @@ func getConfigProject(client *nexus_client.Clientset, orgName, folderName, proje
 		configProject, err := client.TenancyMultiTenancy().Config().Orgs(configOrg.DisplayName()).
 			Folders(folderName).GetProjects(context.Background(), projectName)
 		if err == nil {
+			if attempt > 0 {
+				log.Debug().Msgf("Found project %s after %d retry attempt(s)", projectName, attempt)
+			}
 			return configProject, nil
 		}
 		
@@ -640,11 +745,13 @@ func getConfigProject(client *nexus_client.Clientset, orgName, folderName, proje
 		
 		if attempt < 1 {
 			// Wait before retrying to allow informer to sync the newly created object
+			log.Debug().Msgf("Project %s not found in cache, retrying after backoff (attempt %d/2)", projectName, attempt+1)
 			time.Sleep(100 * time.Millisecond)
 		}
 	}
 	
 	// Project not found after retries
+	log.Debug().Msgf("Project %s not found after cache retry attempts", projectName)
 	return nil, ErrNotFound
 }
 

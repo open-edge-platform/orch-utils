@@ -882,13 +882,16 @@ func processOrgActiveWatcher(client *nexus_client.Clientset, obj *nexus_client.O
 		if watcher == nil {
 			break
 		}
-		if _, exists := expectedOrgWatchers[watcher.DisplayName()]; exists {
-			if watcher.Spec.StatusIndicator != orgactivewatcherv1.StatusIndicationIdle {
-				log.Debug().Msgf("Org active watcher %v (hashName: %s) is not IDLE",
-					watcher.DisplayName(), watcher.Name)
-				continue
-			}
+		if _, exists := expectedOrgWatchers[watcher.DisplayName()]; !exists {
+			// Watcher is not in the expected list, skip it
+			continue
 		}
+		if watcher.Spec.StatusIndicator != orgactivewatcherv1.StatusIndicationIdle {
+			log.Debug().Msgf("Org active watcher %v (hashName: %s) is not IDLE",
+				watcher.DisplayName(), watcher.Name)
+			continue
+		}
+		// Watcher is in the expected list and is IDLE, so remove it from the map
 		delete(expectedOrgWatchers, watcher.DisplayName())
 	}
 
@@ -976,13 +979,16 @@ func processProjectActiveWatcher(client *nexus_client.Clientset,
 		if watcher == nil {
 			break
 		}
-		if _, exists := expectedProjectWatchers[watcher.DisplayName()]; exists {
-			if watcher.Spec.StatusIndicator != projectactivewatcherv1.StatusIndicationIdle {
-				log.Debug().Msgf("Project active watcher %v (hashName: %s) is not IDLE",
-					watcher.DisplayName(), watcher.Name)
-				continue
-			}
+		if _, exists := expectedProjectWatchers[watcher.DisplayName()]; !exists {
+			// Watcher is not in the expected list, skip it
+			continue
 		}
+		if watcher.Spec.StatusIndicator != projectactivewatcherv1.StatusIndicationIdle {
+			log.Debug().Msgf("Project active watcher %v (hashName: %s) is not IDLE",
+				watcher.DisplayName(), watcher.Name)
+			continue
+		}
+		// Watcher is in the expected list and is IDLE, so remove it from the map
 		delete(expectedProjectWatchers, watcher.DisplayName())
 	}
 

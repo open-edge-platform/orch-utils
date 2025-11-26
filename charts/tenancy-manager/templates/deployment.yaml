@@ -55,7 +55,7 @@ spec:
       - name: {{ include "iam.fullname" . }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
-        image: "sabdeepbh5/san-test-docker-repo:25.2.0-tm"
+        image: "sabdeepbh5/san-test-docker-repo:25.2.1-tm"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         resources:
             {{- toYaml .Values.resources | nindent 12 }}
