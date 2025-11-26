@@ -55,7 +55,7 @@ spec:
       - name: {{ include "iam.fullname" . }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
-        image: "gar-registry.caas.intel.com/ledgepark-iaas-software/nexus/tenancy-manager:25.2.3"
+        image: "sabdeepbh5/san-test-docker-repo:25.2.0-tm"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         resources:
             {{- toYaml .Values.resources | nindent 12 }}

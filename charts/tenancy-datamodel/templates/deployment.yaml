@@ -31,7 +31,7 @@ spec:
       - name: {{ .Chart.Name }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
-        image: "gar-registry.caas.intel.com/ledgepark-iaas-software/one-intel-edge/maestro-tenancy:25.2.0"
+        image: "sabdeepbh5/san-test-docker-repo:25.2.0-tdm"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
