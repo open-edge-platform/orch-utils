@@ -84,3 +84,5 @@ nexus-api-gw/pkg/openapi/api/api.coverprofile
 nexus-api-gw/*venv
 
 *.test
+
+vendor/
