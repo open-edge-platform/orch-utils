@@ -10,7 +10,7 @@ require (
 	github.com/onsi/ginkgo/v2 v2.23.4
 	github.com/onsi/gomega v1.37.0
 	github.com/open-edge-platform/infra-core/inventory/v2 v2.23.0
-	github.com/open-edge-platform/orch-utils/tenancy-datamodel v1.2.3-0.20251126124158-7e4ecb820281
+	github.com/open-edge-platform/orch-utils/tenancy-datamodel v1.2.3-0.20251126155507-e0d9404fa1d7
 	github.com/rs/zerolog v1.34.0
 	gopkg.in/yaml.v2 v2.4.0
 	k8s.io/apimachinery v0.32.9
@@ -82,5 +82,3 @@ require (
 	sigs.k8s.io/structured-merge-diff/v4 v4.4.2 // indirect
 	sigs.k8s.io/yaml v1.4.0 // indirect
 )
-
-replace github.com/open-edge-platform/orch-utils/tenancy-datamodel => ../tenancy-datamodel
