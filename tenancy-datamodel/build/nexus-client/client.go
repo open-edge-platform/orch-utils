@@ -323,6 +323,33 @@ func (c *Clientset) SubscribeAll() {
 
 }
 
+// WaitForCacheSync waits for all informers to synchronize with the etcd state
+func (c *Clientset) WaitForCacheSync(ctx context.Context, timeoutSeconds int) error {
+	timeout := time.Duration(timeoutSeconds) * time.Second
+	deadline, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+
+	var informers []cache.SharedIndexInformer
+	subscriptionMap.Range(func(key, value interface{}) bool {
+		if sub, ok := value.(subscription); ok {
+			informers = append(informers, sub.informer)
+		}
+		return true
+	})
+
+	if len(informers) == 0 {
+		logger.Debugf("[WaitForCacheSync] No informers registered")
+		return nil
+	}
+
+	if !cache.WaitForCacheSync(deadline.Done(), informers...) {
+		logger.Warnf("[WaitForCacheSync] Cache sync timeout after %v seconds", timeoutSeconds)
+		return fmt.Errorf("cache sync timeout")
+	}
+	logger.Debugf("[WaitForCacheSync] All caches synchronized successfully")
+	return nil
+}
+
 func (c *Clientset) UnsubscribeAll() {
 	subscriptionMap.Range(func(key, s interface{}) bool {
 		close(s.(subscription).stop)
@@ -670,6 +697,7 @@ func (group *TenancyEdgeV1) GetMultiTenancyByName(ctx context.Context, hashedNam
 	}
 
 	retryCount := 0
+	forceRefreshRetryCount := 0
 	for {
 		result, err := group.client.baseClient.
 			TenancyEdgeV1().
@@ -680,7 +708,26 @@ func (group *TenancyEdgeV1) GetMultiTenancyByName(ctx context.Context, hashedNam
 				MultiTenancy: result,
 			}, nil
 		} else if errors.IsNotFound(err) {
-			logger.Debugf("[GetMultiTenancyByName]: object %v not found", hashedName)
+			logger.Debugf("[GetMultiTenancyByName]: object %v not found in cache, attempting force refresh", hashedName)
+			// Not found in cache - try direct API call to handle race condition
+			// Only do 1 retry with minimal delay to catch recently-created objects
+			// If object still not found after 1 retry, it likely doesn't exist
+			if forceRefreshRetryCount == 0 {
+				forceRefreshRetryCount++
+				// Short delay to allow informer to sync recently created objects
+				time.Sleep(500 * time.Millisecond)
+				forceResult, forceErr := group.ForceReadMultiTenancyByName(ctx, hashedName)
+				if forceErr == nil {
+					logger.Debugf("[GetMultiTenancyByName]: object %v found via force refresh after cache miss", hashedName)
+					return forceResult, nil
+				}
+				if errors.IsNotFound(forceErr) {
+					logger.Debugf("[GetMultiTenancyByName]: object %v confirmed not found (not created yet)", hashedName)
+					return nil, forceErr
+				}
+				logger.Debugf("[GetMultiTenancyByName]: force refresh failed with error: %v, falling back to original error", forceErr)
+			}
+			logger.Debugf("[GetMultiTenancyByName]: object %v not found after force refresh attempt", hashedName)
 			return nil, err
 		} else {
 			if errors.IsTimeout(err) || customerrors.Is(err, context.DeadlineExceeded) {
@@ -1606,6 +1653,7 @@ func (group *ConfigEdgeV1) GetConfigByName(ctx context.Context, hashedName strin
 	}
 
 	retryCount := 0
+	forceRefreshRetryCount := 0
 	for {
 		result, err := group.client.baseClient.
 			ConfigEdgeV1().
@@ -1616,7 +1664,26 @@ func (group *ConfigEdgeV1) GetConfigByName(ctx context.Context, hashedName strin
 				Config: result,
 			}, nil
 		} else if errors.IsNotFound(err) {
-			logger.Debugf("[GetConfigByName]: object %v not found", hashedName)
+			logger.Debugf("[GetConfigByName]: object %v not found in cache, attempting force refresh", hashedName)
+			// Not found in cache - try direct API call to handle race condition
+			// Only do 1 retry with minimal delay to catch recently-created objects
+			// If object still not found after 1 retry, it likely doesn't exist
+			if forceRefreshRetryCount == 0 {
+				forceRefreshRetryCount++
+				// Short delay to allow informer to sync recently created objects
+				time.Sleep(500 * time.Millisecond)
+				forceResult, forceErr := group.ForceReadConfigByName(ctx, hashedName)
+				if forceErr == nil {
+					logger.Debugf("[GetConfigByName]: object %v found via force refresh after cache miss", hashedName)
+					return forceResult, nil
+				}
+				if errors.IsNotFound(forceErr) {
+					logger.Debugf("[GetConfigByName]: object %v confirmed not found (not created yet)", hashedName)
+					return nil, forceErr
+				}
+				logger.Debugf("[GetConfigByName]: force refresh failed with error: %v, falling back to original error", forceErr)
+			}
+			logger.Debugf("[GetConfigByName]: object %v not found after force refresh attempt", hashedName)
 			return nil, err
 		} else {
 			if errors.IsTimeout(err) || customerrors.Is(err, context.DeadlineExceeded) {
@@ -3173,6 +3240,7 @@ func (group *ApimappingconfigEdgeV1) GetAPIMappingConfigByName(ctx context.Conte
 	}
 
 	retryCount := 0
+	forceRefreshRetryCount := 0
 	for {
 		result, err := group.client.baseClient.
 			ApimappingconfigEdgeV1().
@@ -3183,7 +3251,26 @@ func (group *ApimappingconfigEdgeV1) GetAPIMappingConfigByName(ctx context.Conte
 				APIMappingConfig: result,
 			}, nil
 		} else if errors.IsNotFound(err) {
-			logger.Debugf("[GetAPIMappingConfigByName]: object %v not found", hashedName)
+			logger.Debugf("[GetAPIMappingConfigByName]: object %v not found in cache, attempting force refresh", hashedName)
+			// Not found in cache - try direct API call to handle race condition
+			// Only do 1 retry with minimal delay to catch recently-created objects
+			// If object still not found after 1 retry, it likely doesn't exist
+			if forceRefreshRetryCount == 0 {
+				forceRefreshRetryCount++
+				// Short delay to allow informer to sync recently created objects
+				time.Sleep(500 * time.Millisecond)
+				forceResult, forceErr := group.ForceReadAPIMappingConfigByName(ctx, hashedName)
+				if forceErr == nil {
+					logger.Debugf("[GetAPIMappingConfigByName]: object %v found via force refresh after cache miss", hashedName)
+					return forceResult, nil
+				}
+				if errors.IsNotFound(forceErr) {
+					logger.Debugf("[GetAPIMappingConfigByName]: object %v confirmed not found (not created yet)", hashedName)
+					return nil, forceErr
+				}
+				logger.Debugf("[GetAPIMappingConfigByName]: force refresh failed with error: %v, falling back to original error", forceErr)
+			}
+			logger.Debugf("[GetAPIMappingConfigByName]: object %v not found after force refresh attempt", hashedName)
 			return nil, err
 		} else {
 			if errors.IsTimeout(err) || customerrors.Is(err, context.DeadlineExceeded) {
@@ -4085,6 +4172,7 @@ func (group *OrgEdgeV1) GetOrgByName(ctx context.Context, hashedName string) (*O
 	}
 
 	retryCount := 0
+	forceRefreshRetryCount := 0
 	for {
 		result, err := group.client.baseClient.
 			OrgEdgeV1().
@@ -4095,7 +4183,26 @@ func (group *OrgEdgeV1) GetOrgByName(ctx context.Context, hashedName string) (*O
 				Org:    result,
 			}, nil
 		} else if errors.IsNotFound(err) {
-			logger.Debugf("[GetOrgByName]: object %v not found", hashedName)
+			logger.Debugf("[GetOrgByName]: object %v not found in cache, attempting force refresh", hashedName)
+			// Not found in cache - try direct API call to handle race condition
+			// Only do 1 retry with minimal delay to catch recently-created objects
+			// If object still not found after 1 retry, it likely doesn't exist
+			if forceRefreshRetryCount == 0 {
+				forceRefreshRetryCount++
+				// Short delay to allow informer to sync recently created objects
+				time.Sleep(500 * time.Millisecond)
+				forceResult, forceErr := group.ForceReadOrgByName(ctx, hashedName)
+				if forceErr == nil {
+					logger.Debugf("[GetOrgByName]: object %v found via force refresh after cache miss", hashedName)
+					return forceResult, nil
+				}
+				if errors.IsNotFound(forceErr) {
+					logger.Debugf("[GetOrgByName]: object %v confirmed not found (not created yet)", hashedName)
+					return nil, forceErr
+				}
+				logger.Debugf("[GetOrgByName]: force refresh failed with error: %v, falling back to original error", forceErr)
+			}
+			logger.Debugf("[GetOrgByName]: object %v not found after force refresh attempt", hashedName)
 			return nil, err
 		} else {
 			if errors.IsTimeout(err) || customerrors.Is(err, context.DeadlineExceeded) {
@@ -5258,6 +5365,7 @@ func (group *FolderEdgeV1) GetFolderByName(ctx context.Context, hashedName strin
 	}
 
 	retryCount := 0
+	forceRefreshRetryCount := 0
 	for {
 		result, err := group.client.baseClient.
 			FolderEdgeV1().
@@ -5268,7 +5376,26 @@ func (group *FolderEdgeV1) GetFolderByName(ctx context.Context, hashedName strin
 				Folder: result,
 			}, nil
 		} else if errors.IsNotFound(err) {
-			logger.Debugf("[GetFolderByName]: object %v not found", hashedName)
+			logger.Debugf("[GetFolderByName]: object %v not found in cache, attempting force refresh", hashedName)
+			// Not found in cache - try direct API call to handle race condition
+			// Only do 1 retry with minimal delay to catch recently-created objects
+			// If object still not found after 1 retry, it likely doesn't exist
+			if forceRefreshRetryCount == 0 {
+				forceRefreshRetryCount++
+				// Short delay to allow informer to sync recently created objects
+				time.Sleep(500 * time.Millisecond)
+				forceResult, forceErr := group.ForceReadFolderByName(ctx, hashedName)
+				if forceErr == nil {
+					logger.Debugf("[GetFolderByName]: object %v found via force refresh after cache miss", hashedName)
+					return forceResult, nil
+				}
+				if errors.IsNotFound(forceErr) {
+					logger.Debugf("[GetFolderByName]: object %v confirmed not found (not created yet)", hashedName)
+					return nil, forceErr
+				}
+				logger.Debugf("[GetFolderByName]: force refresh failed with error: %v, falling back to original error", forceErr)
+			}
+			logger.Debugf("[GetFolderByName]: object %v not found after force refresh attempt", hashedName)
 			return nil, err
 		} else {
 			if errors.IsTimeout(err) || customerrors.Is(err, context.DeadlineExceeded) {
@@ -6252,6 +6379,7 @@ func (group *ProjectEdgeV1) GetProjectByName(ctx context.Context, hashedName str
 	}
 
 	retryCount := 0
+	forceRefreshRetryCount := 0
 	for {
 		result, err := group.client.baseClient.
 			ProjectEdgeV1().
@@ -6262,7 +6390,26 @@ func (group *ProjectEdgeV1) GetProjectByName(ctx context.Context, hashedName str
 				Project: result,
 			}, nil
 		} else if errors.IsNotFound(err) {
-			logger.Debugf("[GetProjectByName]: object %v not found", hashedName)
+			logger.Debugf("[GetProjectByName]: object %v not found in cache, attempting force refresh", hashedName)
+			// Not found in cache - try direct API call to handle race condition
+			// Only do 1 retry with minimal delay to catch recently-created objects
+			// If object still not found after 1 retry, it likely doesn't exist
+			if forceRefreshRetryCount == 0 {
+				forceRefreshRetryCount++
+				// Short delay to allow informer to sync recently created objects
+				time.Sleep(500 * time.Millisecond)
+				forceResult, forceErr := group.ForceReadProjectByName(ctx, hashedName)
+				if forceErr == nil {
+					logger.Debugf("[GetProjectByName]: object %v found via force refresh after cache miss", hashedName)
+					return forceResult, nil
+				}
+				if errors.IsNotFound(forceErr) {
+					logger.Debugf("[GetProjectByName]: object %v confirmed not found (not created yet)", hashedName)
+					return nil, forceErr
+				}
+				logger.Debugf("[GetProjectByName]: force refresh failed with error: %v, falling back to original error", forceErr)
+			}
+			logger.Debugf("[GetProjectByName]: object %v not found after force refresh attempt", hashedName)
 			return nil, err
 		} else {
 			if errors.IsTimeout(err) || customerrors.Is(err, context.DeadlineExceeded) {
@@ -7425,6 +7572,7 @@ func (group *NetworkEdgeV1) GetNetworkByName(ctx context.Context, hashedName str
 	}
 
 	retryCount := 0
+	forceRefreshRetryCount := 0
 	for {
 		result, err := group.client.baseClient.
 			NetworkEdgeV1().
@@ -7435,7 +7583,26 @@ func (group *NetworkEdgeV1) GetNetworkByName(ctx context.Context, hashedName str
 				Network: result,
 			}, nil
 		} else if errors.IsNotFound(err) {
-			logger.Debugf("[GetNetworkByName]: object %v not found", hashedName)
+			logger.Debugf("[GetNetworkByName]: object %v not found in cache, attempting force refresh", hashedName)
+			// Not found in cache - try direct API call to handle race condition
+			// Only do 1 retry with minimal delay to catch recently-created objects
+			// If object still not found after 1 retry, it likely doesn't exist
+			if forceRefreshRetryCount == 0 {
+				forceRefreshRetryCount++
+				// Short delay to allow informer to sync recently created objects
+				time.Sleep(500 * time.Millisecond)
+				forceResult, forceErr := group.ForceReadNetworkByName(ctx, hashedName)
+				if forceErr == nil {
+					logger.Debugf("[GetNetworkByName]: object %v found via force refresh after cache miss", hashedName)
+					return forceResult, nil
+				}
+				if errors.IsNotFound(forceErr) {
+					logger.Debugf("[GetNetworkByName]: object %v confirmed not found (not created yet)", hashedName)
+					return nil, forceErr
+				}
+				logger.Debugf("[GetNetworkByName]: force refresh failed with error: %v, falling back to original error", forceErr)
+			}
+			logger.Debugf("[GetNetworkByName]: object %v not found after force refresh attempt", hashedName)
 			return nil, err
 		} else {
 			if errors.IsTimeout(err) || customerrors.Is(err, context.DeadlineExceeded) {
@@ -8430,6 +8597,7 @@ func (group *OrgwatcherEdgeV1) GetOrgWatcherByName(ctx context.Context, hashedNa
 	}
 
 	retryCount := 0
+	forceRefreshRetryCount := 0
 	for {
 		result, err := group.client.baseClient.
 			OrgwatcherEdgeV1().
@@ -8440,7 +8608,26 @@ func (group *OrgwatcherEdgeV1) GetOrgWatcherByName(ctx context.Context, hashedNa
 				OrgWatcher: result,
 			}, nil
 		} else if errors.IsNotFound(err) {
-			logger.Debugf("[GetOrgWatcherByName]: object %v not found", hashedName)
+			logger.Debugf("[GetOrgWatcherByName]: object %v not found in cache, attempting force refresh", hashedName)
+			// Not found in cache - try direct API call to handle race condition
+			// Only do 1 retry with minimal delay to catch recently-created objects
+			// If object still not found after 1 retry, it likely doesn't exist
+			if forceRefreshRetryCount == 0 {
+				forceRefreshRetryCount++
+				// Short delay to allow informer to sync recently created objects
+				time.Sleep(500 * time.Millisecond)
+				forceResult, forceErr := group.ForceReadOrgWatcherByName(ctx, hashedName)
+				if forceErr == nil {
+					logger.Debugf("[GetOrgWatcherByName]: object %v found via force refresh after cache miss", hashedName)
+					return forceResult, nil
+				}
+				if errors.IsNotFound(forceErr) {
+					logger.Debugf("[GetOrgWatcherByName]: object %v confirmed not found (not created yet)", hashedName)
+					return nil, forceErr
+				}
+				logger.Debugf("[GetOrgWatcherByName]: force refresh failed with error: %v, falling back to original error", forceErr)
+			}
+			logger.Debugf("[GetOrgWatcherByName]: object %v not found after force refresh attempt", hashedName)
 			return nil, err
 		} else {
 			if errors.IsTimeout(err) || customerrors.Is(err, context.DeadlineExceeded) {
@@ -9235,6 +9422,7 @@ func (group *ProjectwatcherEdgeV1) GetProjectWatcherByName(ctx context.Context, 
 	}
 
 	retryCount := 0
+	forceRefreshRetryCount := 0
 	for {
 		result, err := group.client.baseClient.
 			ProjectwatcherEdgeV1().
@@ -9245,7 +9433,26 @@ func (group *ProjectwatcherEdgeV1) GetProjectWatcherByName(ctx context.Context, 
 				ProjectWatcher: result,
 			}, nil
 		} else if errors.IsNotFound(err) {
-			logger.Debugf("[GetProjectWatcherByName]: object %v not found", hashedName)
+			logger.Debugf("[GetProjectWatcherByName]: object %v not found in cache, attempting force refresh", hashedName)
+			// Not found in cache - try direct API call to handle race condition
+			// Only do 1 retry with minimal delay to catch recently-created objects
+			// If object still not found after 1 retry, it likely doesn't exist
+			if forceRefreshRetryCount == 0 {
+				forceRefreshRetryCount++
+				// Short delay to allow informer to sync recently created objects
+				time.Sleep(500 * time.Millisecond)
+				forceResult, forceErr := group.ForceReadProjectWatcherByName(ctx, hashedName)
+				if forceErr == nil {
+					logger.Debugf("[GetProjectWatcherByName]: object %v found via force refresh after cache miss", hashedName)
+					return forceResult, nil
+				}
+				if errors.IsNotFound(forceErr) {
+					logger.Debugf("[GetProjectWatcherByName]: object %v confirmed not found (not created yet)", hashedName)
+					return nil, forceErr
+				}
+				logger.Debugf("[GetProjectWatcherByName]: force refresh failed with error: %v, falling back to original error", forceErr)
+			}
+			logger.Debugf("[GetProjectWatcherByName]: object %v not found after force refresh attempt", hashedName)
 			return nil, err
 		} else {
 			if errors.IsTimeout(err) || customerrors.Is(err, context.DeadlineExceeded) {
@@ -10040,6 +10247,7 @@ func (group *RuntimeEdgeV1) GetRuntimeByName(ctx context.Context, hashedName str
 	}
 
 	retryCount := 0
+	forceRefreshRetryCount := 0
 	for {
 		result, err := group.client.baseClient.
 			RuntimeEdgeV1().
@@ -10050,7 +10258,26 @@ func (group *RuntimeEdgeV1) GetRuntimeByName(ctx context.Context, hashedName str
 				Runtime: result,
 			}, nil
 		} else if errors.IsNotFound(err) {
-			logger.Debugf("[GetRuntimeByName]: object %v not found", hashedName)
+			logger.Debugf("[GetRuntimeByName]: object %v not found in cache, attempting force refresh", hashedName)
+			// Not found in cache - try direct API call to handle race condition
+			// Only do 1 retry with minimal delay to catch recently-created objects
+			// If object still not found after 1 retry, it likely doesn't exist
+			if forceRefreshRetryCount == 0 {
+				forceRefreshRetryCount++
+				// Short delay to allow informer to sync recently created objects
+				time.Sleep(500 * time.Millisecond)
+				forceResult, forceErr := group.ForceReadRuntimeByName(ctx, hashedName)
+				if forceErr == nil {
+					logger.Debugf("[GetRuntimeByName]: object %v found via force refresh after cache miss", hashedName)
+					return forceResult, nil
+				}
+				if errors.IsNotFound(forceErr) {
+					logger.Debugf("[GetRuntimeByName]: object %v confirmed not found (not created yet)", hashedName)
+					return nil, forceErr
+				}
+				logger.Debugf("[GetRuntimeByName]: force refresh failed with error: %v, falling back to original error", forceErr)
+			}
+			logger.Debugf("[GetRuntimeByName]: object %v not found after force refresh attempt", hashedName)
 			return nil, err
 		} else {
 			if errors.IsTimeout(err) || customerrors.Is(err, context.DeadlineExceeded) {
@@ -11043,6 +11270,7 @@ func (group *RuntimeorgEdgeV1) GetRuntimeOrgByName(ctx context.Context, hashedNa
 	}
 
 	retryCount := 0
+	forceRefreshRetryCount := 0
 	for {
 		result, err := group.client.baseClient.
 			RuntimeorgEdgeV1().
@@ -11053,7 +11281,26 @@ func (group *RuntimeorgEdgeV1) GetRuntimeOrgByName(ctx context.Context, hashedNa
 				RuntimeOrg: result,
 			}, nil
 		} else if errors.IsNotFound(err) {
-			logger.Debugf("[GetRuntimeOrgByName]: object %v not found", hashedName)
+			logger.Debugf("[GetRuntimeOrgByName]: object %v not found in cache, attempting force refresh", hashedName)
+			// Not found in cache - try direct API call to handle race condition
+			// Only do 1 retry with minimal delay to catch recently-created objects
+			// If object still not found after 1 retry, it likely doesn't exist
+			if forceRefreshRetryCount == 0 {
+				forceRefreshRetryCount++
+				// Short delay to allow informer to sync recently created objects
+				time.Sleep(500 * time.Millisecond)
+				forceResult, forceErr := group.ForceReadRuntimeOrgByName(ctx, hashedName)
+				if forceErr == nil {
+					logger.Debugf("[GetRuntimeOrgByName]: object %v found via force refresh after cache miss", hashedName)
+					return forceResult, nil
+				}
+				if errors.IsNotFound(forceErr) {
+					logger.Debugf("[GetRuntimeOrgByName]: object %v confirmed not found (not created yet)", hashedName)
+					return nil, forceErr
+				}
+				logger.Debugf("[GetRuntimeOrgByName]: force refresh failed with error: %v, falling back to original error", forceErr)
+			}
+			logger.Debugf("[GetRuntimeOrgByName]: object %v not found after force refresh attempt", hashedName)
 			return nil, err
 		} else {
 			if errors.IsTimeout(err) || customerrors.Is(err, context.DeadlineExceeded) {
@@ -12248,6 +12495,7 @@ func (group *RuntimefolderEdgeV1) GetRuntimeFolderByName(ctx context.Context, ha
 	}
 
 	retryCount := 0
+	forceRefreshRetryCount := 0
 	for {
 		result, err := group.client.baseClient.
 			RuntimefolderEdgeV1().
@@ -12258,7 +12506,26 @@ func (group *RuntimefolderEdgeV1) GetRuntimeFolderByName(ctx context.Context, ha
 				RuntimeFolder: result,
 			}, nil
 		} else if errors.IsNotFound(err) {
-			logger.Debugf("[GetRuntimeFolderByName]: object %v not found", hashedName)
+			logger.Debugf("[GetRuntimeFolderByName]: object %v not found in cache, attempting force refresh", hashedName)
+			// Not found in cache - try direct API call to handle race condition
+			// Only do 1 retry with minimal delay to catch recently-created objects
+			// If object still not found after 1 retry, it likely doesn't exist
+			if forceRefreshRetryCount == 0 {
+				forceRefreshRetryCount++
+				// Short delay to allow informer to sync recently created objects
+				time.Sleep(500 * time.Millisecond)
+				forceResult, forceErr := group.ForceReadRuntimeFolderByName(ctx, hashedName)
+				if forceErr == nil {
+					logger.Debugf("[GetRuntimeFolderByName]: object %v found via force refresh after cache miss", hashedName)
+					return forceResult, nil
+				}
+				if errors.IsNotFound(forceErr) {
+					logger.Debugf("[GetRuntimeFolderByName]: object %v confirmed not found (not created yet)", hashedName)
+					return nil, forceErr
+				}
+				logger.Debugf("[GetRuntimeFolderByName]: force refresh failed with error: %v, falling back to original error", forceErr)
+			}
+			logger.Debugf("[GetRuntimeFolderByName]: object %v not found after force refresh attempt", hashedName)
 			return nil, err
 		} else {
 			if errors.IsTimeout(err) || customerrors.Is(err, context.DeadlineExceeded) {
@@ -13242,6 +13509,7 @@ func (group *RuntimeprojectEdgeV1) GetRuntimeProjectByName(ctx context.Context, 
 	}
 
 	retryCount := 0
+	forceRefreshRetryCount := 0
 	for {
 		result, err := group.client.baseClient.
 			RuntimeprojectEdgeV1().
@@ -13252,7 +13520,26 @@ func (group *RuntimeprojectEdgeV1) GetRuntimeProjectByName(ctx context.Context, 
 				RuntimeProject: result,
 			}, nil
 		} else if errors.IsNotFound(err) {
-			logger.Debugf("[GetRuntimeProjectByName]: object %v not found", hashedName)
+			logger.Debugf("[GetRuntimeProjectByName]: object %v not found in cache, attempting force refresh", hashedName)
+			// Not found in cache - try direct API call to handle race condition
+			// Only do 1 retry with minimal delay to catch recently-created objects
+			// If object still not found after 1 retry, it likely doesn't exist
+			if forceRefreshRetryCount == 0 {
+				forceRefreshRetryCount++
+				// Short delay to allow informer to sync recently created objects
+				time.Sleep(500 * time.Millisecond)
+				forceResult, forceErr := group.ForceReadRuntimeProjectByName(ctx, hashedName)
+				if forceErr == nil {
+					logger.Debugf("[GetRuntimeProjectByName]: object %v found via force refresh after cache miss", hashedName)
+					return forceResult, nil
+				}
+				if errors.IsNotFound(forceErr) {
+					logger.Debugf("[GetRuntimeProjectByName]: object %v confirmed not found (not created yet)", hashedName)
+					return nil, forceErr
+				}
+				logger.Debugf("[GetRuntimeProjectByName]: force refresh failed with error: %v, falling back to original error", forceErr)
+			}
+			logger.Debugf("[GetRuntimeProjectByName]: object %v not found after force refresh attempt", hashedName)
 			return nil, err
 		} else {
 			if errors.IsTimeout(err) || customerrors.Is(err, context.DeadlineExceeded) {
@@ -14259,6 +14546,7 @@ func (group *ProjectactivewatcherEdgeV1) GetProjectActiveWatcherByName(ctx conte
 	}
 
 	retryCount := 0
+	forceRefreshRetryCount := 0
 	for {
 		result, err := group.client.baseClient.
 			ProjectactivewatcherEdgeV1().
@@ -14269,7 +14557,26 @@ func (group *ProjectactivewatcherEdgeV1) GetProjectActiveWatcherByName(ctx conte
 				ProjectActiveWatcher: result,
 			}, nil
 		} else if errors.IsNotFound(err) {
-			logger.Debugf("[GetProjectActiveWatcherByName]: object %v not found", hashedName)
+			logger.Debugf("[GetProjectActiveWatcherByName]: object %v not found in cache, attempting force refresh", hashedName)
+			// Not found in cache - try direct API call to handle race condition
+			// Only do 1 retry with minimal delay to catch recently-created objects
+			// If object still not found after 1 retry, it likely doesn't exist
+			if forceRefreshRetryCount == 0 {
+				forceRefreshRetryCount++
+				// Short delay to allow informer to sync recently created objects
+				time.Sleep(500 * time.Millisecond)
+				forceResult, forceErr := group.ForceReadProjectActiveWatcherByName(ctx, hashedName)
+				if forceErr == nil {
+					logger.Debugf("[GetProjectActiveWatcherByName]: object %v found via force refresh after cache miss", hashedName)
+					return forceResult, nil
+				}
+				if errors.IsNotFound(forceErr) {
+					logger.Debugf("[GetProjectActiveWatcherByName]: object %v confirmed not found (not created yet)", hashedName)
+					return nil, forceErr
+				}
+				logger.Debugf("[GetProjectActiveWatcherByName]: force refresh failed with error: %v, falling back to original error", forceErr)
+			}
+			logger.Debugf("[GetProjectActiveWatcherByName]: object %v not found after force refresh attempt", hashedName)
 			return nil, err
 		} else {
 			if errors.IsTimeout(err) || customerrors.Is(err, context.DeadlineExceeded) {
@@ -15129,6 +15436,7 @@ func (group *OrgactivewatcherEdgeV1) GetOrgActiveWatcherByName(ctx context.Conte
 	}
 
 	retryCount := 0
+	forceRefreshRetryCount := 0
 	for {
 		result, err := group.client.baseClient.
 			OrgactivewatcherEdgeV1().
@@ -15139,7 +15447,26 @@ func (group *OrgactivewatcherEdgeV1) GetOrgActiveWatcherByName(ctx context.Conte
 				OrgActiveWatcher: result,
 			}, nil
 		} else if errors.IsNotFound(err) {
-			logger.Debugf("[GetOrgActiveWatcherByName]: object %v not found", hashedName)
+			logger.Debugf("[GetOrgActiveWatcherByName]: object %v not found in cache, attempting force refresh", hashedName)
+			// Not found in cache - try direct API call to handle race condition
+			// Only do 1 retry with minimal delay to catch recently-created objects
+			// If object still not found after 1 retry, it likely doesn't exist
+			if forceRefreshRetryCount == 0 {
+				forceRefreshRetryCount++
+				// Short delay to allow informer to sync recently created objects
+				time.Sleep(500 * time.Millisecond)
+				forceResult, forceErr := group.ForceReadOrgActiveWatcherByName(ctx, hashedName)
+				if forceErr == nil {
+					logger.Debugf("[GetOrgActiveWatcherByName]: object %v found via force refresh after cache miss", hashedName)
+					return forceResult, nil
+				}
+				if errors.IsNotFound(forceErr) {
+					logger.Debugf("[GetOrgActiveWatcherByName]: object %v confirmed not found (not created yet)", hashedName)
+					return nil, forceErr
+				}
+				logger.Debugf("[GetOrgActiveWatcherByName]: force refresh failed with error: %v, falling back to original error", forceErr)
+			}
+			logger.Debugf("[GetOrgActiveWatcherByName]: object %v not found after force refresh attempt", hashedName)
 			return nil, err
 		} else {
 			if errors.IsTimeout(err) || customerrors.Is(err, context.DeadlineExceeded) {
