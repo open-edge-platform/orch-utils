@@ -286,18 +286,36 @@ func setOrgStatus(client *nexus_client.Clientset, displayName, hashName string,
 func verifyOrgStatus(client *nexus_client.Clientset, displayName, hashName string,
 	status orgsv1.TenancyRequestStatus,
 ) {
-	updatedOrg, defaultErr := getConfigOrg(client, displayName)
-	if defaultErr != nil {
-		if !errors.Is(defaultErr, ErrNotFound) {
-			log.Panic().Msgf("Failed to get config org %s (hashName: %s) object to add status: %v",
-				displayName, hashName, defaultErr)
+	// Try to verify status with a small retry in case of cache lag
+	for attempt := 0; attempt < 2; attempt++ {
+		updatedOrg, defaultErr := getConfigOrg(client, displayName)
+		if defaultErr != nil {
+			if !errors.Is(defaultErr, ErrNotFound) {
+				log.Error().Msgf("Failed to get config org %s (hashName: %s) during verification: %v",
+					displayName, hashName, defaultErr)
+			}
+			return
 		}
-		return
-	}
-	if status != updatedOrg.Status.OrgStatus.StatusIndicator {
-		log.Error().Msgf("Expected Status: %v. Actual status of Org %s (hashName: %s): %v, Timestamp in Object: %v",
-			status, displayName, hashName, updatedOrg.Status.OrgStatus.StatusIndicator,
+		
+		if status == updatedOrg.Status.OrgStatus.StatusIndicator {
+			log.Debug().Msgf("OrgStatus verification passed for %s: status is %v",
+				displayName, status)
+			return
+		}
+		
+		// Status mismatch - log it and retry once in case of cache lag
+		if attempt < 1 {
+			log.Debug().Msgf("OrgStatus mismatch for %s (attempt %d/2): expected %v but found %v, retrying...",
+				displayName, attempt+1, status, updatedOrg.Status.OrgStatus.StatusIndicator)
+			time.Sleep(500 * time.Millisecond)
+			continue
+		}
+		
+		// After retry still mismatched - log error with full context
+		log.Error().Msgf("OrgStatus verification FAILED for %s (hashName: %s): Expected %v but found %v (TS: %d). This indicates a cache/visibility issue or concurrent modification.",
+			displayName, hashName, status, updatedOrg.Status.OrgStatus.StatusIndicator,
 			updatedOrg.Status.OrgStatus.TimeStamp)
+		return
 	}
 }
 
@@ -341,17 +359,36 @@ func verifyProjectStatus(client *nexus_client.Clientset, displayName, hashName s
 	parentOrgName, parentFolderName string,
 	status projectv1.TenancyRequestStatus,
 ) {
-	updatedProject, err := getConfigProject(client, parentOrgName, parentFolderName, displayName)
-	if err != nil {
-		if !errors.Is(err, ErrNotFound) {
-			log.Panic().Msgf("Failed to get config project %s object to add status: %v", displayName, err)
+	// Try to verify status with a small retry in case of cache lag
+	for attempt := 0; attempt < 2; attempt++ {
+		updatedProject, err := getConfigProject(client, parentOrgName, parentFolderName, displayName)
+		if err != nil {
+			if !errors.Is(err, ErrNotFound) {
+				log.Error().Msgf("Failed to get config project %s during verification: %v",
+					displayName, err)
+			}
+			return
 		}
-		return
-	}
-	if status != updatedProject.Status.ProjectStatus.StatusIndicator {
-		log.Error().Msgf("Expected Status: %v. Actual status of Project %s (hashName: %s): %v, Timestamp in Object: %v",
-			status, displayName, hashName, updatedProject.Status.ProjectStatus.StatusIndicator,
+		
+		if status == updatedProject.Status.ProjectStatus.StatusIndicator {
+			log.Debug().Msgf("ProjectStatus verification passed for %s: status is %v",
+				displayName, status)
+			return
+		}
+		
+		// Status mismatch - log it and retry once in case of cache lag
+		if attempt < 1 {
+			log.Debug().Msgf("ProjectStatus mismatch for %s (attempt %d/2): expected %v but found %v, retrying...",
+				displayName, attempt+1, status, updatedProject.Status.ProjectStatus.StatusIndicator)
+			time.Sleep(500 * time.Millisecond)
+			continue
+		}
+		
+		// After retry still mismatched - log error with full context
+		log.Error().Msgf("ProjectStatus verification FAILED for %s (hashName: %s): Expected %v but found %v (TS: %d). This indicates a cache/visibility issue or concurrent modification.",
+			displayName, hashName, status, updatedProject.Status.ProjectStatus.StatusIndicator,
 			updatedProject.Status.ProjectStatus.TimeStamp)
+		return
 	}
 }
 
@@ -403,6 +440,7 @@ func (r *Reconciler) StartOrgCreateAcknowledgementTimer(timeoutInterval time.Dur
 				setOrgStatus(r.Client, displayName, hashName, orgsv1.StatusIndicationError,
 					fmt.Sprintf("Timeout, active watchers %v haven't acknowledged this org", getMapKeys(expectedOrgWatchers)),
 					Create)
+				log.Debug().Msgf("Org %s (hashName: %s) status transition to ERROR completed (timeout handling)", displayName, hashName)
 			}
 			return
 		}
@@ -525,6 +563,7 @@ func (r *Reconciler) StartProjectCreateAcknowledgementTimer(timeoutInterval time
 					fmt.Sprintf("Timeout, active watchers %v haven't acknowledged this project",
 						getMapKeys(expectedProjectWatchers)),
 					Create)
+				log.Debug().Msgf("Project %s (hashName: %s) status transition to ERROR completed (timeout handling)", displayName, hashName)
 			}
 			return
 		}

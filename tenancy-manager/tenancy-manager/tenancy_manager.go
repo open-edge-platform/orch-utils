@@ -19,17 +19,22 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
+	configv1 "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/config.edge-orchestrator.intel.com/v1"
+	tenancyv1 "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/apis/tenancy.edge-orchestrator.intel.com/v1"
 	"github.com/open-edge-platform/infra-core/inventory/v2/pkg/logging"
 	nexus_client "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/nexus-client"
 	config_helper "github.com/open-edge-platform/orch-utils/tenancy-manager/pkg/config"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/pkg/tenancy"
 	"github.com/rs/zerolog"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 )
@@ -72,6 +77,14 @@ func main() {
 		log.Fatal().Msgf("unable to initialize nexusClient: %v", err)
 		// panic(err)
 	}
+	
+	// Ensure default MultiTenancy and Config objects exist before subscriptions
+	// This prevents cache miss issues when operations try to reference these core objects
+	err = initializeDefaultTenancyObjects(nexusClient)
+	if err != nil {
+		log.Error().Msgf("Failed to initialize default tenancy objects: %v. Continuing anyway, objects may be created on first use.", err)
+	}
+	
 	reconciler := tenancy.NewReconciler(nexusClient, config)
 
 	subscribeToTenancyEvents(nexusClient, reconciler)
@@ -165,6 +178,65 @@ func subscribeToRuntimeEvents(nexusClient *nexus_client.Clientset, reconciler *t
 		RegisterDeleteCallback(reconciler.ProcessProjectActiveWatcherDelete)
 	if err != nil {
 		return fmt.Errorf("failed to register 'Delete' call back to process ProjectActiveWatcher delete, error: %w", err)
+	}
+	return nil
+}
+
+// initializeDefaultTenancyObjects ensures the default MultiTenancy and Config objects exist.
+// This is critical for preventing cache miss issues and 30+ second retry loops when operations
+// try to reference these core objects via labels.
+func initializeDefaultTenancyObjects(nexusClient *nexus_client.Clientset) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	// Try to get the default MultiTenancy object
+	tenant, err := nexusClient.GetTenancyMultiTenancy(ctx)
+	if err == nil && tenant != nil {
+		// MultiTenancy exists, proceed to check Config
+		log.Debug().Msgf("Default MultiTenancy object already exists")
+	} else if err != nil {
+		// Object not found or other error - try to create it
+		log.Debug().Msgf("Default MultiTenancy not found, attempting to create: %v", err)
+		tenancyObj := &tenancyv1.MultiTenancy{
+			ObjectMeta: metav1.ObjectMeta{
+				Name: "default",
+			},
+		}
+		tenant, createErr := nexusClient.AddTenancyMultiTenancy(ctx, tenancyObj)
+		if createErr != nil {
+			// Creation failed, might already exist due to race condition
+			log.Debug().Msgf("Failed to create MultiTenancy: %v, attempting to retrieve existing object...", createErr)
+			tenant, getErr := nexusClient.GetTenancyMultiTenancy(ctx)
+			if getErr != nil || tenant == nil {
+				return fmt.Errorf("failed to get or create default MultiTenancy: create_err=%w get_err=%w tenant_nil=%v",
+					createErr, getErr, tenant == nil)
+			}
+		} else if tenant == nil {
+			return fmt.Errorf("failed to create default MultiTenancy: returned nil with no error")
+		}
+		log.Debug().Msgf("Successfully created default MultiTenancy object")
+	} else {
+		// err == nil but tenant == nil - this shouldn't happen but handle it
+		return fmt.Errorf("failed to initialize MultiTenancy: returned nil with no error")
+	}
+	
+	// Now check if Config exists
+	_, err = tenant.GetConfig(ctx)
+	if err != nil {
+		log.Debug().Msgf("Default Config not found in MultiTenancy, attempting to create: %v", err)
+		configObj := &configv1.Config{
+			ObjectMeta: metav1.ObjectMeta{
+				Name: "default",
+			},
+		}
+		_, err = tenant.AddConfig(ctx, configObj)
+		if err != nil {
+			log.Error().Msgf("Failed to create default Config: %v", err)
+			return fmt.Errorf("failed to create default Config: %w", err)
+		}
+		log.Debug().Msgf("Successfully created default Config object")
+	} else {
+		log.Debug().Msgf("Default MultiTenancy and Config objects already exist")
 	}
 	return nil
 }
