@@ -24,6 +24,7 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+	"sync"
 	"time"
 
 	"github.com/open-edge-platform/infra-core/inventory/v2/pkg/logging"
@@ -55,6 +56,7 @@ var (
 	appName = "tenancy-manager"
 	log     = logging.GetLogger(appName)
 	rng     = rand.New(rand.NewSource(time.Now().UnixNano()))
+	rngLock = &sync.Mutex{} // Protects concurrent access to rng
 )
 
 // calculateBackoffDelay computes exponential backoff with jitter for handling K8s optimistic lock conflicts.
@@ -71,7 +73,10 @@ func calculateBackoffDelay(attempt int) time.Duration {
 	
 	// Add random jitter (0-25ms) to prevent thundering herd
 	// Multiple goroutines won't retry at the exact same time
+	// Use mutex to protect concurrent access to RNG (math/rand is not thread-safe)
+	rngLock.Lock()
 	jitter := time.Duration(rng.Intn(int(maxRetryJitter)))
+	rngLock.Unlock()
 	
 	return exponentialDelay + jitter
 }
@@ -133,6 +138,13 @@ func setOrgStatusWithRetry(client *nexus_client.Clientset, displayName, hashName
 			return err
 		}
 		
+		// Optimization: If status is already set to desired value, avoid unnecessary update
+		if configOrg.Status.OrgStatus.StatusIndicator == status {
+			log.Debug().Msgf("OrgStatus of %s (hashName: %s) already set to %v, no update needed",
+				displayName, hashName, status)
+			return nil
+		}
+		
 		err = configOrg.SetOrgStatus(context.Background(), &orgsv1.OrgStatus{
 			StatusIndicator: status,
 			Message:         msg,
@@ -154,12 +166,17 @@ func setOrgStatusWithRetry(client *nexus_client.Clientset, displayName, hashName
 				log.Debug().Msgf("Conflict updating OrgStatus of %s (hashName: %s), retrying with exponential backoff (attempt %d/%d, delay: %v)",
 					displayName, hashName, attempt+1, maxStatusUpdateRetries, backoffDelay)
 				time.Sleep(backoffDelay)
+				// Retry by continuing loop - will refetch fresh object on next iteration
 				continue
 			}
+			// On last attempt, exhausted all retries
+			log.Error().Msgf("Exhausted retries (%d) for OrgStatus conflict on %s (hashName: %s), last error: %v",
+				maxStatusUpdateRetries, displayName, hashName, err)
+			return err
 		}
 		
 		// For non-retryable errors, return immediately
-		log.Warn().Msgf("Failed to set OrgStatus of %s (hashName: %s) with non-retryable error: %v",
+		log.Error().Msgf("Failed to set OrgStatus of %s (hashName: %s) with non-retryable error: %v",
 			displayName, hashName, err)
 		return err
 	}
@@ -180,6 +197,13 @@ func setProjectStatusWithRetry(client *nexus_client.Clientset, displayName, hash
 		configProject, err := getConfigProject(client, parentOrgName, parentFolderName, displayName)
 		if err != nil {
 			return err
+		}
+		
+		// Optimization: If status is already set to desired value, avoid unnecessary update
+		if configProject.Status.ProjectStatus.StatusIndicator == status {
+			log.Debug().Msgf("ProjectStatus of %s (hashName: %s) already set to %v, no update needed",
+				displayName, hashName, status)
+			return nil
 		}
 		
 		err = configProject.SetProjectStatus(context.Background(), &projectv1.ProjectStatus{
@@ -203,12 +227,17 @@ func setProjectStatusWithRetry(client *nexus_client.Clientset, displayName, hash
 				log.Debug().Msgf("Conflict updating ProjectStatus of %s (hashName: %s), retrying with exponential backoff (attempt %d/%d, delay: %v)",
 					displayName, hashName, attempt+1, maxStatusUpdateRetries, backoffDelay)
 				time.Sleep(backoffDelay)
+				// Retry by continuing loop - will refetch fresh object on next iteration
 				continue
 			}
+			// On last attempt, exhausted all retries
+			log.Error().Msgf("Exhausted retries (%d) for ProjectStatus conflict on %s (hashName: %s), last error: %v",
+				maxStatusUpdateRetries, displayName, hashName, err)
+			return err
 		}
 		
 		// For non-retryable errors, return immediately
-		log.Warn().Msgf("Failed to set ProjectStatus of %s (hashName: %s) with non-retryable error: %v",
+		log.Error().Msgf("Failed to set ProjectStatus of %s (hashName: %s) with non-retryable error: %v",
 			displayName, hashName, err)
 		return err
 	}
@@ -246,7 +275,9 @@ func setOrgStatus(client *nexus_client.Clientset, displayName, hashName string,
 	log.Debug().Msgf("Setting OrgStatus of %s (hashName: %s) to %v", displayName, hashName, status)
 	err := setOrgStatusWithRetry(client, displayName, hashName, status, msg, eventType)
 	if err != nil {
-		log.Panic().Msgf("failed to set OrgStatus of %s to %v status due error: %v", hashName, status, err)
+		log.Error().Msgf("Failed to set OrgStatus of %s (hashName: %s) to %v after retries: %v. Object may be stuck in current state, watchers will attempt recovery.", displayName, hashName, status, err)
+		// Don't panic - let watchers handle recovery via event reconciliation
+		return
 	}
 	// Verify if the status is set as expected.
 	verifyOrgStatus(client, displayName, hashName, status)
@@ -298,7 +329,9 @@ func setProjectStatus(client *nexus_client.Clientset, displayName, hashName stri
 	log.Debug().Msgf("Setting ProjectStatus of %s (hashName: %s) to %v", displayName, hashName, status)
 	err = setProjectStatusWithRetry(client, displayName, hashName, parentOrgName, parentFolderName, status, msg, eventType)
 	if err != nil {
-		log.Panic().Msgf("failed to set ProjectStatus of %s to %s, due error: %v", hashName, status, err)
+		log.Error().Msgf("Failed to set ProjectStatus of %s (hashName: %s) to %v after retries: %v. Object may be stuck in current state, watchers will attempt recovery.", displayName, hashName, status, err)
+		// Don't panic - let watchers handle recovery via event reconciliation
+		return
 	}
 	// Verify if the status is set as expected.
 	verifyProjectStatus(client, displayName, hashName, parentOrgName, parentFolderName, status)
