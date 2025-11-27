@@ -22,6 +22,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math"
+	"math/rand"
 	"time"
 
 	"github.com/open-edge-platform/infra-core/inventory/v2/pkg/logging"
@@ -43,14 +45,36 @@ const (
 	pollInterval = 5 * time.Second
 	
 	// Retry configuration for handling optimistic lock conflicts
-	maxStatusUpdateRetries = 3
-	statusUpdateRetryDelay = 50 * time.Millisecond
+	// Uses exponential backoff with jitter to handle K8s resource version conflicts
+	maxStatusUpdateRetries     = 7                      // Increased from 3 for better concurrency handling
+	statusUpdateRetryBaseDelay = 50 * time.Millisecond  // Base delay for exponential backoff
+	maxRetryJitter             = 25 * time.Millisecond  // Maximum random jitter to prevent thundering herd
 )
 
 var (
 	appName = "tenancy-manager"
 	log     = logging.GetLogger(appName)
+	rng     = rand.New(rand.NewSource(time.Now().UnixNano()))
 )
+
+// calculateBackoffDelay computes exponential backoff with jitter for handling K8s optimistic lock conflicts.
+// Formula: baseDelay * 2^attempt + random jitter
+// This prevents thundering herd and gives k8s time to reconcile concurrent writes.
+func calculateBackoffDelay(attempt int) time.Duration {
+	// Exponential backoff: 50ms, 100ms, 200ms, 400ms, 800ms, 1.6s, 3.2s
+	exponentialDelay := statusUpdateRetryBaseDelay * time.Duration(math.Pow(2, float64(attempt)))
+	
+	// Cap at 3.2 seconds to avoid excessive delays
+	if exponentialDelay > 3200*time.Millisecond {
+		exponentialDelay = 3200 * time.Millisecond
+	}
+	
+	// Add random jitter (0-25ms) to prevent thundering herd
+	// Multiple goroutines won't retry at the exact same time
+	jitter := time.Duration(rng.Intn(int(maxRetryJitter)))
+	
+	return exponentialDelay + jitter
+}
 
 // hasOrgActiveWatcherSpecChanged compares the old and new specifications and returns true if they are different.
 func hasOrgActiveWatcherSpecChanged(oldSpec, newSpec orgactivewatcherv1.OrgActiveWatcherSpec) bool {
@@ -126,9 +150,10 @@ func setOrgStatusWithRetry(client *nexus_client.Clientset, displayName, hashName
 		if nexus_client.IsConflict(err) || nexus_client.IsAlreadyExists(err) {
 			lastErr = err
 			if attempt < maxStatusUpdateRetries-1 {
-				log.Debug().Msgf("Conflict updating OrgStatus of %s (hashName: %s), retrying (attempt %d/%d)",
-					displayName, hashName, attempt+1, maxStatusUpdateRetries)
-				time.Sleep(statusUpdateRetryDelay)
+				backoffDelay := calculateBackoffDelay(attempt)
+				log.Debug().Msgf("Conflict updating OrgStatus of %s (hashName: %s), retrying with exponential backoff (attempt %d/%d, delay: %v)",
+					displayName, hashName, attempt+1, maxStatusUpdateRetries, backoffDelay)
+				time.Sleep(backoffDelay)
 				continue
 			}
 		}
@@ -174,9 +199,10 @@ func setProjectStatusWithRetry(client *nexus_client.Clientset, displayName, hash
 		if nexus_client.IsConflict(err) || nexus_client.IsAlreadyExists(err) {
 			lastErr = err
 			if attempt < maxStatusUpdateRetries-1 {
-				log.Debug().Msgf("Conflict updating ProjectStatus of %s (hashName: %s), retrying (attempt %d/%d)",
-					displayName, hashName, attempt+1, maxStatusUpdateRetries)
-				time.Sleep(statusUpdateRetryDelay)
+				backoffDelay := calculateBackoffDelay(attempt)
+				log.Debug().Msgf("Conflict updating ProjectStatus of %s (hashName: %s), retrying with exponential backoff (attempt %d/%d, delay: %v)",
+					displayName, hashName, attempt+1, maxStatusUpdateRetries, backoffDelay)
+				time.Sleep(backoffDelay)
 				continue
 			}
 		}
