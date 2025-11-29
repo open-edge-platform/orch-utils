@@ -644,6 +644,14 @@ func isOrgCreationSuccessful(client *nexus_client.Clientset,
 		return true, nil
 	}
 
+	// Create a local copy to avoid mutating the input map
+	// This is critical: we must not modify expectedOrgWatchers as it's used
+	// in error messages and subsequent polls to track pending watchers
+	pendingWatchers := make(map[string]struct{})
+	for k, v := range expectedOrgWatchers {
+		pendingWatchers[k] = v
+	}
+
 	activeWatchersIter := runtimeOrg.GetAllActiveWatchersIter(context.Background())
 	for {
 		watcher, err := activeWatchersIter.Next(context.Background())
@@ -654,7 +662,7 @@ func isOrgCreationSuccessful(client *nexus_client.Clientset,
 		if watcher == nil {
 			break
 		}
-		if _, exists := expectedOrgWatchers[watcher.DisplayName()]; !exists {
+		if _, exists := pendingWatchers[watcher.DisplayName()]; !exists {
 			// Watcher is not in the expected list, skip it
 			continue
 		}
@@ -662,12 +670,12 @@ func isOrgCreationSuccessful(client *nexus_client.Clientset,
 			// Watcher is in expected list but not IDLE yet, keep it in the map
 			continue
 		}
-		// Watcher is in the expected list and is IDLE, so remove it from the map
-		delete(expectedOrgWatchers, watcher.DisplayName())
+		// Watcher is in the expected list and is IDLE, so remove it from the local copy
+		delete(pendingWatchers, watcher.DisplayName())
 	}
 
 	// If all watchers acknowledged the org, we can exit.
-	return len(expectedOrgWatchers) == 0, nil
+	return len(pendingWatchers) == 0, nil
 }
 
 func isOrgDeletionSuccessful(client *nexus_client.Clientset,
@@ -721,6 +729,14 @@ func isProjectCreationSuccessful(client *nexus_client.Clientset, displayName, or
 		return true, nil
 	}
 
+	// Create a local copy to avoid mutating the input map
+	// This is critical: we must not modify expectedProjectWatchers as it's used
+	// in error messages and subsequent polls to track pending watchers
+	pendingWatchers := make(map[string]struct{})
+	for k, v := range expectedProjectWatchers {
+		pendingWatchers[k] = v
+	}
+
 	activeWatchersIter := runtimeProject.GetAllActiveWatchersIter(context.Background())
 	for {
 		watcher, err := activeWatchersIter.Next(context.Background())
@@ -731,7 +747,7 @@ func isProjectCreationSuccessful(client *nexus_client.Clientset, displayName, or
 		if watcher == nil {
 			break
 		}
-		if _, exists := expectedProjectWatchers[watcher.DisplayName()]; !exists {
+		if _, exists := pendingWatchers[watcher.DisplayName()]; !exists {
 			// Watcher is not in the expected list, skip it
 			continue
 		}
@@ -739,12 +755,12 @@ func isProjectCreationSuccessful(client *nexus_client.Clientset, displayName, or
 			// Watcher is in expected list but not IDLE yet, keep it in the map
 			continue
 		}
-		// Watcher is in the expected list and is IDLE, so remove it from the map
-		delete(expectedProjectWatchers, watcher.DisplayName())
+		// Watcher is in the expected list and is IDLE, so remove it from the local copy
+		delete(pendingWatchers, watcher.DisplayName())
 	}
 
 	// If all watchers acknowledged the project, we can exit.
-	return len(expectedProjectWatchers) == 0, nil
+	return len(pendingWatchers) == 0, nil
 }
 
 func isProjectDeletionSuccessful(client *nexus_client.Clientset, displayName, orgName, folderName string,
