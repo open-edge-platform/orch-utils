@@ -40,9 +40,33 @@ import (
 var (
 	Testing bool
 
-	orgMutex     sync.Mutex
-	projectMutex sync.Mutex
+	// Per-org and per-project mutexes to prevent blocking all projects/orgs
+	// when one is being updated. Maps hash names to their mutexes.
+	orgMutexMap     = make(map[string]*sync.Mutex)
+	projectMutexMap = make(map[string]*sync.Mutex)
+	orgMutexLock    sync.Mutex
+	projectMutexLock sync.Mutex
 )
+
+// getOrgMutex returns a mutex for a specific org, creating one if needed.
+func getOrgMutex(hashName string) *sync.Mutex {
+	orgMutexLock.Lock()
+	defer orgMutexLock.Unlock()
+	if _, exists := orgMutexMap[hashName]; !exists {
+		orgMutexMap[hashName] = &sync.Mutex{}
+	}
+	return orgMutexMap[hashName]
+}
+
+// getProjectMutex returns a mutex for a specific project, creating one if needed.
+func getProjectMutex(hashName string) *sync.Mutex {
+	projectMutexLock.Lock()
+	defer projectMutexLock.Unlock()
+	if _, exists := projectMutexMap[hashName]; !exists {
+		projectMutexMap[hashName] = &sync.Mutex{}
+	}
+	return projectMutexMap[hashName]
+}
 
 // Reconciler handles the reconciliation logic for the tenancy-datamodel API.
 type Reconciler struct {

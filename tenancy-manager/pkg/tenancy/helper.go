@@ -250,8 +250,10 @@ func setProjectStatusWithRetry(client *nexus_client.Clientset, displayName, hash
 func setOrgStatus(client *nexus_client.Clientset, displayName, hashName string,
 	status orgsv1.TenancyRequestStatus, msg string, eventType Event,
 ) {
-	orgMutex.Lock()
-	defer orgMutex.Unlock()
+	// Use per-org mutex instead of global mutex to allow other orgs to proceed
+	mutex := getOrgMutex(hashName)
+	mutex.Lock()
+	defer mutex.Unlock()
 
 	configOrg, defaultErr := getConfigOrg(client, displayName)
 	if defaultErr != nil {
@@ -323,8 +325,10 @@ func setProjectStatus(client *nexus_client.Clientset, displayName, hashName stri
 	parentOrgName, parentFolderName string,
 	status projectv1.TenancyRequestStatus, msg string, eventType Event,
 ) {
-	projectMutex.Lock()
-	defer projectMutex.Unlock()
+	// Use per-project mutex instead of global mutex to allow other projects to proceed
+	mutex := getProjectMutex(hashName)
+	mutex.Lock()
+	defer mutex.Unlock()
 
 	configProject, err := getConfigProject(client, parentOrgName, parentFolderName, displayName)
 	if err != nil {
