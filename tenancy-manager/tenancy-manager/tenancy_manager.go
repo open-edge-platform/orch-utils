@@ -169,6 +169,9 @@ func subscribeToRuntimeEvents(nexusClient *nexus_client.Clientset, reconciler *t
 	return nil
 }
 
+// initializeDefaultTenancyObjects ensures the default MultiTenancy and Config objects exist.
+// This is critical for preventing cache miss issues and 30+ second retry loops when operations
+// try to reference these core objects via labels.
 // getConfig initializes the Kubernetes client configuration.
 func getConfig(kubeconfig string, useServiceAccount bool) (*rest.Config, error) {
 	if kubeconfig != "" {
