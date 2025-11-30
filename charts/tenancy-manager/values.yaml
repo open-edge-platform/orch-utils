@@ -41,7 +41,7 @@ serviceArgs:
 
 # humanReadableLogs: "enable"
 logging:
-  level: debug
+  level: error
 
 podAnnotations: {}
 
