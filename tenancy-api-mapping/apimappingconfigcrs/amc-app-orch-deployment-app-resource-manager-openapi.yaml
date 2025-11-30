@@ -12,7 +12,7 @@ spec:
   specGenEnabled: true
   repoConf:
     url: "https://github.com/open-edge-platform/app-orch-deployment.git"
-    tag: "app-resource-manager/v2.5.1"
+    tag: "app-resource-manager/v2.5.2"
     specFilePath: "app-resource-manager/api/nbi/v2/spec/v2/openapi.yaml"
   mappings:
     # Pod Management

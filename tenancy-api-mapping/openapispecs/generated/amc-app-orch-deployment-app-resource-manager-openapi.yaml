@@ -13,14 +13,14 @@ servers:
       apiRoot:
         default: https://<multitenancy-gateway-host>
 tags:
-  - description: Provides API to manage a pod workload such as deleting a pod.
-    name: resource.v2.PodService
   - description: Provides API to list endpoints.
     name: resource.v2.EndpointsService
   - description: Provides API to manage a virtual machine workload such as starting, stopping, or restarting a virtual machine; and virtual machine console access.
     name: resource.v2.VirtualMachineService
   - description: Provides API endpoints for listing and lifecycle management of workloads, including virtual machines and container-based workloads.
     name: resource.v2.AppWorkloadService
+  - description: Provides API to manage a pod workload such as deleting a pod.
+    name: resource.v2.PodService
 security:
   - BearerAuth: []
 paths: {}
