@@ -23,11 +23,35 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
         with:
-          fetch-depth: 0  # Needed to get diff info
-          ref: ${{ github.head_ref }}
           token: ${{ secrets.PAT_TOKEN || secrets.GITHUB_TOKEN }}
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0  # Needed to get diff info
+
+      - name: Setup branch
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+        run: |
+          # Fetch all branches
+          git fetch origin
+          
+          # Check if we're in detached HEAD and fix it
+          if git symbolic-ref -q HEAD >/dev/null; then
+            echo "Already on a branch"
+          else
+            echo "In detached HEAD, checking out branch: $BRANCH_NAME"
+            git checkout -B "$BRANCH_NAME" origin/"$BRANCH_NAME"
+          fi
+          
+          # Verify we're on the correct branch
+          current_branch=$(git branch --show-current)
+          echo "Current branch: $current_branch"
+          
+          if [ "$current_branch" != "$BRANCH_NAME" ]; then
+            echo "Not on expected branch, switching to: $BRANCH_NAME"
+            git checkout "$BRANCH_NAME" || git checkout -b "$BRANCH_NAME"
+          fi
 
       - name: Discover Changed Files
         id: check-files
@@ -109,6 +133,16 @@ jobs:
         env:
           BRANCH_NAME: ${{ github.head_ref }}
         run: |
+
+          # Verify we're still on the correct branch
+          current_branch=$(git branch --show-current)
+          echo "Current branch before commit: $current_branch"
+          
+          if [ "$current_branch" != "$BRANCH_NAME" ]; then
+            echo "ERROR: Not on expected branch $BRANCH_NAME, currently on $current_branch"
+            exit 1
+          fi
+
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
