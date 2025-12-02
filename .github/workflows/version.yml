@@ -143,8 +143,9 @@ jobs:
           echo "Current branch before commit: $current_branch"
           
           if [ "$current_branch" != "$BRANCH_NAME" ]; then
-            echo "ERROR: Not on expected branch $BRANCH_NAME, currently on $current_branch"
-            exit 1
+            echo "WARNING: Not on expected branch $BRANCH_NAME, currently on $current_branch"
+            echo "Checking out $BRANCH_NAME"
+            git checkout "$BRANCH_NAME"
           fi
 
           git config --local user.email "action@github.com"
