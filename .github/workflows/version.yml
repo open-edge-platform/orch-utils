@@ -38,7 +38,7 @@ jobs:
           sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           sudo chmod +x /usr/local/bin/yq
 
-      - name: Bump Versions
+      - name: Bump Chart Versions and App Versions
         if: contains(steps.check-files.outputs.changed_files, 'charts/')
         env:
           BRANCH_NAME: ${{ github.head_ref }}
@@ -47,7 +47,7 @@ jobs:
           files="${{ steps.check-files.outputs.changed_files }}"
 
           # Extract unique chart names from changed files
-          changed_apps=$(echo "$files" | grep -o 'charts/[^/]*' | cut -d'/' -f2 | sort -u | tr '\n' ' ')
+          changed_charts=$(echo "$files" | grep -o 'charts/[^/]*' | cut -d'/' -f2 | sort -u | tr '\n' ' ')
           updated_charts=""
 
           for chart_name in $changed_charts; do
@@ -60,10 +60,10 @@ jobs:
             fi
             
             if [ -f "$CHART_FILE" ]; then
-              current_app_version=$(yq eval '.appVersion' "$CHART_FILE")
-              current_chart_version=$(yq eval '.version' "$CHART_FILE")
 
-              # Simple patch version bump for appVersion
+              # Bump appVersion in Chart.yaml
+              current_app_version=$(yq eval '.appVersion' "$CHART_FILE")
+
               IFS='.' read -ra APP_VERSION_PARTS <<< "$current_app_version"
               major=${APP_VERSION_PARTS[0]}
               minor=${APP_VERSION_PARTS[1]}
@@ -71,7 +71,12 @@ jobs:
               new_patch=$((patch + 1))
               new_app_version="${major}.${minor}.${new_patch}"
 
-              # Simple patch version bump for chart version
+              echo "Bumping $chart_name appVersion from $current_app_version to $new_app_version"
+              yq eval ".appVersion = \"$new_app_version\"" -i "$CHART_FILE"
+
+              # Bump version in Chart.yaml
+              current_chart_version=$(yq eval '.version' "$CHART_FILE")
+
               IFS='.' read -ra CHART_VERSION_PARTS <<< "$current_chart_version"
               chart_major=${CHART_VERSION_PARTS[0]}
               chart_minor=${CHART_VERSION_PARTS[1]}
@@ -79,13 +84,10 @@ jobs:
               new_chart_patch=$((chart_patch + 1))
               new_chart_version="${chart_major}.${chart_minor}.${new_chart_patch}"
 
-              echo "Bumping $app_name appVersion from $current_app_version to $new_app_version"
-              echo "Bumping $app_name chart version from $current_chart_version to $new_chart_version"
-
-              yq eval ".appVersion = \"$new_app_version\"" -i "$CHART_FILE"
+              echo "Bumping $chart_name chart version from $current_chart_version to $new_chart_version"              
               yq eval ".version = \"$new_chart_version\"" -i "$CHART_FILE"
 
-              updated_apps="$updated_apps $app_name"
+              updated_charts="$updated_charts $chart_name"
             fi
           done
 
@@ -97,7 +99,11 @@ jobs:
 
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add charts/
+
+          for chart_name in $changed_charts; do
+            CHART_FILE="charts/$chart_name/Chart.yaml"
+            git add "$CHART_FILE"
+          done
 
           # Create commit message with all updated charts
           if [ -n "$updated_charts" ]; then
