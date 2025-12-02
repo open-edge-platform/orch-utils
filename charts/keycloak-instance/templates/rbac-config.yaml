@@ -36,9 +36,9 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: keycloak-operator
-    namespace: keycloak-system
+    namespace: {{ .Values.namespace }}
 ---
-# Allow keycloak-system operator to read realm imports in orch-platform
+# Allow {{ .Values.namespace }} operator to read realm imports in orch-platform
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -72,4 +72,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: keycloak-operator
-    namespace: keycloak-system
+    namespace: {{ .Values.namespace }}

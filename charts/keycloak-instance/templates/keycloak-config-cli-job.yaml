@@ -13,7 +13,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ .Values.keycloakConfigCli.job.name }}
-  namespace: {{ .Values.keycloakConfigCli.job.namespace }}
+  namespace: {{ .Values.namespace }}
   labels:
     {{- toYaml .Values.keycloakConfigCli.job.labels | nindent 4 }}
 spec:
@@ -62,7 +62,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: {{ .Values.keycloakConfigCli.serviceAccount.name }}
-  namespace: {{ .Values.keycloakConfigCli.serviceAccount.namespace }}
+  namespace: {{ .Values.namespace }}
   labels:
     {{- toYaml .Values.keycloakConfigCli.serviceAccount.labels | nindent 4 }}
 
@@ -71,7 +71,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.keycloakConfigCli.configMap.name }}
-  namespace: {{ .Values.keycloakConfigCli.configMap.namespace }}
+  namespace: {{ .Values.namespace }}
   labels:
     {{- toYaml .Values.keycloakConfigCli.configMap.labels | nindent 4 }}
 data:
