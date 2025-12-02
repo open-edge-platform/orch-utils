@@ -15,7 +15,7 @@ metadata:
     app.kubernetes.io/version: 26.4.5
     app.kubernetes.io/managed-by: quarkus
   name: keycloak-operator
-  namespace: keycloak-system
+  namespace: {{ .Values.namespace }}
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -75,7 +75,7 @@ metadata:
     app.kubernetes.io/name: keycloak-operator
     app.kubernetes.io/version: 26.4.5
   name: keycloakrealmimportcontroller-role
-  namespace: keycloak-system
+  namespace: {{ .Values.namespace }}
 rules:
   - apiGroups:
       - ""
@@ -146,7 +146,7 @@ metadata:
     app.kubernetes.io/name: keycloak-operator
     app.kubernetes.io/version: 26.4.5
   name: keycloakcontroller-role
-  namespace: keycloak-system
+  namespace: {{ .Values.namespace }}
 rules:
   - apiGroups:
       - ""
@@ -209,7 +209,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: keycloak-operator
-    namespace: keycloak-system
+    namespace: {{ .Values.namespace }}
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -218,7 +218,7 @@ metadata:
   labels:
     app.kubernetes.io/name: keycloak-operator
   name: keycloak-operator-role
-  namespace: keycloak-system
+  namespace: {{ .Values.namespace }}
 rules:
   - apiGroups:
       - apps
@@ -300,7 +300,7 @@ metadata:
   labels:
     app.kubernetes.io/name: keycloak-operator
   name: keycloak-operator-role-binding
-  namespace: keycloak-system
+  namespace: {{ .Values.namespace }}
 roleRef:
   kind: Role
   apiGroup: rbac.authorization.k8s.io
@@ -308,7 +308,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: keycloak-operator
-    namespace: keycloak-system
+    namespace: {{ .Values.namespace }}
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -318,7 +318,7 @@ metadata:
     app.kubernetes.io/name: keycloak-operator
     app.kubernetes.io/version: 26.4.5
   name: keycloakrealmimportcontroller-role-binding
-  namespace: keycloak-system
+  namespace: {{ .Values.namespace }}
 roleRef:
   kind: ClusterRole
   apiGroup: rbac.authorization.k8s.io
@@ -326,7 +326,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: keycloak-operator
-    namespace: keycloak-system
+    namespace: {{ .Values.namespace }}
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -336,7 +336,7 @@ metadata:
     app.kubernetes.io/name: keycloak-operator
     app.kubernetes.io/version: 26.4.5
   name: keycloakrealmimportcontroller-secrets-role-binding
-  namespace: keycloak-system
+  namespace: {{ .Values.namespace }}
 roleRef:
   kind: Role
   apiGroup: rbac.authorization.k8s.io
@@ -344,7 +344,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: keycloak-operator
-    namespace: keycloak-system
+    namespace: {{ .Values.namespace }}
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -354,7 +354,7 @@ metadata:
     app.kubernetes.io/name: keycloak-operator
     app.kubernetes.io/version: 26.4.5
   name: keycloakcontroller-role-binding
-  namespace: keycloak-system
+  namespace: {{ .Values.namespace }}
 roleRef:
   kind: ClusterRole
   apiGroup: rbac.authorization.k8s.io
@@ -362,7 +362,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: keycloak-operator
-    namespace: keycloak-system
+    namespace: {{ .Values.namespace }}
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -372,7 +372,7 @@ metadata:
     app.kubernetes.io/name: keycloak-operator
     app.kubernetes.io/version: 26.4.5
   name: keycloakcontroller-secrets-role-binding
-  namespace: keycloak-system
+  namespace: {{ .Values.namespace }}
 roleRef:
   kind: Role
   apiGroup: rbac.authorization.k8s.io
@@ -380,7 +380,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: keycloak-operator
-    namespace: keycloak-system
+    namespace: {{ .Values.namespace }}
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -390,7 +390,7 @@ metadata:
     app.kubernetes.io/name: keycloak-operator
     app.kubernetes.io/version: 26.4.5
   name: keycloak-operator-view
-  namespace: keycloak-system
+  namespace: {{ .Values.namespace }}
 roleRef:
   kind: ClusterRole
   apiGroup: rbac.authorization.k8s.io
@@ -398,7 +398,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: keycloak-operator
-    namespace: keycloak-system
+    namespace: {{ .Values.namespace }}
 
 ---
 apiVersion: v1
@@ -413,7 +413,7 @@ metadata:
     app.kubernetes.io/version: 26.4.5
     app.kubernetes.io/managed-by: quarkus
   name: keycloak-operator
-  namespace: keycloak-system
+  namespace: {{ .Values.namespace }}
 spec:
   ports:
     - name: http
