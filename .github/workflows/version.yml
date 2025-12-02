@@ -82,9 +82,7 @@ jobs:
         env:
           BASE_REF: ${{ github.base_ref }}
         run: |
-          files="${{ steps.check-files.outputs.changed_files }}"
-
-          # Extract unique chart names from changed files
+          changed_charts="${{ steps.check-files.outputs.changed_charts }}"
           updated_charts=""
 
           for chart_name in $changed_charts; do
