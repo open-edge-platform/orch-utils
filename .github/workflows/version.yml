@@ -73,7 +73,7 @@ jobs:
       - name: Install yq
         if: steps.check-files.outputs.changed_charts != ''
         run: |
-          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/v4.49.2/download/yq_linux_amd64
           sudo chmod +x /usr/local/bin/yq
 
       - name: Bump Chart Versions and App Versions
@@ -86,7 +86,7 @@ jobs:
           updated_charts=""
 
           for chart_name in $changed_charts; do
-            CHART_FILE="charts/$chart_name/Chart.yaml" 
+            CHART_FILE="charts/$chart_name/Chart.yaml"
             if [ -f "$CHART_FILE" ]; then
 
               # Bump appVersion in Chart.yaml
@@ -112,7 +112,7 @@ jobs:
               new_chart_patch=$((chart_patch + 1))
               new_chart_version="${chart_major}.${chart_minor}.${new_chart_patch}"
 
-              echo "Bumping $chart_name chart version from $current_chart_version to $new_chart_version"              
+              echo "Bumping $chart_name chart version from $current_chart_version to $new_chart_version"
               yq eval ".version = \"$new_chart_version\"" -i "$CHART_FILE"
 
               updated_charts="$updated_charts $chart_name"
@@ -138,11 +138,8 @@ jobs:
 
           # Verify we're still on the correct branch
           current_branch=$(git branch --show-current)
-          echo "Current branch before commit: $current_branch"
           
           if [ "$current_branch" != "$BRANCH_NAME" ]; then
-            echo "WARNING: Not on expected branch $BRANCH_NAME, currently on $current_branch"
-            echo "Checking out $BRANCH_NAME"
             git checkout "$BRANCH_NAME"
           fi
 
