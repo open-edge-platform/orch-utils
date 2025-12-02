@@ -29,62 +29,66 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0  # Needed to get diff info
 
-      - name: Setup branch
-        env:
-          BRANCH_NAME: ${{ github.head_ref }}
-        run: |
-          # Fetch all branches
-          git fetch origin
-          
-          # Check if we're in detached HEAD and fix it
-          if git symbolic-ref -q HEAD >/dev/null; then
-            echo "Already on a branch"
-          else
-            echo "In detached HEAD, checking out branch: $BRANCH_NAME"
-            git checkout -B "$BRANCH_NAME" origin/"$BRANCH_NAME"
-          fi
-          
-          # Verify we're on the correct branch
-          current_branch=$(git branch --show-current)
-          echo "Current branch: $current_branch"
-          
-          if [ "$current_branch" != "$BRANCH_NAME" ]; then
-            echo "Not on expected branch, switching to: $BRANCH_NAME"
-            git checkout "$BRANCH_NAME" || git checkout -b "$BRANCH_NAME"
-          fi
-
-      - name: Discover Changed Files
+      - name: Get changed charts
         id: check-files
-        uses: open-edge-platform/orch-ci/discover-changed-files@main  # zizmor: ignore[unpinned-uses]
-        with:
-          project_folder: "."
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          # Get the base branch for comparison
+          git fetch origin ${{ github.base_ref }}
+
+          # Find all Chart.yaml files that have been modified or are in modified directories
+          changed_files=$(git diff --name-only origin/${BASE_REF}...HEAD)
+  
+          # Find chart directories that contain changes
+          changed_charts=""
+          for chart_dir in charts/*/; do
+            if [ -d "$chart_dir" ] && [ -f "${chart_dir}Chart.yaml" ]; then
+              chart_name=$(basename "$chart_dir")
+              # Check if any files in this chart directory have been modified
+              if echo "$changed_files" | grep -q "^${chart_dir}"; then
+                # Check if version was already changed in the PR
+                chart_file="${chart_dir}Chart.yaml"
+                version_already_changed=false
+
+                if echo "$changed_files" | grep -q "^$chart_file$"; then
+                  # Check if version field was actually changed
+                  version_diff=$(git diff origin/${BASE_REF}...HEAD -- "$chart_file" | grep -E "^\+.*(version:|appVersion:)" || true)
+                  if [ -n "$version_diff" ]; then
+                    version_already_changed=true
+                    echo "Version already bumped for chart: $chart_name"
+                  fi
+                fi
+
+                if [ "$version_already_changed" = false ]; then
+                  changed_charts="$changed_charts $chart_name"
+                  echo "Found changes in chart: $chart_name (version not yet bumped)"
+                fi
+              fi
+            fi
+          done
+
+          echo "changed_charts=$changed_charts" >> $GITHUB_OUTPUT
 
       - name: Install yq
+        if: steps.bump-chart-step.outputs.changed_charts != ''
         run: |
           sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           sudo chmod +x /usr/local/bin/yq
 
       - name: Bump Chart Versions and App Versions
         id: bump-chart-step
-        if: contains(steps.check-files.outputs.changed_files, 'charts/')
+        if: steps.bump-chart-step.outputs.changed_charts != ''
         env:
           BASE_REF: ${{ github.base_ref }}
         run: |
           files="${{ steps.check-files.outputs.changed_files }}"
 
           # Extract unique chart names from changed files
-          changed_charts=$(echo "$files" | grep -o 'charts/[^/]*' | cut -d'/' -f2 | sort -u | tr '\n' ' ')
           updated_charts=""
 
           for chart_name in $changed_charts; do
-            CHART_FILE="charts/$chart_name/Chart.yaml"
-
-            # Check if version or appVersion were already modified in this PR
-            if git diff "origin/${BASE_REF}"..HEAD -- "$CHART_FILE" | grep -E '^\+.*\b(version|appVersion):'; then
-              echo "Skipping $chart_name - version/appVersion already modified in PR"
-              continue
-            fi
-            
+            CHART_FILE="charts/$chart_name/Chart.yaml" 
             if [ -f "$CHART_FILE" ]; then
 
               # Bump appVersion in Chart.yaml
