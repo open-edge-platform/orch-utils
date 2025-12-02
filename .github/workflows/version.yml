@@ -25,7 +25,6 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.head_ref }}
 
       - name: Discover Changed Files
@@ -42,7 +41,6 @@ jobs:
       - name: Bump Chart Versions and App Versions
         if: contains(steps.check-files.outputs.changed_files, 'charts/')
         env:
-          BRANCH_NAME: ${{ github.head_ref }}
           BASE_REF: ${{ github.base_ref }}
         run: |
           files="${{ steps.check-files.outputs.changed_files }}"
@@ -92,16 +90,21 @@ jobs:
             fi
           done
 
-          # Check if there are changes to commit
-          if git diff --quiet charts/; then
-            echo "No version changes to commit"
-            exit 0
-          fi
+          # Set output for use in subsequent steps
+          echo "updated_charts=$updated_charts" >> $GITHUB_OUTPUT
 
+      - name: Commit and Push Changes
+        if: steps.bump-chart.outputs.updated_charts != ''
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+          GITHUB_TOKEN: ${{ secrets.SYS_ORCH_GITHUB }}
+        run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
-          for chart_name in $changed_charts; do
+          updated_charts="${{ steps.bump-chart.outputs.updated_charts }}"
+
+          for chart_name in $updated_charts; do
             CHART_FILE="charts/$chart_name/Chart.yaml"
             git add "$CHART_FILE"
           done
@@ -110,5 +113,5 @@ jobs:
           if [ -n "$updated_charts" ]; then
             commit_msg="chore: bump chart versions for:$updated_charts"
             git commit -m "$commit_msg"
-            git push origin $BRANCH_NAME
-          fi
+            git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git $BRANCH_NAME
+          fi  
