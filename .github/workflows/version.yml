@@ -36,12 +36,14 @@ jobs:
 
       - name: Get changed app directories
         id: changed-apps
+        env:
+          BASE_REF: ${{ github.base_ref }}
         run: |
           # Get the base branch for comparison
-          git fetch origin ${{ github.base_ref }}
+          git fetch origin ${BASE_REF}
 
           # Find all files that have been modified
-          changed_files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+          changed_files=$(git diff --name-only origin/${BASE_REF}...HEAD)
 
           # Check for specific app directory changes
           changed_apps=""
@@ -154,12 +156,14 @@ jobs:
 
       - name: Get changed charts
         id: changed-charts
+        env:
+          BASE_REF: ${{ github.base_ref }}
         run: |
           # Get the base branch for comparison
-          git fetch origin ${{ github.base_ref }}
+          git fetch origin ${BASE_REF}
 
           # Find all Chart.yaml files that have been modified or are in modified directories
-          changed_files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+          changed_files=$(git diff --name-only origin/${BASE_REF}...HEAD)
 
           # Find chart directories that contain changes
           changed_charts=""
@@ -174,7 +178,7 @@ jobs:
 
                 if echo "$changed_files" | grep -q "^$chart_file$"; then
                   # Check if version field was actually changed
-                  version_diff=$(git diff origin/${{ github.base_ref }}...HEAD -- "$chart_file" | grep -E "^\+.*version:" || true)
+                  version_diff=$(git diff origin/${BASE_REF}...HEAD -- "$chart_file" | grep -E "^\+.*version:" || true)
                   if [ -n "$version_diff" ]; then
                     version_already_changed=true
                     echo "Version already bumped for chart: $chart_name"
