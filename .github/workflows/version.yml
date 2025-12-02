@@ -39,6 +39,7 @@ jobs:
           sudo chmod +x /usr/local/bin/yq
 
       - name: Bump Chart Versions and App Versions
+        id: bump-chart-step
         if: contains(steps.check-files.outputs.changed_files, 'charts/')
         env:
           BASE_REF: ${{ github.base_ref }}
@@ -93,8 +94,16 @@ jobs:
           # Set output for use in subsequent steps
           echo "updated_charts=$updated_charts" >> $GITHUB_OUTPUT
 
+      - name: Show Updated Charts
+        run: |
+          if [ -z "${{ steps.bump-chart-step.outputs.updated_charts }}" ]; then
+            echo "Nothing to commit"
+          else
+            echo "Updated charts: ${{ steps.bump-chart-step.outputs.updated_charts }}"
+          fi
+
       - name: Commit and Push Changes
-        if: steps.bump-chart.outputs.updated_charts != ''
+        if: steps.bump-chart-step.outputs.updated_charts != ''
         env:
           BRANCH_NAME: ${{ github.head_ref }}
           GITHUB_TOKEN: ${{ secrets.SYS_ORCH_GITHUB }}
@@ -102,7 +111,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
-          updated_charts="${{ steps.bump-chart.outputs.updated_charts }}"
+          updated_charts="${{ steps.bump-chart-step.outputs.updated_charts }}"
 
           for chart_name in $updated_charts; do
             CHART_FILE="charts/$chart_name/Chart.yaml"
@@ -114,4 +123,4 @@ jobs:
             commit_msg="chore: bump chart versions for:$updated_charts"
             git commit -m "$commit_msg"
             git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git $BRANCH_NAME
-          fi  
+          fi
