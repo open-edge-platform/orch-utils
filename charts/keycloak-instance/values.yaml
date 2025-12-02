@@ -7,6 +7,10 @@
 # section in the ArgoCD Application manifest
 # The values.yaml here serves as documentation and defaults if no valuesObject is provided
 
+# Namespace configuration
+# This namespace is where the Keycloak instance resources are deployed
+namespace: orch-platform
+
 # Keycloak instance configuration (Keycloak CRD)
 keycloak:
   # Version information (sourced from Chart.yaml annotations)
@@ -27,7 +31,7 @@ keycloak:
     vendor: postgres
     host: postgresql-cluster-rw.orch-database.svc.cluster.local
     port: 5432
-    database: keycloak-system-platform-keycloak
+    database: orch-platform-platform-keycloak
     usernameSecret:
       name: keycloak-platform-db
       key: username
@@ -1364,7 +1368,7 @@ keycloakConfigCli:
   # ServiceAccount configuration
   serviceAccount:
     name: keycloak-config-cli
-    namespace: keycloak-system
+    namespace: orch-platform
     labels:
       app.kubernetes.io/name: keycloak-config-cli
       app.kubernetes.io/instance: keycloak-config-cli
@@ -1373,7 +1377,7 @@ keycloakConfigCli:
   # ConfigMap for realm configuration files
   configMap:
     name: keycloak-config-cli-realm-master
-    namespace: keycloak-system
+    namespace: orch-platform
     labels:
       app.kubernetes.io/name: keycloak-config-cli
       app.kubernetes.io/instance: keycloak-config-cli
@@ -1381,7 +1385,7 @@ keycloakConfigCli:
   # Job specification
   job:
     name: keycloak-config-cli
-    namespace: keycloak-system
+    namespace: orch-platform
     labels:
       app.kubernetes.io/name: keycloak-config-cli
       app.kubernetes.io/instance: keycloak-config-cli
@@ -1419,7 +1423,7 @@ keycloakConfigCli:
             MAX_ATTEMPTS=60
             ATTEMPT=0
             while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
-              if timeout 2 sh -c "echo '' | nc -w1 platform-keycloak.keycloak-system.svc 8080" >/dev/null 2>&1; then
+              if timeout 2 sh -c "echo '' | nc -w1 platform-keycloak.{{ .Values.namespace }}.svc 8080" >/dev/null 2>&1; then
                 echo "Keycloak port 8080 is open!"
                 exit 0
               fi
@@ -1457,7 +1461,7 @@ keycloakConfigCli:
       # Environment variables for keycloak-config-cli
       env:
         - name: KEYCLOAK_URL
-          value: "http://platform-keycloak.keycloak-system.svc.cluster.local/"
+          value: "http://platform-keycloak.{{ .Values.namespace }}.svc.cluster.local/"
         - name: KEYCLOAK_USER
           value: "admin"
         - name: KEYCLOAK_PASSWORD

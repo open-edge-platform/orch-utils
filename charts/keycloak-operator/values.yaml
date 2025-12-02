@@ -5,8 +5,9 @@
 # This file defines default values for the keycloak-operator Helm chart
 # The keycloak-operator chart contains the Keycloak Operator deployment and CRDs
 
-# Keycloak Operator namespace
-namespace: keycloak-system
+# Keycloak Operator namespace configuration
+# This namespace is where the Keycloak Operator and Keycloak resources are deployed
+namespace: orch-platform
 
 # Operator deployment configuration
 operator:

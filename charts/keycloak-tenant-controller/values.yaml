@@ -30,7 +30,7 @@ securityContext:
       - ALL
   allowPrivilegeEscalation: false
 keycloakAdmin:
-  url: "http://platform-keycloak.keycloak-system.svc:8080"
+  url: "http://platform-keycloak.orch-platform.svc:8080"
   user: admin
   client: system-client
   passwordSecret:
