@@ -71,14 +71,14 @@ jobs:
           echo "changed_charts=$changed_charts" >> $GITHUB_OUTPUT
 
       - name: Install yq
-        if: steps.bump-chart-step.outputs.changed_charts != ''
+        if: steps.check-files.outputs.changed_charts != ''
         run: |
           sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           sudo chmod +x /usr/local/bin/yq
 
       - name: Bump Chart Versions and App Versions
         id: bump-chart-step
-        if: steps.bump-chart-step.outputs.changed_charts != ''
+        if: steps.check-files.outputs.changed_charts != ''
         env:
           BASE_REF: ${{ github.base_ref }}
         run: |
