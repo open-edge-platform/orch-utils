@@ -14,7 +14,7 @@ namespace: orch-platform
 # Keycloak instance configuration (Keycloak CRD)
 keycloak:
   # Version information (sourced from Chart.yaml annotations)
-  # version: 25.2.0 (from Chart.yaml)
+  # version: 26.0.0 (from Chart.yaml)
   # upstreamVersion: 26.4.5 (from Chart.yaml annotation keycloak-upstream-version)
   # image: quay.io/keycloak/keycloak:26.4.5 (from Chart.yaml annotation keycloak-upstream-image)
 
