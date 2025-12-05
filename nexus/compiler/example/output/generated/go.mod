@@ -16,7 +16,7 @@ require (
 	github.com/elliotchance/orderedmap v1.4.0
 	github.com/golang/protobuf v1.5.4
 	github.com/rs/cors v1.11.1
-	github.com/sirupsen/logrus v1.8.1
+	github.com/sirupsen/logrus v1.8.3
 	github.com/vmware-tanzu/cartographer v0.3.0
 	github.com/vmware-tanzu/graph-framework-for-microservices/gqlgen v0.0.0-00010101000000-000000000000
 	github.com/vmware-tanzu/graph-framework-for-microservices/nexus v0.0.0-00010101000000-000000000000
