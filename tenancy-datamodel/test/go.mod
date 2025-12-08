@@ -4,13 +4,13 @@
 
 module tenancy-test-app
 
-go 1.24.6
+go 1.24.9
 
 replace github.com/open-edge-platform/orch-utils/tenancy-datamodel => ../
 
 require (
 	github.com/open-edge-platform/orch-utils/tenancy-datamodel v0.0.0-00010101000000-000000000000
-	k8s.io/apimachinery v0.32.9
+	k8s.io/apimachinery v0.32.10
 	k8s.io/client-go v0.32.9
 )
 
