@@ -13,7 +13,7 @@ require (
 	github.com/open-edge-platform/orch-utils/tenancy-datamodel v1.2.3-0.20251126155507-e0d9404fa1d7
 	github.com/rs/zerolog v1.34.0
 	gopkg.in/yaml.v2 v2.4.0
-	k8s.io/apimachinery v0.32.9
+	k8s.io/apimachinery v0.32.10
 	k8s.io/client-go v0.32.9
 	sigs.k8s.io/controller-runtime v0.19.1
 )
