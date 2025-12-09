@@ -8,7 +8,7 @@ go 1.24.9
 
 require (
 	github.com/aws/aws-sdk-go-v2/config v1.27.43
-	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.29.1
+	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.29.3
 	github.com/bitfield/script v0.24.1
 	github.com/golang-jwt/jwt/v5 v5.2.3
 	github.com/hashicorp/vault/api v1.16.0
