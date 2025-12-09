@@ -12,7 +12,7 @@ metadata:
     app.quarkus.io/build-timestamp: 2025-10-23 - 07:06:46 +0000
   labels:
     app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.5
+    app.kubernetes.io/version: 26.4.7
     app.kubernetes.io/managed-by: quarkus
   name: keycloak-operator
   namespace: {{ .Values.namespace }}
@@ -38,7 +38,7 @@ kind: ClusterRole
 metadata:
   labels:
     app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.5
+    app.kubernetes.io/version: 26.4.7
   name: keycloakrealmimportcontroller-cluster-role
 rules:
   - apiGroups:
@@ -73,7 +73,7 @@ kind: Role
 metadata:
   labels:
     app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.5
+    app.kubernetes.io/version: 26.4.7
   name: keycloakrealmimportcontroller-role
   namespace: {{ .Values.namespace }}
 rules:
@@ -96,7 +96,7 @@ kind: ClusterRole
 metadata:
   labels:
     app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.5
+    app.kubernetes.io/version: 26.4.7
   name: keycloakcontroller-cluster-role
 rules:
   - apiGroups:
@@ -144,7 +144,7 @@ kind: Role
 metadata:
   labels:
     app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.5
+    app.kubernetes.io/version: 26.4.7
   name: keycloakcontroller-role
   namespace: {{ .Values.namespace }}
 rules:
@@ -316,7 +316,7 @@ kind: RoleBinding
 metadata:
   labels:
     app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.5
+    app.kubernetes.io/version: 26.4.7
   name: keycloakrealmimportcontroller-role-binding
   namespace: {{ .Values.namespace }}
 roleRef:
@@ -334,7 +334,7 @@ kind: RoleBinding
 metadata:
   labels:
     app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.5
+    app.kubernetes.io/version: 26.4.7
   name: keycloakrealmimportcontroller-secrets-role-binding
   namespace: {{ .Values.namespace }}
 roleRef:
@@ -352,7 +352,7 @@ kind: RoleBinding
 metadata:
   labels:
     app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.5
+    app.kubernetes.io/version: 26.4.7
   name: keycloakcontroller-role-binding
   namespace: {{ .Values.namespace }}
 roleRef:
@@ -370,7 +370,7 @@ kind: RoleBinding
 metadata:
   labels:
     app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.5
+    app.kubernetes.io/version: 26.4.7
   name: keycloakcontroller-secrets-role-binding
   namespace: {{ .Values.namespace }}
 roleRef:
@@ -388,7 +388,7 @@ kind: RoleBinding
 metadata:
   labels:
     app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.5
+    app.kubernetes.io/version: 26.4.7
   name: keycloak-operator-view
   namespace: {{ .Values.namespace }}
 roleRef:
@@ -410,7 +410,7 @@ metadata:
     app.quarkus.io/build-timestamp: 2025-10-23 - 07:06:46 +0000
   labels:
     app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.5
+    app.kubernetes.io/version: 26.4.7
     app.kubernetes.io/managed-by: quarkus
   name: keycloak-operator
   namespace: {{ .Values.namespace }}
