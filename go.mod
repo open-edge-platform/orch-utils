@@ -20,9 +20,9 @@ require (
 	github.com/tidwall/gjson v1.18.0
 	go.uber.org/zap v1.27.1
 	gopkg.in/yaml.v3 v3.0.1
-	k8s.io/api v0.32.9
+	k8s.io/api v0.32.10
 	k8s.io/apimachinery v0.32.10
-	k8s.io/client-go v0.32.9
+	k8s.io/client-go v0.32.10
 )
 
 require (
