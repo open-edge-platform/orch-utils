@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 #graphql's and compiler's builder/Dockerfile should be in sync
-FROM golang:1.25.3-bookworm
+FROM golang:1.25.5-bookworm
 
 # Create a non-root user with home directory
 RUN useradd -m -d /home/appuser appuser
