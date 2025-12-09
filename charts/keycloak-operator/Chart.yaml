@@ -9,5 +9,5 @@ type: application
 version: 26.0.0
 appVersion: "26.0.0"
 annotations:
-  keycloak-upstream-version: "26.4.5"
-  keycloak-upstream-image: "quay.io/keycloak/keycloak-operator:26.4.5"
+  keycloak-upstream-version: "26.4.7"
+  keycloak-upstream-image: "quay.io/keycloak/keycloak-operator:26.4.7"
