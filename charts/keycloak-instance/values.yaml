@@ -15,11 +15,11 @@ namespace: orch-platform
 keycloak:
   # Version information (sourced from Chart.yaml annotations)
   # version: 26.0.0 (from Chart.yaml)
-  # upstreamVersion: 26.4.5 (from Chart.yaml annotation keycloak-upstream-version)
-  # image: quay.io/keycloak/keycloak:26.4.5 (from Chart.yaml annotation keycloak-upstream-image)
+  # upstreamVersion: 26.4.7 (from Chart.yaml annotation keycloak-upstream-version)
+  # image: quay.io/keycloak/keycloak:26.4.7 (from Chart.yaml annotation keycloak-upstream-image)
 
   # Container image (uses upstream version from Chart.yaml)
-  image: "quay.io/keycloak/keycloak:26.4.5"
+  image: "quay.io/keycloak/keycloak:26.4.7"
   imagePullPolicy: IfNotPresent
 
   # Bootstrap admin credentials
@@ -104,7 +104,7 @@ keycloak:
     # Init container for building optimized Keycloak image
     initContainers:
       - name: keycloak-builder
-        image: "quay.io/keycloak/keycloak:26.4.5"
+        image: "quay.io/keycloak/keycloak:26.4.7"
         imagePullPolicy: IfNotPresent
         command:
           - /bin/bash
