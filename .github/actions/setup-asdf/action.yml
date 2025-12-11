@@ -9,9 +9,9 @@ runs:
   steps:
     - name: Install asdf
       # TODO: Pin to a SemVer release when one is made
-      uses: asdf-vm/actions/setup@9cd779f40fe38688dd19505ccbc4eaaf018b44e7
+      uses: asdf-vm/actions/setup@v4
       with:
-        asdf_version: 0.16.6
+        asdf_version: 0.18.0
     - name: Cache asdf plugins
       uses: actions/cache@v4.2.0
       id: asdf-cache
