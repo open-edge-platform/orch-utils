@@ -50,11 +50,11 @@ updates:
           - "version-update:semver-major"
           - "version-update:semver-minor"
     schedule:
-      interval: "weekly"
+      interval: daily
+    open-pull-requests-limit: 10
     commit-message:
       prefix: "go.mod"
     reviewers:
-      - "se-chris-thach"
       - "dmytroye"
 
   # Enable version updates for Helm charts
@@ -107,11 +107,11 @@ updates:
           - "version-update:semver-major"
           - "version-update:semver-minor"
     schedule:
-      interval: "weekly"
+      interval: daily
+    open-pull-requests-limit: 10
     commit-message:
       prefix: "Helm charts"
     reviewers:
-      - "se-chris-thach"
       - "dmytroye"
 
   # Enable version updates for Docker
@@ -138,11 +138,11 @@ updates:
           - "version-update:semver-major"
           - "version-update:semver-minor"
     schedule:
-      interval: "weekly"
+      interval: daily
+    open-pull-requests-limit: 10
     commit-message:
       prefix: "Dockerfile"
     reviewers:
-      - "se-chris-thach"
       - "dmytroye"
 
   # Enable version updates for GitHub Actions
@@ -155,9 +155,9 @@ updates:
           - "version-update:semver-major"
           - "version-update:semver-minor"
     schedule:
-      interval: "weekly"
+      interval: daily
+    open-pull-requests-limit: 10
     commit-message:
       prefix: "Github Actions"
     reviewers:
-      - "se-chris-thach"
       - "dmytroye"
