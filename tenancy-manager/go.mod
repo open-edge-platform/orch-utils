@@ -15,7 +15,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0
 	k8s.io/apimachinery v0.32.10
 	k8s.io/client-go v0.32.10
-	sigs.k8s.io/controller-runtime v0.19.1
+	sigs.k8s.io/controller-runtime v0.19.7
 )
 
 require github.com/klauspost/compress v1.18.0 // indirect
