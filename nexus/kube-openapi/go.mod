@@ -6,8 +6,6 @@ module github.com/vmware-tanzu/graph-framework-for-microservices/kube-openapi
 
 go 1.24.6
 
-toolchain go1.24.1
-
 require (
 	github.com/NYTimes/gziphandler v1.1.1
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2
@@ -25,9 +23,9 @@ require (
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822
 	github.com/onsi/ginkgo/v2 v2.23.4
 	github.com/onsi/gomega v1.37.0
-	github.com/spf13/pflag v1.0.6
+	github.com/spf13/pflag v1.0.10
 	github.com/stretchr/testify v1.10.0
-	google.golang.org/protobuf v1.36.6
+	google.golang.org/protobuf v1.36.11
 	gopkg.in/yaml.v2 v2.4.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/gengo v0.0.0-20250207200755-1244d31929d7
