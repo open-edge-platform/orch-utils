@@ -1535,3 +1535,90 @@ keycloakConfigCli:
 argo:
   # Cluster domain suffix for dynamic URL generation
   clusterDomain: "kind.internal"
+
+# Keycloak Admin Password Synchronization Job
+# This job runs after Keycloak and keycloak-config-cli to ensure the admin password
+# in the PostgreSQL database matches the password stored in the bootstrap secret.
+#
+# This solves the issue where KC_BOOTSTRAP_ADMIN_PASSWORD env var only applies on
+# first initialization, causing password mismatches on restarts/redeployments.
+keycloakAdminPasswordSync:
+  # Enabled by default to keep credentials synchronized
+  enabled: true
+
+  # ServiceAccount configuration
+  serviceAccount:
+    name: keycloak-admin-password-sync
+    namespace: orch-platform
+    labels:
+      app.kubernetes.io/name: keycloak-admin-password-sync
+      app.kubernetes.io/instance: keycloak-admin-password-sync
+      app.kubernetes.io/version: "1.0.0"
+
+  # Job specification
+  job:
+    name: keycloak-admin-password-sync
+    namespace: orch-platform
+    labels:
+      app.kubernetes.io/name: keycloak-admin-password-sync
+      app.kubernetes.io/instance: keycloak-admin-password-sync
+      app.kubernetes.io/version: "1.0.0"
+
+    # CronJob schedule: run every 5 minutes to ensure continuous synchronization
+    # This catches password changes, operator restarts, and database modifications
+    schedule: "*/5 * * * *"  # Every 5 minutes (cron format)
+    
+    # Job spec settings
+    ttlSecondsAfterFinished: 3600  # Delete completed job pods after 1 hour
+    backoffLimit: 3  # Retry failed job runs up to 3 times
+    restartPolicy: Never
+
+    # Pod labels (e.g., for Istio sidecar injection)
+    podLabels:
+      sidecar.istio.io/inject: "false"
+
+    # Pod security context
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 65534
+      runAsGroup: 65534
+      seccompProfile:
+        type: RuntimeDefault
+      fsGroup: 65534
+
+    # Init containers (none needed - bash handles waits)
+    initContainers: []
+
+    # Container specification
+    container:
+      name: password-sync
+      # Use postgres client image for database access
+      image: "postgres:15-alpine"
+      imagePullPolicy: IfNotPresent
+
+      # Environment variables (set in template with secret references)
+      env: []
+
+      # Resource requests and limits
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 500m
+          memory: 256Mi
+
+      # Container security context
+      securityContext:
+        allowPrivilegeEscalation: false
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: false  # Needs write for /tmp
+
+# ArgoCD configuration for cluster-specific overrides
