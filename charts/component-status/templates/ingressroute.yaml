@@ -1,0 +1,36 @@
+# SPDX-FileCopyrightText: 2026 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
+{{- if .Values.traefikRoute.enabled }}
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "component-status.fullname" . }}
+  namespace: {{ .Values.traefikRoute.namespace }}
+  labels:
+    {{- include "component-status.labels" . | nindent 4 }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: "Host(`{{ .Values.traefikRoute.host }}`) && PathPrefix(`/v1/orchestrator`)"
+      kind: Rule
+      priority: {{ .Values.traefikRoute.priority }}
+      middlewares:
+        {{- range .Values.traefikRoute.middlewares }}
+        - name: {{ . }}
+        {{- end }}
+      services:
+        - name: {{ include "component-status.fullname" . }}
+          port: 8080
+          scheme: http
+          namespace: {{ .Release.Namespace }}
+  tls:
+    secretName: {{ .Values.traefikRoute.secretName }}
+  {{- if .Values.traefikRoute.tlsOption }}
+    options:
+      name: {{ .Values.traefikRoute.tlsOption }}
+      namespace: {{ .Values.traefikRoute.namespace }}
+  {{- end }}
+{{- end }}
