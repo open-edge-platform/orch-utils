@@ -1593,7 +1593,7 @@ keycloakAdminPasswordSync:
     container:
       name: password-sync
       # Use postgres client image for database access
-      image: "postgres:15-alpine"
+      image: "python:3.13-alpine"
       imagePullPolicy: IfNotPresent
 
       # Environment variables (set in template with secret references)
