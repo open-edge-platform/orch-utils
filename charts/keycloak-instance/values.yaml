@@ -1613,7 +1613,7 @@ keycloakAdminPasswordSync:
   # Proxy configuration for outbound connections
   proxy:
     httpProxy: ""    # HTTP_PROXY / http_proxy
-    httpsProxy: ""   # HTTPS_PROXY / https_proxy
-    noProxy: ""      # NO_PROXY / no_proxy (comma-separated list of hosts/domains)
+    httpsProxy: "http://proxy-dmz.intel.com:912"   # HTTPS_PROXY / https_proxy
+    noProxy: "http://proxy-dmz.intel.com:912"      # NO_PROXY / no_proxy (comma-separated list of hosts/domains)
 
 # ArgoCD configuration for cluster-specific overrides
