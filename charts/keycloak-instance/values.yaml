@@ -1402,12 +1402,8 @@ keycloakConfigCli:
 
     # Pod security context
     securityContext:
-      runAsNonRoot: true
-      runAsUser: 65534
-      runAsGroup: 65534
       seccompProfile:
         type: RuntimeDefault
-      fsGroup: 65534
 
     # Init container for waiting on Keycloak readiness
     initContainers:
@@ -1579,12 +1575,8 @@ keycloakAdminPasswordSync:
 
     # Pod security context
     securityContext:
-      runAsNonRoot: true
-      runAsUser: 65534
-      runAsGroup: 65534
       seccompProfile:
         type: RuntimeDefault
-      fsGroup: 65534
 
     # Init containers (none needed - bash handles waits)
     initContainers: []
@@ -1593,7 +1585,7 @@ keycloakAdminPasswordSync:
     container:
       name: password-sync
       # Use postgres client image for database access
-      image: "python:3.13-alpine"
+      image: "arunvelsriram/utils:latest"
       imagePullPolicy: IfNotPresent
 
       # Environment variables (set in template with secret references)
@@ -1611,14 +1603,17 @@ keycloakAdminPasswordSync:
       # Container security context
       securityContext:
         allowPrivilegeEscalation: false
-        runAsNonRoot: true
-        runAsUser: 65534
-        runAsGroup: 65534
         seccompProfile:
           type: RuntimeDefault
         capabilities:
           drop:
             - ALL
-        readOnlyRootFilesystem: false  # Needs write for /tmp
+        readOnlyRootFilesystem: false  # Needs write for package cache
+
+  # Proxy configuration for outbound connections
+  proxy:
+    httpProxy: ""    # HTTP_PROXY / http_proxy
+    httpsProxy: ""   # HTTPS_PROXY / https_proxy
+    noProxy: ""      # NO_PROXY / no_proxy (comma-separated list of hosts/domains)
 
 # ArgoCD configuration for cluster-specific overrides
