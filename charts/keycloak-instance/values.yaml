@@ -33,11 +33,11 @@ keycloak:
     port: 5432
     database: orch-platform-platform-keycloak
     usernameSecret:
-      name: keycloak-platform-db
-      key: username
+      name: platform-keycloak-local-postgresql
+      key: PGUSER
     passwordSecret:
-      name: keycloak-platform-db
-      key: password
+      name: platform-keycloak-local-postgresql
+      key: PGPASSWORD
     # Connection pool settings
     poolInitialSize: 5
     poolMinSize: 5
