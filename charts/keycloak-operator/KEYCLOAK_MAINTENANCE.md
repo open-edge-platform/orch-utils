@@ -179,7 +179,86 @@ annotations:
   keycloak-config-cli-image: "docker.io/adorsys/keycloak-config-cli:VERSION"
 ```
 
-#### 5. Verify Changes
+#### 5. Update Manifest Template Files (if changed)
+
+This is the **most important step** - you must compare the downloaded manifests with the current templates and update any changes.
+
+**5a. Update CRD Templates (if CRD definitions changed)**
+
+CRDs define the Custom Resources that Keycloak Operator manages. They may change between releases.
+
+```bash
+# Compare old CRDs with new ones
+diff -u keycloak2650/keycloaks.k8s.keycloak.org-v1.yml \
+         charts/keycloak-operator/templates/keycloaks-crd.yaml
+
+diff -u keycloak2650/keycloakrealmimports.k8s.keycloak.org-v1.yml \
+         charts/keycloak-operator/templates/keycloakrealmimports-crd.yaml
+```
+
+If there are differences:
+
+1. **Backup the old CRD files** (for reference)
+2. **Update the template files** with new content:
+   ```bash
+   # Replace entire content with new manifest content
+   cp keycloak2650/keycloaks.k8s.keycloak.org-v1.yml \
+      charts/keycloak-operator/templates/keycloaks-crd.yaml
+   
+   cp keycloak2650/keycloakrealmimports.k8s.keycloak.org-v1.yml \
+      charts/keycloak-operator/templates/keycloakrealmimports-crd.yaml
+   ```
+
+3. **Verify the files are still valid YAML**:
+   ```bash
+   helm lint charts/keycloak-operator
+   ```
+
+**5b. Check for Deployment Manifest Changes**
+
+The main deployment in `kubernetes.yml` may have changes to:
+- Environment variables
+- Pod specifications
+- Container resource requests/limits
+- Security contexts
+- Volume configurations
+
+```bash
+# Extract deployment section to compare
+grep -A 200 "kind: Deployment" keycloak2650/kubernetes.yml > /tmp/new-deployment.yaml
+
+# Compare with current (this is wrapped in Helm template)
+# Review manually for changes
+diff -u charts/keycloak-operator/templates/deployment.yaml /tmp/new-deployment.yaml
+```
+
+**Common Changes to Watch For:**
+- New environment variables in `spec.template.spec.containers[].env`
+- Changes to container resource limits
+- New security context directives
+- Changes to volume mounts
+- Updates to RBAC permissions (ServiceAccount, Role, RoleBinding)
+
+If significant changes exist:
+1. Document the changes
+2. Update the corresponding template files
+3. Test thoroughly (see step 6)
+
+**5c. Update RBAC Templates (if permissions changed)**
+
+The Operator may require new RBAC permissions in new versions.
+
+```bash
+# Extract RBAC from kubernetes.yml
+grep -E "kind: (ServiceAccount|Role|RoleBinding|ClusterRole|ClusterRoleBinding)" \
+     keycloak2650/kubernetes.yml -A 30
+```
+
+Compare with `charts/keycloak-operator/templates/rbac-and-service.yaml` and update if needed.
+
+---
+
+#### 6. Verify Changes
 
 ```bash
 # Lint both charts
@@ -190,7 +269,7 @@ helm template test-operator charts/keycloak-operator | grep image
 helm template test-instance charts/keycloak-instance | grep image
 ```
 
-#### 6. Test Deployment
+#### 7. Test Deployment
 
 ```bash
 # Dry-run install to verify everything works
@@ -198,12 +277,18 @@ helm install --dry-run keycloak-operator charts/keycloak-operator -n orch-platfo
 helm install --dry-run keycloak-instance charts/keycloak-instance -n orch-platform
 ```
 
-#### 7. Commit and Deploy
+#### 8. Commit and Deploy
 
 ```bash
 git add charts/keycloak-operator/Chart.yaml
 git add charts/keycloak-instance/Chart.yaml
-git commit -m "chore: update keycloak charts to version 26.X.0 (upstream 26.X.Y)"
+git add charts/keycloak-operator/templates/  # If manifest files changed
+git add charts/keycloak-instance/templates/  # If manifest files changed
+git commit -m "chore: update keycloak charts to version 26.X.0 (upstream 26.X.Y)
+
+- Update Chart.yaml annotations for version 26.X.Y
+- Update manifest templates (CRD/deployment changes from upstream)
+- Update keycloak-config-cli version if available"
 ```
 
 ---
@@ -214,27 +299,205 @@ When updating to a new Keycloak release, follow this checklist:
 
 - [ ] Download new manifests from GitHub releases
 - [ ] Extract version numbers from kubernetes.yml
+- [ ] **Compare CRD files** (keycloaks.k8s.keycloak.org-v1.yml, keycloakrealmimports.k8s.keycloak.org-v1.yml)
+- [ ] **Update CRD templates if changed** (templates/keycloaks-crd.yaml, templates/keycloakrealmimports-crd.yaml)
+- [ ] **Check for deployment manifest changes** (compare templates/deployment.yaml with kubernetes.yml)
+- [ ] **Update deployment template if changed** (templates/deployment.yaml)
+- [ ] **Check RBAC changes** (compare templates/rbac-and-service.yaml)
+- [ ] **Update RBAC template if changed** (templates/rbac-and-service.yaml)
 - [ ] Update `keycloak-operator/Chart.yaml` annotations (version, images, build metadata)
 - [ ] Update `keycloak-instance/Chart.yaml` annotations (version, images)
-- [ ] Run `helm lint` on both charts
+- [ ] Update `keycloak-instance/templates/keycloak-config-cli-job.yaml` if needed
+- [ ] Run `helm lint` on both charts (0 failures required)
 - [ ] Run `helm template` and verify image tags are correct
-- [ ] Verify no errors in output
-- [ ] **DO NOT modify values.yaml files** (versions are in Chart.yaml only)---
-
-## Update Checklist
-
-When updating to a new Keycloak release, follow this checklist:
-
-- [ ] Download new manifests from GitHub releases
-- [ ] Extract version numbers from kubernetes.yml
-- [ ] Update `keycloak-operator/Chart.yaml` annotations (version, images, build metadata)
-- [ ] Update `keycloak-instance/Chart.yaml` annotations (version, images)
-- [ ] Run `helm lint` on both charts
-- [ ] Run `helm template` and verify image tags are correct
-- [ ] Verify no errors in output
+- [ ] Verify deployment renders without errors
 - [ ] **DO NOT modify values.yaml files** (versions are in Chart.yaml only)
 - [ ] Commit changes with clear message
 - [ ] Merge PR and deploy via ArgoCD
+
+---
+
+## Detailed Manifest Comparison Guide
+
+This section provides detailed procedures for comparing and updating manifest templates when new Keycloak releases are available.
+
+### Understanding the Manifest Structure
+
+The charts wrap three main manifest files from upstream Keycloak:
+
+| Manifest File | Purpose | Helm Template Location |
+|---------------|---------|---|
+| `kubernetes.yml` | Main Operator deployment, RBAC, Service | `templates/deployment.yaml`, `templates/rbac-and-service.yaml` |
+| `keycloaks.k8s.keycloak.org-v1.yml` | CRD for Keycloak resources | `templates/keycloaks-crd.yaml` |
+| `keycloakrealmimports.k8s.keycloak.org-v1.yml` | CRD for realm imports | `templates/keycloakrealmimports-crd.yaml` |
+
+### Step-by-Step Manifest Comparison
+
+**1. Organize Downloaded Files**
+
+```bash
+# Create a working directory for the new release
+mkdir -p /tmp/keycloak-26.X.Y
+cd /tmp/keycloak-26.X.Y
+
+# Download and extract manifests
+wget https://github.com/keycloak/keycloak/releases/download/26.X.Y/kubernetes.yml
+wget https://github.com/keycloak/keycloak/releases/download/26.X.Y/keycloaks.k8s.keycloak.org-v1.yml
+wget https://github.com/keycloak/keycloak/releases/download/26.X.Y/keycloakrealmimports.k8s.keycloak.org-v1.yml
+
+# Copy them to your repo for easy reference
+cp /tmp/keycloak-26.X.Y/* ~/workspace/orch-utils/keycloak2650-NEW/
+```
+
+**2. Compare CRD Files**
+
+```bash
+# Check if CRDs changed
+diff keycloaks.k8s.keycloak.org-v1.yml \
+     ~/workspace/orch-utils/charts/keycloak-operator/templates/keycloaks-crd.yaml
+
+diff keycloakrealmimports.k8s.keycloak.org-v1.yml \
+     ~/workspace/orch-utils/charts/keycloak-operator/templates/keycloakrealmimports-crd.yaml
+```
+
+**If there are changes:**
+- Review the diff carefully for:
+  - New spec fields
+  - Changed validation rules
+  - New CRD properties
+  - Removed deprecated fields
+
+```bash
+# Update the template files
+cp keycloaks.k8s.keycloak.org-v1.yml \
+   ~/workspace/orch-utils/charts/keycloak-operator/templates/keycloaks-crd.yaml
+
+cp keycloakrealmimports.k8s.keycloak.org-v1.yml \
+   ~/workspace/orch-utils/charts/keycloak-operator/templates/keycloakrealmimports-crd.yaml
+
+# Verify templates are valid
+cd ~/workspace/orch-utils
+helm lint charts/keycloak-operator
+```
+
+**3. Compare Deployment Manifest**
+
+```bash
+# Extract deployment section from new manifest
+grep -n "^kind:" keycloak2650-NEW/kubernetes.yml
+# Look for: kind: Deployment, kind: ServiceAccount, kind: Role, kind: RoleBinding, kind: Service
+
+# Extract the Deployment section (adjust line numbers as needed)
+sed -n '/^kind: Deployment$/,/^---$/p' keycloak2650-NEW/kubernetes.yml > /tmp/new-deployment.yaml
+
+# Compare with current
+diff charts/keycloak-operator/templates/deployment.yaml /tmp/new-deployment.yaml
+```
+
+**Key areas to check in deployment changes:**
+
+```yaml
+# ✓ Check these sections for changes:
+
+spec:
+  template:
+    metadata:
+      labels:           # ← New labels?
+      annotations:      # ← New annotations?
+    spec:
+      serviceAccountName:  # ← Still the same?
+      containers:
+        - name: keycloak-operator
+          image:              # ← Usually updated (we override via values)
+          imagePullPolicy:    # ← Check for changes
+          env:                # ← NEW or REMOVED env vars? (CRITICAL)
+          resources:          # ← Changes to CPU/memory limits?
+          ports:              # ← New ports?
+          volumeMounts:       # ← New volume mounts?
+          securityContext:    # ← Changes to security?
+      volumes:              # ← New volumes?
+      securityContext:      # ← Pod-level security changes?
+```
+
+**If deployment changed, update it:**
+
+```bash
+# Manually merge the changes into deployment.yaml
+# OR if it's a complete rewrite:
+sed -n '/^kind: Deployment$/,/^---$/p' keycloak2650-NEW/kubernetes.yml | \
+  sed 's|image: .*|image: {{ .Values.operator.image }}|' > /tmp/deployment-new.yaml
+
+# Review /tmp/deployment-new.yaml thoroughly before copying
+cp /tmp/deployment-new.yaml charts/keycloak-operator/templates/deployment.yaml
+```
+
+**4. Compare RBAC Resources**
+
+```bash
+# Extract all RBAC resources
+grep -n "^kind: \(ServiceAccount\|Role\|RoleBinding\|ClusterRole\|ClusterRoleBinding\)" \
+     keycloak2650-NEW/kubernetes.yml
+
+# Extract each section
+sed -n '/^kind: ServiceAccount$/,/^---$/p' keycloak2650-NEW/kubernetes.yml > /tmp/sa-new.yaml
+sed -n '/^kind: Role$/,/^---$/p' keycloak2650-NEW/kubernetes.yml > /tmp/role-new.yaml
+sed -n '/^kind: RoleBinding$/,/^---$/p' keycloak2650-NEW/kubernetes.yml > /tmp/rb-new.yaml
+sed -n '/^kind: ClusterRole$/,/^---$/p' keycloak2650-NEW/kubernetes.yml > /tmp/cr-new.yaml
+sed -n '/^kind: ClusterRoleBinding$/,/^---$/p' keycloak2650-NEW/kubernetes.yml > /tmp/crb-new.yaml
+
+# Compare with current rbac-and-service.yaml
+diff charts/keycloak-operator/templates/rbac-and-service.yaml /tmp/sa-new.yaml
+diff charts/keycloak-operator/templates/rbac-and-service.yaml /tmp/role-new.yaml
+# ... etc
+```
+
+**Key things to watch for in RBAC changes:**
+
+- ✓ New permissions in `rules` section
+- ✓ New API groups being accessed
+- ✓ New resource types needed
+- ✓ Changes to aggregation labels
+- ✓ New verbs (get, list, watch, create, update, patch, delete, etc.)
+
+**If RBAC changed:**
+
+```bash
+# Update rbac-and-service.yaml with new permissions
+# Ensure service account name stays consistent
+# Test with: helm lint charts/keycloak-operator
+```
+
+**5. Verify Template Rendering**
+
+```bash
+# After updating manifests, verify they render correctly
+cd ~/workspace/orch-utils
+
+# Check that all manifests render without errors
+helm template test charts/keycloak-operator 2>&1 | head -50
+
+# Check for any YAML errors
+helm template test charts/keycloak-operator > /tmp/rendered.yaml
+if [ $? -eq 0 ]; then echo "✓ Templates render successfully"; fi
+
+# Verify specific resources
+helm template test charts/keycloak-operator | grep "kind:" | sort | uniq
+# Should show: Deployment, Role, RoleBinding, ServiceAccount, Service, CustomResourceDefinition
+```
+
+**6. Document Changes**
+
+Create a brief summary of manifest changes in your commit:
+
+```bash
+git log --oneline -1  # See previous format
+
+# Your commit message should mention:
+# - New env variables added/removed
+# - RBAC permission changes
+# - CRD field changes
+# - Any security context updates
+```
 
 ---
 
