@@ -35,6 +35,8 @@ RUN CGO_ENABLED=0 \
 
 FROM gcr.io/distroless/static-debian11:nonroot
 
+USER 65532:65532
+
 COPY --from=build /workspace/build/app /app
 
 ENTRYPOINT [ "/app" ]

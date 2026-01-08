@@ -22,8 +22,13 @@ fullnameOverride: ""
 
 podAnnotations: {}
 
-podSecurityContext: {}
-  # fsGroup: 2000
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 65532
+  runAsGroup: 65532
+  fsGroup: 65532
+  seccompProfile:
+    type: RuntimeDefault
 
 securityContext:
   capabilities:
@@ -31,8 +36,8 @@ securityContext:
       - ALL
   allowPrivilegeEscalation: false
   readOnlyRootFilesystem: true
-  runAsUser: 1000
-  runAsGroup: 1000
+  runAsUser: 65532
+  runAsGroup: 65532
   runAsNonRoot: true
   seccompProfile:
     type: RuntimeDefault
@@ -106,12 +111,12 @@ componentStatus:
         version: "26.0.1"
         description: "Identity and access management"
         status: "enabled"
-      
+
       - name: "vault"
         version: "1.15.2"
         description: "Secrets management"
         status: "enabled"
-      
+
       - name: "observability"
         version: "26.0.0"
         description: "Monitoring and logging stack"
@@ -121,22 +126,22 @@ componentStatus:
             version: "11.3.0"
             description: "Metrics visualization"
             status: "enabled"
-          
+
           - name: "prometheus"
             version: "2.45.0"
             description: "Metrics collection"
             status: "enabled"
-          
+
           - name: "loki"
             version: "2.9.2"
             description: "Log aggregation"
             status: "enabled"
-      
+
       - name: "multitenancy"
         version: "26.0.0"
         description: "Multi-tenant support"
         status: "enabled"
-      
+
       - name: "app-orch"
         version: "26.0.0"
         description: "Application orchestration"
@@ -146,7 +151,7 @@ componentStatus:
             version: "0.10.0"
             description: "GitOps fleet management"
             status: "enabled"
-      
+
       - name: "cluster-orch"
         version: "26.0.0"
         description: "Cluster lifecycle management"
