@@ -44,6 +44,29 @@ jobs:
       run_test: false
       bootstrap_tools: ""
       trivy_config_path: trivy.yaml
+  
+  pre-merge-scan:
+    name: Build+Scan (${{ matrix.service }})
+    if: github.event_name == 'pull_request'
+    strategy:
+      fail-fast: false
+      matrix:
+        service:
+          [authService, awsSmProxy, certSynchronizer, secretsConfig, squidProxy, tokenFS,
+           tenancyAPIMapping, tenancyManager, tenancyDatamodel, nexusAPIGateway,
+           keycloakTenantController, nexusCompiler, openAPIGenerator]
+    uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@7d984ef618c17ff5e616879327f19f37b67307ee  # 0.1.46
+    with:
+      project_folder: '.'
+      only_service: ${{ matrix.service }}
+      run_docker_build: true
+      run_build: false
+      run_docker_push: false
+      run_helm_build: false
+      run_helm_push: false
+      version_suffix: "-pr-${{ github.event.number }}"
+      trivy_config_path: ".trivy.yaml"
+      # trivy_image_skip: "${{ vars.TRIVY_IMAGE_SKIP }}" # use if needed
 
   lint-go:
     permissions:
