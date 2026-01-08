@@ -6,20 +6,24 @@
 # Values are provided directly by the platform-keycloak Application's valuesObject
 # section in the ArgoCD Application manifest
 # The values.yaml here serves as documentation and defaults if no valuesObject is provided
+#
+# VERSION MANAGEMENT:
+# All version information is maintained in Chart.yaml annotations.
+# When upgrading to a new Keycloak release, update the annotations in Chart.yaml.
+# Templates will automatically use the updated versions.
 
 # Namespace configuration
 # This namespace is where the Keycloak instance resources are deployed
 namespace: orch-platform
 
+# ============================================================================
+# KEYCLOAK INSTANCE CONFIGURATION
+# ============================================================================
+
 # Keycloak instance configuration (Keycloak CRD)
 keycloak:
-  # Version information (sourced from Chart.yaml annotations)
-  # version: 26.0.0 (from Chart.yaml)
-  # upstreamVersion: 26.4.7 (from Chart.yaml annotation keycloak-upstream-version)
-  # image: quay.io/keycloak/keycloak:26.4.7 (from Chart.yaml annotation keycloak-upstream-image)
-
-  # Container image (uses upstream version from Chart.yaml)
-  image: "quay.io/keycloak/keycloak:26.4.7"
+  # Container image (resolved from Chart.yaml annotations)
+  image: "quay.io/keycloak/keycloak:26.5.0"
   imagePullPolicy: IfNotPresent
 
   # Bootstrap admin credentials
@@ -33,11 +37,11 @@ keycloak:
     port: 5432
     database: orch-platform-platform-keycloak
     usernameSecret:
-      name: keycloak-platform-db
-      key: username
+      name: platform-keycloak-local-postgresql
+      key: PGUSER
     passwordSecret:
-      name: keycloak-platform-db
-      key: password
+      name: platform-keycloak-local-postgresql
+      key: PGPASSWORD
     # Connection pool settings
     poolInitialSize: 5
     poolMinSize: 5
@@ -104,7 +108,7 @@ keycloak:
     # Init container for building optimized Keycloak image
     initContainers:
       - name: keycloak-builder
-        image: "quay.io/keycloak/keycloak:26.4.7"
+        image: "quay.io/keycloak/keycloak:26.5.0"
         imagePullPolicy: IfNotPresent
         command:
           - /bin/bash
@@ -1402,12 +1406,8 @@ keycloakConfigCli:
 
     # Pod security context
     securityContext:
-      runAsNonRoot: true
-      runAsUser: 65534
-      runAsGroup: 65534
       seccompProfile:
         type: RuntimeDefault
-      fsGroup: 65534
 
     # Init container for waiting on Keycloak readiness
     initContainers:
@@ -1455,7 +1455,7 @@ keycloakConfigCli:
     # Main container configuration
     container:
       name: keycloak-config-cli
-      image: docker.io/adorsys/keycloak-config-cli:6.4.0-26
+      image: "docker.io/adorsys/keycloak-config-cli:6.4.0-26"
       imagePullPolicy: IfNotPresent
 
       # Environment variables for keycloak-config-cli

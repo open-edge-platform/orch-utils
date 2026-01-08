@@ -4,32 +4,41 @@
 
 # This file defines default values for the keycloak-operator Helm chart
 # The keycloak-operator chart contains the Keycloak Operator deployment and CRDs
+#
+# VERSION MANAGEMENT:
+# All version information is maintained in Chart.yaml annotations.
+# When upgrading to a new Keycloak release, update the annotations in Chart.yaml.
+# Templates will automatically use the updated versions.
 
 # Keycloak Operator namespace configuration
 # This namespace is where the Keycloak Operator and Keycloak resources are deployed
 namespace: orch-platform
+
+# ============================================================================
+# OPERATOR DEPLOYMENT CONFIGURATION
+# ============================================================================
 
 # Operator deployment configuration
 operator:
   # Deployment replicas
   replicas: 1
 
-  # Container image (uses upstream version from Chart.yaml)
-  image: "quay.io/keycloak/keycloak-operator:26.4.7"
+  # Container image (resolved from Chart.yaml annotations)
+  image: "quay.io/keycloak/keycloak-operator:26.5.0"
   imagePullPolicy: IfNotPresent
 
   # Related Keycloak image for operator to deploy
   relatedImage:
-    keycloak: "quay.io/keycloak/keycloak:26.4.7"
+    keycloak: "quay.io/keycloak/keycloak:26.5.0"
 
   # Service account name
   serviceAccountName: keycloak-operator
 
-  # Deployment annotations (from upstream)
+  # Deployment annotations (from Chart.yaml annotations)
   annotations:
-    app.quarkus.io/quarkus-version: "3.27.0"
+    app.quarkus.io/quarkus-version: "3.27.1"
     app.quarkus.io/vcs-uri: "https://github.com/keycloak/keycloak.git"
-    app.quarkus.io/build-timestamp: "2025-10-23 - 07:06:46 +0000"
+    app.quarkus.io/build-timestamp: "2026-01-06 - 07:49:45 +0000"
 
   # Pod labels (from upstream)
   podLabels:
@@ -75,7 +84,8 @@ operator:
           fieldRef:
             fieldPath: metadata.namespace
       - name: RELATED_IMAGE_KEYCLOAK
-        value: "quay.io/keycloak/keycloak:26.4.7"
+        # Resolved from Chart.yaml annotations in templates
+        value: "quay.io/keycloak/keycloak:26.5.0"
 
     # Liveness probe
     livenessProbe:
@@ -112,6 +122,7 @@ operator:
       timeoutSeconds: 10
       failureThreshold: 3
       successThreshold: 1
+
 # Security context for operator pods (pod-level)
 securityContext:
   runAsNonRoot: true
