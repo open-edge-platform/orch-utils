@@ -33,7 +33,7 @@ func (h *StatusHandler) GetStatus(w http.ResponseWriter, r *http.Request) {
 
 	// Set response headers
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Cache-Control", "public, max-age=3600") // Cache for 1 hour
+	w.Header().Set("Cache-Control", "public, max-age=3600")
 
 	// Encode and send the configuration as JSON
 	if err := json.NewEncoder(w).Encode(h.config); err != nil {

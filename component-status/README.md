@@ -53,43 +53,6 @@ orchestrator:
         installed: false
 ```
 
-## Security Architecture
-
-### Authentication Requirements
-
-The service uses the **same pattern as nexus-api-gw**:
-
-```yaml
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: component-status
-  namespace: orch-gateway
-spec:
-  entryPoints: [websecure]
-  routes:
-    - match: Host(`api.{{ .Values.argo.clusterDomain }}`) && PathPrefix(`/v1/orchestrator`)
-      priority: 40
-      middlewares:
-        - name: validate-jwt
-        - name: secure-headers
-      services:
-        - name: component-status
-          namespace: orch-platform
-          port: 8080
-  tls:
-    secretName: tls-orch
-```
-
-### Why Validate JWT?
-
-**Threat:** Exposing feature status aids attackers:
-- If `observability: disabled` → attacker knows no logging/monitoring
-- If `multitenancy: disabled` → attacker targets simpler privilege escalation
-- If `device-onboarding: disabled` → attacker can compromise edge devices directly
-
-**Mitigation:** JWT validation ensures only authenticated users can query feature status.
-
 ## Building
 
 ```bash
@@ -129,51 +92,6 @@ curl http://localhost:8080/v1/orchestrator
 helm install component-status ./charts/component-status \
   -n orch-platform --create-namespace \
   --set componentStatus.orchestrator.version="2026.0"
-```
-
-### EMF Integration
-
-EMF custom template must include:
-
-```yaml
-traefikRoute:
-  enabled: true
-  namespace: orch-gateway
-  matchHost: Host(`api.{{ .Values.argo.clusterDomain }}`)
-  priority: 40
-  middlewares:
-    - validate-jwt
-    - secure-headers
-```
-
-### Verification
-
-```bash
-# Check IngressRoute
-kubectl get ingressroute component-status -n orch-gateway -o yaml
-
-# Verify priority is 40
-kubectl get ingressroute component-status -n orch-gateway \
-  -o jsonpath='{.spec.routes[0].priority}'
-
-# Test authentication (should return 403)
-curl -k https://api.<cluster-domain>/v1/orchestrator
-
-# With valid token (should return 200)
-curl -k -H "Authorization: Bearer $TOKEN" \
-  https://api.<cluster-domain>/v1/orchestrator
-```
-
-## Project Structure
-
-```
-component-status/
-├── cmd/component-status/main.go  # HTTP server
-├── pkg/
-│   ├── config/loader.go          # YAML parser
-│   └── handler/status.go         # HTTP handlers
-├── Dockerfile                     # Multi-stage build
-└── Makefile                       # Build automation
 ```
 
 ## License

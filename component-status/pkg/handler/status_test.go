@@ -30,16 +30,15 @@ func TestGetStatus(t *testing.T) {
 
 	handler := NewStatusHandler(cfg)
 
-	// Create a test request
+	// Test request
 	req, err := http.NewRequest("GET", "/v1/orchestrator", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	// Create a response recorder
+	// Response recorder
 	rr := httptest.NewRecorder()
 
-	// Call the handler
 	handler.GetStatus(rr, req)
 
 	// Check the status code
@@ -52,13 +51,12 @@ func TestGetStatus(t *testing.T) {
 		t.Errorf("Handler returned wrong content type: got %v want %v", contentType, "application/json")
 	}
 
-	// Parse the response
 	var response config.Config
 	if err := json.Unmarshal(rr.Body.Bytes(), &response); err != nil {
 		t.Errorf("Failed to parse response: %v", err)
 	}
 
-	// Verify the response
+	// Verify response
 	if response.SchemaVersion != "1.0" {
 		t.Errorf("Expected schema-version '1.0', got '%s'", response.SchemaVersion)
 	}

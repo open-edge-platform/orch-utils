@@ -11,19 +11,19 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// Config represents the component status configuration
+// Component status configuration
 type Config struct {
 	SchemaVersion string       `yaml:"schema-version" json:"schema-version"`
 	Orchestrator  Orchestrator `yaml:"orchestrator" json:"orchestrator"`
 }
 
-// Orchestrator represents orchestrator information
+// Orchestrator information
 type Orchestrator struct {
 	Version  string    `yaml:"version" json:"version"`
 	Features []Feature `yaml:"features" json:"features"`
 }
 
-// Feature represents a feature and its installation status
+// Feature and its installation status
 type Feature struct {
 	Name        string    `yaml:"name" json:"name"`
 	Version     string    `yaml:"version,omitempty" json:"version,omitempty"`
@@ -56,8 +56,7 @@ func Load(path string) (*Config, error) {
 	return &config, nil
 }
 
-// IsFeatureInstalled checks if a feature is installed using hierarchical lookup
-// Example: IsFeatureInstalled("observability", "grafana")
+// IsFeatureInstalled checks if a feature is installed
 func (c *Config) IsFeatureInstalled(featurePath ...string) bool {
 	if len(featurePath) == 0 {
 		return false
@@ -84,7 +83,7 @@ func (c *Config) IsFeatureInstalled(featurePath ...string) bool {
 			return false
 		}
 		
-		// If this is the last key in the path, check if enabled
+		// Check if last key is enabled
 		if i == len(featurePath)-1 {
 			return currentFeature.Status == "enabled"
 		}

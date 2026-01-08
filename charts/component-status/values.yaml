@@ -83,18 +83,13 @@ tolerations: []
 affinity: {}
 
 # Traefik IngressRoute Configuration
-# CRITICAL: Authentication is REQUIRED to prevent security information leakage
-# Exposing which features are disabled helps attackers tailor their attacks
 traefikRoute:
-  enabled: false  # Set to true when deployed via EMF ArgoCD
-  namespace: orch-gateway  # IngressRoute namespace (consistent with other services)
-  host: api.example.com  # Override via EMF custom template (just hostname, no Host())
-  priority: 40  # Must be > 30 to override nexus-api-gw's generic /v route (priority 30)
-  secretName: ""  # TLS secret name (e.g., "tls-orch"), set via EMF
-  tlsOption: ""  # TLS options (e.g., "orch-gateway-tlsoption"), set via EMF
-  # Authentication and security middlewares - component status is sensitive information
-  # validate-jwt: Ensures only authenticated users can query feature status
-  # secure-headers: Adds security headers to responses (CSP, CORS, etc.)
+  enabled: false
+  namespace: orch-gateway
+  host: api.example.com
+  priority: 40
+  secretName: ""
+  tlsOption: ""
   middlewares:
     - validate-jwt
     - secure-headers
