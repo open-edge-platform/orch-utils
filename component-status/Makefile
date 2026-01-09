@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-.PHONY: build test lint clean docker-build
+.PHONY: build test lint clean docker-build ginkgo
 
 # Variables
 SERVICE_NAME := component-status
@@ -30,10 +30,10 @@ build:
 		./cmd/$(SERVICE_NAME)
 	@echo "Build complete: $(BINARY)"
 
-test:
-	@echo "Running tests..."
-	go test -v -race -coverprofile=coverage.out ./...
-	@echo "Tests complete"
+test: ginkgo ## Run all tests
+
+ginkgo: ## Run ginkgo tests
+	ginkgo run -v -r -p --race -randomize-all -randomize-suites
 
 lint:
 	@echo "Running linter..."

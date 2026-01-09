@@ -41,6 +41,7 @@ mage test:golang
 mage build:authService
 mage build:awsSmProxy
 mage build:certSynchronizer
+mage build:componentStatus
 mage build:keycloakTenantController
 mage build:nexusAPIGateway
 mage build:nexusCompiler
@@ -60,6 +61,7 @@ mage chartsBuild
 mage push:authService
 mage push:awsSmProxy
 mage push:certSynchronizer
+mage push:componentStatus
 mage push:charts
 mage push:keycloakTenantController
 mage push:nexusAPIGateway
