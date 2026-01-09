@@ -33,6 +33,9 @@ docker-build-aws-sm-proxy:
 docker-build-cert-synchronizer:
 	mage build:certSynchronizer
 
+docker-build-component-status:
+	mage build:componentStatus
+
 docker-build-keycloak-tenant-controller:
 	mage build:keycloakTenantController
 
@@ -69,6 +72,7 @@ docker-build-token-fs:
 ginkgo: ## Run all ginkgo tests in sub-projects
 	make -C auth-service        ginkgo
 	make -C aws-sm-proxy        ginkgo
+	make -C component-status    ginkgo
 	make -C internal            ginkgo
 	make -C nexus-api-gw        ginkgo
 	make -C nexus               ginkgo

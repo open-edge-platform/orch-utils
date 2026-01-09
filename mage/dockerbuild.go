@@ -114,6 +114,37 @@ func authServiceBuild() error {
 	)
 }
 
+func componentStatusBuild() error {
+	appVersion, err := getChartAppVersion("component-status")
+	if err != nil {
+		return err
+	}
+
+	g0 := sh.OutCmd("git")
+	commitID, err := g0("rev-parse", "HEAD")
+	if err != nil {
+		fmt.Printf("error running git rev-parse HEAD = %s", err)
+	}
+	commitID = strings.TrimSpace(commitID)
+
+	return sh.RunV(
+		"docker",
+		"build",
+		"--load",
+		"--build-arg", "org_oci_version="+appVersion,
+		"--build-arg", "org_oci_revision="+commitID,
+		"--build-arg", "HTTPS_PROXY="+os.Getenv("HTTPS_PROXY"),
+		"--build-arg", "HTTP_PROXY="+os.Getenv("HTTP_PROXY"),
+		"--build-arg", "NO_PROXY="+os.Getenv("NO_PROXY"),
+		"--build-arg", "https_proxy="+os.Getenv("https_proxy"),
+		"--build-arg", "http_proxy="+os.Getenv("http_proxy"),
+		"--build-arg", "no_proxy="+os.Getenv("no_proxy"),
+		"--tag", OpenEdgePlatformContainerRegistry+"/component-status:"+appVersion,
+		"--file", filepath.Join("component-status", "Dockerfile"),
+		"./component-status",
+	)
+}
+
 func getChartAppVersion(chartName string) (string, error) {
 	contents, err := os.ReadFile(filepath.Join("charts", chartName, "Chart.yaml"))
 	if err != nil {

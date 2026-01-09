@@ -136,6 +136,11 @@ func (Build) AuthService() error {
 	return authServiceBuild()
 }
 
+// Builds the ComponentStatus container image.
+func (Build) ComponentStatus() error {
+	return componentStatusBuild()
+}
+
 // Builds the CertSynchronizer container image.
 func (Build) CertSynchronizer() error {
 	return certSynchronizerBuild()
@@ -201,6 +206,11 @@ func (Push) TokenFs() error {
 // Push the auth-service container image to the registry.
 func (Push) AuthService() error {
 	return pushImage("auth-service", "auth-service")
+}
+
+// Push the component-status container image to the registry.
+func (Push) ComponentStatus() error {
+	return pushImage("component-status", "component-status")
 }
 
 // Push the cert-synchronizer container image to the registry.

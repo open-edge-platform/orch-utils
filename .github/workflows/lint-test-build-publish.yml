@@ -320,6 +320,7 @@ jobs:
             authService,
             awsSmProxy,
             certSynchronizer,
+            componentStatus,
             secretsConfig,
             squidProxy,
             tokenFS,

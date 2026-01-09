@@ -2,136 +2,103 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package handler
+package handler_test
 
 import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
-	"testing"
+
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
 
 	"github.com/open-edge-platform/orch-utils/component-status/pkg/config"
+	"github.com/open-edge-platform/orch-utils/component-status/pkg/handler"
 )
 
-func TestGetStatus(t *testing.T) {
-	// Create a test config
-	cfg := &config.Config{
-		SchemaVersion: "1.0",
-		Orchestrator: config.Orchestrator{
-			Version: "2026.0",
-			Features: map[string]config.Feature{
-				"application-orchestration": {
-					Installed:   true,
-					SubFeatures: map[string]config.Feature{},
+var _ = Describe("Status Handler", func() {
+	var (
+		cfg            *config.Config
+		statusHandler  *handler.StatusHandler
+		responseWriter *httptest.ResponseRecorder
+	)
+
+	BeforeEach(func() {
+		cfg = &config.Config{
+			SchemaVersion: "1.0",
+			Orchestrator: config.Orchestrator{
+				Version: "2026.0",
+				Features: []config.Feature{
+					{
+						Name:   "application-orchestration",
+						Status: "enabled",
+					},
 				},
 			},
-		},
-	}
+		}
+		statusHandler = handler.NewStatusHandler(cfg)
+		responseWriter = httptest.NewRecorder()
+	})
 
-	handler := NewStatusHandler(cfg)
+	Describe("GetStatus", func() {
+		It("should return component status successfully", func() {
+			req, err := http.NewRequest("GET", "/v1/orchestrator", nil)
+			Expect(err).ToNot(HaveOccurred())
 
-	// Test request
-	req, err := http.NewRequest("GET", "/v1/orchestrator", nil)
-	if err != nil {
-		t.Fatal(err)
-	}
+			statusHandler.GetStatus(responseWriter, req)
 
-	// Response recorder
-	rr := httptest.NewRecorder()
+			Expect(responseWriter.Code).To(Equal(http.StatusOK))
+			Expect(responseWriter.Header().Get("Content-Type")).To(Equal("application/json"))
 
-	handler.GetStatus(rr, req)
+			var response config.Config
+			err = json.Unmarshal(responseWriter.Body.Bytes(), &response)
+			Expect(err).ToNot(HaveOccurred())
 
-	// Check the status code
-	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("Handler returned wrong status code: got %v want %v", status, http.StatusOK)
-	}
+			Expect(response.SchemaVersion).To(Equal("1.0"))
+			Expect(response.Orchestrator.Version).To(Equal("2026.0"))
+		})
 
-	// Check the Content-Type header
-	if contentType := rr.Header().Get("Content-Type"); contentType != "application/json" {
-		t.Errorf("Handler returned wrong content type: got %v want %v", contentType, "application/json")
-	}
+		It("should return method not allowed for non-GET requests", func() {
+			req, err := http.NewRequest("POST", "/v1/orchestrator", nil)
+			Expect(err).ToNot(HaveOccurred())
 
-	var response config.Config
-	if err := json.Unmarshal(rr.Body.Bytes(), &response); err != nil {
-		t.Errorf("Failed to parse response: %v", err)
-	}
+			statusHandler.GetStatus(responseWriter, req)
 
-	// Verify response
-	if response.SchemaVersion != "1.0" {
-		t.Errorf("Expected schema-version '1.0', got '%s'", response.SchemaVersion)
-	}
-	if response.Orchestrator.Version != "2026.0" {
-		t.Errorf("Expected version '2026.0', got '%s'", response.Orchestrator.Version)
-	}
-}
+			Expect(responseWriter.Code).To(Equal(http.StatusMethodNotAllowed))
+		})
+	})
 
-func TestGetStatusMethodNotAllowed(t *testing.T) {
-	cfg := &config.Config{
-		SchemaVersion: "1.0",
-		Orchestrator: config.Orchestrator{
-			Version: "2026.0",
-			Features: map[string]config.Feature{},
-		},
-	}
+	Describe("HealthCheck", func() {
+		It("should return healthy status", func() {
+			req, err := http.NewRequest("GET", "/healthz", nil)
+			Expect(err).ToNot(HaveOccurred())
 
-	handler := NewStatusHandler(cfg)
+			http.HandlerFunc(handler.HealthCheck).ServeHTTP(responseWriter, req)
 
-	// Test POST request (should be rejected)
-	req, err := http.NewRequest("POST", "/v1/orchestrator", nil)
-	if err != nil {
-		t.Fatal(err)
-	}
+			Expect(responseWriter.Code).To(Equal(http.StatusOK))
 
-	rr := httptest.NewRecorder()
-	handler.GetStatus(rr, req)
+			var response map[string]string
+			err = json.Unmarshal(responseWriter.Body.Bytes(), &response)
+			Expect(err).ToNot(HaveOccurred())
 
-	if status := rr.Code; status != http.StatusMethodNotAllowed {
-		t.Errorf("Handler returned wrong status code: got %v want %v", status, http.StatusMethodNotAllowed)
-	}
-}
+			Expect(response["status"]).To(Equal("healthy"))
+		})
+	})
 
-func TestHealthCheck(t *testing.T) {
-	req, err := http.NewRequest("GET", "/healthz", nil)
-	if err != nil {
-		t.Fatal(err)
-	}
+	Describe("ReadyCheck", func() {
+		It("should return ready status", func() {
+			req, err := http.NewRequest("GET", "/readyz", nil)
+			Expect(err).ToNot(HaveOccurred())
 
-	rr := httptest.NewRecorder()
-	http.HandlerFunc(HealthCheck).ServeHTTP(rr, req)
+			http.HandlerFunc(handler.ReadyCheck).ServeHTTP(responseWriter, req)
 
-	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("Handler returned wrong status code: got %v want %v", status, http.StatusOK)
-	}
+			Expect(responseWriter.Code).To(Equal(http.StatusOK))
 
-	var response map[string]string
-	if err := json.Unmarshal(rr.Body.Bytes(), &response); err != nil {
-		t.Errorf("Failed to parse response: %v", err)
-	}
+			var response map[string]string
+			err = json.Unmarshal(responseWriter.Body.Bytes(), &response)
+			Expect(err).ToNot(HaveOccurred())
 
-	if response["status"] != "healthy" {
-		t.Errorf("Expected status 'healthy', got '%s'", response["status"])
-	}
-}
-
-func TestReadyCheck(t *testing.T) {
-	req, err := http.NewRequest("GET", "/readyz", nil)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	rr := httptest.NewRecorder()
-	http.HandlerFunc(ReadyCheck).ServeHTTP(rr, req)
-
-	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("Handler returned wrong status code: got %v want %v", status, http.StatusOK)
-	}
-
-	var response map[string]string
-	if err := json.Unmarshal(rr.Body.Bytes(), &response); err != nil {
-		t.Errorf("Failed to parse response: %v", err)
-	}
-
-	if response["status"] != "ready" {
-		t.Errorf("Expected status 'ready', got '%s'", response["status"])
-	}
-}
+			Expect(response["status"]).To(Equal("ready"))
+		})
+	})
+})
