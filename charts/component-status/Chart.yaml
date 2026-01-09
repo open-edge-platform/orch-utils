@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: 2026 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+---
+
+apiVersion: v2
+name: component-status
+description: A Helm chart for the Orchestrator Component Status Service
+type: application
+version: 26.0.0
+appVersion: "26.0.0"
