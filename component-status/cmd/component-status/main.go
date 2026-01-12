@@ -18,9 +18,9 @@ import (
 )
 
 var (
-	// Version is populated at build time
+	// Version is populated at build time.
 	Version = "dev"
-	// Revision is populated at build time
+	// Revision is populated at build time.
 	Revision = "unknown"
 )
 
@@ -81,13 +81,13 @@ func main() {
 	defer cancel()
 
 	if err := server.Shutdown(ctx); err != nil {
-		log.Fatalf("Server forced to shutdown: %v", err)
+		log.Printf("Server forced to shutdown: %v", err)
 	}
 
 	log.Println("Server exited")
 }
 
-// getEnv gets an environment variable or returns a default value
+// getEnv gets an environment variable or returns a default value.
 func getEnv(key, defaultValue string) string {
 	if value := os.Getenv(key); value != "" {
 		return value
@@ -95,16 +95,16 @@ func getEnv(key, defaultValue string) string {
 	return defaultValue
 }
 
-// loggingMiddleware logs each HTTP request
+// loggingMiddleware logs each HTTP request.
 func loggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
-		
+
 		// Create a response writer wrapper to capture status code
 		wrapped := &responseWriter{ResponseWriter: w, statusCode: http.StatusOK}
-		
+
 		next.ServeHTTP(wrapped, r)
-		
+
 		duration := time.Since(start)
 		log.Printf("%s %s %d %v %s",
 			r.Method,
@@ -116,7 +116,7 @@ func loggingMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-// responseWriter wraps http.ResponseWriter to capture status code
+// responseWriter wraps http.ResponseWriter to capture status code.
 type responseWriter struct {
 	http.ResponseWriter
 	statusCode int
