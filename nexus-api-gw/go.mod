@@ -4,7 +4,7 @@
 
 module github.com/open-edge-platform/orch-utils/nexus-api-gw
 
-go 1.24.9
+go 1.25.5
 
 require (
 	github.com/getkin/kin-openapi v0.131.0

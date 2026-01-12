@@ -80,7 +80,10 @@ func newKubernetesCli() (*k8s.Clientset, error) {
 
 func shutdownIstioProxy() {
 	log.Infof("Checking if istio proxy is valid...")
-	conn, err := net.DialTimeout("tcp", "127.0.0.1:15000", time.Second*10)
+	dialer := &net.Dialer{Timeout: time.Second * 10}
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	conn, err := dialer.DialContext(ctx, "tcp", "127.0.0.1:15000")
 	if err != nil {
 		log.Info("Unable to find istio proxy, nothing to do.")
 		return

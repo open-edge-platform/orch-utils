@@ -4,7 +4,7 @@
 
 module github.com/open-edge-platform/orch-utils/tenancy-manager
 
-go 1.24.9
+go 1.25.5
 
 require (
 	github.com/onsi/ginkgo/v2 v2.23.4

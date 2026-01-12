@@ -4,7 +4,7 @@
 
 module github.com/vmware-tanzu/graph-framework-for-microservices/gqlgen
 
-go 1.24
+go 1.25.5
 
 toolchain go1.24.1
 

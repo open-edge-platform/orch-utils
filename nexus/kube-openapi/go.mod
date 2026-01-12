@@ -4,7 +4,7 @@
 
 module github.com/vmware-tanzu/graph-framework-for-microservices/kube-openapi
 
-go 1.24.6
+go 1.25.5
 
 require (
 	github.com/NYTimes/gziphandler v1.1.1
