@@ -20,15 +20,14 @@ var _ = Describe("Config Loader", func() {
 orchestrator:
   version: "2026.0"
   features:
-    - name: application-orchestration
-      status: enabled
-    - name: edge-infrastructure-manager
-      status: enabled
-      features:
-        - name: inventory
-          status: enabled
-        - name: device-onboarding
-          status: disabled
+    application-orchestration:
+      installed: true
+    edge-infrastructure-manager:
+      installed: true
+      inventory:
+        installed: true
+      device-onboarding:
+        installed: false
 `
 
 			tmpfile, err := os.CreateTemp("", "config-*.yaml")
@@ -47,22 +46,22 @@ orchestrator:
 			Expect(cfg.Orchestrator.Version).To(Equal("2026.0"))
 			Expect(cfg.Orchestrator.Features).To(HaveLen(2))
 
-			appOrch := cfg.Orchestrator.Features[0]
-			Expect(appOrch.Name).To(Equal("application-orchestration"))
-			Expect(appOrch.Status).To(Equal("enabled"))
+			appOrch, exists := cfg.Orchestrator.Features["application-orchestration"]
+			Expect(exists).To(BeTrue())
+			Expect(appOrch.Installed).To(BeTrue())
 
-			eim := cfg.Orchestrator.Features[1]
-			Expect(eim.Name).To(Equal("edge-infrastructure-manager"))
-			Expect(eim.Status).To(Equal("enabled"))
-			Expect(eim.Features).To(HaveLen(2))
+			eim, exists := cfg.Orchestrator.Features["edge-infrastructure-manager"]
+			Expect(exists).To(BeTrue())
+			Expect(eim.Installed).To(BeTrue())
+			Expect(eim.SubFeatures).To(HaveLen(2))
 
-			inventory := eim.Features[0]
-			Expect(inventory.Name).To(Equal("inventory"))
-			Expect(inventory.Status).To(Equal("enabled"))
+			inventory, exists := eim.SubFeatures["inventory"]
+			Expect(exists).To(BeTrue())
+			Expect(inventory.Installed).To(BeTrue())
 
-			deviceOnboarding := eim.Features[1]
-			Expect(deviceOnboarding.Name).To(Equal("device-onboarding"))
-			Expect(deviceOnboarding.Status).To(Equal("disabled"))
+			deviceOnboarding, exists := eim.SubFeatures["device-onboarding"]
+			Expect(exists).To(BeTrue())
+			Expect(deviceOnboarding.Installed).To(BeFalse())
 		})
 
 		It("should return error for non-existent file", func() {
@@ -90,7 +89,7 @@ orchestrator:
 			It("should return error for missing schema-version", func() {
 				content := `orchestrator:
   version: "2026.0"
-  features: []
+  features: {}
 `
 				tmpfile, err := os.CreateTemp("", "config-*.yaml")
 				Expect(err).ToNot(HaveOccurred())
@@ -108,7 +107,7 @@ orchestrator:
 			It("should return error for missing orchestrator.version", func() {
 				content := `schema-version: "1.0"
 orchestrator:
-  features: []
+  features: {}
 `
 				tmpfile, err := os.CreateTemp("", "config-*.yaml")
 				Expect(err).ToNot(HaveOccurred())
@@ -133,28 +132,27 @@ orchestrator:
 				SchemaVersion: "1.0",
 				Orchestrator: config.Orchestrator{
 					Version: "2026.0",
-					Features: []config.Feature{
-						{
-							Name:   "application-orchestration",
-							Status: "enabled",
+					Features: map[string]config.Feature{
+						"application-orchestration": {
+							Installed:   true,
+							SubFeatures: map[string]config.Feature{},
 						},
-						{
-							Name:   "edge-infrastructure-manager",
-							Status: "enabled",
-							Features: []config.Feature{
-								{
-									Name:   "inventory",
-									Status: "enabled",
+						"edge-infrastructure-manager": {
+							Installed: true,
+							SubFeatures: map[string]config.Feature{
+								"inventory": {
+									Installed:   true,
+									SubFeatures: map[string]config.Feature{},
 								},
-								{
-									Name:   "device-onboarding",
-									Status: "disabled",
+								"device-onboarding": {
+									Installed:   false,
+									SubFeatures: map[string]config.Feature{},
 								},
 							},
 						},
-						{
-							Name:   "cluster-orchestration",
-							Status: "disabled",
+						"cluster-orchestration": {
+							Installed:   false,
+							SubFeatures: map[string]config.Feature{},
 						},
 					},
 				},
@@ -190,4 +188,3 @@ orchestrator:
 		})
 	})
 })
-
