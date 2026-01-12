@@ -5,6 +5,7 @@
 package config
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 
@@ -19,17 +20,28 @@ type Config struct {
 
 // Orchestrator information
 type Orchestrator struct {
-	Version  string    `yaml:"version" json:"version"`
-	Features []Feature `yaml:"features" json:"features"`
+	Version  string             `yaml:"version" json:"version"`
+	Features map[string]Feature `yaml:"features" json:"features"`
 }
 
 // Feature and its installation status
 type Feature struct {
-	Name        string    `yaml:"name" json:"name"`
-	Version     string    `yaml:"version,omitempty" json:"version,omitempty"`
-	Description string    `yaml:"description,omitempty" json:"description,omitempty"`
-	Status      string    `yaml:"status" json:"status"`
-	Features    []Feature `yaml:"features,omitempty" json:"features,omitempty"`
+	Installed   bool               `yaml:"installed" json:"installed"`
+	SubFeatures map[string]Feature `yaml:",inline" json:"-"`
+}
+
+// MarshalJSON implements custom JSON marshaling for Feature
+func (f Feature) MarshalJSON() ([]byte, error) {
+	// Create a map to hold all fields
+	result := make(map[string]interface{})
+	result["installed"] = f.Installed
+	
+	// Add all subfeatures directly to the result (flatten)
+	for key, value := range f.SubFeatures {
+		result[key] = value
+	}
+	
+	return json.Marshal(result)
 }
 
 // Load reads and parses the configuration file
@@ -58,39 +70,28 @@ func Load(path string) (*Config, error) {
 
 // IsFeatureInstalled checks if a feature is installed
 func (c *Config) IsFeatureInstalled(featurePath ...string) bool {
-	if len(featurePath) == 0 {
-		return false
-	}
+if len(featurePath) == 0 {
+return false
+}
 
-	// Start with top-level features
-	features := c.Orchestrator.Features
-	
-	// Traverse the feature path
-	for i, name := range featurePath {
-		found := false
-		var currentFeature *Feature
-		
-		// Search for feature by name
-		for j := range features {
-			if features[j].Name == name {
-				currentFeature = &features[j]
-				found = true
-				break
-			}
-		}
-		
-		if !found {
-			return false
-		}
-		
-		// Check if last key is enabled
-		if i == len(featurePath)-1 {
-			return currentFeature.Status == "enabled"
-		}
-		
-		// Move to sub-features for next iteration
-		features = currentFeature.Features
-	}
-	
-	return false
+// Start with top-level features
+features := c.Orchestrator.Features
+
+// Traverse the feature path
+for i, name := range featurePath {
+feature, found := features[name]
+if !found {
+return false
+}
+
+// Check if last key - return installed status
+if i == len(featurePath)-1 {
+return feature.Installed
+}
+
+// Move to sub-features for next iteration
+features = feature.SubFeatures
+}
+
+return false
 }

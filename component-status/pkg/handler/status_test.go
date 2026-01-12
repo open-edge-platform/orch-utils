@@ -28,10 +28,10 @@ var _ = Describe("Status Handler", func() {
 			SchemaVersion: "1.0",
 			Orchestrator: config.Orchestrator{
 				Version: "2026.0",
-				Features: []config.Feature{
-					{
-						Name:   "application-orchestration",
-						Status: "enabled",
+				Features: map[string]config.Feature{
+					"application-orchestration": {
+						Installed:   true,
+						SubFeatures: map[string]config.Feature{},
 					},
 				},
 			},
