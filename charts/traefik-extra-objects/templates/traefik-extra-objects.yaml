@@ -496,6 +496,10 @@ metadata:
 spec:
   headers:
     referrerPolicy: "no-referrer"
+{{- if .Values.keycloakProxyHeaders }}
+    customRequestHeaders:
+{{- toYaml .Values.keycloakProxyHeaders | nindent 6 }}
+{{- end }}
     customResponseHeaders:
       X-Permitted-Cross-Domain-Policies: none
       Pragma: no-cache

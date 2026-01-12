@@ -8,7 +8,7 @@ keycloakJwksUrl: http://platform-keycloak.orch-platform.svc
 keycloakJwksPath: /realms/master/protocol/openid-connect/certs
 keycloakServicePort: 80
 keycloakServiceName: platform-keycloak
-keycloakServiceNamespace: keycloak-system
+keycloakServiceNamespace: orch-platform
 fleetMatchHost: "fleet.domain"
 harborOciMatchHost: "registry-oci.domain"
 observabilityMatchHost: "observability-ui.domain"
@@ -55,3 +55,12 @@ cors:
   # - "http://web-ui.kind.internal"
 
 traefikApiGroup: "traefik.containo.us/v1alpha1"
+
+# Keycloak proxy headers for X-Forwarded-* support
+# These headers allow Keycloak to understand it's being accessed through an HTTPS proxy
+# and generate tokens with the correct external issuer URL
+keycloakProxyHeaders: {}
+  # Example:
+  # X-Forwarded-Proto: https
+  # X-Forwarded-Host: keycloak.example.com
+  # X-Forwarded-Port: "443"
