@@ -6,6 +6,7 @@
 package mage
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
@@ -23,7 +24,7 @@ func getNexusVersion() string {
 
 func runCommand(cmd string) error {
 	fmt.Println("Running command:", cmd)
-	c := exec.Command("sh", "-c", cmd)
+	c := exec.CommandContext(context.Background(), "sh", "-c", cmd)
 	c.Stdout = os.Stdout
 	c.Stderr = os.Stderr
 	return c.Run()

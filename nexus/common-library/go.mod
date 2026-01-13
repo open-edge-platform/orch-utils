@@ -4,7 +4,7 @@
 
 module github.com/vmware-tanzu/graph-framework-for-microservices/common-library
 
-go 1.24.6
+go 1.25.5
 
 require (
 	github.com/elliotchance/orderedmap v1.8.0

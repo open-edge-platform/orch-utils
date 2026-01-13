@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-FROM golang:1.24.11 AS builder
+FROM golang:1.25.5 AS builder
 
 ENV GO111MODULE=on
 ARG MAKE_TARGET=go-build

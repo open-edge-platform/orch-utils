@@ -4,6 +4,6 @@
 
 module traefik/jwt-plugin
 
-go 1.19
+go 1.25.5
 
 require github.com/team-carepay/traefik-jwt-plugin v0.3.1

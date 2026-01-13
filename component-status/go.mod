@@ -4,7 +4,7 @@
 
 module github.com/open-edge-platform/orch-utils/component-status
 
-go 1.24.11
+go 1.25.5
 
 require (
 	github.com/onsi/ginkgo/v2 v2.27.4
