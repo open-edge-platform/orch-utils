@@ -6,12 +6,9 @@ FROM golang:1.25.5 AS build
 
 WORKDIR /workspace
 
-# Copy go.mod, go.sum files and download deps
-COPY go.mod go.sum ./
-RUN go mod download
-
 # Copy sources to the working directory
-COPY token-fs/ /workspace/token-fs/
+COPY token-fs/ .
+RUN go mod download
 
 ARG org_oci_version=unknown
 ARG org_oci_source=unknown
@@ -30,7 +27,7 @@ RUN CGO_ENABLED=0 \
   build \
   -ldflags="-s -w -extldflags=-static -X 'main.Version=$org_oci_version' -X 'main.Revision=$org_oci_revision'" \
   -o ./build/app \
-  ./token-fs/cmd/token-fs
+  ./cmd/token-fs
 
 FROM gcr.io/distroless/static-debian11:nonroot
 

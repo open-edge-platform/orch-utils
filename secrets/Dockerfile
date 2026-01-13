@@ -6,13 +6,9 @@ FROM golang:1.25.5 AS build
 
 WORKDIR /workspace
 
-# Copy go.mod, go.sum files and download deps
-COPY go.mod go.sum ./
+# Copy sources to the working directory
+COPY secrets/ .
 RUN go mod download
-
-# Copy just the necessary source files
-COPY secrets/ /workspace/secrets/
-COPY internal/ /workspace/internal/
 
 ARG org_oci_version=unknown
 ARG org_oci_source=unknown
@@ -31,7 +27,7 @@ RUN CGO_ENABLED=0 \
   build \
   -ldflags="-s -w -extldflags=-static -X 'main.Version=$org_oci_version' -X 'main.Revision=$org_oci_revision'" \
   -o ./build/app \
-  ./secrets/cmd/config
+  ./cmd/config
 
 FROM gcr.io/distroless/static-debian11:nonroot
 

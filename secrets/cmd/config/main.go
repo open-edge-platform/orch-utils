@@ -20,7 +20,7 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 
-	"github.com/open-edge-platform/orch-utils/internal/retry"
+	"github.com/open-edge-platform/orch-utils/secrets/internal/retry"
 	"github.com/open-edge-platform/orch-utils/secrets"
 	"github.com/open-edge-platform/orch-utils/secrets/internal"
 	"github.com/open-edge-platform/orch-utils/secrets/kubernetes"

@@ -13,7 +13,7 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/open-edge-platform/orch-utils/internal/retry"
+	"github.com/open-edge-platform/orch-utils/secrets/internal/retry"
 	"github.com/open-edge-platform/orch-utils/secrets"
 )
 

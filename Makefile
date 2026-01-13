@@ -73,7 +73,6 @@ ginkgo: ## Run all ginkgo tests in sub-projects
 	make -C auth-service        ginkgo
 	make -C aws-sm-proxy        ginkgo
 	make -C component-status    ginkgo
-	make -C internal            ginkgo
 	make -C nexus-api-gw        ginkgo
 	make -C nexus               ginkgo
 	make -C secrets             ginkgo
