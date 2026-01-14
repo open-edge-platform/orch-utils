@@ -17,6 +17,7 @@ import (
 // Pushes all helm chart .tgz files as OCI artifacts to the specified OCI registry.
 func pushCharts(ociRegistry string) error { //nolint: cyclop
 	chartsDir := "charts"
+	chartsBuildDir := "chartsBuildDir"
 
 	// Get all chart directories in charts directory
 	entries, err := os.ReadDir(chartsDir)
@@ -43,7 +44,7 @@ func pushCharts(ociRegistry string) error { //nolint: cyclop
 	}
 
 	// Recursively find and push all .tgz files in charts directory
-	if err := filepath.Walk(chartsDir, func(path string, info os.FileInfo, err error) error {
+	if err := filepath.Walk(chartsBuildDir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}

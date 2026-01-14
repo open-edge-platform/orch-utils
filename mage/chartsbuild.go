@@ -25,7 +25,7 @@ func ChartsBuild() error {
 		if info.IsDir() && strings.Count(path, string(os.PathSeparator)) ==
 			strings.Count(chartsDir, string(os.PathSeparator))+1 {
 			fmt.Println("Packaging chart:", path)
-			buildDir := filepath.Join(path, "build")
+			buildDir := filepath.Join("chartsBuildDir", filepath.Base(path))
 			if err := os.MkdirAll(buildDir, os.ModePerm); err != nil {
 				return fmt.Errorf("error creating build directory for chart %s: %w", path, err)
 			}
