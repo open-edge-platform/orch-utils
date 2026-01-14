@@ -91,7 +91,8 @@ affinity: {}
 traefikRoute:
   enabled: false
   namespace: orch-gateway
-  host: api.example.com
+  matchHost: Host(`api.example.com`)
+  matchPath: PathPrefix(`/v1/orchestrator`)
   priority: 40
   secretName: ""
   tlsOption: ""
@@ -113,12 +114,6 @@ componentStatus:
         installed: true
       edge-infrastructure-manager:
         installed: true
-        inventory:
-          installed: true
-        out-of-band-management:
-          installed: true
-        device-onboarding:
-          installed: false
       observability:
         installed: true
       multitenancy:
