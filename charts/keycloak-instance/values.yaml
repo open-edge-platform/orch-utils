@@ -1535,3 +1535,22 @@ keycloakConfigCli:
 argo:
   # Cluster domain suffix for dynamic URL generation
   clusterDomain: "kind.internal"
+
+# ============================================================================
+# M2M CLIENT SECRETS EXTRACTOR JOB
+# ============================================================================
+# This job extracts M2M (Machine-to-Machine) client secrets from Keycloak
+# and creates Kubernetes secrets for service-to-service authentication
+
+m2mSecretsExtractor:
+  # Enable/disable the M2M secrets extractor job
+  enabled: true
+  
+  # List of M2M client IDs to extract secrets for
+  clients:
+    - alerts-m2m-client
+    - host-manager-m2m-client
+    - co-manager-m2m-client
+    - ktc-m2m-client
+    - 3rd-party-host-manager-m2m-client
+    - edge-manager-m2m-client
