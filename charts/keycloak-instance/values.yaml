@@ -1423,7 +1423,7 @@ keycloakConfigCli:
             MAX_ATTEMPTS=60
             ATTEMPT=0
             while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
-              if timeout 2 sh -c "echo '' | nc -w1 platform-keycloak.{{ .Values.namespace }}.svc 8080" >/dev/null 2>&1; then
+              if timeout 2 sh -c "echo '' | nc -w1 platform-keycloak.orch-platform.svc 8080" >/dev/null 2>&1; then
                 echo "Keycloak port 8080 is open!"
                 exit 0
               fi
@@ -1461,7 +1461,7 @@ keycloakConfigCli:
       # Environment variables for keycloak-config-cli
       env:
         - name: KEYCLOAK_URL
-          value: "http://platform-keycloak.{{ .Values.namespace }}.svc.cluster.local/"
+          value: "http://platform-keycloak.orch-platform.svc.cluster.local/"
         - name: KEYCLOAK_USER
           value: "admin"
         - name: KEYCLOAK_PASSWORD
