@@ -33,8 +33,6 @@ keycloak:
   # Database configuration
   database:
     vendor: postgres
-    host: postgresql-cluster-rw.orch-database.svc.cluster.local
-    port: 5432
     database: orch-platform-platform-keycloak
     usernameSecret:
       name: platform-keycloak-local-postgresql
