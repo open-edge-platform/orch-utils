@@ -14,7 +14,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: "Host(`{{ .Values.traefikRoute.host }}`) && PathPrefix(`/v1/orchestrator`)"
+    - match: "{{ .Values.traefikRoute.matchHost }} && {{ .Values.traefikRoute.matchPath }}"
       kind: Rule
       priority: {{ .Values.traefikRoute.priority }}
       middlewares:
