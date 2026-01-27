@@ -1,0 +1,33 @@
+# SPDX-FileCopyrightText: 2026 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+---
+
+# LoadBalancer Service for Tinkerbell with TLS
+apiVersion: v1
+kind: Service
+metadata:
+  name: pa-server-loadbalancer
+  namespace: orch-boots
+  annotations:
+    # Cloud provider specific annotations (adjust for AWS/Azure/GCP)
+    # For AWS Network Load Balancer:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "ssl"
+    # For Azure:
+    # service.beta.kubernetes.io/azure-load-balancer-internal: "false"
+    # For GCP:
+    # cloud.google.com/load-balancer-type: "Internal"
+spec:
+  type: LoadBalancer
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+  ports:
+    - name: https
+      port: 443
+      targetPort: 443
+      protocol: TCP
+  selector:
+    app: pa-server-tls-proxy

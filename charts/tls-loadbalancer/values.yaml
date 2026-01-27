@@ -1,0 +1,44 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+# Number of TLS proxy replicas
+replicaCount: 1
+
+# NGINX image configuration
+image:
+  repository: nginxinc/nginx-unprivileged
+  tag: alpine3.22
+  pullPolicy: IfNotPresent
+
+
+clusterDomain: "cluster.local"
+
+# Backend service configuration
+backend:
+  service: "tinkerbell.orch-infra.svc.cluster.local"
+  port: 8080
+
+# Rate limiting for TLS proxy (matches nginx-ingress-pxe-boots structure)
+nginxLBRateLimit:
+  rps: 1
+  connections: 5
+
+# TLS configuration
+tls:
+  # Certificate secret name (managed by cert-manager)
+  certificateSecretName: "tls-boots"
+  
+  # Diffie-Hellman parameters (base64-encoded PEM)
+  # Generated with: openssl dhparam 4096 2>/dev/null | base64 -w0
+  # yamllint disable-line rule:line-length
+  dhParam: "LS0tLS1CRUdJTiBESCBQQVJBTUVURVJTLS0tLS0KTUlJQ0NBS0NBZ0VBdE9Pcy9YVUUrQTAvVG1RdVVuVlN1UlNvOEtLOXFmaWFzMUg4VFZkUGZlRDNObDBvLzRLbQpPQkZHNjJPRHN2YjlFMW0zYXhjTHZCbFpKOU0vNGJhUXpuOVh4RG1VcmwweGNId21GZWsvV0xDT3MybGRScXRBCmpaMmhwU3lNbUtud2xWQkFqbWh4eGpGUmR2VmwyMTVQM1BWMkdmOEtlbkd6OFBVRnpGa1FENHRzNWg5Nzgzc0UKMlpFUnJTanFxSEFyVjlNTDJsM2ZBcUhBL1RSTEZXTlpoZ21QSnJhYnBnNXJSa0pxaHM2b254ZnBJUStJNTZORgorYlBtLzBPVzc4d2F1anFMTm80M2tDdHgxdFUrdFFmd1l0eExTNWNIYlJHUkFDem51K0Mzd3NnVXQxRlhzZHFQCk1zNmFicU9iUFZhTTcrR25EUmdGcHBnd0ViLzVteXNtOXNmcThyeWVxbjBNYWdpS0VHb0ZaQzR2Z2NaczhUSTkKU08yWVlMUVZyK21kYnB2ZnR1UUtZYlkxVGhxajlKVE9xZFBNdmNFc0hhdzlMN2hURnVFN0s5dy90QVpFRFVSUQp4SWhVTFBtaHIrdFhua2JTMkZHNHlYZ1Vna1lJRWNETGNFNk1wa0JSK1F5NktTUXRqQUZvTmtBcUFIMlUvNXBxCjI5SDIrbDhIa2pIQmhUS3dxWkd2MCtvWUZaNFBZSHFreWl5dUhHZEYvQ1IzSWdJODBHdS9ha1RFb3BocVBRcm8KU3hkU0JTS1pqVG5mYUZ5QSsrVUZYUjBYZTdiaWtpcTBlTllyanJBNTU5WlBLNmtMVnJrYlAwNGhVczVmYXVqWQpiQ1BFNHJNVXNFZncvQU11a1N5c3V2bGhzb1dhMTZQK1Zlam1PQTJmUXZwMkVOQ05xL2M2TTY4Q0FRST0KLS0tLS1FTkQgREggUEFSQU1FVEVSUy0tLS0tCg=="
+
+# Resource limits per EMF conventions
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+

@@ -1,0 +1,44 @@
+# SPDX-FileCopyrightText: 2026 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+---
+
+# nginx-ingress-boots uses a self-signed TLS server certificate managed by cert-manager
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: boots-selfsigned-issuer
+  namespace: orch-boots
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: tls-boots
+  namespace: orch-boots
+spec:
+  secretName: tls-boots
+  duration: 8765h0m0s # 1 year
+  renewBefore: 2160h0m0s # 90 days
+  subject:
+    organizations:
+      - Intel Corporation
+    countries:
+      - US
+  isCA: true
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 3072
+  usages:
+    - digital signature
+    - server auth
+  commonName: {{ required "A valid commonName is required!" (printf "tinkerbell-nginx.%s" .Values.clusterDomain) }}
+  dnsNames:
+    - {{ required "A valid commonName is required!" (printf "tinkerbell-nginx.%s" .Values.clusterDomain) }}
+    - tinkerbell.orch-infra.svc.cluster.local
+    - tinkerbell.orch-infra.svc
+  issuerRef:
+    name: boots-selfsigned-issuer
+    kind: Issuer

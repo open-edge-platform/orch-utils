@@ -1,0 +1,94 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+---
+
+# NGINX Configuration for TLS Termination
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-tls-proxy-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "tls-loadbalancer.labels" . | nindent 4 }}
+data:
+  nginx.conf: |-
+    worker_processes auto;
+    error_log /dev/stderr warn;
+    pid /var/run/nginx/nginx.pid;
+
+    events {
+        worker_connections 1024;
+    }
+
+    http {
+        include /etc/nginx/mime.types;
+        default_type application/octet-stream;
+        
+        log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '"$http_user_agent" "$http_x_forwarded_for"';
+        
+        access_log /dev/stdout main;
+        sendfile on;
+        keepalive_timeout 65;
+
+        # Temporary file paths writable by non-root user
+        client_body_temp_path /tmp/nginx_client_temp;
+        proxy_temp_path /tmp/nginx_proxy_temp;
+        fastcgi_temp_path /tmp/nginx_fastcgi_temp;
+        uwsgi_temp_path /tmp/nginx_uwsgi_temp;
+        scgi_temp_path /tmp/nginx_scgi_temp;
+
+        # Rate limiting zones
+        limit_req_zone $binary_remote_addr zone=req_limit:10m rate={{ .Values.nginxLBRateLimit.rps }}r/s;
+        limit_conn_zone $binary_remote_addr zone=conn_limit:10m;
+        limit_req_status 429;
+        limit_conn_status 429;
+
+        server {
+            listen 443 ssl http2;
+            server_name tinkerbell-nginx.{{ .Values.clusterDomain }};
+
+            # TLS configuration matching approved cipher suites
+            ssl_certificate /etc/nginx/certs/tls.crt;
+            ssl_certificate_key /etc/nginx/certs/tls.key;
+            ssl_dhparam /etc/nginx/tls/dh-param.pem;
+            
+            # Approved cipher suites and protocols per ingress-nginx.yaml
+            # First cipher: BIOS-compatible (DHE-RSA-AES256-GCM-SHA384)
+            # Remaining: Approved for all other clients
+            ssl_protocols TLSv1.2 TLSv1.3;
+            ssl_ciphers DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:TLS_AES_256_GCM_SHA384;
+            ssl_prefer_server_ciphers on;
+            ssl_session_cache shared:SSL:10m;
+            ssl_session_timeout 10m;
+
+            # Rate limiting
+            limit_req zone=req_limit burst=20 nodelay;
+            limit_conn conn_limit {{ .Values.nginxLBRateLimit.connections }};
+
+            # Route /tink-stack/* to Tinkerbell backend
+            # Strips /tink-stack prefix and forwards /<captured-path>?<query-params>
+            location ~ ^/tink-stack(/|$)(.*) {
+                proxy_pass http://{{ .Values.backend.service }}:{{ .Values.backend.port }}/$2$is_args$args;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_set_header X-Forwarded-Host $host;
+                proxy_set_header X-Forwarded-Port $server_port;
+                proxy_http_version 1.1;
+                proxy_set_header Connection "";
+                
+                # Pass original request URI for logging
+                proxy_set_header X-Original-URI $request_uri;
+            }
+
+            # Health check endpoint
+            location /healthz {
+                access_log off;
+                return 200 "healthy\n";
+                add_header Content-Type text/plain;
+            }
+        }
+    }

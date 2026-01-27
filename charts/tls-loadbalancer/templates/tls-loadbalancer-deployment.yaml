@@ -1,0 +1,119 @@
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+---
+
+# NGINX TLS Proxy Deployment for Tinkerbell backend
+# This pod terminates TLS and proxies to Tinkerbell:8080
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "tls-loadbalancer.name" . }}-proxy
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "tls-loadbalancer.labels" . | nindent 4 }}
+    app.kubernetes.io/component: tls-proxy
+spec:
+  replicas: {{ .Values.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      {{- include "tls-loadbalancer.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "tls-loadbalancer.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: tls-proxy
+      annotations:
+        # Restart pods on ConfigMap changes
+        checksum/config: {{ include (print $.Template.BasePath "/nginx-tls-proxy-configmap.yaml") . | sha256sum }}
+        checksum/tls-config: {{ include (print $.Template.BasePath "/tls-config-configmap.yaml") . | sha256sum }}
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101  # nginx user in nginxinc/nginx-unprivileged
+        runAsGroup: 101
+        fsGroup: 101
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: nginx-tls
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag | default "alpine3.22" }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+          ports:
+            - containerPort: 443
+              name: https
+              protocol: TCP
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 101
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - name: tls-config
+              mountPath: /etc/nginx/tls
+              readOnly: true
+            - name: tls-cert
+              mountPath: /etc/nginx/certs
+              readOnly: true
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
+            - name: nginx-cache
+              mountPath: /var/cache/nginx
+            - name: nginx-run
+              mountPath: /var/run/nginx
+            - name: nginx-tmp
+              mountPath: /tmp
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 443
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            periodSeconds: 2
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 30
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 443
+              scheme: HTTPS
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 443
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 3
+      volumes:
+        - name: tls-config
+          configMap:
+            name: tls-config
+        - name: tls-cert
+          secret:
+            secretName: {{ .Values.tls.certificateSecretName | default "tls-boots" }}
+        - name: nginx-config
+          configMap:
+            name: nginx-tls-proxy-config
+        - name: nginx-cache
+          emptyDir: {}
+        - name: nginx-run
+          emptyDir: {}
+        - name: nginx-tmp
+          emptyDir: {}
