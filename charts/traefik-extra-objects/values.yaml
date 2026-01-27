@@ -60,7 +60,7 @@ traefikApiGroup: "traefik.containo.us/v1alpha1"
 # These headers allow Keycloak to understand it's being accessed through an HTTPS proxy
 # and generate tokens with the correct external issuer URL
 keycloakProxyHeaders: {}
-  # Example:
-  # X-Forwarded-Proto: https
-  # X-Forwarded-Host: keycloak.example.com
-  # X-Forwarded-Port: "443"
+# Example:
+# X-Forwarded-Proto: https
+# X-Forwarded-Host: keycloak.example.com
+# X-Forwarded-Port: "443"
