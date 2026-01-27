@@ -51,6 +51,11 @@ misconfigurations:
 
   - id: AVD-KSV-0109
     paths:
+      - "**/m2m-secrets-extractor-job.yaml"
+    statement: ConfigMap contains a shell script with variable references to credentials ($KEYCLOAK_PASSWORD, $M2M_CLIENTS), not actual secret values. Secrets are injected at runtime from Kubernetes Secrets.
+
+  - id: AVD-KSV-0109
+    paths:
       - "charts/adm-secret/templates/config-map.yaml"
       - "charts/keycloak-tenant-controller/templates/configmap.yaml"
       - "charts/traefik-pre/templates/jwt-plugin-configmap-generated.yaml"
