@@ -41,6 +41,7 @@ spec:
     name: boots-selfsigned-issuer
     kind: Issuer
 ---
+{{- if .Values.nginxIngress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -65,3 +66,4 @@ spec:
               name: tinkerbell
               port:
                 number: 8080
+{{- end }}

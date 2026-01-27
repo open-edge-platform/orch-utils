@@ -1,10 +1,16 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
----
 
-# Common name and DNS SAN of the self-signed TLS certificate
+# Common name for TLS certificate and ingress host
 commonName: ""
+
+# Ingress configuration
+nginxIngress:
+  # Set to false to disable Ingress resource (use LoadBalancer instead)
+  enabled: true
+
+# Rate limiting for nginx ingress (when ingress.enabled=true)
 nginxIngressRateLimit:
   rps: "1"
   connections: "5"
