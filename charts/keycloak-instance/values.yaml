@@ -33,8 +33,6 @@ keycloak:
   # Database configuration
   database:
     vendor: postgres
-    host: postgresql-cluster-rw.orch-database.svc.cluster.local
-    port: 5432
     database: orch-platform-platform-keycloak
     usernameSecret:
       name: platform-keycloak-local-postgresql
@@ -1423,7 +1421,7 @@ keycloakConfigCli:
             MAX_ATTEMPTS=60
             ATTEMPT=0
             while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
-              if timeout 2 sh -c "echo '' | nc -w1 platform-keycloak.{{ .Values.namespace }}.svc 8080" >/dev/null 2>&1; then
+              if timeout 2 sh -c "echo '' | nc -w1 platform-keycloak.orch-platform.svc 8080" >/dev/null 2>&1; then
                 echo "Keycloak port 8080 is open!"
                 exit 0
               fi
@@ -1461,7 +1459,7 @@ keycloakConfigCli:
       # Environment variables for keycloak-config-cli
       env:
         - name: KEYCLOAK_URL
-          value: "http://platform-keycloak.{{ .Values.namespace }}.svc.cluster.local/"
+          value: "http://platform-keycloak.orch-platform.svc.cluster.local/"
         - name: KEYCLOAK_USER
           value: "admin"
         - name: KEYCLOAK_PASSWORD
@@ -1535,3 +1533,21 @@ keycloakConfigCli:
 argo:
   # Cluster domain suffix for dynamic URL generation
   clusterDomain: "kind.internal"
+
+# ============================================================================
+# M2M CLIENT SECRETS EXTRACTOR JOB
+# ============================================================================
+# This job extracts M2M (Machine-to-Machine) client secrets from Keycloak
+# and creates Kubernetes secrets for service-to-service authentication
+
+m2mSecretsExtractor:
+  # Enable/disable the M2M secrets extractor job
+  enabled: true
+  # List of M2M client IDs to extract secrets for
+  clients:
+    - alerts-m2m-client
+    - host-manager-m2m-client
+    - co-manager-m2m-client
+    - ktc-m2m-client
+    - 3rd-party-host-manager-m2m-client
+    - edge-manager-m2m-client
