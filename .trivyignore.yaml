@@ -59,6 +59,16 @@ misconfigurations:
       - "**/m2m-secrets-extractor-job.yaml"
     statement: ConfigMap contains a shell script with text references (e.g., --data-urlencode "username"), not actual sensitive values. These are command-line arguments, not stored secrets.
 
+  - id: KSV113
+    paths:
+      - "**/m2m-secrets-extractor-job.yaml"
+    statement: Role requires minimal secret management permissions (create, patch only) to extract M2M client secrets from Keycloak and create Kubernetes secrets for service authentication. No get/update/delete/list permissions granted.
+
+  - id: KSV0125
+    paths:
+      - "**/m2m-secrets-extractor-job.yaml"
+    statement: badouralix/curl-jq image from Docker Hub is a well-maintained, public image with multiple security scanners. Image is pinned to specific SHA256 digest for immutability and reproducibility.
+
   - id: AVD-KSV-0109
     paths:
       - "charts/adm-secret/templates/config-map.yaml"
