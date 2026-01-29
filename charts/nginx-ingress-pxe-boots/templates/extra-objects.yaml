@@ -53,7 +53,7 @@ metadata:
   name: tinkerbell-nginx-ingress
   namespace: orch-infra
 spec:
-  ingressClassName: nginx
+  ingressClassName: haproxy
   rules:
    - host: {{ required "A valid commonName is required!" .Values.commonName }}
      http:
