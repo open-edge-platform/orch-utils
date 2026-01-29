@@ -41,11 +41,11 @@ spec:
     name: boots-selfsigned-issuer
     kind: Issuer
 ---
-{{- if and .Values.haproxyIngress (eq .Values.haproxyIngress.enabled true) }}
+{{- if .Values.haproxyIngress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: tinkerbell-haproxy-ingress
+  name: tinkerbell-nginx-ingress
   namespace: orch-infra
   annotations:
     # HAProxy Ingress Controller

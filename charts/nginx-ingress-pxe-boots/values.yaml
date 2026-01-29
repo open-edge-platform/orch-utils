@@ -6,11 +6,6 @@
 commonName: ""
 
 # Ingress configuration
-nginxIngress:
+haproxyIngress:
   # Set to false to disable Ingress resource (use LoadBalancer instead)
   enabled: true
-
-# Rate limiting for nginx ingress (when ingress.enabled=true)
-nginxIngressRateLimit:
-  rps: "1"
-  connections: "5"
