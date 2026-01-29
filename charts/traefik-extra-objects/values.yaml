@@ -64,3 +64,14 @@ keycloakProxyHeaders: {}
 # X-Forwarded-Proto: https
 # X-Forwarded-Host: keycloak.example.com
 # X-Forwarded-Port: "443"
+
+# Nexus API Gateway configuration
+apiHostname: "api.kind.internal"
+apiv2ServiceName: "apiv2-proxy"
+apiv2ServiceNamespace: "orch-infra"
+apiv2ServicePort: 8080
+apiv2PathRewriteTarget: "edge-infra.orchestrator.apis/v2/compute"
+nexusApiGwServiceName: "svc-iam-nexus-api-gw"
+nexusApiGwServiceNamespace: "orch-iam"
+nexusApiGwServicePort: 8082
+tlsOptionName: "gateway-tls"
