@@ -41,29 +41,34 @@ spec:
     name: boots-selfsigned-issuer
     kind: Issuer
 ---
-{{- if .Values.nginxIngress.enabled }}
+{{- if and .Values.haproxyIngress (eq .Values.haproxyIngress.enabled true) }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  annotations:
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-    nginx.ingress.kubernetes.io/limit-rps: "{{ .Values.nginxIngressRateLimit.rps | default 1 }}"
-    nginx.ingress.kubernetes.io/limit-connections: "{{ .Values.nginxIngressRateLimit.connections | default 5 }}"
-  name: tinkerbell-nginx-ingress
+  name: tinkerbell-haproxy-ingress
   namespace: orch-infra
+  annotations:
+    # HAProxy Ingress Controller
+    # Rate limiting is configured globally in the HAProxy helm chart deployment
+    # See: edge-manageability-framework/argocd/applications/configs/ingress-haproxy.yaml
+    description: "HAProxy Ingress for Tinkerbell PXE boots services"
 spec:
   ingressClassName: haproxy
+  tls:
+    - hosts:
+        - {{ required "A valid commonName is required!" .Values.commonName }}
+      secretName: tls-boots
   rules:
-   - host: {{ required "A valid commonName is required!" .Values.commonName }}
-     http:
+    - host: {{ required "A valid commonName is required!" .Values.commonName }}
+      http:
         paths:
-        - path: /tink-stack(/|$)(.*)
-          pathType: ImplementationSpecific
-          backend:
-            # This assumes http-svc exists and routes to healthy endpoints
-            service:
-              name: tinkerbell
-              port:
-                number: 8080
+          # Tinkerbell Stack Routes
+          - path: /tink-stack
+            pathType: Prefix
+            backend:
+              # This assumes tinkerbell service exists and routes to healthy endpoints
+              service:
+                name: tinkerbell
+                port:
+                  number: 8080
 {{- end }}
