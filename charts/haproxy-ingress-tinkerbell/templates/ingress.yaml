@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tinkerbell-nginx-ingress
+  namespace: orch-infra
+  annotations:
+    description: "HAProxy Ingress for Tinkerbell PXE boots services"
+spec:
+  ingressClassName: haproxy
+  tls:
+    - hosts:
+        - {{ required "A valid commonName is required!" .Values.commonName }}
+      secretName: tls-boots
+  rules:
+    - host: {{ required "A valid commonName is required!" .Values.commonName }}
+      http:
+        paths:
+          # Tinkerbell Stack Routes
+          - path: /tink-stack
+            pathType: Prefix
+            backend:
+              service:
+                name: tinkerbell
+                port:
+                  number: 8080
