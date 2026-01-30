@@ -1,0 +1,69 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
+---
+# haproxy-ingress-boots uses a self-signed TLS server certificate managed by cert-manager
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: boots-selfsigned-issuer
+  namespace: orch-boots
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: tls-boots
+  namespace: orch-boots
+spec:
+  secretName: tls-boots
+  duration: 8765h0m0s # 1 year
+  renewBefore: 2160h0m0s # 90 days
+  subject:
+    organizations:
+      - Intel Corporation
+    countries:
+      - US
+  isCA: true
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 3072
+  usages:
+    - digital signature
+    - server auth
+  commonName: {{ required "A valid commonName is required!" .Values.commonName }}
+  dnsNames:
+    - {{ required "A valid commonName is required!" .Values.commonName }}
+  issuerRef:
+    name: boots-selfsigned-issuer
+    kind: Issuer
+---
+{{- if .Values.haproxyIngress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    haproxy.org/path-rewrite: "/tink-stack/(.*) /\\1"
+    haproxy.org/rate-limit: "true"
+    haproxy.org/rate-limit-requests: "{{ .Values.haproxyIngressRateLimit.rps | default 1 }}"
+    haproxy.org/rate-limit-period: "1s"
+  name: tinkerbell-haproxy-ingress
+  namespace: orch-infra
+spec:
+  ingressClassName: haproxy
+  rules:
+   - host: {{ required "A valid commonName is required!" .Values.commonName }}
+     http:
+        paths:
+        - path: /tink-stack
+          pathType: Prefix
+          backend:
+            # This assumes http-svc exists and routes to healthy endpoints
+            service:
+              name: tinkerbell
+              port:
+                number: 8080
+{{- end }}
