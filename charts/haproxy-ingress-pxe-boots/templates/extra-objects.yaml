@@ -122,7 +122,7 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx-controller
     app.kubernetes.io/component: alias
   annotations:
-    metallb.universe.tf/address-pool: example
+    metallb.universe.tf/address-pool: {{ .Values.metallbPool | default "ingress-nginx-controller" }}
 spec:
   type: LoadBalancer
   ipFamilies:
