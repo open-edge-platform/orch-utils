@@ -15,7 +15,7 @@ require (
 	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/google/uuid v1.6.0
 	github.com/mitchellh/go-ps v1.0.0
-	github.com/sirupsen/logrus v1.9.3
+	github.com/sirupsen/logrus v1.9.4
 	k8s.io/apimachinery v0.30.14
 	k8s.io/client-go v0.30.14
 )
