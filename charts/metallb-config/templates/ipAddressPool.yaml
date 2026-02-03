@@ -42,7 +42,7 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-  - "{{ .Values.HAProxyIP }}/32"
+  - "{{ .Values.HaproxyIP }}/32"
   autoAssign: true
   avoidBuggyIPs: true
   serviceAllocation:
