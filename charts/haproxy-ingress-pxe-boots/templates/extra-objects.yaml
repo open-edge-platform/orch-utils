@@ -41,6 +41,44 @@ spec:
     name: boots-selfsigned-issuer
     kind: Issuer
 ---
+# Create issuer and certificate in orch-infra namespace for the Ingress
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: boots-selfsigned-issuer
+  namespace: orch-infra
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: tls-boots
+  namespace: orch-infra
+spec:
+  secretName: tls-boots
+  duration: 8765h0m0s # 1 year
+  renewBefore: 2160h0m0s # 90 days
+  subject:
+    organizations:
+      - Intel Corporation
+    countries:
+      - US
+  isCA: true
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 3072
+  usages:
+    - digital signature
+    - server auth
+  commonName: {{ required "A valid commonName is required!" .Values.commonName }}
+  dnsNames:
+    - {{ required "A valid commonName is required!" .Values.commonName }}
+  issuerRef:
+    name: boots-selfsigned-issuer
+    kind: Issuer
+---
 {{- if .Values.haproxyIngress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -54,6 +92,10 @@ metadata:
   namespace: orch-infra
 spec:
   ingressClassName: haproxy
+  tls:
+  - hosts:
+    - {{ required "A valid commonName is required!" .Values.commonName }}
+    secretName: tls-boots
   rules:
    - host: {{ required "A valid commonName is required!" .Values.commonName }}
      http:
