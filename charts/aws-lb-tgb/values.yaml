@@ -5,5 +5,5 @@
 targetGroup:
   traefik: null
   traefikGrpc: null
-  nginx: null
+  haproxy: null
   argocd: null
