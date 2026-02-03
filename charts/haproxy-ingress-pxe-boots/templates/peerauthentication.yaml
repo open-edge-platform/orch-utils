@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
+---
+# Allow HAProxy ingress to send plain HTTP to tinkerbell service
+# while still allowing mTLS from other mesh services
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: tinkerbell-permissive
+  namespace: orch-infra
+spec:
+  selector:
+    matchLabels:
+      app: tinkerbell
+  mtls:
+    mode: PERMISSIVE
