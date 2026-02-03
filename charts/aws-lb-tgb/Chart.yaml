@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 apiVersion: v1
-version: 26.0.1
+version: 26.0.2
 appVersion: "26.0.0"
 description: AWS load balancer TargetGroupBinding CRDs
 name: aws-lb-tgb
