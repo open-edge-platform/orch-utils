@@ -50,7 +50,7 @@ metadata:
     haproxy.org/rate-limit: "true"
     haproxy.org/rate-limit-requests: "{{ .Values.haproxyIngressRateLimit.rps | default 1 }}"
     haproxy.org/rate-limit-period: "1s"
-  name: tinkerbell-haproxy-ingress
+  name: tinkerbell-nginx-ingress
   namespace: orch-infra
 spec:
   ingressClassName: haproxy

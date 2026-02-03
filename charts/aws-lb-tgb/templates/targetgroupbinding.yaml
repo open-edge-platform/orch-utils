@@ -41,7 +41,7 @@ spec:
     port: 443
   targetGroupARN: {{ .Values.targetGroup.argocd }}
 {{- end }}
-{{- if .Values.targetGroup.haproxy }}
+{{- if .Values.targetGroup.nginx }}
 ---
 apiVersion: elbv2.k8s.aws/v1beta1
 kind: TargetGroupBinding
@@ -52,6 +52,6 @@ spec:
   serviceRef:
     name: ingress-haproxy-kubernetes-ingress
     port: 443
-  targetGroupARN: {{ .Values.targetGroup.haproxy }}
+  targetGroupARN: {{ .Values.targetGroup.nginx }}
 {{- end }}
 {{- end }}
