@@ -47,10 +47,10 @@ apiVersion: elbv2.k8s.aws/v1beta1
 kind: TargetGroupBinding
 metadata:
   namespace: orch-boots
-  name: ingress-haproxy-kubernetes-ingress
+  name: ingress-nginx-controller
 spec:
   serviceRef:
-    name: ingress-haproxy-kubernetes-ingress
+    name: ingress-nginx-controller
     port: 443
   targetGroupARN: {{ .Values.targetGroup.nginx }}
 {{- end }}
