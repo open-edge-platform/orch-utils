@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# Common name for TLS certificate and ingress host
+commonName: ""
+
+# Ingress configuration
+haproxyIngress:
+  # Set to false to disable Ingress resource (use LoadBalancer instead)
+  enabled: true
+
+# Rate limiting for haproxy ingress (when ingress.enabled=true)
+haproxyIngressRateLimit:
+  rps: "1"
+  connections: "5"

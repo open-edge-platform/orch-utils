@@ -41,17 +41,17 @@ spec:
     port: 443
   targetGroupARN: {{ .Values.targetGroup.argocd }}
 {{- end }}
-{{- if .Values.targetGroup.nginx }}
+{{- if .Values.targetGroup.haproxy }}
 ---
 apiVersion: elbv2.k8s.aws/v1beta1
 kind: TargetGroupBinding
 metadata:
   namespace: orch-boots
-  name: ingress-nginx-controller
+  name: ingress-haproxy-kubernetes-ingress
 spec:
   serviceRef:
-    name: ingress-nginx-controller
+    name: ingress-haproxy-kubernetes-ingress
     port: 443
-  targetGroupARN: {{ .Values.targetGroup.nginx }}
+  targetGroupARN: {{ .Values.targetGroup.haproxy }}
 {{- end }}
 {{- end }}
