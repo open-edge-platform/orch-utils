@@ -30,6 +30,8 @@ serviceAccount:
 
 serviceArgs:
   serverAddress: "0.0.0.0:8080"
+  httpPort: 8080
+  enableHTTPServer: true
   baseRESTURL: "/"
   globalLogLevel: "info"
   echoDebug: false
@@ -38,6 +40,21 @@ serviceArgs:
   enableTracing: false
   enableAuditing: true
   enableAuth: true
+
+# Traefik reverse proxy configuration for IngressRoute
+traefikReverseProxy:
+  enabled: true
+  apiHostname: ""  # To be set at deployment time
+  tlsOption: "default"
+  secretName: "tls-orch"
+
+# Traefik API group version
+traefikApiGroup: "traefik.io/v1alpha1"
+
+# OIDC configuration for authentication
+oidc:
+  serverUrl: "http://platform-keycloak.orch-platform.svc/realms/master"
+  tlsInsecureSkipVerify: true
 
 # humanReadableLogs: "enable"
 logging:

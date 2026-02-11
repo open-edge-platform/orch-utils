@@ -76,6 +76,10 @@ func main() {
 
 	subscribeToTenancyEvents(nexusClient, reconciler)
 
+	// Start HTTP REST API Server
+	httpServerConfig := config_helper.GetHTTPServerConfig()
+	startRESTAPIServer(httpServerConfig, nexusClient)
+
 	// Main wait loop for the App.
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)

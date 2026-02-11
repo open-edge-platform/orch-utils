@@ -1,0 +1,20 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "iam.fullname" . }}
+  namespace: {{ default .Release.Namespace .Values.global.namespace }}
+  labels:
+    {{- include "iam.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.serviceArgs.httpPort | default 8080 }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ include "iam.fullname" . }}

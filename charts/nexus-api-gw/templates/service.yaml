@@ -58,19 +58,9 @@ spec:
   entryPoints: # We listen to requests coming from ports 443
     - websecure
   routes:
+    # Note: /v1/orgs and /v1/projects routes have been migrated to tenancy-manager
+    # See tenancy-manager IngressRoute for organization and project management endpoints
     - match: "Host(`{{ .Values.traefikReverseProxy.host.grpc.name }}`) && PathPrefix(`/v`)"
-      kind: Rule
-      services:
-        - name: svc-iam-nexus-api-gw
-          port: {{ .Values.service.port }}
-          scheme: http
-          namespace: {{ .Release.Namespace }}
-      priority: 30
-      middlewares:
-        - name: validate-jwt
-        - name: iam-nexus-api-gw-http
-        - name: secure-headers
-    - match: "Host(`{{ .Values.traefikReverseProxy.host.grpc.name }}`) && PathPrefix(`/v1/orgs`)"
       kind: Rule
       services:
         - name: svc-iam-nexus-api-gw

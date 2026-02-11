@@ -1,0 +1,49 @@
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+---
+{{- if .Values.traefikReverseProxy.enabled }}
+apiVersion: {{ .Values.traefikApiGroup | default "traefik.io/v1alpha1" }}
+kind: IngressRoute
+metadata:
+  name: tenancy-manager-http
+  namespace: orch-gateway
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    # Route for organization management
+    - match: Host(`{{ required "A valid apiHostname entry required!" .Values.traefikReverseProxy.apiHostname }}`) && PathRegexp(`^/v1/orgs(/.*)?$`)
+      kind: Rule
+      priority: 60
+      middlewares:
+        - name: validate-jwt
+          namespace: orch-gateway
+        - name: secure-headers
+          namespace: orch-gateway
+      services:
+        - name: {{ include "iam.fullname" . }}
+          namespace: {{ default .Release.Namespace .Values.global.namespace }}
+          port: {{ .Values.serviceArgs.httpPort | default 8080 }}
+          scheme: http
+    
+    # Route for project management
+    - match: Host(`{{ required "A valid apiHostname entry required!" .Values.traefikReverseProxy.apiHostname }}`) && PathRegexp(`^/v1/projects(/.*)?$`)
+      kind: Rule
+      priority: 60
+      middlewares:
+        - name: validate-jwt
+          namespace: orch-gateway
+        - name: secure-headers
+          namespace: orch-gateway
+      services:
+        - name: {{ include "iam.fullname" . }}
+          namespace: {{ default .Release.Namespace .Values.global.namespace }}
+          port: {{ .Values.serviceArgs.httpPort | default 8080 }}
+          scheme: http
+  tls:
+    options:
+      name: {{ .Values.traefikReverseProxy.tlsOption | default "default" }}
+      namespace: orch-gateway
+    secretName: {{ .Values.traefikReverseProxy.secretName | default "tls-orch" }}
+{{- end }}

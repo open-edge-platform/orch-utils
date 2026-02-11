@@ -67,6 +67,24 @@ spec:
           value: {{ .Values.logging.level }}
         - name: NEXUS_LOG_LEVEL
           value: {{ .Values.logging.level }}
+        - name: HTTP_SERVER_ENABLED
+          value: {{ .Values.serviceArgs.enableHTTPServer | default "true" | quote }}
+        - name: HTTP_SERVER_HOST
+          value: {{ .Values.serviceArgs.serverAddress | default "0.0.0.0" | quote }}
+        - name: HTTP_SERVER_PORT
+          value: {{ .Values.serviceArgs.httpPort | default "8080" | quote }}
+        - name: HTTP_TLS_ENABLED
+          value: "false"
+        - name: ENABLE_AUTH
+          value: {{ .Values.serviceArgs.enableAuth | default "true" | quote }}
+        - name: OIDC_SERVER_URL
+          value: {{ .Values.oidc.serverUrl | quote }}
+        - name: OIDC_TLS_INSECURE_SKIP_VERIFY
+          value: {{ .Values.oidc.tlsInsecureSkipVerify | default "true" | quote }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.serviceArgs.httpPort | default 8080 }}
+          protocol: TCP
         volumeMounts:
         - name: config-volume
           mountPath: /etc/config
