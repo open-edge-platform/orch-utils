@@ -11,7 +11,7 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	"github.com/open-edge-platform/orch-utils/internal/retry"
+	"github.com/open-edge-platform/orch-utils/secrets/internal/retry"
 )
 
 var _ = Describe("UntilItSucceeds", func() {
