@@ -16,7 +16,7 @@ require (
 	github.com/magefile/mage v1.15.0
 	github.com/open-edge-platform/orch-utils/tenancy-datamodel v0.0.0-20250401180309-9c2571c45857
 	github.com/sirupsen/logrus v1.9.4
-	k8s.io/apimachinery v0.32.11
+	k8s.io/apimachinery v0.32.12
 	k8s.io/client-go v0.32.11
 )
 
