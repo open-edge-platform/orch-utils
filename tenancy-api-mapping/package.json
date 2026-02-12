@@ -21,6 +21,9 @@
     "undici": "^6.23.0"
   },
   "overrides": {
-    "brace-expansion": ">=2.0.2"
+    "brace-expansion": ">=2.0.2",
+    "openapi-sampler": {
+      "fast-xml-parser": "5.3.4"
+    }
   }
 }
