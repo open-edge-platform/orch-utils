@@ -188,7 +188,7 @@ race-unit-test: init-unit-test
 
 .PHONY: ginkgo
 ginkgo: ## run ginkgo tests
-	ginkgo run -v -r -p --race -randomize-all -randomize-suites
+	ginkgo run -v -r --procs=1 --race -randomize-all -randomize-suites
 
 clean-testdata:
 	rm -rf ./pkg/apiremap/testdata
