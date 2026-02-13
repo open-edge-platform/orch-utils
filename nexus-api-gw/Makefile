@@ -55,6 +55,9 @@ GIT_HEAD  					?= $(shell git rev-parse --verify HEAD 2> /dev/null || echo "0000
 IMAGE_REGISTRY 					?= gcr.io/nsx-sm/nexus/nexus-api-gateway
 
 FUZZ_SECONDS                   ?= 24
+ENVTEST_K8S_VERSION            ?= 1.35.0
+ENVTEST_TOOLS_RELEASE          ?= release-0.23
+ENVTEST_RELEASES_INDEX         ?= https://raw.githubusercontent.com/kubernetes-sigs/controller-tools/master/envtest-releases.yaml
 
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
@@ -174,9 +177,8 @@ go-build: go-tidy create ## Builds golang source files
 .PHONY: init-unit-test
 init-unit-test:
 	if [[ ! -f test/bin/etcd || ! -f test/bin/kube-apiserver || ! -f test/bin/kubectl ]]; then \
-		curl -SLo envtest-bins.tar.gz "https://go.kubebuilder.io/test-tools/1.24.2/$$(go env GOOS)/$$(go env GOARCH)"; \
-        tar --strip-components=1 -xvf envtest-bins.tar.gz -C test; \
-        rm envtest-bins.tar.gz; \
+		ASSETS="$$(go run sigs.k8s.io/controller-runtime/tools/setup-envtest@$(ENVTEST_TOOLS_RELEASE) use $(ENVTEST_K8S_VERSION) --index $(ENVTEST_RELEASES_INDEX) --bin-dir ./test/bin -p path)"; \
+		cp "$$ASSETS/etcd" "$$ASSETS/kube-apiserver" "$$ASSETS/kubectl" ./test/bin/; \
   	fi
 
 .PHONY: test
@@ -188,7 +190,7 @@ race-unit-test: init-unit-test
 
 .PHONY: ginkgo
 ginkgo: ## run ginkgo tests
-	ginkgo run -v -r -p --race -randomize-all -randomize-suites
+	ASSETS="$$(go run sigs.k8s.io/controller-runtime/tools/setup-envtest@$(ENVTEST_TOOLS_RELEASE) use $(ENVTEST_K8S_VERSION) --index $(ENVTEST_RELEASES_INDEX) --bin-dir ./test/bin -p path)"; cp "$$ASSETS/etcd" "$$ASSETS/kube-apiserver" "$$ASSETS/kubectl" ./test/bin/; ginkgo run -v -r --procs=1 --race -randomize-all -randomize-suites
 
 clean-testdata:
 	rm -rf ./pkg/apiremap/testdata
