@@ -13,7 +13,7 @@ require (
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/ginkgo/v2 v2.25.3
 	github.com/onsi/gomega v1.38.3
-	github.com/sirupsen/logrus v1.9.4
+	github.com/sirupsen/logrus v1.9.3
 	github.com/vmware-tanzu/graph-framework-for-microservices/common-library v0.0.0-20231031085545-baa1f0ece453
 	github.com/vmware-tanzu/graph-framework-for-microservices/kube-openapi v0.0.0-20231031085545-baa1f0ece453
 	github.com/vmware-tanzu/graph-framework-for-microservices/nexus v0.0.0-20231031085545-baa1f0ece453
