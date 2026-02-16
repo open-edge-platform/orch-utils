@@ -10,7 +10,7 @@ require (
 	github.com/elliotchance/orderedmap v1.8.0
 	github.com/gonvenience/bunt v1.4.3
 	github.com/gonvenience/neat v1.3.16
-	github.com/gonvenience/term v1.0.4
+	github.com/gonvenience/term v1.0.5
 	github.com/gonvenience/text v1.0.9
 	github.com/gonvenience/ytbx v1.4.7
 	github.com/homeport/dyff v1.10.2
