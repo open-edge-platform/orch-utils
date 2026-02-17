@@ -48,21 +48,21 @@ endif
 TARGET_REPO_NAME     := $(shell echo ${ARTIFACT_REPO} | awk -F'/' '{print $$2}' | tr -d '"'| awk -F'.git' '{print $$1}')
 ARTIFACT_REPO_GITCMD := $(shell echo git -C $(shell realpath ${TARGET_REPO_NAME}) pull origin $(shell echo ${PREV_SPEC_BRANCH}))
 
-COMPILER_DOCKER_REGISTRY    ?=
+COMPILER_DOCKER_REGISTRY    ?= $(shell cat nexus.yaml | grep dockerRepo | awk '{print $$2}' | tr -d '"')
 COMPILER_DOCKER_REPO        ?= edge-orch/common
 
 GOARCH                      ?= $(shell go env GOARCH)
 COMPILER_NAME               ?= nexus/compiler/${GOARCH}
-COMPILER_VERSION            ?= 0.1.0-dev
+COMPILER_VERSION            ?= $(shell cat ../nexus/VERSION)
 
 OPENAPI_GENERATOR_NAME      ?= nexus/openapi-generator
-OPENAPI_GENERATOR_VERSION   ?= 0.1.0-dev
+OPENAPI_GENERATOR_VERSION   ?= $(shell cat ../nexus/VERSION)
 
 ifeq (${COMPILER_DOCKER_REGISTRY}, )
 COMPILER_DOCKER_TAG = ${COMPILER_NAME}:${COMPILER_VERSION}
 OPENAPI_GENERATOR_DOCKER_TAG = ${OPENAPI_GENERATOR_NAME}:${OPENAPI_GENERATOR_VERSION}
 else
-COMPILER_DOCKER_TAG = ${COMPILER_DOCKER_REGISTRY}/${COMPILER_DOCKER_REPO}/${COMPILER_NAME}:${COMPILER_VERSIOn}
+COMPILER_DOCKER_TAG = ${COMPILER_DOCKER_REGISTRY}/${COMPILER_DOCKER_REPO}/${COMPILER_NAME}:${COMPILER_VERSION}
 OPENAPI_GENERATOR_DOCKER_TAG = ${COMPILER_DOCKER_REGISTRY}/${COMPILER_DOCKER_REPO}/${OPENAPI_GENERATOR_NAME}:${OPENAPI_GENERATOR_VERSION}
 endif
 
