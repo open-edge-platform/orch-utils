@@ -83,6 +83,7 @@ jobs:
       - name: Bump App Versions
         if: steps.changed-apps.outputs.changed_apps != ''
         env:
+          BASE_REF: ${{ github.base_ref }}
           BRANCH_NAME: ${{ github.head_ref }}
         run: |
           changed_apps="${{ steps.changed-apps.outputs.changed_apps }}"
@@ -94,30 +95,39 @@ jobs:
             if [ -f "$CHART_FILE" ]; then
               current_app_version=$(yq eval '.appVersion' "$CHART_FILE")
               current_chart_version=$(yq eval '.version' "$CHART_FILE")
+              
+              # Get base versions to compare
+              base_app_version=$(git show origin/${BASE_REF}:${CHART_FILE} 2>/dev/null | yq eval '.appVersion' - || echo "")
+              base_chart_version=$(git show origin/${BASE_REF}:${CHART_FILE} 2>/dev/null | yq eval '.version' - || echo "")
+              
+              # Only bump if versions haven't been changed from base
+              if [ "$current_app_version" = "$base_app_version" ] && [ "$current_chart_version" = "$base_chart_version" ]; then
+                # Simple patch version bump for appVersion
+                IFS='.' read -ra VERSION_PARTS <<< "$current_app_version"
+                major=${VERSION_PARTS[0]}
+                minor=${VERSION_PARTS[1]}
+                patch=${VERSION_PARTS[2]}
+                new_patch=$((patch + 1))
+                new_app_version="${major}.${minor}.${new_patch}"
 
-              # Simple patch version bump for appVersion
-              IFS='.' read -ra VERSION_PARTS <<< "$current_app_version"
-              major=${VERSION_PARTS[0]}
-              minor=${VERSION_PARTS[1]}
-              patch=${VERSION_PARTS[2]}
-              new_patch=$((patch + 1))
-              new_app_version="${major}.${minor}.${new_patch}"
+                # Simple patch version bump for chart version
+                IFS='.' read -ra CHART_VERSION_PARTS <<< "$current_chart_version"
+                chart_major=${CHART_VERSION_PARTS[0]}
+                chart_minor=${CHART_VERSION_PARTS[1]}
+                chart_patch=${CHART_VERSION_PARTS[2]}
+                new_chart_patch=$((chart_patch + 1))
+                new_chart_version="${chart_major}.${chart_minor}.${new_chart_patch}"
 
-              # Simple patch version bump for chart version
-              IFS='.' read -ra CHART_VERSION_PARTS <<< "$current_chart_version"
-              chart_major=${CHART_VERSION_PARTS[0]}
-              chart_minor=${CHART_VERSION_PARTS[1]}
-              chart_patch=${CHART_VERSION_PARTS[2]}
-              new_chart_patch=$((chart_patch + 1))
-              new_chart_version="${chart_major}.${chart_minor}.${new_chart_patch}"
+                echo "Bumping $app_name appVersion from $current_app_version to $new_app_version"
+                echo "Bumping $app_name chart version from $current_chart_version to $new_chart_version"
 
-              echo "Bumping $app_name appVersion from $current_app_version to $new_app_version"
-              echo "Bumping $app_name chart version from $current_chart_version to $new_chart_version"
+                yq eval ".appVersion = \"$new_app_version\"" -i "$CHART_FILE"
+                yq eval ".version = \"$new_chart_version\"" -i "$CHART_FILE"
 
-              yq eval ".appVersion = \"$new_app_version\"" -i "$CHART_FILE"
-              yq eval ".version = \"$new_chart_version\"" -i "$CHART_FILE"
-
-              updated_apps="$updated_apps $app_name"
+                updated_apps="$updated_apps $app_name"
+              else
+                echo "Skipping $app_name - versions already bumped in this PR"
+              fi
             fi
           done
 
@@ -198,6 +208,7 @@ jobs:
       - name: Bump Chart Versions
         if: steps.changed-charts.outputs.changed_charts != ''
         env:
+          BASE_REF: ${{ github.base_ref }}
           BRANCH_NAME: ${{ github.head_ref }}
         run: |
           changed_charts="${{ steps.changed-charts.outputs.changed_charts }}"
@@ -208,20 +219,28 @@ jobs:
 
             if [ -f "$CHART_FILE" ]; then
               current_version=$(yq eval '.version' "$CHART_FILE")
+              
+              # Get base version to compare
+              base_version=$(git show origin/${BASE_REF}:${CHART_FILE} 2>/dev/null | yq eval '.version' - || echo "")
+              
+              # Only bump if version hasn't been changed from base
+              if [ "$current_version" = "$base_version" ]; then
+                # Simple patch version bump
+                IFS='.' read -ra VERSION_PARTS <<< "$current_version"
+                major=${VERSION_PARTS[0]}
+                minor=${VERSION_PARTS[1]}
+                patch=${VERSION_PARTS[2]}
+                new_patch=$((patch + 1))
+                new_version="${major}.${minor}.${new_patch}"
 
-              # Simple patch version bump
-              IFS='.' read -ra VERSION_PARTS <<< "$current_version"
-              major=${VERSION_PARTS[0]}
-              minor=${VERSION_PARTS[1]}
-              patch=${VERSION_PARTS[2]}
-              new_patch=$((patch + 1))
-              new_version="${major}.${minor}.${new_patch}"
+                echo "Bumping $chart_name version from $current_version to $new_version"
 
-              echo "Bumping $chart_name version from $current_version to $new_version"
+                yq eval ".version = \"$new_version\"" -i "$CHART_FILE"
 
-              yq eval ".version = \"$new_version\"" -i "$CHART_FILE"
-
-              updated_charts="$updated_charts $chart_name"
+                updated_charts="$updated_charts $chart_name"
+              else
+                echo "Skipping $chart_name - version already bumped in this PR"
+              fi
             fi
           done
 

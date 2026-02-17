@@ -22,22 +22,6 @@ spec:
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
-  name: ingress-nginx-controller
-  namespace: metallb-system
-spec:
-  addresses:
-  - "{{ .Values.NginxIP }}/32"
-  autoAssign: true
-  avoidBuggyIPs: true
-  serviceAllocation:
-    priority: 1
-    namespaces:
-      - orch-boots
-
----
-apiVersion: metallb.io/v1beta1
-kind: IPAddressPool
-metadata:
   name: argocd-server
   namespace: metallb-system
 spec:
@@ -49,3 +33,19 @@ spec:
     priority: 1
     namespaces:
       - argocd
+
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: haproxy-controller
+  namespace: metallb-system
+spec:
+  addresses:
+  - "{{ .Values.HaproxyIP }}/32"
+  autoAssign: true
+  avoidBuggyIPs: true
+  serviceAllocation:
+    priority: 1
+    namespaces:
+      - orch-boots

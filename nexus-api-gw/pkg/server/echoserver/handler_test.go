@@ -8,7 +8,6 @@ package echoserver_test
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net"
 	"net/http"
 	"net/http/httptest"
@@ -53,11 +52,12 @@ func setupServer() (*echoserver.EchoServer, chan struct{}) {
 		panic("failed to cast listener address to TCPAddr")
 	}
 	port := tcpAddr.Port
+	_ = port
 
 	// Set the server configuration to use the dynamic port
 	config.Cfg = &config.Config{
 		Server: config.ServerConfig{
-			HTTPPort: fmt.Sprintf("%d", port),
+			HTTPPort: "0",
 		},
 	}
 	k8sClient := k8sFake.NewSimpleClientset()

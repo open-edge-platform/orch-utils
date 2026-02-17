@@ -30,9 +30,8 @@ jobs:
           persist-credentials: false
 
       - name: Bootstrap CI environment
-        uses: open-edge-platform/orch-ci/.github/actions/bootstrap@c6a01b803d3c045de1b1b2f788a47eaaefed3f07  # 2026.0.4
+        uses: open-edge-platform/orch-ci/.github/actions/bootstrap@858a9f6aff2df36fcdc58efaedfac1a06ee5ef3c  # 2026.0.8
         with:
-          orch_ci_repo_ref: cf81328e4c9526e579181efb1f609af06071889b
           gh_token: ${{ secrets.SYS_EMF_GH_TOKEN }}
 
       - name: Generate OpenAPI specs and combined spec

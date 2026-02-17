@@ -1,9 +1,9 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
----
 
-# nginx-ingress-boots uses a self-signed TLS server certificate managed by cert-manager
+---
+# haproxy-ingress-boots uses a self-signed TLS server certificate managed by cert-manager
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
@@ -41,25 +41,25 @@ spec:
     name: boots-selfsigned-issuer
     kind: Issuer
 ---
-{{- if .Values.nginxIngress.enabled }}
+{{- if .Values.haproxyIngress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-    nginx.ingress.kubernetes.io/limit-rps: "{{ .Values.nginxIngressRateLimit.rps | default 1 }}"
-    nginx.ingress.kubernetes.io/limit-connections: "{{ .Values.nginxIngressRateLimit.connections | default 5 }}"
-  name: tinkerbell-nginx-ingress
+    haproxy.org/path-rewrite: "/tink-stack/(.*) /\\1"
+    haproxy.org/rate-limit: "true"
+    haproxy.org/rate-limit-requests: "{{ .Values.haproxyIngressRateLimit.rps | default 1 }}"
+    haproxy.org/rate-limit-period: "1s"
+  name: tinkerbell-haproxy-ingress
   namespace: orch-infra
 spec:
-  ingressClassName: nginx
+  ingressClassName: haproxy
   rules:
    - host: {{ required "A valid commonName is required!" .Values.commonName }}
      http:
         paths:
-        - path: /tink-stack(/|$)(.*)
-          pathType: ImplementationSpecific
+        - path: /tink-stack
+          pathType: Prefix
           backend:
             # This assumes http-svc exists and routes to healthy endpoints
             service:

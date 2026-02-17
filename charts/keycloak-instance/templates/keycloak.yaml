@@ -20,8 +20,6 @@ spec:
   
   db:
     vendor: {{ .Values.keycloak.database.vendor }}
-    host: {{ .Values.keycloak.database.host }}
-    port: {{ .Values.keycloak.database.port }}
     database: {{ .Values.keycloak.database.database }}
     usernameSecret:
       name: {{ .Values.keycloak.database.usernameSecret.name }}
