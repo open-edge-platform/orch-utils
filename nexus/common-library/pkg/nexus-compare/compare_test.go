@@ -37,7 +37,7 @@ var _ = Describe("Compare lib tests", func() {
 		ans, text, err := CompareFiles([]byte(baseSpec), []byte(addedField))
 		Expect(err).NotTo(HaveOccurred())
 		Expect(ans).To(BeTrue())
-		changeCheck := []string{"/spec/versions/name=v1/schema/openAPIV3Schema/properties/status/properties/nexus/required", "one required field added", "- testaddrequire"}
+		changeCheck := []string{"/spec/versions/name=v1/schema/openAPIV3Schema/properties/status/properties/nexus/required", "one required field added", "value: testaddrequire"}
 		changeCheckNot := []string{"/spec/versions/name=v1/schema/openAPIV3Schema/properties/status/properties/nexus/properties/addedField"}
 		for _, v := range changeCheck {
 			Expect(text.String()).Should(ContainSubstring(v))
@@ -64,7 +64,7 @@ var _ = Describe("Compare lib tests", func() {
 		ans, text, err := CompareFiles([]byte(other2), []byte(other))
 		Expect(err).NotTo(HaveOccurred())
 		Expect(ans).To(BeTrue())
-		changeCheck := []string{"nexus annotation changes", "/children", "accesscontrolpolicies.policypkg.tsm.tanzu.vmware.com:", "/is_singleton", "value change"}
+		changeCheck := []string{"nexus annotation changes", "/children", "value: accesscontrolpolicies.policypkg.tsm.tanzu.vmware.com", "/is_singleton", "value change"}
 		for _, v := range changeCheck {
 			Expect(text.String()).Should(ContainSubstring(v))
 		}
