@@ -11,7 +11,7 @@ require (
 	github.com/gonvenience/bunt v1.4.3
 	github.com/gonvenience/neat v1.3.17
 	github.com/gonvenience/term v1.0.5
-	github.com/gonvenience/text v1.0.9
+	github.com/gonvenience/text v1.0.10
 	github.com/gonvenience/ytbx v1.4.7
 	github.com/homeport/dyff v1.10.2
 	github.com/lucasb-eyer/go-colorful v1.3.0
