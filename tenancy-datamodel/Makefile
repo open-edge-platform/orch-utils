@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-FileCopyrightText: 2026 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
 ### configuration ###
@@ -48,15 +48,15 @@ endif
 TARGET_REPO_NAME     := $(shell echo ${ARTIFACT_REPO} | awk -F'/' '{print $$2}' | tr -d '"'| awk -F'.git' '{print $$1}')
 ARTIFACT_REPO_GITCMD := $(shell echo git -C $(shell realpath ${TARGET_REPO_NAME}) pull origin $(shell echo ${PREV_SPEC_BRANCH}))
 
-COMPILER_DOCKER_REGISTRY    ?= $(shell cat nexus.yaml | grep dockerRepo | awk '{print $$2}' | tr -d '"')
+COMPILER_DOCKER_REGISTRY    ?=
 COMPILER_DOCKER_REPO        ?= edge-orch/common
 
 GOARCH                      ?= $(shell go env GOARCH)
 COMPILER_NAME               ?= nexus/compiler/${GOARCH}
-COMPILER_VERSION            ?= $(shell cat ../nexus/VERSION)
+COMPILER_VERSION            ?= 0.1.0-dev
 
 OPENAPI_GENERATOR_NAME      ?= nexus/openapi-generator
-OPENAPI_GENERATOR_VERSION   ?= $(shell cat ../nexus/VERSION)
+OPENAPI_GENERATOR_VERSION   ?= 0.1.0-dev
 
 ifeq (${COMPILER_DOCKER_REGISTRY}, )
 COMPILER_DOCKER_TAG = ${COMPILER_NAME}:${COMPILER_VERSION}
