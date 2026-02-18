@@ -27,7 +27,8 @@ import (
 	"github.com/lucasb-eyer/go-colorful"
 	"github.com/sergi/go-diff/diffmatchpatch"
 	"github.com/texttheater/golang-levenshtein/levenshtein"
-	yamlv3 "gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
+	yamlv3 "go.yaml.in/yaml/v3"
 )
 
 type stringWriter interface {
@@ -142,13 +143,13 @@ func (report *CustomReport) generateHumanDetailOutputAddition(detail dyff.Detail
 	var output bytes.Buffer
 
 	switch detail.To.Kind {
-	case yamlv3.SequenceNode:
+	case yaml.SequenceNode:
 		_, _ = output.WriteString(yellow("%c %s added:\n",
 			dyff.ADDITION,
 			text.Plural(len(detail.To.Content), "required field", "required fields"),
 		))
 
-	case yamlv3.MappingNode:
+	case yaml.MappingNode:
 		_, _ = output.WriteString(yellow("%c %s added:\n",
 			dyff.ADDITION,
 			text.Plural(len(detail.To.Content)/2, "field", "fields"),
