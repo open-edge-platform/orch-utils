@@ -27,7 +27,6 @@ import (
 	"github.com/lucasb-eyer/go-colorful"
 	"github.com/sergi/go-diff/diffmatchpatch"
 	"github.com/texttheater/golang-levenshtein/levenshtein"
-	"go.yaml.in/yaml/v3"
 	yamlv3 "go.yaml.in/yaml/v3"
 )
 
@@ -143,13 +142,13 @@ func (report *CustomReport) generateHumanDetailOutputAddition(detail dyff.Detail
 	var output bytes.Buffer
 
 	switch detail.To.Kind {
-	case yaml.SequenceNode:
+	case yamlv3.SequenceNode:
 		_, _ = output.WriteString(yellow("%c %s added:\n",
 			dyff.ADDITION,
 			text.Plural(len(detail.To.Content), "required field", "required fields"),
 		))
 
-	case yaml.MappingNode:
+	case yamlv3.MappingNode:
 		_, _ = output.WriteString(yellow("%c %s added:\n",
 			dyff.ADDITION,
 			text.Plural(len(detail.To.Content)/2, "field", "fields"),
