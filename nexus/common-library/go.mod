@@ -11,9 +11,9 @@ require (
 	github.com/gonvenience/bunt v1.4.3
 	github.com/gonvenience/neat v1.3.17
 	github.com/gonvenience/term v1.0.5
-	github.com/gonvenience/text v1.0.9
-	github.com/gonvenience/ytbx v1.4.7
-	github.com/homeport/dyff v1.10.2
+	github.com/gonvenience/text v1.0.10
+	github.com/gonvenience/ytbx v1.4.8
+	github.com/homeport/dyff v1.10.4
 	github.com/lucasb-eyer/go-colorful v1.3.0
 	github.com/onsi/ginkgo/v2 v2.28.1
 	github.com/onsi/gomega v1.39.1
@@ -23,11 +23,11 @@ require (
 )
 
 require (
-	github.com/BurntSushi/toml v1.5.0 // indirect
+	github.com/BurntSushi/toml v1.6.0 // indirect
 	github.com/Masterminds/semver/v3 v3.4.0 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-task/slim-sprig/v3 v3.0.0 // indirect
-	github.com/gonvenience/idem v0.0.2 // indirect
+	github.com/gonvenience/idem v0.0.3 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/pprof v0.0.0-20260202012954-cb029daf43ef // indirect
 	github.com/mattn/go-ciede2000 v0.0.0-20170301095244-782e8c62fec3 // indirect
