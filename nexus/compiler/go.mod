@@ -39,8 +39,8 @@ require (
 	github.com/go-task/slim-sprig/v3 v3.0.0 // indirect
 	github.com/gonvenience/bunt v1.4.3 // indirect
 	github.com/gonvenience/idem v0.0.2 // indirect
-	github.com/gonvenience/neat v1.3.16 // indirect
-	github.com/gonvenience/term v1.0.4 // indirect
+	github.com/gonvenience/neat v1.3.17 // indirect
+	github.com/gonvenience/term v1.0.5 // indirect
 	github.com/gonvenience/text v1.0.9 // indirect
 	github.com/gonvenience/ytbx v1.4.7 // indirect
 	github.com/google/gnostic v0.7.0 // indirect
@@ -65,6 +65,7 @@ require (
 	github.com/texttheater/golang-levenshtein v1.0.1 // indirect
 	github.com/virtuald/go-ordered-json v0.0.0-20170621173500-b18e6e673d74 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
+	go.yaml.in/yaml/v2 v2.4.3 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/net v0.49.0 // indirect
 	golang.org/x/sync v0.19.0 // indirect
