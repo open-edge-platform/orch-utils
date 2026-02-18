@@ -22,7 +22,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"os"
+	"strings"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -32,6 +32,7 @@ import (
 	config_helper "github.com/open-edge-platform/orch-utils/tenancy-manager/pkg/config"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/pkg/handlers"
 	nexus_client "github.com/open-edge-platform/orch-utils/tenancy-datamodel/build/nexus-client"
+	"github.com/rs/zerolog"
 )
 
 var (
@@ -41,13 +42,15 @@ var (
 
 // RESTAPIServer represents the HTTP REST API server for tenant management.
 type RESTAPIServer struct {
-	Echo        *echo.Echo
-	Config      *config_helper.HTTPServerConfig
-	NexusClient *nexus_client.Clientset
+	echo        *echo.Echo
+	config      *config_helper.HTTPServerConfig
+	nexusClient *nexus_client.Clientset
+	logger      zerolog.Logger
+	authEnabled bool
 }
 
 // NewRESTAPIServer creates a new RESTAPIServer instance.
-func NewRESTAPIServer(config *config_helper.HTTPServerConfig, nexusClient *nexus_client.Clientset) *RESTAPIServer {
+func NewRESTAPIServer(nexusClient *nexus_client.Clientset, config *config_helper.HTTPServerConfig, logger zerolog.Logger, authEnabled bool) *RESTAPIServer {
 	e := echo.New()
 
 	// Hide banner
@@ -68,15 +71,13 @@ func NewRESTAPIServer(config *config_helper.HTTPServerConfig, nexusClient *nexus
 		Timeout: 30 * time.Second,
 	}))
 
-	server := &RESTAPIServer{
-		Echo:        e,
-		Config:      config,
-		NexusClient: nexusClient,
+	return &RESTAPIServer{
+		echo:        e,
+		config:      config,
+		nexusClient: nexusClient,
+		logger:      logger,
+		authEnabled: authEnabled,
 	}
-
-	server.RegisterRoutes()
-
-	return server
 }
 
 // RegisterRoutes registers all API routes.
@@ -84,20 +85,19 @@ func (s *RESTAPIServer) RegisterRoutes() {
 	restAPILog.Info().Msg("Registering REST API routes")
 
 	// Health check endpoints (no auth required)
-	s.Echo.GET("/health", s.healthHandler)
-	s.Echo.GET("/readiness", s.readinessHandler)
+	s.echo.GET("/health", s.healthHandler)
+	s.echo.GET("/ready", s.readinessHandler)
 
-	// API v1 routes (with authentication)
-	v1 := s.Echo.Group("/v1")
+	// API v1 routes (with optional authentication)
+	v1 := s.echo.Group("/v1")
 
-	// Apply authentication middleware if AUTH is enabled
-	if os.Getenv("ENABLE_AUTH") != "false" {
+	if s.authEnabled {
 		v1.Use(s.authenticationMiddleware)
 	}
 
 	// Organization routes
 	orgs := v1.Group("/orgs")
-	orgHandler := handlers.NewOrgHandler(s.NexusClient)
+	orgHandler := handlers.NewOrgHandler(s.nexusClient, s.logger)
 	orgs.POST("", orgHandler.CreateOrg)
 	orgs.GET("", orgHandler.ListOrgs)
 	orgs.GET("/:orgId", orgHandler.GetOrg)
@@ -107,7 +107,7 @@ func (s *RESTAPIServer) RegisterRoutes() {
 
 	// Project routes
 	projects := v1.Group("/projects")
-	projectHandler := handlers.NewProjectHandler(s.NexusClient)
+	projectHandler := handlers.NewProjectHandler(s.nexusClient, s.logger)
 	projects.POST("", projectHandler.CreateProject)
 	projects.GET("", projectHandler.ListProjects)
 	projects.GET("/:projectId", projectHandler.GetProject)
@@ -118,7 +118,9 @@ func (s *RESTAPIServer) RegisterRoutes() {
 	restAPILog.Info().Msg("REST API routes registered successfully")
 }
 
-// authenticationMiddleware handles JWT authentication.
+// authenticationMiddleware handles JWT authentication using the JWKS from the OIDC provider.
+// Note: JWT validation is also performed by Traefik's validate-jwt middleware at the ingress level.
+// This provides defense-in-depth for direct service access.
 func (s *RESTAPIServer) authenticationMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// Extract JWT token from Authorization header
@@ -128,28 +130,16 @@ func (s *RESTAPIServer) authenticationMiddleware(next echo.HandlerFunc) echo.Han
 			return echo.NewHTTPError(http.StatusUnauthorized, "Missing authorization header")
 		}
 
-		// Validate JWT token using orch-library
-		oidcServerURL := os.Getenv("OIDC_SERVER_URL")
-		if oidcServerURL == "" {
-			oidcServerURL = "http://platform-keycloak.orch-platform.svc/realms/master"
-		}
-
-		tlsInsecureSkipVerify := os.Getenv("OIDC_TLS_INSECURE_SKIP_VERIFY") == "true"
-
-		authenticator, err := auth.NewOIDCAuthenticator(oidcServerURL, tlsInsecureSkipVerify)
-		if err != nil {
-			restAPILog.Error().Msgf("Failed to create authenticator: %v", err)
-			return echo.NewHTTPError(http.StatusInternalServerError, "Authentication service error")
-		}
-
 		// Extract token from "Bearer <token>"
-		token := authHeader
-		if len(authHeader) > 7 && authHeader[:7] == "Bearer " {
-			token = authHeader[7:]
+		token := strings.TrimPrefix(authHeader, "Bearer ")
+		if token == authHeader {
+			restAPILog.Warn().Msg("Invalid authorization header format; expected 'Bearer <token>'")
+			return echo.NewHTTPError(http.StatusUnauthorized, "Invalid authorization header format")
 		}
 
-		// Verify token
-		claims, err := authenticator.VerifyToken(c.Request().Context(), token)
+		// Validate JWT using the JwtAuthenticator (reads OIDC_SERVER_URL env var for JWKS)
+		jwtAuth := new(auth.JwtAuthenticator)
+		claims, err := jwtAuth.ParseAndValidate(token)
 		if err != nil {
 			restAPILog.Warn().Msgf("Token verification failed: %v", err)
 			return echo.NewHTTPError(http.StatusUnauthorized, "Invalid or expired token")
@@ -167,14 +157,12 @@ func (s *RESTAPIServer) healthHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]string{
 		"status":  "healthy",
 		"service": "tenancy-manager",
-		"version": "1.0.0",
 	})
 }
 
-// readinessHandler handles GET /readiness - Readiness check endpoint.
+// readinessHandler handles GET /ready - Readiness check endpoint.
 func (s *RESTAPIServer) readinessHandler(c echo.Context) error {
-	// Check if nexus client is operational
-	if s.NexusClient == nil {
+	if s.nexusClient == nil {
 		return c.JSON(http.StatusServiceUnavailable, map[string]string{
 			"status":  "not ready",
 			"service": "tenancy-manager",
@@ -185,25 +173,24 @@ func (s *RESTAPIServer) readinessHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]string{
 		"status":  "ready",
 		"service": "tenancy-manager",
-		"version": "1.0.0",
 	})
 }
 
 // Start starts the HTTP REST API server.
 func (s *RESTAPIServer) Start() error {
-	address := fmt.Sprintf("%s:%s", s.Config.Host, s.Config.Port)
+	address := fmt.Sprintf("%s:%s", s.config.Host, s.config.Port)
 	restAPILog.Info().Msgf("Starting REST API server on %s", address)
 
-	if s.Config.TLSEnabled {
-		if s.Config.CertPath == "" || s.Config.KeyPath == "" {
+	if s.config.TLSEnabled {
+		if s.config.CertPath == "" || s.config.KeyPath == "" {
 			return fmt.Errorf("TLS enabled but cert/key paths not configured")
 		}
 		restAPILog.Info().Msg("Starting TLS server")
-		return s.Echo.StartTLS(address, s.Config.CertPath, s.Config.KeyPath)
+		return s.echo.StartTLS(address, s.config.CertPath, s.config.KeyPath)
 	}
 
 	restAPILog.Info().Msg("Starting HTTP server")
-	if err := s.Echo.Start(address); err != nil && err != http.ErrServerClosed {
+	if err := s.echo.Start(address); err != nil && err != http.ErrServerClosed {
 		return err
 	}
 
@@ -213,17 +200,18 @@ func (s *RESTAPIServer) Start() error {
 // Shutdown gracefully shuts down the HTTP REST API server.
 func (s *RESTAPIServer) Shutdown(ctx context.Context) error {
 	restAPILog.Info().Msg("Shutting down REST API server")
-	return s.Echo.Shutdown(ctx)
+	return s.echo.Shutdown(ctx)
 }
 
 // startRESTAPIServer starts the REST API server in a goroutine.
-func startRESTAPIServer(config *config_helper.HTTPServerConfig, nexusClient *nexus_client.Clientset) {
+func startRESTAPIServer(config *config_helper.HTTPServerConfig, nexusClient *nexus_client.Clientset, authEnabled bool) {
 	if !config.Enabled {
 		restAPILog.Info().Msg("REST API server is disabled")
 		return
 	}
 
-	server := NewRESTAPIServer(config, nexusClient)
+	server := NewRESTAPIServer(nexusClient, config, restAPILog.Logger, authEnabled)
+	server.RegisterRoutes()
 	go func() {
 		if err := server.Start(); err != nil {
 			restAPILog.Fatal().Msgf("REST API server failed: %v", err)

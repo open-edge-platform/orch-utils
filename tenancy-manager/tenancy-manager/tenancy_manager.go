@@ -78,7 +78,8 @@ func main() {
 
 	// Start HTTP REST API Server
 	httpServerConfig := config_helper.GetHTTPServerConfig()
-	startRESTAPIServer(httpServerConfig, nexusClient)
+	authEnabled := os.Getenv("ENABLE_AUTH") != "false"
+	startRESTAPIServer(httpServerConfig, nexusClient, authEnabled)
 
 	// Main wait loop for the App.
 	sigs := make(chan os.Signal, 1)
