@@ -46,9 +46,9 @@ name: keycloak-operator
 version: 26.1.0
 appVersion: "26.1.0"
 annotations:
-  keycloak-upstream-version: "26.5.0"                    # ← Upstream Keycloak version
-  keycloak-upstream-operator-image: "quay.io/keycloak/keycloak-operator:26.5.0"
-  keycloak-upstream-keycloak-image: "quay.io/keycloak/keycloak:26.5.0"
+  keycloak-upstream-version: "26.5.3"                    # ← Upstream Keycloak version
+  keycloak-upstream-operator-image: "quay.io/keycloak/keycloak-operator:26.5.3"
+  keycloak-upstream-keycloak-image: "quay.io/keycloak/keycloak:26.5.3"
   keycloak-quarkus-version: "3.27.1"                     # ← Build metadata
   keycloak-vcs-uri: "https://github.com/keycloak/keycloak.git"
   keycloak-build-timestamp: "2026-01-06 - 07:49:45 +0000"
@@ -61,8 +61,8 @@ name: keycloak-instance
 version: 26.1.0
 appVersion: "26.1.0"
 annotations:
-  keycloak-upstream-version: "26.5.0"                    # ← Upstream Keycloak version
-  keycloak-upstream-keycloak-image: "quay.io/keycloak/keycloak:26.5.0"
+  keycloak-upstream-version: "26.5.3"                    # ← Upstream Keycloak version
+  keycloak-upstream-keycloak-image: "quay.io/keycloak/keycloak:26.5.3"
   keycloak-config-cli-image: "docker.io/adorsys/keycloak-config-cli:6.4.0-26"
 ```
 
@@ -72,9 +72,9 @@ annotations:
 # keycloak-operator/values.yaml
 operator:
   replicas: 1
-  image: "quay.io/keycloak/keycloak-operator:26.5.0"    # Used by templates
+  image: "quay.io/keycloak/keycloak-operator:26.5.3"    # Used by templates
   relatedImage:
-    keycloak: "quay.io/keycloak/keycloak:26.5.0"
+    keycloak: "quay.io/keycloak/keycloak:26.5.3"
   # ... rest is configuration (resources, security, etc)
 ```
 
@@ -120,18 +120,18 @@ spec:
         app.quarkus.io/quarkus-version: "3.27.1"      # ← Copy this
         app.quarkus.io/build-timestamp: "2026-01-06..."  # ← Copy this
       labels:
-        app.kubernetes.io/version: "26.5.0"            # ← Copy this
+        app.kubernetes.io/version: "26.5.3"            # ← Copy this
 
     spec:
       containers:
       - name: keycloak-operator
-        image: quay.io/keycloak/keycloak-operator:26.5.0  # ← Operator image
+        image: quay.io/keycloak/keycloak-operator:26.5.3  # ← Operator image
 ```
 
 Look for environment variable:
 ```yaml
 - name: RELATED_IMAGE_KEYCLOAK
-  value: quay.io/keycloak/keycloak:26.5.0             # ← Keycloak image
+  value: quay.io/keycloak/keycloak:26.5.3             # ← Keycloak image
 ```
 
 #### 3. Update Chart.yaml ONLY (keycloak-operator)
@@ -501,12 +501,12 @@ git log --oneline -1  # See previous format
 
 ---
 
-## Current Versions (26.5.0)
+## Current Versions (26.5.3)
 
 | Component | Version | Image/Location |
 |-----------|---------|---|
-| **Keycloak Operator** | 26.5.0 | quay.io/keycloak/keycloak-operator:26.5.0 |
-| **Keycloak Instance** | 26.5.0 | quay.io/keycloak/keycloak:26.5.0 |
+| **Keycloak Operator** | 26.5.3 | quay.io/keycloak/keycloak-operator:26.5.3 |
+| **Keycloak Instance** | 26.5.3 | quay.io/keycloak/keycloak:26.5.3 |
 | **keycloak-config-cli** | 6.4.0-26 | docker.io/adorsys/keycloak-config-cli:6.4.0-26 |
 | **Quarkus** | 3.27.1 | - |
 | **Chart Version (both)** | 26.1.0 | - |
@@ -670,6 +670,6 @@ Refer to relevant sections above:
 ---
 
 **Last Updated**: January 6, 2026
-**Current Keycloak Version**: 26.5.0
+**Current Keycloak Version**: 26.5.3
 **Current Chart Version**: 26.1.0
 **Status**: ✅ Production Ready
