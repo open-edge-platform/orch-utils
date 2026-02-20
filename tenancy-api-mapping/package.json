@@ -25,6 +25,9 @@
     "brace-expansion": ">=2.0.2",
     "openapi-sampler": {
       "fast-xml-parser": "5.3.4"
+    },
+    "@redocly/openapi-cli": {
+      "minimatch": "^10.2.1"
     }
   }
 }
