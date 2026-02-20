@@ -6,8 +6,6 @@ module github.com/vmware-tanzu/graph-framework-for-microservices/gqlgen
 
 go 1.25.5
 
-toolchain go1.24.1
-
 require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/hashicorp/golang-lru v1.0.2
@@ -19,7 +17,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/stretchr/testify v1.11.1
 	github.com/urfave/cli/v2 v2.27.7
-	github.com/vektah/gqlparser/v2 v2.5.31
+	github.com/vektah/gqlparser/v2 v2.5.32
 	golang.org/x/text v0.24.0
 	golang.org/x/tools v0.31.0
 	google.golang.org/protobuf v1.36.11
