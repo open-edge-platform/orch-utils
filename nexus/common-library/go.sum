@@ -38,8 +38,8 @@ github.com/google/pprof v0.0.0-20260202012954-cb029daf43ef h1:xpF9fUHpoIrrjX24DU
 github.com/google/pprof v0.0.0-20260202012954-cb029daf43ef/go.mod h1:MxpfABSjhmINe3F1It9d+8exIHFvUqtLIRCdOGNXqiI=
 github.com/gorilla/mux v1.8.1 h1:TuBL49tXwgrFYWhqrNgrUNEY92u81SPhu7sTdzQEiWY=
 github.com/gorilla/mux v1.8.1/go.mod h1:AKf9I4AEqPTmMytcMc0KkNouC66V3BtZ4qD5fmWSiMQ=
-github.com/homeport/dyff v1.10.4 h1:l1Y7TF5+bvmZ4sZbo/78RnjrPGoUj5q6O8Qoxxsx/Xs=
-github.com/homeport/dyff v1.10.4/go.mod h1:i5C9VJj2SDS7m8Z3ULwk1Araou05Dg+5mb0WsYVmxhY=
+github.com/homeport/dyff v1.10.5 h1:19PgFJoR4rseGUkUXcU8uaRCycHa1ziL7CgydmjZCzU=
+github.com/homeport/dyff v1.10.5/go.mod h1:pB/DNp7qT6yv/9rUgB+aQzySAwos0EsQkBY9NbPtX18=
 github.com/joshdk/go-junit v1.0.0 h1:S86cUKIdwBHWwA6xCmFlf3RTLfVXYQfvanM5Uh+K6GE=
 github.com/joshdk/go-junit v1.0.0/go.mod h1:TiiV0PqkaNfFXjEiyjWM3XXrhVyCa1K4Zfga6W52ung=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
