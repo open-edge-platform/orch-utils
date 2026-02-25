@@ -6,13 +6,13 @@ apiVersion: v2
 name: keycloak-operator
 description: Keycloak Operator for managing Keycloak instances via CRDs
 type: application
-version: 26.1.1
-appVersion: "26.1.0"
+version: 26.1.2
+appVersion: "26.1.2"
 annotations:
   # Keycloak upstream version information
-  keycloak-upstream-version: "26.5.0"
-  keycloak-upstream-operator-image: "quay.io/keycloak/keycloak-operator:26.5.0"
-  keycloak-upstream-keycloak-image: "quay.io/keycloak/keycloak:26.5.0"
+  keycloak-upstream-version: "26.5.3"
+  keycloak-upstream-operator-image: "quay.io/keycloak/keycloak-operator:26.5.3"
+  keycloak-upstream-keycloak-image: "quay.io/keycloak/keycloak:26.5.3"
   # Quarkus build metadata from upstream
   keycloak-quarkus-version: "3.27.1"
   keycloak-vcs-uri: "https://github.com/keycloak/keycloak.git"

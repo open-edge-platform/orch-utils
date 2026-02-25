@@ -24,12 +24,12 @@ operator:
   replicas: 1
 
   # Container image (resolved from Chart.yaml annotations)
-  image: "quay.io/keycloak/keycloak-operator:26.5.0"
+  image: "quay.io/keycloak/keycloak-operator:26.5.3"
   imagePullPolicy: IfNotPresent
 
   # Related Keycloak image for operator to deploy
   relatedImage:
-    keycloak: "quay.io/keycloak/keycloak:26.5.0"
+    keycloak: "quay.io/keycloak/keycloak:26.5.3"
 
   # Service account name
   serviceAccountName: keycloak-operator
@@ -87,7 +87,7 @@ operator:
             fieldPath: metadata.namespace
       - name: RELATED_IMAGE_KEYCLOAK
         # Resolved from Chart.yaml annotations in templates
-        value: "quay.io/keycloak/keycloak:26.5.0"
+        value: "quay.io/keycloak/keycloak:26.5.3"
 
     # Liveness probe
     livenessProbe:
