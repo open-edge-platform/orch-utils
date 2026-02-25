@@ -12,19 +12,19 @@
   "author": "",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@redocly/cli": "^2.19.1"
+    "@redocly/cli": "^2.19.2"
   },
   "dependencies": {
     "@redocly/openapi-cli": "^1.0.0-beta.59",
-    "fast-xml-parser": "^5.3.6",
+    "fast-xml-parser": "5.3.6",
     "minimatch": "^10.2.1",
-    "openapi-format": "^1.29.3",
+    "openapi-format": "^1.29.4",
     "undici": "^6.23.0"
   },
   "overrides": {
     "brace-expansion": ">=2.0.2",
     "openapi-sampler": {
-      "fast-xml-parser": "5.3.4"
+      "fast-xml-parser": "5.3.6"
     },
     "@redocly/openapi-cli": {
       "minimatch": "^10.2.1"
