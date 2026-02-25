@@ -27,7 +27,7 @@ else
 DATAMODEL_DOCKER_TAG=${DATAMODEL_DOCKER_REGISTRY}/${DATAMODEL_GROUP_NAME}/tenancy-datamodel:${DATAMODEL_VERSION}
 endif
 
-DATAMODEL_BASE_DOCKER_IMAGE = alpine/kubectl:1.34.1
+DATAMODEL_BASE_DOCKER_IMAGE = alpine/kubectl:1.35.1
 
 NAMESPACE                   ?= "default"
 HOST_KUBECONFIG             ?= ${HOME}/.kube/config
