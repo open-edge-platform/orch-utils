@@ -833,8 +833,8 @@ github.com/grpc-ecosystem/grpc-gateway/v2 v2.7.0/go.mod h1:hgWBS7lorOAVIJEQMi4Zs
 github.com/grpc-ecosystem/grpc-gateway/v2 v2.11.3/go.mod h1:o//XUCC/F+yRGJoPO/VU0GSB0f8Nhgmxx0VIRUvaC0w=
 github.com/hashicorp/golang-lru v0.5.0/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
 github.com/hashicorp/golang-lru v0.5.1/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
-github.com/homeport/dyff v1.10.4 h1:l1Y7TF5+bvmZ4sZbo/78RnjrPGoUj5q6O8Qoxxsx/Xs=
-github.com/homeport/dyff v1.10.4/go.mod h1:i5C9VJj2SDS7m8Z3ULwk1Araou05Dg+5mb0WsYVmxhY=
+github.com/homeport/dyff v1.10.5 h1:19PgFJoR4rseGUkUXcU8uaRCycHa1ziL7CgydmjZCzU=
+github.com/homeport/dyff v1.10.5/go.mod h1:pB/DNp7qT6yv/9rUgB+aQzySAwos0EsQkBY9NbPtX18=
 github.com/hpcloud/tail v1.0.0/go.mod h1:ab1qPbhIpdTxEkNHXyeSf5vhxWSCs/tWer42PpOxQnU=
 github.com/iancoleman/strcase v0.2.0/go.mod h1:iwCmte+B7n89clKwxIoIXy/HfoL7AsD47ZCWhYzw7ho=
 github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
