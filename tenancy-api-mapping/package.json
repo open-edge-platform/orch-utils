@@ -28,6 +28,9 @@
     },
     "@redocly/openapi-cli": {
       "minimatch": "^10.2.1"
+    },
+    "redoc": {
+      "minimatch": "5.1.7"
     }
   }
 }
