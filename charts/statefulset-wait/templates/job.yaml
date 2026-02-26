@@ -21,7 +21,7 @@ spec:
       serviceAccountName: {{ $serviceAccountName }}
       containers:
       - name: statefulset-wait
-        image: alpine/kubectl:1.34.1
+        image: alpine/kubectl:1.35.1
         command:
           - "timeout"
           - "5m"

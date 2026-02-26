@@ -54,7 +54,7 @@ spec:
               subPath: ktc-credentials.sh
               name: ktc-credentials
         - name: wait-for-crd
-          image: alpine/kubectl:1.34.1
+          image: alpine/kubectl:1.35.1
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           command: ["/bin/sh", "-c"]
