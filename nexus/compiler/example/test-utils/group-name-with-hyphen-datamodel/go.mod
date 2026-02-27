@@ -1,10 +1,10 @@
-// SPDX-FileCopyrightText: 2025 Intel Corporation
+// SPDX-FileCopyrightText: 2026 Intel Corporation
 //
 // SPDX-License-Identifier: Apache-2.0
 
 module github.com/vmware-tanzu/graph-framework-for-microservices/compiler/example/test-utils/group-name-with-hyphen-datamodel
 
-go 1.25.5
+go 1.25.7
 
 require github.com/vmware-tanzu/graph-framework-for-microservices/common-library v0.0.0-20221028160844-d70f863bc31b
 

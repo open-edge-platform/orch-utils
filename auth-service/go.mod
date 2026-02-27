@@ -1,10 +1,10 @@
-// SPDX-FileCopyrightText: 2025 Intel Corporation
+// SPDX-FileCopyrightText: 2026 Intel Corporation
 //
 // SPDX-License-Identifier: Apache-2.0
 
 module github.com/open-edge-platform/orch-utils/auth-service
 
-go 1.25.5
+go 1.25.7
 
 require (
 	github.com/golang-jwt/jwt/v5 v5.2.3

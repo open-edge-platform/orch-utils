@@ -1,8 +1,8 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-FileCopyrightText: 2026 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
 #graphql's and compiler's builder/Dockerfile should be in sync
-FROM golang:1.25.7
+FROM golang:1.25.7@sha256:931c889bca758a82fcbfcb1b6ed6ca1de30783e9e52e6093ad50060735cb99be
 
 # Create a non-root user with home directory
 RUN useradd -m -d /home/appuser appuser

@@ -1,10 +1,10 @@
-// SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+// SPDX-FileCopyrightText: (C) 2026 Intel Corporation
 //
 // SPDX-License-Identifier: Apache-2.0
 
 module nexus/openapi-generator
 
-go 1.25.5
+go 1.25.7
 
 require (
 	github.com/getkin/kin-openapi v0.131.0
