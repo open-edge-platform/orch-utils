@@ -1,10 +1,10 @@
-// SPDX-FileCopyrightText: 2025 Intel Corporation
+// SPDX-FileCopyrightText: 2026 Intel Corporation
 //
 // SPDX-License-Identifier: Apache-2.0
 
 module tenancy-test-app
 
-go 1.25.5
+go 1.25.7
 
 replace github.com/open-edge-platform/orch-utils/tenancy-datamodel => ../
 

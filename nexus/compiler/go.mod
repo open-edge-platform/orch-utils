@@ -1,10 +1,10 @@
-// SPDX-FileCopyrightText: 2025 Intel Corporation
+// SPDX-FileCopyrightText: 2026 Intel Corporation
 //
 // SPDX-License-Identifier: Apache-2.0
 
 module github.com/vmware-tanzu/graph-framework-for-microservices/compiler
 
-go 1.25.5
+go 1.25.7
 
 require (
 	github.com/fatih/structtag v1.2.0
