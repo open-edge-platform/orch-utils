@@ -30,7 +30,7 @@ RUN ldd /usr/sbin/squid | tr -s '[:space:]' '\n' | grep '^/' | \
     xargs -I {} cp -v --parents {} /deps
 
 # Use Distroless as the final base image
-FROM gcr.io/distroless/base-debian12:nonroot
+FROM gcr.io/distroless/base-debian12:nonroot@sha256:8b9f2e503e55aff85b79d6b22c7a63a65170e8698ae80de680e3f5ea600977bf
 
 # Copy Squid binaries and configuration from the build stage
 COPY --from=build-stage /usr/sbin/squid /usr/sbin/squid
