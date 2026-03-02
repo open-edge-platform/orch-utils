@@ -30,7 +30,7 @@ ENV https_proxy=${HTTPS_PROXY}
 RUN apt-get update -y && apt-get install -y --no-install-recommends netcat-openbsd
 RUN mkdir -p build/bin && CGO_ENABLED=0 DOCKER_LABEL_REPO_URL=${REPO_URL} DOCKER_LABEL_VERSION=${VERSION} DOCKER_LABEL_REVISION=${REVISION} DOCKER_LABEL_BUILD_DATE=${BUILD_DATE} go build -o build/bin ./...
 
-FROM gcr.io/distroless/static-debian12:nonroot
+FROM gcr.io/distroless/static-debian12:nonroot@sha256:a9329520abc449e3b14d5bc3a6ffae065bdde0f02667fa10880c49b35c109fd1
 # Run as non-privileged user
 USER nobody
 

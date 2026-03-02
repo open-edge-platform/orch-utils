@@ -13,7 +13,7 @@ RUN set -x && \
     go mod download && \
     CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -buildvcs=false -o bin/tenantinit ./cmd/tenant-init
 
-FROM gcr.io/distroless/static-debian12:nonroot
+FROM gcr.io/distroless/static-debian12:nonroot@sha256:a9329520abc449e3b14d5bc3a6ffae065bdde0f02667fa10880c49b35c109fd1
 
 # Run as non-privileged user
 USER nobody
