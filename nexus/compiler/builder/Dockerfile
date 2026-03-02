@@ -33,8 +33,8 @@ RUN git config --global --add safe.directory '*' \
     && go install golang.org/x/tools/cmd/goimports@v0.37.0 \
     && go install github.com/mikefarah/yq/v4@v4.45.1 \
     && go install -buildvcs=false k8s.io/kube-openapi/cmd/openapi-gen@v0.0.0-20250910181357-589584f1c912 \
-    && curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh -o /tmp/install-golangci-lint.sh \
-    && echo "9e99d38f3213411a1b6175e5b535c72e37c7ed42ccf251d331385a3f97b695e7 /tmp/install-golangci-lint.sh" | sha256sum -c - \
+    && curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/v1.58.2/install.sh -o /tmp/install-golangci-lint.sh \
+    && echo "562223cd80a52743745ed3fc2d05927942f141b64ecc3423d0a17b312a036fe2 /tmp/install-golangci-lint.sh" | sha256sum -c - \
     && sh /tmp/install-golangci-lint.sh -b "$(go env GOPATH)/bin" v1.58.2 \
     && rm /tmp/install-golangci-lint.sh \
     && apt-get clean \
