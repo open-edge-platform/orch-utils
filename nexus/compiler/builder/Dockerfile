@@ -1,4 +1,5 @@
 # SPDX-FileCopyrightText: 2026 Intel Corporation
+#
 # SPDX-License-Identifier: Apache-2.0
 
 #graphql's and compiler's builder/Dockerfile should be in sync
