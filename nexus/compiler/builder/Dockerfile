@@ -26,13 +26,17 @@ RUN git config --global --add safe.directory '*' \
         make=4.4.1-3 \
         coreutils=9.7-3 \
     && curl -Lo /usr/local/bin/jq https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-linux-amd64 \
+    && echo "020468de7539ce70ef1bceaf7cde2e8c4f2ca6c3afb84642aabc5c97d9fc2a0d /usr/local/bin/jq" | sha256sum -c - \
     && chmod +x /usr/local/bin/jq \
     && go install github.com/onsi/ginkgo/ginkgo@v1.16.0 \
     && go install github.com/onsi/gomega/...@v1.38.2 \
     && go install golang.org/x/tools/cmd/goimports@v0.37.0 \
     && go install github.com/mikefarah/yq/v4@v4.45.1 \
     && go install -buildvcs=false k8s.io/kube-openapi/cmd/openapi-gen@v0.0.0-20250910181357-589584f1c912 \
-    && curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b "$(go env GOPATH)/bin" v1.58.2 \
+    && curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh -o /tmp/install-golangci-lint.sh \
+    && echo "9e99d38f3213411a1b6175e5b535c72e37c7ed42ccf251d331385a3f97b695e7 /tmp/install-golangci-lint.sh" | sha256sum -c - \
+    && sh /tmp/install-golangci-lint.sh -b "$(go env GOPATH)/bin" v1.58.2 \
+    && rm /tmp/install-golangci-lint.sh \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
