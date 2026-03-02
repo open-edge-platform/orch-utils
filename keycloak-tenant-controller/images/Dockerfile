@@ -25,7 +25,7 @@ RUN echo "Using commit ID $KTC_GIT_COMMIT"
 RUN	apt-get update && apt-get -y install --no-install-recommends -o APT::Keep-Downloaded-Packages=false build-essential=12.12 sudo=1.9.16p2-3 \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* \
-	&& go install github.com/magefile/mage@latest \
+	&& go install github.com/magefile/mage@v1.15.0 \
 	&& mage binary:build
 
 FROM gcr.io/distroless/base:nonroot

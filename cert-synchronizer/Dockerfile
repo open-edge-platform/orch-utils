@@ -36,7 +36,7 @@ RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -ldflags="-X main.Commit=${GI
 
 
 #FROM gcr.io/distroless/base-debian12
-FROM gcr.io/distroless/base-debian12:nonroot
+FROM gcr.io/distroless/base-debian12:nonroot@sha256:8b9f2e503e55aff85b79d6b22c7a63a65170e8698ae80de680e3f5ea600977bf
 #FROM gcr.io/distroless/base-debian12:debug
 
 WORKDIR /
@@ -46,4 +46,3 @@ COPY --from=builder /src/main /opt/intel/aws_management
 
 EXPOSE 8080/tcp
 ENTRYPOINT ["/opt/intel/aws_management"]
-
