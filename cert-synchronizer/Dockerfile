@@ -19,16 +19,16 @@ COPY ./pkg/buildflags/*.go ./pkg/buildflags/
 COPY ./pkg/log/*.go ./pkg/log/
 
 RUN go mod download
-RUN go get github.com/mitchellh/go-ps
-RUN go get github.com/aws/aws-sdk-go-v2/aws
-RUN go get github.com/aws/aws-sdk-go-v2/config
-RUN go get github.com/aws/aws-sdk-go-v2/credentials
-RUN go get github.com/aws/aws-sdk-go-v2/credentials/stscreds
-RUN go get github.com/aws/aws-sdk-go-v2/service/sts
-RUN go get github.com/aws/aws-sdk-go-v2/service/acm
-RUN go get github.com/aws/aws-sdk-go-v2/service/acm/types
-RUN go get github.com/aws/aws-sdk-go-v2/service/route53
-RUN go get github.com/aws/aws-sdk-go-v2/service/route53/types
+RUN go get github.com/mitchellh/go-ps@v1.0.0
+RUN go get github.com/aws/aws-sdk-go-v2/aws@v1.36.6
+RUN go get github.com/aws/aws-sdk-go-v2/config@v1.29.18
+RUN go get github.com/aws/aws-sdk-go-v2/credentials@v1.17.71
+RUN go get github.com/aws/aws-sdk-go-v2/credentials/stscreds@v1.17.71
+RUN go get github.com/aws/aws-sdk-go-v2/service/sts@v1.34.1
+RUN go get github.com/aws/aws-sdk-go-v2/service/acm@v1.33.1
+RUN go get github.com/aws/aws-sdk-go-v2/service/acm/types@v1.33.1
+RUN go get github.com/aws/aws-sdk-go-v2/service/route53@v1.53.1
+RUN go get github.com/aws/aws-sdk-go-v2/service/route53/types@v1.53.1
 
 ARG GIT_COMMIT
 RUN echo "Using commitid $GIT_COMMIT"

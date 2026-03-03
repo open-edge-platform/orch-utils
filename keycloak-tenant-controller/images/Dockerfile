@@ -28,7 +28,7 @@ RUN	apt-get update && apt-get -y install --no-install-recommends -o APT::Keep-Do
 	&& go install github.com/magefile/mage@v1.15.0 \
 	&& mage binary:build
 
-FROM gcr.io/distroless/base:nonroot
+FROM gcr.io/distroless/base:nonroot@sha256:e00da4d3bd422820880b080115b3bad24349bef37ed46d68ed0d13e150dc8d67
 
 COPY --from=builder /usr/src/keycloak-tenant-controller/bin/* /bin/
 COPY ./images/entrypoint.sh /oep/keycloak-tenant-controller/
