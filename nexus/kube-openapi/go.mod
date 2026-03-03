@@ -12,7 +12,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/emicklei/go-restful v2.16.0+incompatible
 	github.com/getkin/kin-openapi v0.131.0
-	github.com/go-openapi/jsonreference v0.21.0
+	github.com/go-openapi/jsonreference v0.21.5
 	github.com/go-openapi/swag v0.23.1
 	github.com/golang/protobuf v1.5.4
 	github.com/google/gnostic v0.7.0
@@ -37,7 +37,8 @@ require (
 
 require (
 	github.com/go-logr/logr v1.4.2 // indirect
-	github.com/go-openapi/jsonpointer v0.21.1 // indirect
+	github.com/go-openapi/jsonpointer v0.22.5 // indirect
+	github.com/go-openapi/swag/jsonname v0.25.5 // indirect
 	github.com/go-task/slim-sprig/v3 v3.0.0 // indirect
 	github.com/google/gnostic-models v0.6.9 // indirect
 	github.com/google/pprof v0.0.0-20250403155104-27863c87afa6 // indirect
