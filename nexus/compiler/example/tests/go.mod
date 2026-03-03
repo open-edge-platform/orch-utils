@@ -12,7 +12,7 @@ require (
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.37.0
 	github.com/vmware-tanzu/graph-framework-for-microservices/compiler/example/output/generated v0.0.0-20231031085545-baa1f0ece453
-	k8s.io/apimachinery v0.32.11
+	k8s.io/apimachinery v0.32.13
 )
 
 require (
