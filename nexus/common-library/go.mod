@@ -9,7 +9,7 @@ go 1.25.7
 require (
 	github.com/elliotchance/orderedmap v1.8.0
 	github.com/gonvenience/bunt v1.4.3
-	github.com/gonvenience/neat v1.3.17
+	github.com/gonvenience/neat v1.3.18
 	github.com/gonvenience/term v1.0.5
 	github.com/gonvenience/text v1.0.10
 	github.com/gonvenience/ytbx v1.4.8
@@ -38,7 +38,7 @@ require (
 	github.com/virtuald/go-ordered-json v0.0.0-20170621173500-b18e6e673d74 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
 	golang.org/x/mod v0.33.0 // indirect
-	golang.org/x/net v0.50.0 // indirect
+	golang.org/x/net v0.51.0 // indirect
 	golang.org/x/sync v0.19.0 // indirect
 	golang.org/x/sys v0.41.0 // indirect
 	golang.org/x/term v0.40.0 // indirect
