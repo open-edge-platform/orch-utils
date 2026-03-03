@@ -38,8 +38,8 @@ github.com/gonvenience/bunt v1.4.3 h1:MLd8YWu1Vl1tiL+XfXJvVA9kL71yQT0N+x7gXVH9H7
 github.com/gonvenience/bunt v1.4.3/go.mod h1:ggA6odP6FNOh50mGxxytSSJTs2Ghy5Veq9wIVSbuoAw=
 github.com/gonvenience/idem v0.0.3 h1:rZ2f17JU5GHa3b5M5R2fClz0dYN3EFGhHHGo3AZz/1U=
 github.com/gonvenience/idem v0.0.3/go.mod h1:ChZ+RP8e30+uCBcCIzN/0di6lTO2PucjemgKfzQUQEw=
-github.com/gonvenience/neat v1.3.17 h1:S/F0XNE4sc/b3APfLDqC9xM476Or55WhXZ7F/Sy07QY=
-github.com/gonvenience/neat v1.3.17/go.mod h1:h+b8M0LFDZUKS5D4xaoPd2qTLrVpX+bDRlDJphOAS/s=
+github.com/gonvenience/neat v1.3.18 h1:WxWoXhsTHA6CStNrGgSEjGTt5MwIm+7Xs+VZmQIuXZA=
+github.com/gonvenience/neat v1.3.18/go.mod h1:DTaEyHIOjSkMa066EoZZl3k5KCG/rFGE67n0cjm/9qk=
 github.com/gonvenience/term v1.0.5 h1:PYfBH7FB1V+tuuJl4KYrqG/tzAOUnvTy8IFa9YqYrJY=
 github.com/gonvenience/term v1.0.5/go.mod h1:CYvcU7H3nE6eOP0gvGfYz4BjGJzM1GeNp+fx4IBWKLs=
 github.com/gonvenience/text v1.0.10 h1:QRqtC/KMk57K7y4jHi4HjLxf8u+tg+/tIRCS5afywNE=
@@ -156,8 +156,8 @@ golang.org/x/net v0.0.0-20190620200207-3b0461eec859/go.mod h1:z5CRVTTTmAJ677TzLL
 golang.org/x/net v0.0.0-20200226121028-0de0cce0169b/go.mod h1:z5CRVTTTmAJ677TzLLGU+0bjPO0LkuOLi4/5GtJWs/s=
 golang.org/x/net v0.0.0-20201021035429-f5854403a974/go.mod h1:sp8m0HH+o8qH0wwXwYZr8TS3Oi6o0r6Gce1SSxlDquU=
 golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4/go.mod h1:p54w0d4576C0XHj96bSt6lcn1PtDYWL6XObtHCRCNQM=
-golang.org/x/net v0.50.0 h1:ucWh9eiCGyDR3vtzso0WMQinm2Dnt8cFMuQa9K33J60=
-golang.org/x/net v0.50.0/go.mod h1:UgoSli3F/pBgdJBHCTc+tp3gmrU4XswgGRgtnwWTfyM=
+golang.org/x/net v0.51.0 h1:94R/GTO7mt3/4wIKpcR5gkGmRLOuE/2hNGeWq/GBIFo=
+golang.org/x/net v0.51.0/go.mod h1:aamm+2QF5ogm02fjy5Bb7CQ0WMt1/WVM7FtyaTLlA9Y=
 golang.org/x/oauth2 v0.29.0 h1:WdYw2tdTK1S8olAzWHdgeqfy+Mtm9XNhv/xJsY65d98=
 golang.org/x/oauth2 v0.29.0/go.mod h1:onh5ek6nERTohokkhCD/y2cV4Do3fxFHFuAejCkRWT8=
 golang.org/x/sync v0.0.0-20190423024810-112230192c58/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
