@@ -108,3 +108,46 @@ misconfigurations:
     paths:
       - "charts/keycloak-operator/templates/rbac-and-service.yaml"
     statement: Official Keycloak Operator v26.4.5 RBAC permissions. Operator requires secret access to read bootstrap admin credentials and manage Keycloak configuration. Scoped to keycloak-system namespace via RoleBinding. Acceptable risk in controlled K8s environments.
+
+  - id: KSV-0125
+    paths:
+      - "charts/auth-service/templates/deployment.yaml"
+      - "charts/component-status/templates/deployment.yaml"
+      - "charts/keycloak-tenant-controller/templates/statefulset.yaml"
+      - "charts/nexus-api-gw/templates/deployment.yaml"
+      - "charts/secrets-config/templates/job.yaml"
+    statement: Image provided by registry-rs.edgeorchestration.intel.com, built from a known Dockerfile in the repository.
+
+  - id: KSV0125
+    paths:
+      - "charts/auth-service/templates/deployment.yaml"
+      - "charts/component-status/templates/deployment.yaml"
+      - "charts/keycloak-tenant-controller/templates/statefulset.yaml"
+      - "charts/nexus-api-gw/templates/deployment.yaml"
+      - "charts/secrets-config/templates/job.yaml"
+      - "charts/squid-proxy/templates/deployment.yaml"
+      - "charts/tenancy-api-mapping/templates/job.yaml"
+      - "charts/tenancy-datamodel/templates/deployment.yaml"
+      - "charts/tenancy-manager/templates/deployment.yaml"
+      - "charts/token-fs/templates/deployment.yaml"
+    statement: Image provided by registry-rs.edgeorchestration.intel.com, built from a known Dockerfile in the repository.
+
+  - id: DS-0026
+    paths:
+      - "auth-service/Dockerfile"
+      - "aws-sm-proxy/Dockerfile"
+      - "cert-synchronizer/Dockerfile"
+      - "component-status/Dockerfile"
+      - "keycloak-tenant-controller/images/Dockerfile"
+      - "nexus-api-gw/Dockerfile"
+      - "nexus/compiler/Dockerfile"
+      - "nexus/compiler/builder/Dockerfile"
+      - "nexus/openapi-generator/Dockerfile"
+      - "secrets/Dockerfile"
+      - "squid-proxy/Dockerfile"
+      - "tenancy-api-mapping/Dockerfile"
+      - "tenancy-datamodel/Dockerfile"
+      - "tenancy-init/Dockerfile"
+      - "tenancy-manager/Dockerfile"
+      - "token-fs/Dockerfile"
+    statement: Likely runs as a short-lived or batch job that doesn't require continuous health monitoring, or the application already implements health checks through external monitoring system that provide their own health check mechanisms.

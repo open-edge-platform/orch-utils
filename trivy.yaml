@@ -18,10 +18,3 @@
 #   - https://github.com/aquasecurity/trivy-action/issues/284
 
 ignorefile: ./.trivyignore.yaml
-
-scan:
-  skip-check-ids:
-    - DS026  # Distroless images do not support HEALTHCHECK
-    - DS-0026  # Alternate rule ID for the same check
-    - KSV0125  # Image registry is templated via .Values; resolved at deploy time
-    - KSV-0125  # Alternate rule ID for the same check
