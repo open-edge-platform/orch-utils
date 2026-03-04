@@ -108,3 +108,26 @@ misconfigurations:
     paths:
       - "charts/keycloak-operator/templates/rbac-and-service.yaml"
     statement: Official Keycloak Operator v26.4.5 RBAC permissions. Operator requires secret access to read bootstrap admin credentials and manage Keycloak configuration. Scoped to keycloak-system namespace via RoleBinding. Acceptable risk in controlled K8s environments.
+
+  - id: KSV-0125
+    paths:
+      - "charts/auth-service/templates/deployment.yaml"
+      - "charts/component-status/templates/deployment.yaml"
+      - "charts/keycloak-tenant-controller/templates/statefulset.yaml"
+      - "charts/nexus-api-gw/templates/deployment.yaml"
+      - "charts/secrets-config/templates/job.yaml"
+    statement: Image provided by registry-rs.edgeorchestration.intel.com, built from a known Dockerfile in the repository.
+
+  - id: KSV0125
+    paths:
+      - "charts/auth-service/templates/deployment.yaml"
+      - "charts/component-status/templates/deployment.yaml"
+      - "charts/keycloak-tenant-controller/templates/statefulset.yaml"
+      - "charts/nexus-api-gw/templates/deployment.yaml"
+      - "charts/secrets-config/templates/job.yaml"
+      - "charts/squid-proxy/templates/deployment.yaml"
+      - "charts/tenancy-api-mapping/templates/job.yaml"
+      - "charts/tenancy-datamodel/templates/deployment.yaml"
+      - "charts/tenancy-manager/templates/deployment.yaml"
+      - "charts/token-fs/templates/deployment.yaml"
+    statement: Image provided by registry-rs.edgeorchestration.intel.com, built from a known Dockerfile in the repository.
