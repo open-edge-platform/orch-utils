@@ -131,3 +131,23 @@ misconfigurations:
       - "charts/tenancy-manager/templates/deployment.yaml"
       - "charts/token-fs/templates/deployment.yaml"
     statement: Image provided by registry-rs.edgeorchestration.intel.com, built from a known Dockerfile in the repository.
+
+  - id: DS-0026
+    paths:
+      - "auth-service/Dockerfile"
+      - "aws-sm-proxy/Dockerfile"
+      - "cert-synchronizer/Dockerfile"
+      - "component-status/Dockerfile"
+      - "keycloak-tenant-controller/images/Dockerfile"
+      - "nexus-api-gw/Dockerfile"
+      - "nexus/compiler/Dockerfile"
+      - "nexus/compiler/builder/Dockerfile"
+      - "nexus/openapi-generator/Dockerfile"
+      - "secrets/Dockerfile"
+      - "squid-proxy/Dockerfile"
+      - "tenancy-api-mapping/Dockerfile"
+      - "tenancy-datamodel/Dockerfile"
+      - "tenancy-init/Dockerfile"
+      - "tenancy-manager/Dockerfile"
+      - "token-fs/Dockerfile"
+    statement: Likely runs as a short-lived or batch job that doesn't require continuous health monitoring, or the application already implements health checks through external monitoring system that provide their own health check mechanisms.
