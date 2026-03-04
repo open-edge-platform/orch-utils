@@ -442,6 +442,7 @@ jobs:
     permissions:
       contents: read
       security-events: write
+      actions: read
       id-token: write
     if: github.event_name == 'push' && ( github.ref == 'refs/heads/main' || github.ref == 'refs/heads/main-pass-validation' )
     uses: open-edge-platform/orch-ci/.github/workflows/post-merge.yml@24a3a495be45af021486e265cf09a17ac3798405  # 2026.0.13
