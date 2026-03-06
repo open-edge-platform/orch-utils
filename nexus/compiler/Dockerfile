@@ -37,7 +37,7 @@ RUN --mount=type=cache,target="/home/appuser/.cache/go-build" go mod init && \
     go mod download || go mod download
 
 WORKDIR /go/src/github.com/vmware-tanzu/graph-framework-for-microservices/compiler/_deps/github.com/kubernetes/code-generator
-RUN --mount=type=cache,target="/home/appuser/.cache/go-build" GOTOOLCHAIN=auto go mod download || go mod download
+RUN --mount=type=cache,target="/home/appuser/.cache/go-build" go mod download || go mod download
 
 USER root
 WORKDIR /go/src/github.com/vmware-tanzu/graph-framework-for-microservices/install-validator
