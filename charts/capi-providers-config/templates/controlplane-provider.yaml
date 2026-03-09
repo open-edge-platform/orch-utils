@@ -29,7 +29,7 @@ metadata:
 data:
   manifests: |
     {{- if .spec.additionalManifests.manifests }}
-    {{- toYaml .additionalManifests.manifests | nindent 4 }}
+    {{- toYaml .spec.additionalManifests.manifests | nindent 4 }}
     {{- end }}
     {{- if $.Values.metrics.enabled }}
     ---
