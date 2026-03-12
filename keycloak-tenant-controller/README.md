@@ -14,3 +14,14 @@ This gives the end user flexible and customizable role/group definitions tailore
 ## Building the container
 
 From the `orch-utils` directory run `build:keycloakTenantController`
+
+
+
+```mermaid
+flowchart LR
+
+A[Hard] -->|Text| B(Round)
+B --> C{Decision}
+C -->|One| D[Result 1]
+C -->|Two| E[Result 2]
+```
