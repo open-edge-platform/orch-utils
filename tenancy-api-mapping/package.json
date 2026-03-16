@@ -12,14 +12,14 @@
   "author": "",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@redocly/cli": "^2.20.4"
+    "@redocly/cli": "^2.21.1"
   },
   "dependencies": {
     "@redocly/openapi-cli": "^1.0.0-beta.59",
     "fast-xml-parser": "5.3.8",
     "minimatch": "^10.2.4",
     "openapi-format": "^1.29.5",
-    "undici": "^6.23.0"
+    "undici": "^6.24.0"
   },
   "overrides": {
     "brace-expansion": ">=2.0.2",

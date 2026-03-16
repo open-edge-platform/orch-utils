@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-FROM golang:1.25.7@sha256:5a79b94c34c299ac0361fbb7c7fca6dc552e166b42341050323fa3ab137d7be9 AS builder
+FROM golang:1.25.8@sha256:bd1e2df4e6259b2bd5b1de0e6b22ca414502cd6e7276a5dd5dd414b65063be58 AS builder
 ARG KTC_GIT_COMMIT
 
 # Set proxy environment variables using build arguments
@@ -12,17 +12,17 @@ ARG no_proxy
 ARG ftp_proxy
 ARG socks_proxy
 
-ENV HTTP_PROXY $http_proxy
-ENV HTTPS_PROXY $http_proxy
-ENV NO_PROXY $http_proxy
-ENV FTP_PROXY $ftp_proxy
-ENV SOCKS_PROXY $socks_proxy
+ENV HTTP_PROXY=$http_proxy
+ENV HTTPS_PROXY=$http_proxy
+ENV NO_PROXY=$http_proxy
+ENV FTP_PROXY=$ftp_proxy
+ENV SOCKS_PROXY=$socks_proxy
 
 COPY . /usr/src/keycloak-tenant-controller/
 WORKDIR /usr/src/keycloak-tenant-controller/
 
 RUN echo "Using commit ID $KTC_GIT_COMMIT"
-RUN	apt-get update && apt-get -y install --no-install-recommends -o APT::Keep-Downloaded-Packages=false build-essential=12.12 sudo=1.9.16p2-3 \
+RUN	apt-get update && apt-get -y install --no-install-recommends -o APT::Keep-Downloaded-Packages=false build-essential=12.12 sudo=1.9.16p2-3+deb13u1 \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& go install github.com/magefile/mage@v1.15.0 \
