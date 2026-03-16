@@ -41,6 +41,8 @@ PREPARSER_MODPATH          ?= model
 
 NEXUS_KUBEOPENAPI_VERSION ?= 7416bd4754d3c0dd8b3fa37fff53d36594f11607
 NEXUS_GRAPHQLGEN_VERSION ?= 32f028bce22efeb70b47a640195bd969dbb337f0
+# kubernetes-code-generator pinned to version v0.35.2 as latest requires go 1.26. Update this when we update our go version.
+CODE_GENERATOR_VERSION ?= v0.35.2
 
 INCLUDE_LOCAL_CHANGES ?= false
 
@@ -326,7 +328,7 @@ publish_builder_image:
 init_submodules:
 	@if [ ! -d "_deps/github.com/kubernetes/code-generator/.git" ]; then\
     	echo "Cloning kubernetes/code-generator repo ...";\
-	git clone https://github.com/kubernetes/code-generator.git _deps/github.com/kubernetes/code-generator;\
+	git clone --depth 1 --branch ${CODE_GENERATOR_VERSION} https://github.com/kubernetes/code-generator.git _deps/github.com/kubernetes/code-generator;\
     fi
 
 .PHONY: render_templates

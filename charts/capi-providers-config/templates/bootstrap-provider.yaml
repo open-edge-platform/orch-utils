@@ -9,15 +9,15 @@ metadata:
   name: {{ .name }}
   namespace: {{ .namespace }}
 spec:
-  {{- toYaml (omit .spec "manifestPatches") | nindent 2 }}
+  {{- toYaml (omit .spec "manifestPatches" "additionalManifests") | nindent 2 }}
   {{- with .spec.manifestPatches }}
   manifestPatches:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- toYaml (omit .spec "additionalManifests") | nindent 2 }}
   {{- with .spec.additionalManifests }}
   additionalManifests:
-    {{- toYaml . | nindent 4 }}
+    name: {{ .name }}
+    namespace: {{ .namespace }}
   {{- end }}
 ---
 {{- if .spec.additionalManifests }}
