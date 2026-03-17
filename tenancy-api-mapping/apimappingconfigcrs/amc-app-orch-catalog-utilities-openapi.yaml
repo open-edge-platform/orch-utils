@@ -15,11 +15,11 @@ spec:
     tag: "v0.15.6"
     specFilePath: "api/spec/utilities-openapi.yaml"
   mappings:
-    - externalURI: /v3/projects/{projectName}/catalog/charts
+    - externalURI: /v1/projects/{projectName}/catalog/charts
       serviceURI: catalog.orchestrator.apis/charts
-    - externalURI: /v3/projects/{projectName}/catalog/upload
+    - externalURI: /v1/projects/{projectName}/catalog/upload
       serviceURI: catalog.orchestrator.apis/upload
-    - externalURI: /v3/projects/{projectName}/catalog/deployment_packages/{deployment_package_name}/versions/{version}/download
+    - externalURI: /v1/projects/{projectName}/catalog/deployment_packages/{deployment_package_name}/versions/{version}/download
       serviceURI: catalog.orchestrator.apis/v3/deployment_packages/{deployment_package_name}/versions/{version}/download
   backend:
     service: "app-orch-catalog-rest-proxy.orch-app.svc.cluster.local"

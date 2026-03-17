@@ -9119,7 +9119,7 @@ paths:
         required: true
         schema:
           type: string
-  /v3/projects/{projectName}/catalog/applications:
+  /v1/projects/{projectName}/catalog/applications:
     get:
       description: Gets a list of applications.
       operationId: CatalogService_ListApplications
@@ -9206,7 +9206,7 @@ paths:
       summary: CreateApplication
       tags:
         - CatalogService
-  /v3/projects/{projectName}/catalog/applications/{application_name}/versions:
+  /v1/projects/{projectName}/catalog/applications/{application_name}/versions:
     get:
       description: Gets all versions of a named application.
       operationId: CatalogService_GetApplicationVersions
@@ -9235,7 +9235,7 @@ paths:
       summary: GetApplicationVersions
       tags:
         - CatalogService
-  /v3/projects/{projectName}/catalog/applications/{application_name}/versions/{version}:
+  /v1/projects/{projectName}/catalog/applications/{application_name}/versions/{version}:
     delete:
       description: Deletes an application.
       operationId: CatalogService_DeleteApplication
@@ -9350,7 +9350,7 @@ paths:
       summary: UpdateApplication
       tags:
         - CatalogService
-  /v3/projects/{projectName}/catalog/applications/{application_name}/versions/{version}/reference_count:
+  /v1/projects/{projectName}/catalog/applications/{application_name}/versions/{version}/reference_count:
     get:
       description: Gets application reference count - the number of deployment packages using this application.
       operationId: CatalogService_GetApplicationReferenceCount
@@ -9387,7 +9387,7 @@ paths:
       summary: GetApplicationReferenceCount
       tags:
         - CatalogService
-  /v3/projects/{projectName}/catalog/artifacts:
+  /v1/projects/{projectName}/catalog/artifacts:
     get:
       description: Gets a list of artifacts.
       operationId: CatalogService_ListArtifacts
@@ -9464,7 +9464,7 @@ paths:
       summary: CreateArtifact
       tags:
         - CatalogService
-  /v3/projects/{projectName}/catalog/artifacts/{artifact_name}:
+  /v1/projects/{projectName}/catalog/artifacts/{artifact_name}:
     delete:
       description: Deletes an artifact.
       operationId: CatalogService_DeleteArtifact
@@ -9555,7 +9555,7 @@ paths:
       summary: UpdateArtifact
       tags:
         - CatalogService
-  /v3/projects/{projectName}/catalog/charts:
+  /v1/projects/{projectName}/catalog/charts:
     get:
       description: Gets a list of registry chart names of chart versions.
       operationId: CatalogService_GetRegistryCharts
@@ -9593,7 +9593,7 @@ paths:
       summary: GetRegistryCharts
       tags:
         - CatalogService
-  /v3/projects/{projectName}/catalog/deployment_packages:
+  /v1/projects/{projectName}/catalog/deployment_packages:
     get:
       description: Gets a list of deployment packages.
       operationId: CatalogService_ListDeploymentPackages
@@ -9680,7 +9680,7 @@ paths:
       summary: CreateDeploymentPackage
       tags:
         - CatalogService
-  /v3/projects/{projectName}/catalog/deployment_packages/{deployment_package_name}/versions:
+  /v1/projects/{projectName}/catalog/deployment_packages/{deployment_package_name}/versions:
     get:
       description: Gets all versions of a named deployment package.
       operationId: CatalogService_GetDeploymentPackageVersions
@@ -9709,7 +9709,7 @@ paths:
       summary: GetDeploymentPackageVersions
       tags:
         - CatalogService
-  /v3/projects/{projectName}/catalog/deployment_packages/{deployment_package_name}/versions/{version}:
+  /v1/projects/{projectName}/catalog/deployment_packages/{deployment_package_name}/versions/{version}:
     delete:
       description: Deletes a deployment package.
       operationId: CatalogService_DeleteDeploymentPackage
@@ -9824,7 +9824,7 @@ paths:
       summary: UpdateDeploymentPackage
       tags:
         - CatalogService
-  /v3/projects/{projectName}/catalog/deployment_packages/{deployment_package_name}/versions/{version}/download:
+  /v1/projects/{projectName}/catalog/deployment_packages/{deployment_package_name}/versions/{version}/download:
     get:
       description: Gets a specific deployment package and downloads it as a tarball.
       operationId: CatalogService_DownloadDeploymentPackage
@@ -9862,7 +9862,7 @@ paths:
       summary: DownloadDeploymentPackage
       tags:
         - CatalogService
-  /v3/projects/{projectName}/catalog/import:
+  /v1/projects/{projectName}/catalog/import:
     post:
       description: |-
         Allows importing a deployment package from a Helm Chart. This is done as a single invocation with the URL
@@ -9961,7 +9961,7 @@ paths:
       summary: Import
       tags:
         - CatalogService
-  /v3/projects/{projectName}/catalog/registries:
+  /v1/projects/{projectName}/catalog/registries:
     get:
       description: Gets a list of registries.
       operationId: CatalogService_ListRegistries
@@ -10045,7 +10045,7 @@ paths:
       summary: CreateRegistry
       tags:
         - CatalogService
-  /v3/projects/{projectName}/catalog/registries/{registry_name}:
+  /v1/projects/{projectName}/catalog/registries/{registry_name}:
     delete:
       description: Deletes a registry.
       operationId: CatalogService_DeleteRegistry
@@ -10152,7 +10152,7 @@ paths:
       summary: UpdateRegistry
       tags:
         - CatalogService
-  /v3/projects/{projectName}/catalog/upload:
+  /v1/projects/{projectName}/catalog/upload:
     post:
       description: Allows uploading of a YAML files containing various application catalog entities.
       operationId: CatalogService_BulkCatalogUpload
@@ -10202,7 +10202,7 @@ paths:
       summary: BulkCatalogUpload
       tags:
         - CatalogService
-  /v3/projects/{projectName}/catalog/uploads:
+  /v1/projects/{projectName}/catalog/uploads:
     post:
       description: |-
         Allows uploading of a YAML file containing various application catalog entities. Multiple RPC invocations
