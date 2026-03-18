@@ -13,7 +13,7 @@ runs:
       with:
         asdf_version: 0.18.0
     - name: Cache asdf plugins
-      uses: actions/cache@v4.2.0
+      uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306  # v5.0.3
       id: asdf-cache
       with:
         path: |
