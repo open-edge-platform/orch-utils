@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-FileCopyrightText: 2026 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
 ---
@@ -17,7 +17,7 @@ spec:
       restartPolicy: Never
       containers:
       - name: ns-label-container
-        image: alpine/kubectl:1.35.1
+        image: alpine/kubectl:1.35.2
         command: ["/bin/sh", "-c"]
         args:
         - |

@@ -1,6 +1,6 @@
 ---
 
-# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-FileCopyrightText: 2026 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
 ---
@@ -37,7 +37,7 @@ spec:
       restartPolicy: Never
       initContainers:
       - name: job-wait-for-tenancy-crds
-        image: alpine/kubectl:1.35.1
+        image: alpine/kubectl:1.35.2
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
         command: ["/bin/sh", "-c"]
