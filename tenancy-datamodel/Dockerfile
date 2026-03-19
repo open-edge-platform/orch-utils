@@ -9,7 +9,7 @@ USER nobody
 # Now copy the static shell into base image.
 COPY --from=busybox:1.37.0-uclibc /bin/sh /bin/sh
 
-COPY --from=alpine/kubectl:1.35.1 /usr/local/bin/kubectl /usr/local/bin/kubectl
+COPY --from=alpine/kubectl:1.35.2 /usr/local/bin/kubectl /usr/local/bin/kubectl
 
 # Set the working directory in the container
 WORKDIR /app
