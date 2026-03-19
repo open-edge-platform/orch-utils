@@ -1,5 +1,5 @@
 // Copyright (C) 2025 Intel Corporation
-// SPDX-FileCopyrightText: 2025 Intel Corporation
+// SPDX-FileCopyrightText: 2026 Intel Corporation
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -294,7 +294,7 @@ func datamodelCompilerBuild() error {
 func tenancyDatamodelBuild() error {
 	projectDir := "tenancy-datamodel"
 	nexusFile := "nexus.yaml"
-	baseImage := "alpine/kubectl:1.35.1"
+	baseImage := "alpine/kubectl:1.35.2"
 
 	nexusConf := struct {
 		GroupName string `yaml:"groupName"`
