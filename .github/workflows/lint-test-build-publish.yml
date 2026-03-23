@@ -63,7 +63,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup asdf and install dependencies
-        uses: ./.github/actions/setup-asdf
+        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@main  # zizmor: ignore[unpinned-uses]
 
       - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7  # v5.0.4
         with:
@@ -97,7 +97,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup asdf and install dependencies
-        uses: ./.github/actions/setup-asdf
+        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@main  # zizmor: ignore[unpinned-uses]
 
       - name: Run lint
         run: mage lint:helm
@@ -120,7 +120,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup asdf and install dependencies
-        uses: ./.github/actions/setup-asdf
+        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@main  # zizmor: ignore[unpinned-uses]
 
       - name: Run lint
         run: mage lint:yaml
@@ -142,7 +142,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup asdf and install dependencies
-        uses: ./.github/actions/setup-asdf
+        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@main  # zizmor: ignore[unpinned-uses]
 
       - name: Lint Dockerfiles using hadolint
         run: mage lint:dockerfiles
@@ -232,7 +232,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup asdf and install dependencies
-        uses: ./.github/actions/setup-asdf
+        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@main  # zizmor: ignore[unpinned-uses]
 
       # TODO: This is a temporary solution for buildall script
       # We need to find a long term solution that leverages orch-ci workflow
@@ -290,7 +290,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup asdf and install dependencies
-        uses: ./.github/actions/setup-asdf
+        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@main  # zizmor: ignore[unpinned-uses]
 
       - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7  # v5.0.4
         with:
@@ -347,7 +347,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup asdf and install dependencies
-        uses: ./.github/actions/setup-asdf
+        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@main  # zizmor: ignore[unpinned-uses]
 
       - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7  # v5.0.4
         with:
@@ -411,7 +411,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup asdf and install dependencies
-        uses: ./.github/actions/setup-asdf
+        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@main  # zizmor: ignore[unpinned-uses]
 
       - name: Build Helm charts
         run: mage ChartsBuild
