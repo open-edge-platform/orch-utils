@@ -4,7 +4,7 @@
 
 module github.com/vmware-tanzu/graph-framework-for-microservices/compiler/example/output/generated
 
-go 1.25.7
+go 1.26.1
 
 replace github.com/vmware-tanzu/graph-framework-for-microservices/gqlgen => ../../../../gqlgen
 

@@ -4,7 +4,7 @@
 
 module github.com/vmware-tanzu/graph-framework-for-microservices/compiler/example/datamodel
 
-go 1.25.7
+go 1.26.1
 
 require (
 	github.com/vmware-tanzu/cartographer v1.2.0

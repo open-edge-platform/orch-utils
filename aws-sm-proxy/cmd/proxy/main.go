@@ -38,7 +38,9 @@ func main() {
 	}
 
 	if proxy := os.Getenv("HTTPS_PROXY"); proxy != "" {
+		// #nosec G706 -- proxy values are from trusted environment configuration
 		log.Printf("https proxy value is: %s", proxy)
+		// #nosec G706 -- NO_PROXY is from trusted environment configuration
 		log.Printf("no proxy value is: %s", os.Getenv("NO_PROXY"))
 		cfg.HTTPClient = &http.Client{Timeout: 15 * time.Second}
 	}

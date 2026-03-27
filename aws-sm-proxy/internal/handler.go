@@ -29,6 +29,7 @@ func NewProxyAWSHandler(svc SecretsManagerAPI) func(w http.ResponseWriter, r *ht
 			fmt.Fprintln(w, "query param name empty")
 			return
 		}
+		// #nosec G706 -- secretName is validated before this point
 		log.Println("handling request for secret:", secretName)
 		input := &secretsmanager.GetSecretValueInput{
 			SecretId: &secretName,

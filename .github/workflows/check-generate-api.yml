@@ -1,7 +1,7 @@
-# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-FileCopyrightText: (C) 2026 Intel Corporation
+#
 # SPDX-License-Identifier: Apache-2.0
 ---
-
 name: Validate and Generate OpenAPI
 
 on:
@@ -30,7 +30,7 @@ jobs:
           persist-credentials: false
 
       - name: Bootstrap CI environment
-        uses: open-edge-platform/orch-ci/.github/actions/bootstrap@388f7e2aa884295786ed363fc97d3fd45e57e12a  # 2026.0.8
+        uses: open-edge-platform/orch-ci/.github/actions/bootstrap@d40dfda9598df896aa20cb1dc2c950d6444e8fa7  # 2026.0.19
         with:
           gh_token: ${{ secrets.SYS_EMF_GH_TOKEN }}
 

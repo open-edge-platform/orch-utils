@@ -6,6 +6,6 @@ apiVersion: v2
 name: nexus-api-gw
 description: Multi Tenancy HTTP API GW
 type: application
-version: 26.0.9
-appVersion: "26.0.9"
+version: 26.1.0
+appVersion: "26.1.0"
 annotations: {}
