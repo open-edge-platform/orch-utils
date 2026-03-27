@@ -4,7 +4,7 @@
 
 module github.com/vmware-tanzu/graph-framework-for-microservices/gqlgen
 
-go 1.25.7
+go 1.25.8
 
 require (
 	github.com/gorilla/websocket v1.5.3

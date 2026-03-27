@@ -4,7 +4,7 @@
 
 module github.com/vmware-tanzu/graph-framework-for-microservices/compiler
 
-go 1.25.7
+go 1.25.8
 
 require (
 	github.com/fatih/structtag v1.2.0

@@ -4,7 +4,7 @@
 
 module github.com/vmware-tanzu/graph-framework-for-microservices/install-validator
 
-go 1.25.7
+go 1.25.8
 
 require (
 	github.com/golang/mock v1.6.0
