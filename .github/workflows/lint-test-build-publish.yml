@@ -36,7 +36,7 @@ jobs:
     if: github.event_name == 'pull_request'
     permissions:
       contents: read
-    uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@ec19d9d4f47ec4817d001867e5b32c90212ddbd7  # 2026.0.17
+    uses: open-edge-platform/orch-ci/.github/workflows/pre-merge.yml@d40dfda9598df896aa20cb1dc2c950d6444e8fa7  # 2026.0.19
     with:
       run_version_check: false
       run_build: false
@@ -63,7 +63,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup asdf and install dependencies
-        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@ec19d9d4f47ec4817d001867e5b32c90212ddbd7
+        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@d40dfda9598df896aa20cb1dc2c950d6444e8fa7  # 2026.0.19
 
       - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7  # v5.0.4
         with:
@@ -97,7 +97,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup asdf and install dependencies
-        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@ec19d9d4f47ec4817d001867e5b32c90212ddbd7
+        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@d40dfda9598df896aa20cb1dc2c950d6444e8fa7  # 2026.0.19
 
       - name: Run lint
         run: mage lint:helm
@@ -120,7 +120,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup asdf and install dependencies
-        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@ec19d9d4f47ec4817d001867e5b32c90212ddbd7
+        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@d40dfda9598df896aa20cb1dc2c950d6444e8fa7  # 2026.0.19
 
       - name: Run lint
         run: mage lint:yaml
@@ -142,7 +142,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup asdf and install dependencies
-        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@ec19d9d4f47ec4817d001867e5b32c90212ddbd7
+        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@d40dfda9598df896aa20cb1dc2c950d6444e8fa7  # 2026.0.19
 
       - name: Lint Dockerfiles using hadolint
         run: mage lint:dockerfiles
@@ -232,7 +232,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup asdf and install dependencies
-        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@ec19d9d4f47ec4817d001867e5b32c90212ddbd7
+        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@d40dfda9598df896aa20cb1dc2c950d6444e8fa7  # 2026.0.19
 
       # TODO: This is a temporary solution for buildall script
       # We need to find a long term solution that leverages orch-ci workflow
@@ -290,7 +290,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup asdf and install dependencies
-        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@ec19d9d4f47ec4817d001867e5b32c90212ddbd7
+        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@d40dfda9598df896aa20cb1dc2c950d6444e8fa7  # 2026.0.19
 
       - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7  # v5.0.4
         with:
@@ -347,7 +347,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup asdf and install dependencies
-        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@ec19d9d4f47ec4817d001867e5b32c90212ddbd7
+        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@d40dfda9598df896aa20cb1dc2c950d6444e8fa7  # 2026.0.19
 
       - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7  # v5.0.4
         with:
@@ -411,7 +411,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup asdf and install dependencies
-        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@ec19d9d4f47ec4817d001867e5b32c90212ddbd7
+        uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@d40dfda9598df896aa20cb1dc2c950d6444e8fa7  # 2026.0.19
 
       - name: Build Helm charts
         run: mage ChartsBuild
@@ -443,7 +443,7 @@ jobs:
       actions: read
       id-token: write
     if: github.event_name == 'push' && ( github.ref == 'refs/heads/main' || github.ref == 'refs/heads/main-pass-validation' )
-    uses: open-edge-platform/orch-ci/.github/workflows/post-merge.yml@ec19d9d4f47ec4817d001867e5b32c90212ddbd7  # 2026.0.17
+    uses: open-edge-platform/orch-ci/.github/workflows/post-merge.yml@d40dfda9598df896aa20cb1dc2c950d6444e8fa7  # 2026.0.19
     with:
       run_build: false
       run_version_tag: true

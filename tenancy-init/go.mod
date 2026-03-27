@@ -4,7 +4,7 @@
 
 module github.com/open-edge-platform/orch-utils/tenancy-init
 
-go 1.25.8
+go 1.26.1
 
 require (
 	github.com/Nerzal/gocloak/v13 v13.9.0
