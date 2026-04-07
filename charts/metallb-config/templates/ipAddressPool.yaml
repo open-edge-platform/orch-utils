@@ -1,8 +1,26 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-FileCopyrightText: 2026 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
 ---
 
+{{- if and (eq .Values.TraefikIP .Values.ArgoIP) (eq .Values.TraefikIP .Values.HaproxyIP) }}
+# Single-IP mode: one shared pool for all services.
+# MetalLB rejects overlapping /32 pools, so when all three IPs are the same we
+# create a single pool. Services sharing the IP must use different ports and the
+# metallb.universe.tf/allow-shared-ip annotation.
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: orch-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - "{{ .Values.TraefikIP }}/32"
+  autoAssign: true
+  avoidBuggyIPs: true
+
+{{- else }}
+# Multi-IP mode: separate pools per service
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
@@ -49,3 +67,4 @@ spec:
     priority: 1
     namespaces:
       - orch-boots
+{{- end }}
