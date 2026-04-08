@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 {{- $keycloakJwksUrlPortPath := printf "%s:%s%s" (required "A valid keycloakJwksUrl required!" .Values.keycloakJwksUrl )  (required "A valid keycloakServicePort required!" .Values.keycloakServicePort | toString )  (required "A valid keycloakJwksPath required!" .Values.keycloakJwksPath) -}}
+{{- if .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -24,6 +25,7 @@ spec:
   endpoints:
     - port: metrics
       interval: 30s
+{{- end }}
 {{- if .Values.tlsOption }}
 ---
 apiVersion: {{ .Values.traefikApiGroup }}
@@ -680,7 +682,7 @@ metadata:
   namespace: orch-gateway
 spec:
   inFlightConn:
-    amount: {{ required "A valid tcpLimit.connectionLimit entry required!" .Values.tcpLimit.connectionLimit }} 
+    amount: {{ required "A valid tcpLimit.connectionLimit entry required!" .Values.tcpLimit.connectionLimit }}
 ---
 apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
