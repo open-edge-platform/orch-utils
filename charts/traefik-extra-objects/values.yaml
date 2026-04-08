@@ -3,6 +3,9 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 
+serviceMonitor:
+  enabled: true
+
 orchSecretName: tls-orch
 keycloakJwksUrl: http://platform-keycloak.orch-platform.svc
 keycloakJwksPath: /realms/master/protocol/openid-connect/certs
