@@ -2,8 +2,38 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 ---
-
 enableDatabaseNamespace: true
-
 serviceMonitor:
   enabled: true
+
+envoyFilter:
+  enabled: true
+
+peerAuthentication:
+  enabled: true
+
+proxyConfig:
+  enabled: true
+
+virtualServices:
+  enabled: true
+
+authorizationPolicy:
+  orch-infra:
+    enabled: true
+  orch-app:
+    enabled: true
+  orch-cluster:
+    enabled: true
+  orch-ui:
+    enabled: true
+  orch-platform:
+    enabled: true
+  orch-gateway:
+    enabled: true
+  orch-sre:
+    enabled: true
+  orch-harbor:
+    enabled: true
+  orch-database:
+    enabled: true

@@ -8,3 +8,12 @@ certDomain:
 
 # Should be disabled for cloud deployments, where tls-orch secret will be supplied in advance
 generateOrchCert: false
+
+# Enable/disable per-namespace resources
+namespaces:
+  orch-harbor:
+    enabled: true
+  orch-app:
+    enabled: true
+  orch-cluster:
+    enabled: true
