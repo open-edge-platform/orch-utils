@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+{{- if .Values.peerAuthentication.enabled }}
 ---
 
 apiVersion: security.istio.io/v1beta1
@@ -11,3 +12,4 @@ metadata:
 spec:
   mtls:
     mode: PERMISSIVE
+{{- end }}
