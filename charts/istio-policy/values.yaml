@@ -4,7 +4,7 @@
 ---
 
 serviceMonitor:
-  enabled: false
+  enabled: true
 
 envoyFilter:
   enabled: true
