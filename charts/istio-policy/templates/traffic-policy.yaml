@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+{{- if (index .Values.authorizationPolicy "orch-infra").enabled }}
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -26,6 +27,8 @@ spec:
         - "9095" # edgenode-observability-loki (TCP)
         - "9094" # edgenode-alerting-alertmanager (TCP)
         - "4433"  # AMT CIRA
+{{- end }}
+{{- if (index .Values.authorizationPolicy "orch-app").enabled }}
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -46,6 +49,8 @@ spec:
         - "11211" # memcache
         - "9443" # adm webhook service
         - "3310" # malware scanner
+{{- end }}
+{{- if (index .Values.authorizationPolicy "orch-cluster").enabled }}
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -65,6 +70,8 @@ spec:
         - "5432" # Postgresql
         - "11211" # memcache
         - "9443" # cluster-manager webhook service
+{{- end }}
+{{- if (index .Values.authorizationPolicy "orch-ui").enabled }}
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -78,6 +85,8 @@ spec:
     - operation:
         hosts:
         - "*"
+{{- end }}
+{{- if (index .Values.authorizationPolicy "orch-platform").enabled }}
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -104,6 +113,38 @@ spec:
         - "3100" # orchestrator-observability-loki (TCP)
         - "9095" # orchestrator-observability-loki (TCP)
         - "8443" # rs-proxy
+{{- end }}
+{{- if (index .Values.authorizationPolicy "orch-gateway").enabled }}
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-to-orch-gateway
+  namespace: orch-gateway
+spec:
+  action: ALLOW
+  rules:
+  - to:
+    - operation:
+        hosts:
+        - "*"
+{{- end }}
+{{- if (index .Values.authorizationPolicy "orch-sre").enabled }}
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-to-orch-sre
+  namespace: orch-sre
+spec:
+  action: ALLOW
+  rules:
+  - to:
+    - operation:
+        hosts:
+        - "*"
+{{- end }}
+{{- if (index .Values.authorizationPolicy "orch-harbor").enabled }}
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -124,33 +165,8 @@ spec:
         - "5432" # Postgresql
         - "6379" # Redis
         - "7899" # notary-signer
----
-apiVersion: security.istio.io/v1beta1
-kind: AuthorizationPolicy
-metadata:
-  name: allow-to-orch-gateway
-  namespace: orch-gateway
-spec:
-  action: ALLOW
-  rules:
-  - to:
-    - operation:
-        hosts:
-        - "*"
----
-apiVersion: security.istio.io/v1beta1
-kind: AuthorizationPolicy
-metadata:
-  name: allow-to-orch-sre
-  namespace: orch-sre
-spec:
-  action: ALLOW
-  rules:
-  - to:
-    - operation:
-        hosts:
-        - "*"
-{{- if .Values.enableDatabaseNamespace }}
+{{- end }}
+{{- if (index .Values.authorizationPolicy "orch-database").enabled }}
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
