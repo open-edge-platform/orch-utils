@@ -10,6 +10,7 @@ metadata:
   namespace: cert-manager
 spec:
   selfSigned: {}
+{{- if (index .Values.namespaces "orch-harbor").enabled }}
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -26,6 +27,7 @@ metadata:
     kubernetes.io/service-account.name: "orch-svc"
 type: kubernetes.io/service-account-token
 data: {}
+{{- end }}
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -42,6 +44,7 @@ metadata:
     kubernetes.io/service-account.name: "orch-svc"
 type: kubernetes.io/service-account-token
 data: {}
+{{- if (index .Values.namespaces "orch-app").enabled }}
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -58,6 +61,8 @@ metadata:
     kubernetes.io/service-account.name: "orch-svc"
 type: kubernetes.io/service-account-token
 data: {}
+{{- end }}
+{{- if (index .Values.namespaces "orch-cluster").enabled }}
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -79,6 +84,7 @@ metadata:
     kubernetes.io/service-account.name: "orch-svc"
 type: kubernetes.io/service-account-token
 data: {}
+{{- end }}
 ---
 ##
 ## certs for https connections to orch-platform
@@ -187,6 +193,7 @@ data:
     - rps-wss.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - device-manager-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - connect-gateway.{{ required "A valid certDomain entry required!" .Values.certDomain }}
+{{- if (index .Values.namespaces "orch-cluster").enabled }}
 ---
 # FIXME: The following ClusterRole and ClusterRoleBinding should be installed by CTM chart.
 #        However there is an issue where the db migration job gets executed as PreSync hook before these are created.
@@ -244,3 +251,4 @@ subjects:
   - name: "orch-svc"
     kind: ServiceAccount
     namespace: orch-cluster
+{{- end }}
