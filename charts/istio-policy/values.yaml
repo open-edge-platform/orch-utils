@@ -4,3 +4,6 @@
 ---
 
 enableDatabaseNamespace: true
+
+serviceMonitor:
+  enabled: true

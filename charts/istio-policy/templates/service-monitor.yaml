@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+{{- if .Values.serviceMonitor.enabled }}
 ---
 
 apiVersion: monitoring.coreos.com/v1
@@ -52,3 +53,4 @@ spec:
   endpoints:
     - port: http-monitoring
       interval: 15m
+{{- end }}
