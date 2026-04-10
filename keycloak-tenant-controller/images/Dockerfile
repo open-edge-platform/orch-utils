@@ -22,11 +22,10 @@ COPY . /usr/src/keycloak-tenant-controller/
 WORKDIR /usr/src/keycloak-tenant-controller/
 
 RUN echo "Using commit ID $KTC_GIT_COMMIT"
-RUN	apt-get update && apt-get -y install --no-install-recommends -o APT::Keep-Downloaded-Packages=false build-essential=12.12 sudo=1.9.16p2-3+deb13u1 \
-	&& apt-get clean \
-	&& rm -rf /var/lib/apt/lists/* \
-	&& go install github.com/magefile/mage@v1.15.0 \
-	&& mage binary:build
+RUN mkdir -p ./bin \
+	&& CGO_ENABLED=0 go build -mod=vendor -trimpath \
+	   -ldflags="-w -s -buildid= -X 'main.Commit=${KTC_GIT_COMMIT}'" \
+	   -o ./bin/ktc ./cmd/
 
 FROM gcr.io/distroless/base:nonroot@sha256:a696c7c8545ba9b2b2807ee60b8538d049622f0addd85aee8cec3ec1910de1f9
 
