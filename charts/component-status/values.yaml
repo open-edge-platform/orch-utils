@@ -98,6 +98,7 @@ traefikRoute:
   tlsOption: ""
   middlewares:
     - validate-jwt
+    - cors
     - secure-headers
 
 # Component Status Configuration
