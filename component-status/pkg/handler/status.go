@@ -34,9 +34,10 @@ func (h *StatusHandler) GetStatus(w http.ResponseWriter, r *http.Request) {
 
 	// Set response headers
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Cache-Control", "public, max-age=3600")
-
-	// Encode and send the configuration as JSON
+	w.Header().Set("Cache-Control", "no-store")
+	// Expose the Date header so browsers can read orchestrator time
+	// from a cross-origin fetch (used by the UI to display the clock).
+	w.Header().Set("Access-Control-Expose-Headers", "Date")
 	if err := json.NewEncoder(w).Encode(h.config); err != nil {
 		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
 		return
