@@ -8,4 +8,4 @@ name: component-status
 description: A Helm chart for the Orchestrator Component Status Service
 type: application
 version: 26.1.2
-appVersion: "26.1.1"
+appVersion: "26.1.2"
