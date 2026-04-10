@@ -81,6 +81,8 @@ spec:
       - {{ $origin }}
     {{- end }}
     accessControlAllowCredentials: true
+    accessControlExposeHeaders:
+      - "Date"
     accessControlMaxAge: 100
     addVaryHeader: true
     stsSeconds: 31536000
