@@ -5,6 +5,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -75,6 +76,9 @@ func DefaultConfig() *Config {
 }
 
 // Load reads a YAML config file and merges it with defaults.
+// After loading the file, it checks for standard PostgreSQL environment
+// variables (PGHOST, PGUSER, PGPASSWORD, PGDATABASE, PGPORT) and
+// constructs a database URL from them if present, overriding the file value.
 func Load(path string) (*Config, error) {
 	cfg := DefaultConfig()
 	if path == "" {
@@ -87,7 +91,36 @@ func Load(path string) (*Config, error) {
 	if err := yaml.Unmarshal(data, cfg); err != nil {
 		return nil, err
 	}
+	// Standard PG* env vars (from mounted postgresql secret) override config.
+	if dbURL := databaseURLFromEnv(); dbURL != "" {
+		cfg.DatabaseURL = dbURL
+	}
 	return cfg, nil
+}
+
+// databaseURLFromEnv constructs a Postgres connection URL from standard
+// PG* environment variables. Returns "" if the required vars aren't set.
+func databaseURLFromEnv() string {
+	host := os.Getenv("PGHOST")
+	user := os.Getenv("PGUSER")
+	if host == "" || user == "" {
+		return ""
+	}
+	password := os.Getenv("PGPASSWORD")
+	dbName := os.Getenv("PGDATABASE")
+	if dbName == "" {
+		dbName = "tenancy"
+	}
+	port := os.Getenv("PGPORT")
+	if port == "" {
+		port = "5432"
+	}
+	sslmode := os.Getenv("PGSSLMODE")
+	if sslmode == "" {
+		sslmode = "disable"
+	}
+	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s",
+		user, password, host, port, dbName, sslmode)
 }
 
 // ControllersForResource returns the registered controller names for a

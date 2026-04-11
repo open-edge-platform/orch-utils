@@ -77,6 +77,10 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
+postgres: {}
+# postgres:
+#   secrets: iam-tenancy-local-postgresql  # name of the K8s secret with PG* env vars
+
 nodeSelector: {}
 
 tolerations: []

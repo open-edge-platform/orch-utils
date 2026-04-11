@@ -61,7 +61,13 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
         command:
         - /usr/local/bin/tenancy-manager
-        - -serviceaccount
+        {{- if .Values.postgres }}
+        {{- if .Values.postgres.secrets }}
+        envFrom:
+        - secretRef:
+            name: {{ .Values.postgres.secrets }}
+        {{- end }}
+        {{- end }}
         env:
         - name: LOG_LEVEL
           value: {{ .Values.logging.level }}
