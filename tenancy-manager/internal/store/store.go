@@ -478,8 +478,7 @@ func (s *Store) SynthesizeReplayEvents(ctx context.Context) ([]ReplayEvent, int6
 	var maxID int64
 	e, err := tx.TenancyEvent.Query().
 		Order(ent.Desc(tenancyevent.FieldID)).
-		Limit(1).
-		Only(ctx)
+		First(ctx)
 	if ent.IsNotFound(err) {
 		maxID = 0
 	} else if err != nil {
