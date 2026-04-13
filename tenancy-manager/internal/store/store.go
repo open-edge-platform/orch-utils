@@ -837,7 +837,12 @@ func (s *Store) cleanOrphanedStatuses(ctx context.Context, resourceType string, 
 // --- Bootstrap ---
 
 // Bootstrap creates the default org and project if they don't exist.
+// Skips if either name is empty.
 func (s *Store) Bootstrap(ctx context.Context, orgName, projectName string) error {
+	if orgName == "" || projectName == "" {
+		log.Info().Msg("bootstrap skipped (default org/project names not configured)")
+		return nil
+	}
 	_, err := s.GetOrg(ctx, orgName)
 	if err == nil {
 		log.Info().Str("org", orgName).Msg("default org already exists, skipping bootstrap")

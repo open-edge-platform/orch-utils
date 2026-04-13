@@ -56,8 +56,8 @@ func DefaultConfig() *Config {
 		ListenAddr:         ":8080",
 		EventRetention:     7 * 24 * time.Hour,
 		CleanupInterval:    1 * time.Minute,
-		DefaultOrgName:     "default",
-		DefaultProjectName: "default",
+		DefaultOrgName:     "",
+		DefaultProjectName: "",
 		Controllers: ControllersConfig{
 			Org: []string{
 				"keycloak-tenant-controller",
