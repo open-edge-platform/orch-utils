@@ -25,7 +25,7 @@ operator:
 
   # Container image (resolved from Chart.yaml annotations)
   image: '{{ index .Chart.Annotations "keycloak-upstream-operator-image" }}'
-  imagePullPolicy: Always
+  imagePullPolicy: IfNotPresent
 
   # Related Keycloak image for operator to deploy
   relatedImage:
