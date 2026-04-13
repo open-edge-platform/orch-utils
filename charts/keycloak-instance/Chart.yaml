@@ -6,10 +6,10 @@ apiVersion: v2
 name: keycloak-instance
 description: Keycloak Operator deployment with realm configuration
 type: application
-version: 26.1.2
-appVersion: "26.1.2"
+version: 26.2.0
+appVersion: "26.2.0"
 annotations:
   # Keycloak upstream version information
-  keycloak-upstream-version: "26.5.3"
-  keycloak-upstream-keycloak-image: "quay.io/keycloak/keycloak:26.5.3"
+  keycloak-upstream-version: "26.6.0"
+  keycloak-upstream-keycloak-image: "quay.io/keycloak/keycloak:26.6.0"
   keycloak-config-cli-image: "docker.io/adorsys/keycloak-config-cli:6.4.0-26"

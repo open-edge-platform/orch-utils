@@ -44,7 +44,7 @@ spec:
       {{- end }}
       containers:
         - name: {{ .Values.keycloakConfigCli.job.container.name }}
-          image: {{ .Values.keycloakConfigCli.job.container.image }}
+          image: {{ tpl .Values.keycloakConfigCli.job.container.image . }}
           imagePullPolicy: {{ .Values.keycloakConfigCli.job.container.imagePullPolicy }}
           env:
             {{- toYaml .Values.keycloakConfigCli.job.container.env | nindent 12 }}

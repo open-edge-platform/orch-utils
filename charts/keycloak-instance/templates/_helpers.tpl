@@ -38,3 +38,14 @@ Get the cluster domain from values or default
 {{- "kind.internal" }}
 {{- end }}
 {{- end }}
+
+{{/*
+Resolve versioned images from chart metadata.
+*/}}
+{{- define "keycloak-instance.keycloakImage" -}}
+{{- index .Chart.Annotations "keycloak-upstream-keycloak-image" -}}
+{{- end }}
+
+{{- define "keycloak-instance.configCliImage" -}}
+{{- index .Chart.Annotations "keycloak-config-cli-image" -}}
+{{- end }}

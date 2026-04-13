@@ -5,11 +5,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations: {{- toYaml .Values.operator.annotations | nindent 4 }}
+  annotations: {{- tpl (toYaml .Values.operator.annotations) . | nindent 4 }}
   labels:
+    helm.sh/chart: {{ include "keycloak-operator.chart" . }}
     app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
-    {{- include "keycloak-operator.labels" . | nindent 4 }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ include "keycloak-operator.upstreamVersion" . | quote }}
+    app.kubernetes.io/managed-by: quarkus
   name: keycloak-operator
   namespace: {{ .Values.namespace }}
 spec:
@@ -19,10 +21,10 @@ spec:
       app.kubernetes.io/name: keycloak-operator
   template:
     metadata:
-      annotations: {{- toYaml .Values.operator.annotations | nindent 8 }}
+      annotations: {{- tpl (toYaml .Values.operator.annotations) . | nindent 8 }}
       labels:
         app.kubernetes.io/name: keycloak-operator
-        app.kubernetes.io/version: {{ .Chart.AppVersion }}
+        app.kubernetes.io/version: {{ include "keycloak-operator.upstreamVersion" . | quote }}
         {{- with .Values.operator.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -31,11 +33,11 @@ spec:
       serviceAccountName: {{ .Values.operator.serviceAccountName }}
       containers:
         - name: {{ .Values.operator.container.name }}
-          image: {{ .Values.operator.image }}
+          image: {{ tpl .Values.operator.image . }}
           imagePullPolicy: {{ .Values.operator.imagePullPolicy }}
           securityContext: {{- toYaml .Values.operator.container.securityContext | nindent 12 }}
           ports: {{- toYaml .Values.operator.container.ports | nindent 12 }}
-          env: {{- toYaml .Values.operator.container.env | nindent 12 }}
+          env: {{- tpl (toYaml .Values.operator.container.env) . | nindent 12 }}
           livenessProbe: {{- toYaml .Values.operator.container.livenessProbe | nindent 12 }}
           readinessProbe: {{- toYaml .Values.operator.container.readinessProbe | nindent 12 }}
           startupProbe: {{- toYaml .Values.operator.container.startupProbe | nindent 12 }}

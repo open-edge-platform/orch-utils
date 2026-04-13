@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
-apiVersion: k8s.keycloak.org/v2alpha1
+apiVersion: k8s.keycloak.org/v2beta1
 kind: Keycloak
 metadata:
   name: platform-keycloak
@@ -11,7 +11,7 @@ metadata:
     app.kubernetes.io/instance: platform-keycloak
     app.kubernetes.io/version: {{ index .Chart.Annotations "keycloak-upstream-version" | quote }}
 spec:
-  image: {{ .Values.keycloak.image }}
+  image: {{ tpl .Values.keycloak.image . }}
   startOptimized: {{ .Values.keycloak.startOptimized }}
   
   bootstrapAdmin:
@@ -64,7 +64,7 @@ spec:
         initContainers:
           {{- range .Values.keycloak.podTemplate.initContainers }}
           - name: {{ .name }}
-            image: {{ .image }}
+            image: {{ tpl .image $ }}
             imagePullPolicy: {{ .imagePullPolicy }}
             command:
               {{- toYaml .command | nindent 14 }}

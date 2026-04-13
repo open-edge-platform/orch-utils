@@ -23,7 +23,7 @@ namespace: orch-platform
 # Keycloak instance configuration (Keycloak CRD)
 keycloak:
   # Container image (resolved from Chart.yaml annotations)
-  image: "quay.io/keycloak/keycloak:26.5.3"
+  image: '{{ index .Chart.Annotations "keycloak-upstream-keycloak-image" }}'
   imagePullPolicy: IfNotPresent
 
   # Bootstrap admin credentials
@@ -106,7 +106,7 @@ keycloak:
     # Init container for building optimized Keycloak image
     initContainers:
       - name: keycloak-builder
-        image: "quay.io/keycloak/keycloak:26.5.3"
+        image: '{{ index .Chart.Annotations "keycloak-upstream-keycloak-image" }}'
         imagePullPolicy: IfNotPresent
         command:
           - /bin/bash
@@ -1453,7 +1453,7 @@ keycloakConfigCli:
     # Main container configuration
     container:
       name: keycloak-config-cli
-      image: "docker.io/adorsys/keycloak-config-cli:6.4.0-26"
+      image: '{{ index .Chart.Annotations "keycloak-config-cli-image" }}'
       imagePullPolicy: IfNotPresent
 
       # Environment variables for keycloak-config-cli

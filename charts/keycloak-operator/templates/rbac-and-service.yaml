@@ -7,12 +7,12 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   annotations:
-    app.quarkus.io/quarkus-version: 3.27.0
-    app.quarkus.io/vcs-uri: https://github.com/keycloak/keycloak.git
-    app.quarkus.io/build-timestamp: 2025-10-23 - 07:06:46 +0000
+    app.quarkus.io/quarkus-version: {{ include "keycloak-operator.quarkusVersion" . | quote }}
+    app.quarkus.io/vcs-uri: {{ include "keycloak-operator.vcsUri" . | quote }}
+    app.quarkus.io/build-timestamp: {{ include "keycloak-operator.buildTimestamp" . | quote }}
   labels:
     app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.7
+    app.kubernetes.io/version: {{ include "keycloak-operator.upstreamVersion" . | quote }}
     app.kubernetes.io/managed-by: quarkus
   name: keycloak-operator
   namespace: {{ .Values.namespace }}
@@ -38,7 +38,7 @@ kind: ClusterRole
 metadata:
   labels:
     app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.7
+    app.kubernetes.io/version: {{ include "keycloak-operator.upstreamVersion" . | quote }}
   name: keycloakrealmimportcontroller-cluster-role
 rules:
   - apiGroups:
@@ -66,17 +66,6 @@ rules:
       - list
       - patch
       - watch
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  labels:
-    app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.7
-  name: keycloakrealmimportcontroller-role
-  namespace: {{ .Values.namespace }}
-rules:
   - apiGroups:
       - ""
     resources:
@@ -96,7 +85,7 @@ kind: ClusterRole
 metadata:
   labels:
     app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.7
+    app.kubernetes.io/version: {{ include "keycloak-operator.upstreamVersion" . | quote }}
   name: keycloakcontroller-cluster-role
 rules:
   - apiGroups:
@@ -114,41 +103,6 @@ rules:
       - create
       - delete
   - apiGroups:
-      - monitoring.coreos.com
-    resources:
-      - servicemonitors
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
-  - apiGroups:
-      - apps
-    resources:
-      - statefulsets
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  labels:
-    app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.7
-  name: keycloakcontroller-role
-  namespace: {{ .Values.namespace }}
-rules:
-  - apiGroups:
       - ""
     resources:
       - services
@@ -161,9 +115,33 @@ rules:
       - update
       - watch
   - apiGroups:
+      - monitoring.coreos.com
+    resources:
+      - servicemonitors
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
       - networking.k8s.io
     resources:
       - networkpolicies
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - statefulsets
     verbs:
       - create
       - delete
@@ -249,6 +227,10 @@ rules:
       - get
       - list
       - watch
+      - create
+      - delete
+      - patch
+      - update
   - apiGroups:
       - ""
     resources:
@@ -281,6 +263,10 @@ rules:
       - get
       - list
       - watch
+      - create
+      - delete
+      - patch
+      - update
   - apiGroups:
       - monitoring.coreos.com
     resources:
@@ -292,6 +278,7 @@ rules:
       - list
       - update
       - watch
+      - patch
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -316,7 +303,7 @@ kind: RoleBinding
 metadata:
   labels:
     app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.7
+    app.kubernetes.io/version: {{ include "keycloak-operator.upstreamVersion" . | quote }}
   name: keycloakrealmimportcontroller-role-binding
   namespace: {{ .Values.namespace }}
 roleRef:
@@ -334,25 +321,7 @@ kind: RoleBinding
 metadata:
   labels:
     app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.7
-  name: keycloakrealmimportcontroller-secrets-role-binding
-  namespace: {{ .Values.namespace }}
-roleRef:
-  kind: Role
-  apiGroup: rbac.authorization.k8s.io
-  name: keycloakrealmimportcontroller-role
-subjects:
-  - kind: ServiceAccount
-    name: keycloak-operator
-    namespace: {{ .Values.namespace }}
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  labels:
-    app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.7
+    app.kubernetes.io/version: {{ include "keycloak-operator.upstreamVersion" . | quote }}
   name: keycloakcontroller-role-binding
   namespace: {{ .Values.namespace }}
 roleRef:
@@ -370,25 +339,7 @@ kind: RoleBinding
 metadata:
   labels:
     app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.7
-  name: keycloakcontroller-secrets-role-binding
-  namespace: {{ .Values.namespace }}
-roleRef:
-  kind: Role
-  apiGroup: rbac.authorization.k8s.io
-  name: keycloakcontroller-role
-subjects:
-  - kind: ServiceAccount
-    name: keycloak-operator
-    namespace: {{ .Values.namespace }}
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  labels:
-    app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.7
+    app.kubernetes.io/version: {{ include "keycloak-operator.upstreamVersion" . | quote }}
   name: keycloak-operator-view
   namespace: {{ .Values.namespace }}
 roleRef:
@@ -405,12 +356,12 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    app.quarkus.io/quarkus-version: 3.27.0
-    app.quarkus.io/vcs-uri: https://github.com/keycloak/keycloak.git
-    app.quarkus.io/build-timestamp: 2025-10-23 - 07:06:46 +0000
+    app.quarkus.io/quarkus-version: {{ include "keycloak-operator.quarkusVersion" . | quote }}
+    app.quarkus.io/vcs-uri: {{ include "keycloak-operator.vcsUri" . | quote }}
+    app.quarkus.io/build-timestamp: {{ include "keycloak-operator.buildTimestamp" . | quote }}
   labels:
     app.kubernetes.io/name: keycloak-operator
-    app.kubernetes.io/version: 26.4.7
+    app.kubernetes.io/version: {{ include "keycloak-operator.upstreamVersion" . | quote }}
     app.kubernetes.io/managed-by: quarkus
   name: keycloak-operator
   namespace: {{ .Values.namespace }}

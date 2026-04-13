@@ -33,6 +33,25 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
+Keycloak upstream metadata helpers.
+*/}}
+{{- define "keycloak-operator.upstreamVersion" -}}
+{{- index .Chart.Annotations "keycloak-upstream-version" -}}
+{{- end }}
+
+{{- define "keycloak-operator.quarkusVersion" -}}
+{{- index .Chart.Annotations "keycloak-quarkus-version" -}}
+{{- end }}
+
+{{- define "keycloak-operator.vcsUri" -}}
+{{- index .Chart.Annotations "keycloak-vcs-uri" -}}
+{{- end }}
+
+{{- define "keycloak-operator.buildTimestamp" -}}
+{{- index .Chart.Annotations "keycloak-build-timestamp" -}}
+{{- end }}
+
+{{/*
 Common labels
 */}}
 {{- define "keycloak-operator.labels" -}}
