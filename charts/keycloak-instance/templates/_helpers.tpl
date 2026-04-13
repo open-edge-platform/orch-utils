@@ -1,5 +1,5 @@
 {{/*
-SPDX-FileCopyrightText: 2025 Intel Corporation
+SPDX-FileCopyrightText: 2026 Intel Corporation
 SPDX-License-Identifier: Apache-2.0
 
 Create chart name and version as used by the chart label.
