@@ -6,8 +6,8 @@ apiVersion: v2
 name: keycloak-operator
 description: Keycloak Operator for managing Keycloak instances via CRDs
 type: application
-version: 26.2.0
-appVersion: "26.2.0"
+version: 26.1.3
+appVersion: "26.1.3"
 annotations:
   # Keycloak upstream version information
   keycloak-upstream-version: "26.6.0"
