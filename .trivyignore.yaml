@@ -92,7 +92,7 @@ misconfigurations:
   - id: AVD-KSV-0056
     paths:
       - "charts/keycloak-operator/templates/rbac-and-service.yaml"
-    statement: Official Keycloak Operator v26.4.5 RBAC permissions. Required for operator to manage services, ingresses, and network policies. Scoped to keycloak-system namespace via RoleBinding. Acceptable risk in controlled K8s environments with admission controls.
+    statement: Official Keycloak Operator v26.6.0 RBAC permissions. Required for operator to manage services, ingresses, and network policies. Scoped to the release namespace via RoleBinding. Acceptable risk in controlled K8s environments with admission controls.
 
   - id: AVD-KSV-0113
     paths:
@@ -102,12 +102,17 @@ misconfigurations:
   - id: AVD-KSV-0048
     paths:
       - "charts/keycloak-operator/templates/rbac-and-service.yaml"
-    statement: Official Keycloak Operator v26.4.5 RBAC permissions. Operator requires create/update/patch/delete on statefulsets and jobs to manage Keycloak pod lifecycle and configuration jobs. Limited to keycloak-system namespace via RoleBinding. Acceptable risk in controlled K8s environments.
+    statement: Official Keycloak Operator v26.6.0 RBAC permissions. Operator requires create/update/patch/delete on statefulsets and jobs to manage Keycloak pod lifecycle and configuration jobs. Limited to the release namespace via RoleBinding. Acceptable risk in controlled K8s environments.
 
   - id: AVD-KSV-0113
     paths:
       - "charts/keycloak-operator/templates/rbac-and-service.yaml"
-    statement: Official Keycloak Operator v26.4.5 RBAC permissions. Operator requires secret access to read bootstrap admin credentials and manage Keycloak configuration. Scoped to keycloak-system namespace via RoleBinding. Acceptable risk in controlled K8s environments.
+    statement: Official Keycloak Operator v26.6.0 RBAC permissions. Operator requires secret access to read bootstrap admin credentials and manage Keycloak configuration. Scoped to the release namespace via RoleBinding. Acceptable risk in controlled K8s environments.
+
+  - id: KSV-0041
+    paths:
+      - "charts/keycloak-operator/templates/rbac-and-service.yaml"
+    statement: Official Keycloak Operator v26.6.0 RBAC uses ClusterRoles that are only bound through namespace-scoped RoleBindings in this chart. Secret access is therefore limited to the release namespace, not cluster-wide.
 
   - id: KSV-0125
     paths:

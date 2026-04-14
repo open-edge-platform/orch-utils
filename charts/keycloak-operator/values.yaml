@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-FileCopyrightText: 2026 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
 
@@ -24,21 +24,21 @@ operator:
   replicas: 1
 
   # Container image (resolved from Chart.yaml annotations)
-  image: "quay.io/keycloak/keycloak-operator:26.5.3"
+  image: '{{ index .Chart.Annotations "keycloak-upstream-operator-image" }}'
   imagePullPolicy: IfNotPresent
 
   # Related Keycloak image for operator to deploy
   relatedImage:
-    keycloak: "quay.io/keycloak/keycloak:26.5.3"
+    keycloak: '{{ index .Chart.Annotations "keycloak-upstream-keycloak-image" }}'
 
   # Service account name
   serviceAccountName: keycloak-operator
 
   # Deployment annotations (from Chart.yaml annotations)
   annotations:
-    app.quarkus.io/quarkus-version: "3.27.1"
-    app.quarkus.io/vcs-uri: "https://github.com/keycloak/keycloak.git"
-    app.quarkus.io/build-timestamp: "2026-01-06 - 07:49:45 +0000"
+    app.quarkus.io/quarkus-version: '{{ index .Chart.Annotations "keycloak-quarkus-version" }}'
+    app.quarkus.io/vcs-uri: '{{ index .Chart.Annotations "keycloak-vcs-uri" }}'
+    app.quarkus.io/build-timestamp: '{{ index .Chart.Annotations "keycloak-build-timestamp" }}'
 
   # Pod labels (from upstream)
   podLabels:
@@ -86,8 +86,11 @@ operator:
           fieldRef:
             fieldPath: metadata.namespace
       - name: RELATED_IMAGE_KEYCLOAK
-        # Resolved from Chart.yaml annotations in templates
-        value: "quay.io/keycloak/keycloak:26.5.3"
+        value: '{{ index .Chart.Annotations "keycloak-upstream-keycloak-image" }}'
+      - name: QUARKUS_OPERATOR_SDK_CONTROLLERS_KEYCLOAKREALMIMPORTCONTROLLER_NAMESPACES
+        value: JOSDK_WATCH_CURRENT
+      - name: QUARKUS_OPERATOR_SDK_CONTROLLERS_KEYCLOAKCONTROLLER_NAMESPACES
+        value: JOSDK_WATCH_CURRENT
 
     # Liveness probe
     livenessProbe:

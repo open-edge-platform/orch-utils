@@ -1,5 +1,5 @@
 {{/*
-SPDX-FileCopyrightText: 2025 Intel Corporation
+SPDX-FileCopyrightText: 2026 Intel Corporation
 SPDX-License-Identifier: Apache-2.0
 
 Create chart name and version as used by the chart label.
@@ -37,4 +37,15 @@ Get the cluster domain from values or default
 {{- else }}
 {{- "kind.internal" }}
 {{- end }}
+{{- end }}
+
+{{/*
+Resolve versioned images from chart metadata.
+*/}}
+{{- define "keycloak-instance.keycloakImage" -}}
+{{- index .Chart.Annotations "keycloak-upstream-keycloak-image" -}}
+{{- end }}
+
+{{- define "keycloak-instance.configCliImage" -}}
+{{- index .Chart.Annotations "keycloak-config-cli-image" -}}
 {{- end }}
