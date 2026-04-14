@@ -26,9 +26,6 @@ func main() {
 	dbURL := flag.String("database-url", "", "database URL (overrides config)")
 	listenAddr := flag.String("listen", "", "listen address (overrides config)")
 	logLevel := flag.String("log-level", "info", "log level (debug, info, warn, error)")
-	// TODO: Remove once the tenancy-manager Helm chart (v26.1.0) is updated to
-	// drop the hardcoded "-serviceaccount" arg from its deployment template.
-	_ = flag.Bool("serviceaccount", false, "deprecated: accepted for chart compatibility, ignored")
 	flag.Parse()
 
 	// Logging setup.
