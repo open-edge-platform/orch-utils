@@ -65,7 +65,7 @@ jobs:
       - name: Setup asdf and install dependencies
         uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@d40dfda9598df896aa20cb1dc2c950d6444e8fa7  # 2026.0.19
 
-      - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7  # v5.0.4
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: |
             ~/.cache/go-build
@@ -292,7 +292,7 @@ jobs:
       - name: Setup asdf and install dependencies
         uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@d40dfda9598df896aa20cb1dc2c950d6444e8fa7  # 2026.0.19
 
-      - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7  # v5.0.4
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: |
             ~/.cache/go-build
@@ -349,7 +349,7 @@ jobs:
       - name: Setup asdf and install dependencies
         uses: open-edge-platform/orch-ci/.github/actions/setup-asdf@d40dfda9598df896aa20cb1dc2c950d6444e8fa7  # 2026.0.19
 
-      - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7  # v5.0.4
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
         with:
           path: |
             ~/.cache/go-build
