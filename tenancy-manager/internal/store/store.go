@@ -8,6 +8,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"strings"
 	"time"
 
 	"entgo.io/ent/dialect"
@@ -706,6 +707,7 @@ func DeriveStatusFromRows(statuses []*ent.ControllerStatus, isDeleted bool, regi
 			return "STATUS_INDICATION_DELETED", ""
 		}
 
+		var delInProgress []string
 		for _, c := range registeredControllers {
 			cs, ok := statusMap[c]
 			if !ok {
@@ -715,23 +717,42 @@ func DeriveStatusFromRows(statuses []*ent.ControllerStatus, isDeleted bool, regi
 			if cs.Status == controllerstatus.StatusError {
 				return "STATUS_INDICATION_ERROR", cs.Message
 			}
+			delInProgress = append(delInProgress, c)
 		}
 		// Any remaining rows (in_progress or completed) = still working.
-		return "STATUS_INDICATION_IN_PROGRESS", ""
+		msg := ""
+		if len(delInProgress) > 0 {
+			msg = "deleting, waiting for: " + strings.Join(delInProgress, ", ")
+		}
+		return "STATUS_INDICATION_IN_PROGRESS", msg
 	}
 
-	// Active resources.
+	// Active resources — collect pending/in-progress controllers so the
+	// status message reports which controllers we are waiting on.
+	var pending []string
+	var inProgress []string
 	for _, c := range registeredControllers {
 		cs, ok := statusMap[c]
 		if !ok {
-			return "STATUS_INDICATION_IN_PROGRESS", ""
+			pending = append(pending, c)
+			continue
 		}
 		if cs.Status == controllerstatus.StatusError {
 			return "STATUS_INDICATION_ERROR", cs.Message
 		}
 		if cs.Status == controllerstatus.StatusInProgress {
-			return "STATUS_INDICATION_IN_PROGRESS", ""
+			inProgress = append(inProgress, c)
 		}
+	}
+	if len(pending) > 0 || len(inProgress) > 0 {
+		var parts []string
+		if len(pending) > 0 {
+			parts = append(parts, "waiting for: "+strings.Join(pending, ", "))
+		}
+		if len(inProgress) > 0 {
+			parts = append(parts, "in progress: "+strings.Join(inProgress, ", "))
+		}
+		return "STATUS_INDICATION_IN_PROGRESS", strings.Join(parts, "; ")
 	}
 	return "STATUS_INDICATION_IDLE", ""
 }
