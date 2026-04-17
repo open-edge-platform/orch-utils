@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-FileCopyrightText: 2026 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
 
@@ -30,6 +30,25 @@ Create chart name and version as used by the chart label.
 */}}
 {{- define "keycloak-operator.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.AppVersion | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Keycloak upstream metadata helpers.
+*/}}
+{{- define "keycloak-operator.upstreamVersion" -}}
+{{- index .Chart.Annotations "keycloak-upstream-version" -}}
+{{- end }}
+
+{{- define "keycloak-operator.quarkusVersion" -}}
+{{- index .Chart.Annotations "keycloak-quarkus-version" -}}
+{{- end }}
+
+{{- define "keycloak-operator.vcsUri" -}}
+{{- index .Chart.Annotations "keycloak-vcs-uri" -}}
+{{- end }}
+
+{{- define "keycloak-operator.buildTimestamp" -}}
+{{- index .Chart.Annotations "keycloak-build-timestamp" -}}
 {{- end }}
 
 {{/*
