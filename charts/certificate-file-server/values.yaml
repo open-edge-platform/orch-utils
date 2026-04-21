@@ -12,6 +12,11 @@ secretName: "boots-ca-cert"
 rootMatchHost:
 orchSecretName:
 
+# Source ConfigMap containing orchestrator configuration
+sourceConfigMap:
+  name: infra-config
+  namespace: orch-infra
+
 replicaCount: 1
 
 image:
@@ -79,4 +84,4 @@ affinity: {}
 
 tlsOption: "gateway-tls"
 
-traefikApiGroup: "traefik.containo.us/v1alpha1"
+traefikApiGroup: "traefik.io/v1alpha1"

@@ -58,6 +58,9 @@ spec:
             - name: data
               mountPath: {{ required "A valid rootFolder entry required!" .Values.rootFolder }}
               readOnly: true
+            - name: installer-script
+              mountPath: {{ required "A valid rootFolder entry required!" .Values.rootFolder }}installer/
+              readOnly: true
       volumes:
         - name: config
           configMap:
@@ -65,6 +68,13 @@ spec:
         - name: data
           secret:
             secretName: {{ required "A valid secretName entry required!" .Values.secretName }}
+        - name: installer-script
+          configMap:
+            name: {{ include "certificate-file-server.fullname" . }}
+            items:
+              - key: edge-node-installer.sh
+                path: edge-node-installer.sh
+                mode: 0755
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
