@@ -81,6 +81,7 @@ func NewJWTValidator(oidcServerURL string) (*JWTValidator, error) {
 	}
 
 	if strings.ToLower(os.Getenv("OIDC_TLS_INSECURE_SKIP_VERIFY")) == "true" {
+		log.Warn().Msg("OIDC TLS certificate verification DISABLED — do not use in production")
 		v.httpClient.Transport = &http.Transport{
 			TLSClientConfig: &tls.Config{
 				InsecureSkipVerify: true, //nolint:gosec // opt-in via env var for dev/test
@@ -98,26 +99,23 @@ func NewJWTValidator(oidcServerURL string) (*JWTValidator, error) {
 }
 
 // Validate parses and validates a JWT token string, returning the claims.
+// Only RS* and PS* (asymmetric) algorithms are accepted. HMAC is intentionally
+// rejected to prevent algorithm-confusion attacks where an attacker uses the
+// JWKS public key as an HMAC secret.
 func (v *JWTValidator) Validate(tokenString string) (jwt.MapClaims, error) {
 	claims := jwt.MapClaims{}
 	_, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 		alg := token.Method.Alg()
-
-		if strings.HasPrefix(alg, "HS") {
-			// HMAC fallback (matches orch-library behavior)
-			key := os.Getenv("SHARED_SECRET_KEY")
-			if key == "" {
-				return nil, fmt.Errorf("SHARED_SECRET_KEY not set for HMAC token")
-			}
-			return []byte(key), nil
-		}
 
 		if strings.HasPrefix(alg, "RS") || strings.HasPrefix(alg, "PS") {
 			keyID, ok := token.Header["kid"]
 			if !ok {
 				return nil, fmt.Errorf("token missing kid header")
 			}
-			kid := keyID.(string)
+			kid, ok := keyID.(string)
+			if !ok {
+				return nil, fmt.Errorf("token kid header is not a string")
+			}
 
 			pubKeyPEM := v.getKey(kid)
 			if pubKeyPEM == nil {
@@ -134,7 +132,8 @@ func (v *JWTValidator) Validate(tokenString string) (jwt.MapClaims, error) {
 			return jwt.ParseRSAPublicKeyFromPEM(pubKeyPEM)
 		}
 
-		return nil, fmt.Errorf("unsupported signing algorithm: %s", alg)
+		// Reject all other algorithms (including HMAC) explicitly.
+		return nil, fmt.Errorf("unsupported signing algorithm %q: only RS*/PS* are accepted", alg)
 	})
 
 	if err != nil {
@@ -149,6 +148,8 @@ func (v *JWTValidator) getKey(kid string) []byte {
 	return v.publicKeys[kid]
 }
 
+const maxJWKSBodyBytes = 1 << 20 // 1 MB — generous but bounded
+
 func (v *JWTValidator) refreshKeys() error {
 	discoveryURL := fmt.Sprintf("%s/.well-known/openid-configuration", v.oidcServerURL)
 	resp, err := v.httpClient.Get(discoveryURL)
@@ -156,8 +157,11 @@ func (v *JWTValidator) refreshKeys() error {
 		return fmt.Errorf("OIDC discovery failed: %w", err)
 	}
 	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("OIDC discovery returned HTTP %d", resp.StatusCode)
+	}
 
-	body, err := io.ReadAll(resp.Body)
+	body, err := io.ReadAll(io.LimitReader(resp.Body, maxJWKSBodyBytes))
 	if err != nil {
 		return fmt.Errorf("reading OIDC discovery response: %w", err)
 	}
@@ -172,8 +176,11 @@ func (v *JWTValidator) refreshKeys() error {
 		return fmt.Errorf("fetching JWKS: %w", err)
 	}
 	defer keysResp.Body.Close()
+	if keysResp.StatusCode != http.StatusOK {
+		return fmt.Errorf("JWKS endpoint returned HTTP %d", keysResp.StatusCode)
+	}
 
-	keysBody, err := io.ReadAll(keysResp.Body)
+	keysBody, err := io.ReadAll(io.LimitReader(keysResp.Body, maxJWKSBodyBytes))
 	if err != nil {
 		return fmt.Errorf("reading JWKS response: %w", err)
 	}
@@ -488,6 +495,22 @@ func isOrgDeleted(ctx context.Context, checker ProjectDeletionChecker, name stri
 func isProjectDeleted(ctx context.Context, checker ProjectDeletionChecker, name string, orgNames []string) bool {
 	p, _, err := checker.GetProjectIncludingDeleted(ctx, name, orgNames)
 	return err == nil && p.DeletedAt != nil
+}
+
+// InternalAuthMiddleware protects internal controller-facing endpoints
+// (/v1/status, /v1/events) with a shared secret token. When token is
+// non-empty, every request must carry a matching X-Internal-Token header.
+// When token is empty the middleware is a no-op (rely on network policy).
+func InternalAuthMiddleware(token string) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if token != "" && r.Header.Get("X-Internal-Token") != token {
+				writeError(w, http.StatusUnauthorized, "unauthorized")
+				return
+			}
+			next.ServeHTTP(w, r)
+		})
+	}
 }
 
 // extractRolesFromClaims extracts realm_access.roles from JWT claims.

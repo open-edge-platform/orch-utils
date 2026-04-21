@@ -6,6 +6,7 @@ package config
 
 import (
 	"fmt"
+	"net/url"
 	"os"
 	"time"
 
@@ -121,6 +122,19 @@ func databaseURLFromEnv() string {
 	}
 	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s",
 		user, password, host, port, dbName, sslmode)
+}
+
+// RedactedDatabaseURL returns the database URL with the password replaced by
+// "***", safe for use in log messages and error output.
+func (c *Config) RedactedDatabaseURL() string {
+	u, err := url.Parse(c.DatabaseURL)
+	if err != nil {
+		return "[unparseable database URL]"
+	}
+	if u.User != nil {
+		u.User = url.UserPassword(u.User.Username(), "***")
+	}
+	return u.String()
 }
 
 // ControllersForResource returns the registered controller names for a

@@ -138,13 +138,27 @@ func (s *Store) ListOrgs(ctx context.Context) ([]*ent.Org, error) {
 		All(ctx)
 }
 
-// UpdateOrg updates an active org's description.
+// UpdateOrg updates an active org's description inside a transaction,
+// preventing a concurrent update from overwriting a stale read.
 func (s *Store) UpdateOrg(ctx context.Context, name, description string) (*ent.Org, error) {
-	o, err := s.GetOrg(ctx, name)
+	tx, err := s.client.Tx(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return o.Update().SetDescription(description).Save(ctx)
+	o, err := tx.Org.Query().
+		Where(org.Name(name), org.DeletedAtIsNil()).
+		Only(ctx)
+	if err != nil {
+		return nil, rollback(tx, err)
+	}
+	updated, err := o.Update().SetDescription(description).Save(ctx)
+	if err != nil {
+		return nil, rollback(tx, err)
+	}
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
+	return updated, nil
 }
 
 // DeleteOrg soft-deletes an org and all its projects, emitting events.
@@ -341,17 +355,38 @@ func (s *Store) ListProjects(ctx context.Context, orgNames []string) ([]*ent.Pro
 	return q.All(ctx)
 }
 
-// UpdateProject updates a project's description.
+// UpdateProject updates a project's description inside a transaction,
+// preventing a concurrent update from overwriting a stale read.
 func (s *Store) UpdateProject(ctx context.Context, name string, orgNames []string, description string) (*ent.Project, *ent.Org, error) {
-	p, o, err := s.GetProject(ctx, name, orgNames)
+	tx, err := s.client.Tx(ctx)
 	if err != nil {
 		return nil, nil, err
 	}
+	q := tx.Project.Query().
+		Where(project.Name(name), project.DeletedAtIsNil()).
+		WithOrg()
+	if len(orgNames) > 0 {
+		q = q.Where(project.HasOrgWith(org.NameIn(orgNames...), org.DeletedAtIsNil()))
+	}
+	projects, err := q.All(ctx)
+	if err != nil {
+		return nil, nil, rollback(tx, err)
+	}
+	if len(projects) == 0 {
+		return nil, nil, rollback(tx, &ent.NotFoundError{})
+	}
+	if len(projects) > 1 {
+		return nil, nil, rollback(tx, fmt.Errorf("ambiguous project name %q exists in multiple orgs", name))
+	}
+	p := projects[0]
 	updated, err := p.Update().SetDescription(description).Save(ctx)
 	if err != nil {
+		return nil, nil, rollback(tx, err)
+	}
+	if err := tx.Commit(); err != nil {
 		return nil, nil, err
 	}
-	return updated, o, nil
+	return updated, p.Edges.Org, nil
 }
 
 // DeleteProject soft-deletes a project, emitting a deleted event.

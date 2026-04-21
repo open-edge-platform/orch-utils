@@ -56,6 +56,7 @@ func main() {
 
 	log.Info().
 		Str("listen", cfg.ListenAddr).
+		Str("database", cfg.RedactedDatabaseURL()).
 		Int("org_controllers", len(cfg.Controllers.Org)).
 		Int("project_controllers", len(cfg.Controllers.Project)).
 		Msg("starting tenant manager")
@@ -95,27 +96,37 @@ func main() {
 	// Start cleanup goroutine.
 	go runCleanup(ctx, s, cfg)
 
+	// Internal-endpoint auth token (guards /v1/status and /v1/events).
+	internalToken := os.Getenv("INTERNAL_AUTH_TOKEN")
+	if internalToken == "" {
+		log.Warn().Msg("INTERNAL_AUTH_TOKEN not set; internal endpoints (/v1/status, /v1/events) are unauthenticated")
+	}
+
 	// Start HTTP server.
-	handler := api.NewHandler(s, cfg, jwtValidator)
+	handler := api.NewHandler(s, cfg, jwtValidator, internalToken)
 	srv := &http.Server{
 		Addr:              cfg.ListenAddr,
 		Handler:           handler.Router(),
 		ReadHeaderTimeout: 10 * time.Second,
+		ReadTimeout:       30 * time.Second,
+		WriteTimeout:      30 * time.Second,
+		IdleTimeout:       120 * time.Second,
 	}
 
-	// Graceful shutdown.
+	// Graceful shutdown: drain HTTP first, then cancel background goroutines.
+	// Cancelling the context before Shutdown would abort in-flight DB writes.
 	sigCh := make(chan os.Signal, 1)
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
 
 	go func() {
 		<-sigCh
 		log.Info().Msg("shutting down")
-		cancel()
-		shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 10*time.Second)
+		shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer shutdownCancel()
 		if err := srv.Shutdown(shutdownCtx); err != nil {
 			log.Error().Err(err).Msg("server shutdown error")
 		}
+		cancel() // cancel background goroutines only after HTTP is drained
 	}()
 
 	log.Info().Str("addr", cfg.ListenAddr).Msg("listening")

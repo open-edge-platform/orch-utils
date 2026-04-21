@@ -68,9 +68,6 @@ DOCKER_REGISTRY_OEP                    ?= registry-rs.edgeorchestration.intel.co
 DOCKER_REPOSITORY_OEP                  ?= edge-orch/common
 TENANCY_MANAGER_DOCKER_IMAGE_OEP       ?= ${DOCKER_REGISTRY_OEP}/${DOCKER_REPOSITORY_OEP}/${IMG_NAME_OEP}:${IMG_VERSION_OEP}
 
-# Fuzz timeout
-FUZZ_SECONDS                   ?= 30
-
 YAML_FILES := $(shell find . -path './venv_charts' -prune -o -type f \( -name '*.yaml' -o -name '*.yml' \) -print )
 # Create the virtualenv with python tools installed
 VENV_NAME = venv_tenancy_manager
@@ -86,33 +83,28 @@ $(VENV_NAME): requirements.txt
 tidy:
 	go mod tidy
 
-.PHONY: vendor
-vendor:
-	go mod vendor
-
 build.amd64: tidy
 	go mod download
 	mkdir -p bin/amd64
-	GOARCH=amd64 GOOS=linux go build -buildvcs=false -o bin/amd64 ./...
+	GOARCH=amd64 GOOS=linux go build -buildvcs=false -o bin/amd64 ./cmd/... ./internal/...
 
 build.darwin: tidy
 	go mod download
 	mkdir -p bin/darwin
-	GOARCH=arm64 GOOS=darwin go build -buildvcs=false -o bin/darwin ./...
+	GOARCH=arm64 GOOS=darwin go build -buildvcs=false -o bin/darwin ./cmd/... ./internal/...
 
 create:
 	mkdir -p ${BUILD_DIR}
 
 PHONY: go-build
-go-build: tidy vendor create ## go build
-	${GOCMD} build $(GOEXTRAFLAGS) -o ${BUILD_DIR}/ ./...
+go-build: tidy create ## go build
+	${GOCMD} build $(GOEXTRAFLAGS) -o ${BUILD_DIR}/ ./cmd/... ./internal/...
 
 .PHONY: build
 build: go-build docker.build.oep
 
 .PHONY: docker.build.oep
 docker.build.oep:
-	go mod vendor
 	docker build --build-arg TENANCY_MANAGER_COMPONENT_NAME=${TENANCY_MANAGER_COMPONENT_NAME} --build-arg HTTP_PROXY=${http_proxy} --build-arg HTTPS_PROXY=${https_proxy} --build-arg FTP_PROXY=${ftp_proxy} --build-arg SOCKS_PROXY=${socks_proxy} --build-arg NO_PROXY=${no_proxy} -t ${TENANCY_MANAGER_DOCKER_IMAGE_OEP} -f Dockerfile .
 
 .PHONY: release
@@ -125,7 +117,7 @@ docker.publish.oep:
 
 .PHONY: test
 test: go-build
-	${GOCMD} test --race -coverprofile ${BUILD_DIR}/coverage.out -coverpkg=$$(go list ./... | grep -v "pkg/tenancy" | grep -v "tenancy-manager" | grep -v "cluster-orchestrator" | tr '\n' ,)  -covermode atomic ./...
+	${GOCMD} test --race -coverprofile ${BUILD_DIR}/coverage.out -coverpkg=$$(go list ./cmd/... ./internal/... | tr '\n' ,) -covermode atomic ./cmd/... ./internal/...
 	gocover-cobertura < ${BUILD_DIR}/coverage.out > ${BUILD_DIR}/coverage.xml
 	${GOCMD} tool cover -html=${BUILD_DIR}/coverage.out -o ${BUILD_DIR}/coverage.html
 	${GOCMD} tool cover -func ${BUILD_DIR}/coverage.out -o ${BUILD_DIR}/function_coverage.log
@@ -162,17 +154,6 @@ yamllint:
 	yamllint --version
 	yamllint -c yamllint_conf.yml -s $(YAML_FILES)
 
-clean-testdata:
-	rm -rf ./fuzztest/testdata
-
-.PHONY: test-fuzz
-test-fuzz: clean-testdata
-	$(GOCMD) test ./fuzztest -fuzz FuzzTenancyOrgProjectCreate -fuzztime=${FUZZ_SECONDS}s
-
-.PHONY: ginkgo
-ginkgo: ## run ginkgo tests
-	ginkgo run -v -r -p --race -randomize-all -randomize-suites \
-		--skip-package="fuzztest"
 
 help:
 	@printf "%-20s %s\n" "Target" "Description"

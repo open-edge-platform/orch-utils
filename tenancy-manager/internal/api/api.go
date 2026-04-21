@@ -6,7 +6,10 @@ package api
 
 import (
 	"encoding/json"
+	"errors"
+	"io"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -21,14 +24,33 @@ import (
 
 // Handler provides HTTP handlers for the Tenant Manager REST API.
 type Handler struct {
-	store        *store.Store
-	cfg          *config.Config
-	jwtValidator *JWTValidator // nil when auth is disabled
+	store         *store.Store
+	cfg           *config.Config
+	jwtValidator  *JWTValidator // nil when auth is disabled
+	internalToken string        // shared secret for internal endpoints; empty = rely on network policy
 }
 
 // NewHandler creates a new API handler.
-func NewHandler(s *store.Store, cfg *config.Config, jwtValidator *JWTValidator) *Handler {
-	return &Handler{store: s, cfg: cfg, jwtValidator: jwtValidator}
+func NewHandler(s *store.Store, cfg *config.Config, jwtValidator *JWTValidator, internalToken string) *Handler {
+	return &Handler{store: s, cfg: cfg, jwtValidator: jwtValidator, internalToken: internalToken}
+}
+
+// maxBodyBytes is the maximum request body size accepted by mutation endpoints.
+const maxBodyBytes = 64 * 1024 // 64 KB
+
+// decodeBody reads and JSON-decodes the request body, enforcing a size limit.
+// Returns false and writes a 400 response if the body is invalid or too large.
+// An empty body (no Content-Type sent) yields the zero value of dst — callers
+// that treat all fields as optional should check for io.EOF themselves; this
+// helper treats io.EOF as an empty-but-valid body.
+func decodeBody(w http.ResponseWriter, r *http.Request, dst interface{}) bool {
+	r.Body = http.MaxBytesReader(w, r.Body, maxBodyBytes)
+	err := json.NewDecoder(r.Body).Decode(dst)
+	if err != nil && !errors.Is(err, io.EOF) {
+		writeError(w, http.StatusBadRequest, "invalid request body")
+		return false
+	}
+	return true
 }
 
 // Router returns the chi router with all routes registered.
@@ -61,12 +83,16 @@ func (h *Handler) Router() http.Handler {
 			r.Get("/projects/{name}/status", h.GetProjectStatus)
 		})
 
-		// Internal endpoints (controller-facing) -- no auth.
-		// Access is restricted to in-cluster traffic via network policy.
-		r.Get("/events", h.GetEvents)
-		r.Put("/status", h.UpdateControllerStatus)
-		r.Delete("/status", h.DeleteControllerStatus)
-		r.Get("/internal/projects/{id}", h.GetProjectByID)
+		// Internal endpoints (controller-facing) — protected by shared secret.
+		// When INTERNAL_AUTH_TOKEN is not set the middleware is a no-op and
+		// access must be restricted by Kubernetes NetworkPolicy.
+		r.Group(func(r chi.Router) {
+			r.Use(InternalAuthMiddleware(h.internalToken))
+			r.Get("/events", h.GetEvents)
+			r.Put("/status", h.UpdateControllerStatus)
+			r.Delete("/status", h.DeleteControllerStatus)
+			r.Get("/internal/projects/{id}", h.GetProjectByID)
+		})
 	})
 
 	// Health
@@ -82,7 +108,8 @@ func (h *Handler) Router() http.Handler {
 func (h *Handler) ListOrgs(w http.ResponseWriter, r *http.Request) {
 	orgs, err := h.store.ListOrgs(r.Context())
 	if err != nil {
-		writeError(w, http.StatusInternalServerError, err.Error())
+		log.Error().Err(err).Msg("ListOrgs failed")
+		writeError(w, http.StatusInternalServerError, "internal server error")
 		return
 	}
 
@@ -102,7 +129,8 @@ func (h *Handler) GetOrg(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err != nil {
-		writeError(w, http.StatusInternalServerError, err.Error())
+		log.Error().Err(err).Str("org", name).Msg("GetOrg failed")
+		writeError(w, http.StatusInternalServerError, "internal server error")
 		return
 	}
 
@@ -116,9 +144,7 @@ func (h *Handler) CreateOrUpdateOrg(w http.ResponseWriter, r *http.Request) {
 	var body struct {
 		Description string `json:"description"`
 	}
-	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-		body.Description = ""
-	}
+	decodeBody(w, r, &body) // description is optional; empty body is valid
 
 	updateIfExists := r.URL.Query().Get("update_if_exists") != "false" // default true
 
@@ -131,7 +157,8 @@ func (h *Handler) CreateOrUpdateOrg(w http.ResponseWriter, r *http.Request) {
 		// Update existing org.
 		updated, err := h.store.UpdateOrg(r.Context(), name, body.Description)
 		if err != nil {
-			writeError(w, http.StatusInternalServerError, err.Error())
+			log.Error().Err(err).Str("org", name).Msg("UpdateOrg failed")
+			writeError(w, http.StatusInternalServerError, "internal server error")
 			return
 		}
 		status, msg := h.store.DeriveStatus(r.Context(), "org", updated.ID, false, h.cfg.ControllersForResource("org"))
@@ -140,7 +167,8 @@ func (h *Handler) CreateOrUpdateOrg(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !ent.IsNotFound(err) {
-		writeError(w, http.StatusInternalServerError, err.Error())
+		log.Error().Err(err).Str("org", name).Msg("GetOrg failed")
+		writeError(w, http.StatusInternalServerError, "internal server error")
 		return
 	}
 
@@ -148,9 +176,10 @@ func (h *Handler) CreateOrUpdateOrg(w http.ResponseWriter, r *http.Request) {
 	o, err := h.store.CreateOrg(r.Context(), name, body.Description)
 	if err != nil {
 		if ent.IsConstraintError(err) {
-			writeError(w, http.StatusConflict, err.Error())
+			writeError(w, http.StatusConflict, "org already exists")
 		} else {
-			writeError(w, http.StatusInternalServerError, err.Error())
+			log.Error().Err(err).Str("org", name).Msg("CreateOrg failed")
+			writeError(w, http.StatusInternalServerError, "internal server error")
 		}
 		return
 	}
@@ -166,7 +195,8 @@ func (h *Handler) DeleteOrg(w http.ResponseWriter, r *http.Request) {
 			writeError(w, http.StatusNotFound, "org not found")
 			return
 		}
-		writeError(w, http.StatusInternalServerError, err.Error())
+		log.Error().Err(err).Str("org", name).Msg("DeleteOrg failed")
+		writeError(w, http.StatusInternalServerError, "internal server error")
 		return
 	}
 	w.WriteHeader(http.StatusOK)
@@ -180,7 +210,8 @@ func (h *Handler) GetOrgStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err != nil {
-		writeError(w, http.StatusInternalServerError, err.Error())
+		log.Error().Err(err).Str("org", name).Msg("GetOrgStatus failed")
+		writeError(w, http.StatusInternalServerError, "internal server error")
 		return
 	}
 
@@ -195,7 +226,8 @@ func (h *Handler) ListProjects(w http.ResponseWriter, r *http.Request) {
 	orgNames := resolveOrgNames(r)
 	projects, err := h.store.ListProjects(r.Context(), orgNames)
 	if err != nil {
-		writeError(w, http.StatusInternalServerError, err.Error())
+		log.Error().Err(err).Msg("ListProjects failed")
+		writeError(w, http.StatusInternalServerError, "internal server error")
 		return
 	}
 
@@ -222,10 +254,11 @@ func (h *Handler) GetProject(w http.ResponseWriter, r *http.Request) {
 	}
 	if err != nil {
 		if isAmbiguous(err) {
-			writeError(w, http.StatusConflict, err.Error())
+			writeError(w, http.StatusConflict, "ambiguous project: specify ?org=name")
 			return
 		}
-		writeError(w, http.StatusInternalServerError, err.Error())
+		log.Error().Err(err).Str("project", name).Msg("GetProject failed")
+		writeError(w, http.StatusInternalServerError, "internal server error")
 		return
 	}
 
@@ -244,9 +277,7 @@ func (h *Handler) CreateOrUpdateProject(w http.ResponseWriter, r *http.Request) 
 	var body struct {
 		Description string `json:"description"`
 	}
-	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-		body.Description = ""
-	}
+	decodeBody(w, r, &body) // description is optional; empty body is valid
 
 	updateIfExists := r.URL.Query().Get("update_if_exists") != "false" // default true
 
@@ -259,7 +290,8 @@ func (h *Handler) CreateOrUpdateProject(w http.ResponseWriter, r *http.Request) 
 		}
 		updated, updatedOrg, err := h.store.UpdateProject(r.Context(), name, orgNames, body.Description)
 		if err != nil {
-			writeError(w, http.StatusInternalServerError, err.Error())
+			log.Error().Err(err).Str("project", name).Msg("UpdateProject failed")
+			writeError(w, http.StatusInternalServerError, "internal server error")
 			return
 		}
 		orgName := ""
@@ -277,7 +309,8 @@ func (h *Handler) CreateOrUpdateProject(w http.ResponseWriter, r *http.Request) 
 			writeError(w, http.StatusConflict, err.Error())
 			return
 		}
-		writeError(w, http.StatusInternalServerError, err.Error())
+		log.Error().Err(err).Str("project", name).Msg("GetProject failed")
+		writeError(w, http.StatusInternalServerError, "internal server error")
 		return
 	}
 
@@ -294,9 +327,10 @@ func (h *Handler) CreateOrUpdateProject(w http.ResponseWriter, r *http.Request) 
 	p, createdOrg, err := h.store.CreateProject(r.Context(), orgNames[0], name, body.Description)
 	if err != nil {
 		if ent.IsConstraintError(err) {
-			writeError(w, http.StatusConflict, err.Error())
+			writeError(w, http.StatusConflict, "project already exists")
 		} else {
-			writeError(w, http.StatusInternalServerError, err.Error())
+			log.Error().Err(err).Str("project", name).Msg("CreateProject failed")
+			writeError(w, http.StatusInternalServerError, "internal server error")
 		}
 		return
 	}
@@ -319,10 +353,11 @@ func (h *Handler) DeleteProject(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if isAmbiguous(err) {
-			writeError(w, http.StatusConflict, err.Error())
+			writeError(w, http.StatusConflict, "ambiguous project: specify ?org=name")
 			return
 		}
-		writeError(w, http.StatusInternalServerError, err.Error())
+		log.Error().Err(err).Str("project", name).Msg("DeleteProject failed")
+		writeError(w, http.StatusInternalServerError, "internal server error")
 		return
 	}
 	w.WriteHeader(http.StatusOK)
@@ -339,10 +374,11 @@ func (h *Handler) GetProjectStatus(w http.ResponseWriter, r *http.Request) {
 	}
 	if err != nil {
 		if isAmbiguous(err) {
-			writeError(w, http.StatusConflict, err.Error())
+			writeError(w, http.StatusConflict, "ambiguous project: specify ?org=name")
 			return
 		}
-		writeError(w, http.StatusInternalServerError, err.Error())
+		log.Error().Err(err).Str("project", name).Msg("GetProjectStatus failed")
+		writeError(w, http.StatusInternalServerError, "internal server error")
 		return
 	}
 
@@ -375,7 +411,8 @@ func (h *Handler) GetProjectByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err != nil {
-		writeError(w, http.StatusInternalServerError, err.Error())
+		log.Error().Err(err).Str("id", idParam).Msg("GetProjectByID failed")
+		writeError(w, http.StatusInternalServerError, "internal server error")
 		return
 	}
 
@@ -401,7 +438,8 @@ func (h *Handler) GetEvents(w http.ResponseWriter, r *http.Request) {
 	if replay {
 		events, maxID, err := h.store.SynthesizeReplayEvents(r.Context())
 		if err != nil {
-			writeError(w, http.StatusInternalServerError, err.Error())
+			log.Error().Err(err).Msg("SynthesizeReplayEvents failed")
+			writeError(w, http.StatusInternalServerError, "internal server error")
 			return
 		}
 
@@ -427,25 +465,30 @@ func (h *Handler) GetEvents(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Incremental polling.
-	afterStr := r.URL.Query().Get("after")
 	var afterID int64
-	if afterStr != "" {
-		if _, err := json.Number(afterStr).Int64(); err == nil {
-			afterID, _ = json.Number(afterStr).Int64()
+	if afterStr := r.URL.Query().Get("after"); afterStr != "" {
+		n, err := strconv.ParseInt(afterStr, 10, 64)
+		if err != nil || n < 0 {
+			writeError(w, http.StatusBadRequest, "invalid after parameter: must be a non-negative integer")
+			return
 		}
+		afterID = n
 	}
 
-	limitStr := r.URL.Query().Get("limit")
 	limit := 100
-	if limitStr != "" {
-		if n, err := json.Number(limitStr).Int64(); err == nil && n > 0 && n <= 1000 {
-			limit = int(n)
+	if limitStr := r.URL.Query().Get("limit"); limitStr != "" {
+		n, err := strconv.ParseInt(limitStr, 10, 64)
+		if err != nil || n <= 0 || n > 1000 {
+			writeError(w, http.StatusBadRequest, "invalid limit parameter: must be between 1 and 1000")
+			return
 		}
+		limit = int(n)
 	}
 
 	events, err := h.store.GetEventsAfter(r.Context(), afterID, limit)
 	if err != nil {
-		writeError(w, http.StatusInternalServerError, err.Error())
+		log.Error().Err(err).Msg("GetEventsAfter failed")
+		writeError(w, http.StatusInternalServerError, "internal server error")
 		return
 	}
 
@@ -474,8 +517,7 @@ func (h *Handler) GetEvents(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) UpdateControllerStatus(w http.ResponseWriter, r *http.Request) {
 	var body StatusUpdateRequest
-	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-		writeError(w, http.StatusBadRequest, "invalid request body")
+	if !decodeBody(w, r, &body) {
 		return
 	}
 
@@ -487,7 +529,8 @@ func (h *Handler) UpdateControllerStatus(w http.ResponseWriter, r *http.Request)
 	if err := h.store.UpsertControllerStatus(
 		r.Context(), body.Controller, body.ResourceType, body.ResourceID, body.Status, body.Message,
 	); err != nil {
-		writeError(w, http.StatusInternalServerError, err.Error())
+		log.Error().Err(err).Msg("UpsertControllerStatus failed")
+		writeError(w, http.StatusInternalServerError, "internal server error")
 		return
 	}
 	w.WriteHeader(http.StatusOK)
@@ -495,8 +538,7 @@ func (h *Handler) UpdateControllerStatus(w http.ResponseWriter, r *http.Request)
 
 func (h *Handler) DeleteControllerStatus(w http.ResponseWriter, r *http.Request) {
 	var body StatusDeleteRequest
-	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-		writeError(w, http.StatusBadRequest, "invalid request body")
+	if !decodeBody(w, r, &body) {
 		return
 	}
 
@@ -508,7 +550,8 @@ func (h *Handler) DeleteControllerStatus(w http.ResponseWriter, r *http.Request)
 	if err := h.store.DeleteControllerStatus(
 		r.Context(), body.Controller, body.ResourceType, body.ResourceID,
 	); err != nil {
-		writeError(w, http.StatusInternalServerError, err.Error())
+		log.Error().Err(err).Msg("DeleteControllerStatus failed")
+		writeError(w, http.StatusInternalServerError, "internal server error")
 		return
 	}
 	w.WriteHeader(http.StatusOK)
