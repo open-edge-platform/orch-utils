@@ -86,3 +86,4 @@ nexus-api-gw/*venv
 *.test
 
 vendor/
+!keycloak-tenant-controller/vendor/
