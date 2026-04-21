@@ -1,0 +1,587 @@
+// SPDX-FileCopyrightText: 2026 Intel Corporation
+//
+// SPDX-License-Identifier: Apache-2.0
+
+package api
+
+import (
+	"encoding/json"
+	"net/http"
+	"time"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/google/uuid"
+	"github.com/rs/zerolog/log"
+
+	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/config"
+	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent"
+	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/store"
+)
+
+// Handler provides HTTP handlers for the Tenant Manager REST API.
+type Handler struct {
+	store        *store.Store
+	cfg          *config.Config
+	jwtValidator *JWTValidator // nil when auth is disabled
+}
+
+// NewHandler creates a new API handler.
+func NewHandler(s *store.Store, cfg *config.Config, jwtValidator *JWTValidator) *Handler {
+	return &Handler{store: s, cfg: cfg, jwtValidator: jwtValidator}
+}
+
+// Router returns the chi router with all routes registered.
+func (h *Handler) Router() http.Handler {
+	r := chi.NewRouter()
+	r.Use(middleware.Recoverer)
+	r.Use(middleware.RequestID)
+
+	r.Route("/v1", func(r chi.Router) {
+		// External endpoints -- require auth when configured.
+		r.Group(func(r chi.Router) {
+			if h.jwtValidator != nil {
+				r.Use(AuthnMiddleware(h.jwtValidator, h.store))
+				r.Use(AuthzMiddleware())
+			}
+			r.Use(DeletionCheckMiddleware(h.store, h.store))
+
+			// Org endpoints
+			r.Get("/orgs", h.ListOrgs)
+			r.Get("/orgs/{name}", h.GetOrg)
+			r.Put("/orgs/{name}", h.CreateOrUpdateOrg)
+			r.Delete("/orgs/{name}", h.DeleteOrg)
+			r.Get("/orgs/{name}/status", h.GetOrgStatus)
+
+			// Project endpoints
+			r.Get("/projects", h.ListProjects)
+			r.Get("/projects/{name}", h.GetProject)
+			r.Put("/projects/{name}", h.CreateOrUpdateProject)
+			r.Delete("/projects/{name}", h.DeleteProject)
+			r.Get("/projects/{name}/status", h.GetProjectStatus)
+		})
+
+		// Internal endpoints (controller-facing) -- no auth.
+		// Access is restricted to in-cluster traffic via network policy.
+		r.Get("/events", h.GetEvents)
+		r.Put("/status", h.UpdateControllerStatus)
+		r.Delete("/status", h.DeleteControllerStatus)
+		r.Get("/internal/projects/{id}", h.GetProjectByID)
+	})
+
+	// Health
+	r.Get("/healthz", func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+
+	return r
+}
+
+// --- Org handlers ---
+
+func (h *Handler) ListOrgs(w http.ResponseWriter, r *http.Request) {
+	orgs, err := h.store.ListOrgs(r.Context())
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	result := make([]OrgResponse, 0, len(orgs))
+	for _, o := range orgs {
+		status, msg := h.store.DeriveStatus(r.Context(), "org", o.ID, false, h.cfg.ControllersForResource("org"))
+		result = append(result, toOrgResponse(o, status, msg))
+	}
+	writeJSON(w, http.StatusOK, result)
+}
+
+func (h *Handler) GetOrg(w http.ResponseWriter, r *http.Request) {
+	name := chi.URLParam(r, "name")
+	o, err := h.store.GetOrg(r.Context(), name)
+	if ent.IsNotFound(err) {
+		writeError(w, http.StatusNotFound, "org not found")
+		return
+	}
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	status, msg := h.store.DeriveStatus(r.Context(), "org", o.ID, false, h.cfg.ControllersForResource("org"))
+	writeJSON(w, http.StatusOK, toOrgResponse(o, status, msg))
+}
+
+func (h *Handler) CreateOrUpdateOrg(w http.ResponseWriter, r *http.Request) {
+	name := chi.URLParam(r, "name")
+
+	var body struct {
+		Description string `json:"description"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		body.Description = ""
+	}
+
+	updateIfExists := r.URL.Query().Get("update_if_exists") != "false" // default true
+
+	existing, err := h.store.GetOrg(r.Context(), name)
+	if err == nil {
+		if !updateIfExists {
+			writeError(w, http.StatusConflict, "org already exists")
+			return
+		}
+		// Update existing org.
+		updated, err := h.store.UpdateOrg(r.Context(), name, body.Description)
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+		status, msg := h.store.DeriveStatus(r.Context(), "org", updated.ID, false, h.cfg.ControllersForResource("org"))
+		writeJSON(w, http.StatusOK, toOrgResponse(updated, status, msg))
+		return
+	}
+
+	if !ent.IsNotFound(err) {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	_ = existing // not found, create new
+	o, err := h.store.CreateOrg(r.Context(), name, body.Description)
+	if err != nil {
+		if ent.IsConstraintError(err) {
+			writeError(w, http.StatusConflict, err.Error())
+		} else {
+			writeError(w, http.StatusInternalServerError, err.Error())
+		}
+		return
+	}
+
+	status, msg := h.store.DeriveStatus(r.Context(), "org", o.ID, false, h.cfg.ControllersForResource("org"))
+	writeJSON(w, http.StatusOK, toOrgResponse(o, status, msg))
+}
+
+func (h *Handler) DeleteOrg(w http.ResponseWriter, r *http.Request) {
+	name := chi.URLParam(r, "name")
+	if err := h.store.DeleteOrg(r.Context(), name); err != nil {
+		if ent.IsNotFound(err) {
+			writeError(w, http.StatusNotFound, "org not found")
+			return
+		}
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+func (h *Handler) GetOrgStatus(w http.ResponseWriter, r *http.Request) {
+	name := chi.URLParam(r, "name")
+	o, err := h.store.GetOrgIncludingDeleted(r.Context(), name)
+	if ent.IsNotFound(err) {
+		writeError(w, http.StatusNotFound, "org not found")
+		return
+	}
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	isDeleted := o.DeletedAt != nil
+	status, msg := h.store.DeriveStatus(r.Context(), "org", o.ID, isDeleted, h.cfg.ControllersForResource("org"))
+	writeJSON(w, http.StatusOK, toOrgResponse(o, status, msg))
+}
+
+// --- Project handlers ---
+
+func (h *Handler) ListProjects(w http.ResponseWriter, r *http.Request) {
+	orgNames := resolveOrgNames(r)
+	projects, err := h.store.ListProjects(r.Context(), orgNames)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	result := make([]ProjectResponse, 0, len(projects))
+	for _, p := range projects {
+		status, msg := h.store.DeriveStatus(r.Context(), "project", p.ID, false, h.cfg.ControllersForResource("project"))
+		orgName := ""
+		if p.Edges.Org != nil {
+			orgName = p.Edges.Org.Name
+		}
+		result = append(result, toProjectResponse(p, orgName, status, msg))
+	}
+	writeJSON(w, http.StatusOK, result)
+}
+
+func (h *Handler) GetProject(w http.ResponseWriter, r *http.Request) {
+	name := chi.URLParam(r, "name")
+	orgNames := resolveOrgNames(r)
+
+	p, o, err := h.store.GetProject(r.Context(), name, orgNames)
+	if ent.IsNotFound(err) {
+		writeError(w, http.StatusNotFound, "project not found")
+		return
+	}
+	if err != nil {
+		if isAmbiguous(err) {
+			writeError(w, http.StatusConflict, err.Error())
+			return
+		}
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	orgName := ""
+	if o != nil {
+		orgName = o.Name
+	}
+	status, msg := h.store.DeriveStatus(r.Context(), "project", p.ID, false, h.cfg.ControllersForResource("project"))
+	writeJSON(w, http.StatusOK, toProjectResponse(p, orgName, status, msg))
+}
+
+func (h *Handler) CreateOrUpdateProject(w http.ResponseWriter, r *http.Request) {
+	name := chi.URLParam(r, "name")
+	orgNames := resolveOrgNamesWithDefault(r, h.cfg.DefaultOrgName)
+
+	var body struct {
+		Description string `json:"description"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		body.Description = ""
+	}
+
+	updateIfExists := r.URL.Query().Get("update_if_exists") != "false" // default true
+
+	// Try update first.
+	existing, o, err := h.store.GetProject(r.Context(), name, orgNames)
+	if err == nil {
+		if !updateIfExists {
+			writeError(w, http.StatusConflict, "project already exists")
+			return
+		}
+		updated, updatedOrg, err := h.store.UpdateProject(r.Context(), name, orgNames, body.Description)
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+		orgName := ""
+		if updatedOrg != nil {
+			orgName = updatedOrg.Name
+		}
+		status, msg := h.store.DeriveStatus(r.Context(), "project", updated.ID, false, h.cfg.ControllersForResource("project"))
+		writeJSON(w, http.StatusOK, toProjectResponse(updated, orgName, status, msg))
+		return
+	}
+	_, _ = existing, o
+
+	if !ent.IsNotFound(err) {
+		if isAmbiguous(err) {
+			writeError(w, http.StatusConflict, err.Error())
+			return
+		}
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	// Determine which org to create in.
+	if len(orgNames) == 0 {
+		writeError(w, http.StatusBadRequest, "org must be specified for project creation (use ?org=name)")
+		return
+	}
+	if len(orgNames) > 1 {
+		writeError(w, http.StatusConflict, "ambiguous org context: specify ?org=name")
+		return
+	}
+
+	p, createdOrg, err := h.store.CreateProject(r.Context(), orgNames[0], name, body.Description)
+	if err != nil {
+		if ent.IsConstraintError(err) {
+			writeError(w, http.StatusConflict, err.Error())
+		} else {
+			writeError(w, http.StatusInternalServerError, err.Error())
+		}
+		return
+	}
+
+	orgName := ""
+	if createdOrg != nil {
+		orgName = createdOrg.Name
+	}
+	status, msg := h.store.DeriveStatus(r.Context(), "project", p.ID, false, h.cfg.ControllersForResource("project"))
+	writeJSON(w, http.StatusOK, toProjectResponse(p, orgName, status, msg))
+}
+
+func (h *Handler) DeleteProject(w http.ResponseWriter, r *http.Request) {
+	name := chi.URLParam(r, "name")
+	orgNames := resolveOrgNamesWithDefault(r, h.cfg.DefaultOrgName)
+
+	if err := h.store.DeleteProject(r.Context(), name, orgNames); err != nil {
+		if ent.IsNotFound(err) {
+			writeError(w, http.StatusNotFound, "project not found")
+			return
+		}
+		if isAmbiguous(err) {
+			writeError(w, http.StatusConflict, err.Error())
+			return
+		}
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+func (h *Handler) GetProjectStatus(w http.ResponseWriter, r *http.Request) {
+	name := chi.URLParam(r, "name")
+	orgNames := resolveOrgNames(r)
+
+	p, o, err := h.store.GetProjectIncludingDeleted(r.Context(), name, orgNames)
+	if ent.IsNotFound(err) {
+		writeError(w, http.StatusNotFound, "project not found")
+		return
+	}
+	if err != nil {
+		if isAmbiguous(err) {
+			writeError(w, http.StatusConflict, err.Error())
+			return
+		}
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	isDeleted := p.DeletedAt != nil
+	orgName := ""
+	if o != nil {
+		orgName = o.Name
+	}
+	status, msg := h.store.DeriveStatus(r.Context(), "project", p.ID, isDeleted, h.cfg.ControllersForResource("project"))
+	writeJSON(w, http.StatusOK, toProjectResponse(p, orgName, status, msg))
+}
+
+// --- Internal project lookup (controller-facing, no auth) ---
+
+// GetProjectByID returns a project by UUID. This is an internal endpoint
+// for controller-to-service lookups (e.g., app-deployment-manager resolving
+// a project UUID to org/project names). No JWT auth is required; access is
+// restricted to in-cluster traffic via network policy.
+func (h *Handler) GetProjectByID(w http.ResponseWriter, r *http.Request) {
+	idParam := chi.URLParam(r, "id")
+	id, err := uuid.Parse(idParam)
+	if err != nil {
+		writeError(w, http.StatusBadRequest, "invalid project id")
+		return
+	}
+
+	p, o, err := h.store.GetProjectByID(r.Context(), id)
+	if ent.IsNotFound(err) {
+		writeError(w, http.StatusNotFound, "project not found")
+		return
+	}
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	orgName := ""
+	if o != nil {
+		orgName = o.Name
+	}
+	status, msg := h.store.DeriveStatus(r.Context(), "project", p.ID, false, h.cfg.ControllersForResource("project"))
+	writeJSON(w, http.StatusOK, toProjectResponse(p, orgName, status, msg))
+}
+
+// --- Event handlers (internal, controller-facing) ---
+
+func (h *Handler) GetEvents(w http.ResponseWriter, r *http.Request) {
+	controllerName := r.URL.Query().Get("controller")
+	if controllerName == "" {
+		writeError(w, http.StatusBadRequest, "controller query parameter required")
+		return
+	}
+
+	replay := r.URL.Query().Get("replay") == "true"
+
+	if replay {
+		events, maxID, err := h.store.SynthesizeReplayEvents(r.Context())
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		resp := EventsResponse{
+			Events:      make([]EventResponse, 0, len(events)),
+			LastEventID: maxID,
+		}
+		for _, e := range events {
+			resp.Events = append(resp.Events, EventResponse{
+				ID:           0,
+				EventType:    e.EventType,
+				ResourceType: e.ResourceType,
+				ResourceID:   e.ResourceID,
+				ResourceName: e.ResourceName,
+				OrgID:        e.OrgID,
+				OrgName:      e.OrgName,
+				FolderID:     e.FolderID,
+				CreatedAt:    time.Now(),
+			})
+		}
+		writeJSON(w, http.StatusOK, resp)
+		return
+	}
+
+	// Incremental polling.
+	afterStr := r.URL.Query().Get("after")
+	var afterID int64
+	if afterStr != "" {
+		if _, err := json.Number(afterStr).Int64(); err == nil {
+			afterID, _ = json.Number(afterStr).Int64()
+		}
+	}
+
+	limitStr := r.URL.Query().Get("limit")
+	limit := 100
+	if limitStr != "" {
+		if n, err := json.Number(limitStr).Int64(); err == nil && n > 0 && n <= 1000 {
+			limit = int(n)
+		}
+	}
+
+	events, err := h.store.GetEventsAfter(r.Context(), afterID, limit)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	resp := EventsResponse{
+		Events:      make([]EventResponse, 0, len(events)),
+		LastEventID: afterID,
+	}
+	for _, e := range events {
+		resp.Events = append(resp.Events, EventResponse{
+			ID:           e.ID,
+			EventType:    e.EventType,
+			ResourceType: e.ResourceType,
+			ResourceID:   e.ResourceID,
+			ResourceName: e.ResourceName,
+			OrgID:        e.OrgID,
+			OrgName:      e.OrgName,
+			FolderID:     e.FolderID,
+			CreatedAt:    e.CreatedAt,
+		})
+		resp.LastEventID = e.ID
+	}
+	writeJSON(w, http.StatusOK, resp)
+}
+
+// --- Controller status handlers ---
+
+func (h *Handler) UpdateControllerStatus(w http.ResponseWriter, r *http.Request) {
+	var body StatusUpdateRequest
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+
+	if body.Controller == "" || body.ResourceType == "" || body.ResourceID == uuid.Nil || body.Status == "" {
+		writeError(w, http.StatusBadRequest, "controller, resourceType, resourceId, and status are required")
+		return
+	}
+
+	if err := h.store.UpsertControllerStatus(
+		r.Context(), body.Controller, body.ResourceType, body.ResourceID, body.Status, body.Message,
+	); err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+func (h *Handler) DeleteControllerStatus(w http.ResponseWriter, r *http.Request) {
+	var body StatusDeleteRequest
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+
+	if body.Controller == "" || body.ResourceType == "" || body.ResourceID == uuid.Nil {
+		writeError(w, http.StatusBadRequest, "controller, resourceType, and resourceId are required")
+		return
+	}
+
+	if err := h.store.DeleteControllerStatus(
+		r.Context(), body.Controller, body.ResourceType, body.ResourceID,
+	); err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+// --- Helpers ---
+
+// resolveOrgNames determines the org scope for a request. Priority:
+// 1. Explicit ?org= query parameter (validated against JWT org membership).
+// 2. Org names extracted from JWT claims by AuthnMiddleware.
+// 3. nil if no auth context (internal endpoints, or auth disabled).
+func resolveOrgNames(r *http.Request) []string {
+	ac := getAuthContext(r)
+
+	if orgParam := r.URL.Query().Get("org"); orgParam != "" {
+		// If auth is active, validate that the caller has access to this org.
+		if ac != nil {
+			for _, name := range ac.OrgNames {
+				if name == orgParam {
+					return []string{orgParam}
+				}
+			}
+			// Caller specified an org they don't have access to.
+			// Return empty (not nil) to indicate "no valid org" rather than
+			// "unscoped". The handler will get zero results.
+			return []string{}
+		}
+		return []string{orgParam}
+	}
+
+	// Use JWT-derived org names if available.
+	if ac != nil && len(ac.OrgNames) > 0 {
+		return ac.OrgNames
+	}
+
+	return nil
+}
+
+// resolveOrgNamesWithDefault is like resolveOrgNames but falls back to the
+// configured default org when no explicit org context is available. Use this
+// for mutation endpoints where an org is required.
+//
+// Importantly, the fallback only applies when the caller supplied no org
+// context at all (nil return from resolveOrgNames).  An empty non-nil slice
+// means the caller explicitly specified an org they do not have access to;
+// in that case we must NOT fall back to the default org.
+func resolveOrgNamesWithDefault(r *http.Request, defaultOrg string) []string {
+	names := resolveOrgNames(r)
+	if names != nil {
+		// Caller provided explicit org context (possibly empty if denied).
+		return names
+	}
+	// No org context at all — fall back to default.
+	if defaultOrg != "" {
+		return []string{defaultOrg}
+	}
+	return nil
+}
+
+func isAmbiguous(err error) bool {
+	return err != nil && err.Error() != "" && len(err.Error()) > 9 && err.Error()[:9] == "ambiguous"
+}
+
+func writeJSON(w http.ResponseWriter, status int, v interface{}) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	if err := json.NewEncoder(w).Encode(v); err != nil {
+		log.Error().Err(err).Msg("failed to write response")
+	}
+}
+
+func writeError(w http.ResponseWriter, status int, msg string) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	_ = json.NewEncoder(w).Encode(map[string]string{"error": msg})
+}
