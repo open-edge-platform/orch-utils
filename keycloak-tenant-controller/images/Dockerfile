@@ -22,6 +22,7 @@ COPY . /usr/src/keycloak-tenant-controller/
 WORKDIR /usr/src/keycloak-tenant-controller/
 
 RUN echo "Using commit ID $KTC_GIT_COMMIT"
+RUN go mod vendor
 RUN mkdir -p ./bin \
     && CGO_ENABLED=0 go build -mod=vendor -trimpath \
     -ldflags="-w -s -buildid= -X 'main.Commit=${KTC_GIT_COMMIT}'" \

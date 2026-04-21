@@ -6,8 +6,6 @@ module github.com/open-edge-platform/orch-utils/keycloak-tenant-controller
 
 go 1.26.1
 
-replace github.com/open-edge-platform/orch-library/go => ../../orch-library/go
-
 require (
 	github.com/Clarilab/gocloaksession v1.14.0
 	github.com/Nerzal/gocloak/v13 v13.9.0
@@ -16,7 +14,7 @@ require (
 	github.com/hashicorp/vault/api v1.15.0
 	github.com/hashicorp/vault/api/auth/kubernetes v0.8.0
 	github.com/magefile/mage v1.15.0
-	github.com/open-edge-platform/orch-library/go v0.0.0
+	github.com/open-edge-platform/orch-library/go v0.6.4-0.20260420133059-5326600099ac
 	github.com/sirupsen/logrus v1.9.4
 	github.com/stretchr/testify v1.10.0
 )

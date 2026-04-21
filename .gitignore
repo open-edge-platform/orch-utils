@@ -86,4 +86,6 @@ nexus-api-gw/*venv
 *.test
 
 vendor/
-!keycloak-tenant-controller/vendor/
+# go workspace files (local dev only)
+go.work
+go.work.sum
