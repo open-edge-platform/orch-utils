@@ -25,6 +25,11 @@ func (Build) Docker() error {
 // Test targets run test suites.
 type Test mg.Namespace
 
+// Unit runs the Go unit tests (no database required).
+func (Test) Unit() error {
+	return runUnitTests()
+}
+
 // Integration runs the functional integration tests (requires docker).
 func (Test) Integration() error {
 	mg.Deps(Binary.Build)
