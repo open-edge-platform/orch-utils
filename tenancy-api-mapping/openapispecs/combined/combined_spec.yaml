@@ -4765,6 +4765,97 @@ paths:
           description: OK
       tags:
         - MetadataService
+  /v1/projects/{projectName}/oob/amt/userConsentCode/{guid}:
+    get:
+      description: If optInState is 0, it will request for a new user consent code
+      parameters:
+        - description: GUID of device
+          example: 123e4567-e89b-12d3-a456-426614174000
+          in: path
+          name: guid
+          required: true
+          schema:
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserConsentResponse'
+          description: Successful operation
+      summary: Request an user consent code on client device
+      tags:
+        - AMT
+    post:
+      description: Send the user consent code displayed on the client device
+      parameters:
+        - description: GUID of device
+          example: 123e4567-e89b-12d3-a456-426614174000
+          in: path
+          name: guid
+          required: true
+          schema:
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserConsentRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserConsentResponse'
+          description: Successful operation
+      summary: Send user consent code
+      tags:
+        - AMT
+  /v1/projects/{projectName}/oob/authorize/redirection/{guid}:
+    get:
+      description: |
+        Authenticate Redirection (KVM or SOL) sessions between the management console and MPS to allow only authenticated and authorized users to initiate.
+
+        **If using Kong**, make sure to use the prefix `/mps`, **NOT** `/mps/login`.  Authorize Redirection does not use the login route.
+      parameters:
+        - description: GUID of device
+          example: 123e4567-e89b-12d3-a456-426614174000
+          in: path
+          name: guid
+          required: true
+          schema:
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                properties:
+                  token:
+                    type: string
+          description: Success
+      summary: Issue Short-lived Bearer Token for Redirection Sessions
+      tags:
+        - Auth
   /v1/status:
     get:
       description: Gets runtime status of the service
