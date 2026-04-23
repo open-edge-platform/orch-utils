@@ -89,3 +89,6 @@ vendor/
 # go workspace files (local dev only)
 go.work
 go.work.sum
+cluster-manager/
+orch-cli/
+orch-library/
