@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent/folder"
-	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent/org"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent/predicate"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent/project"
 )
@@ -96,17 +95,6 @@ func (_u *ProjectUpdate) SetFolder(v *Folder) *ProjectUpdate {
 	return _u.SetFolderID(v.ID)
 }
 
-// SetOrgID sets the "org" edge to the Org entity by ID.
-func (_u *ProjectUpdate) SetOrgID(id uuid.UUID) *ProjectUpdate {
-	_u.mutation.SetOrgID(id)
-	return _u
-}
-
-// SetOrg sets the "org" edge to the Org entity.
-func (_u *ProjectUpdate) SetOrg(v *Org) *ProjectUpdate {
-	return _u.SetOrgID(v.ID)
-}
-
 // Mutation returns the ProjectMutation object of the builder.
 func (_u *ProjectUpdate) Mutation() *ProjectMutation {
 	return _u.mutation
@@ -115,12 +103,6 @@ func (_u *ProjectUpdate) Mutation() *ProjectMutation {
 // ClearFolder clears the "folder" edge to the Folder entity.
 func (_u *ProjectUpdate) ClearFolder() *ProjectUpdate {
 	_u.mutation.ClearFolder()
-	return _u
-}
-
-// ClearOrg clears the "org" edge to the Org entity.
-func (_u *ProjectUpdate) ClearOrg() *ProjectUpdate {
-	_u.mutation.ClearOrg()
 	return _u
 }
 
@@ -169,9 +151,6 @@ func (_u *ProjectUpdate) check() error {
 	}
 	if _u.mutation.FolderCleared() && len(_u.mutation.FolderIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Project.folder"`)
-	}
-	if _u.mutation.OrgCleared() && len(_u.mutation.OrgIDs()) > 0 {
-		return errors.New(`ent: clearing a required unique edge "Project.org"`)
 	}
 	return nil
 }
@@ -225,35 +204,6 @@ func (_u *ProjectUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(folder.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.OrgCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   project.OrgTable,
-			Columns: []string{project.OrgColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(org.FieldID, field.TypeUUID),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OrgIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   project.OrgTable,
-			Columns: []string{project.OrgColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(org.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -346,17 +296,6 @@ func (_u *ProjectUpdateOne) SetFolder(v *Folder) *ProjectUpdateOne {
 	return _u.SetFolderID(v.ID)
 }
 
-// SetOrgID sets the "org" edge to the Org entity by ID.
-func (_u *ProjectUpdateOne) SetOrgID(id uuid.UUID) *ProjectUpdateOne {
-	_u.mutation.SetOrgID(id)
-	return _u
-}
-
-// SetOrg sets the "org" edge to the Org entity.
-func (_u *ProjectUpdateOne) SetOrg(v *Org) *ProjectUpdateOne {
-	return _u.SetOrgID(v.ID)
-}
-
 // Mutation returns the ProjectMutation object of the builder.
 func (_u *ProjectUpdateOne) Mutation() *ProjectMutation {
 	return _u.mutation
@@ -365,12 +304,6 @@ func (_u *ProjectUpdateOne) Mutation() *ProjectMutation {
 // ClearFolder clears the "folder" edge to the Folder entity.
 func (_u *ProjectUpdateOne) ClearFolder() *ProjectUpdateOne {
 	_u.mutation.ClearFolder()
-	return _u
-}
-
-// ClearOrg clears the "org" edge to the Org entity.
-func (_u *ProjectUpdateOne) ClearOrg() *ProjectUpdateOne {
-	_u.mutation.ClearOrg()
 	return _u
 }
 
@@ -432,9 +365,6 @@ func (_u *ProjectUpdateOne) check() error {
 	}
 	if _u.mutation.FolderCleared() && len(_u.mutation.FolderIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Project.folder"`)
-	}
-	if _u.mutation.OrgCleared() && len(_u.mutation.OrgIDs()) > 0 {
-		return errors.New(`ent: clearing a required unique edge "Project.org"`)
 	}
 	return nil
 }
@@ -505,35 +435,6 @@ func (_u *ProjectUpdateOne) sqlSave(ctx context.Context) (_node *Project, err er
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(folder.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.OrgCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   project.OrgTable,
-			Columns: []string{project.OrgColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(org.FieldID, field.TypeUUID),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OrgIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   project.OrgTable,
-			Columns: []string{project.OrgColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(org.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

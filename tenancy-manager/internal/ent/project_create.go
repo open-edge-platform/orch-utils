@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent/folder"
-	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent/org"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent/project"
 )
 
@@ -110,17 +109,6 @@ func (_c *ProjectCreate) SetFolder(v *Folder) *ProjectCreate {
 	return _c.SetFolderID(v.ID)
 }
 
-// SetOrgID sets the "org" edge to the Org entity by ID.
-func (_c *ProjectCreate) SetOrgID(id uuid.UUID) *ProjectCreate {
-	_c.mutation.SetOrgID(id)
-	return _c
-}
-
-// SetOrg sets the "org" edge to the Org entity.
-func (_c *ProjectCreate) SetOrg(v *Org) *ProjectCreate {
-	return _c.SetOrgID(v.ID)
-}
-
 // Mutation returns the ProjectMutation object of the builder.
 func (_c *ProjectCreate) Mutation() *ProjectMutation {
 	return _c.mutation
@@ -196,9 +184,6 @@ func (_c *ProjectCreate) check() error {
 	if len(_c.mutation.FolderIDs()) == 0 {
 		return &ValidationError{Name: "folder", err: errors.New(`ent: missing required edge "Project.folder"`)}
 	}
-	if len(_c.mutation.OrgIDs()) == 0 {
-		return &ValidationError{Name: "org", err: errors.New(`ent: missing required edge "Project.org"`)}
-	}
 	return nil
 }
 
@@ -269,23 +254,6 @@ func (_c *ProjectCreate) createSpec() (*Project, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.folder_projects = &nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.OrgIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   project.OrgTable,
-			Columns: []string{project.OrgColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(org.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.org_projects = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

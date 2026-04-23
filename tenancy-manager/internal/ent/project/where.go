@@ -364,29 +364,6 @@ func HasFolderWith(preds ...predicate.Folder) predicate.Project {
 	})
 }
 
-// HasOrg applies the HasEdge predicate on the "org" edge.
-func HasOrg() predicate.Project {
-	return predicate.Project(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, OrgTable, OrgColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasOrgWith applies the HasEdge predicate on the "org" edge with a given conditions (other predicates).
-func HasOrgWith(preds ...predicate.Org) predicate.Project {
-	return predicate.Project(func(s *sql.Selector) {
-		step := newOrgStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Project) predicate.Project {
 	return predicate.Project(sql.AndPredicates(predicates...))

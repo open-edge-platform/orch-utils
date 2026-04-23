@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent/folder"
-	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent/org"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent/predicate"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent/project"
 )
@@ -26,7 +25,6 @@ type ProjectQuery struct {
 	inters     []Interceptor
 	predicates []predicate.Project
 	withFolder *FolderQuery
-	withOrg    *OrgQuery
 	withFKs    bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -79,28 +77,6 @@ func (_q *ProjectQuery) QueryFolder() *FolderQuery {
 			sqlgraph.From(project.Table, project.FieldID, selector),
 			sqlgraph.To(folder.Table, folder.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, project.FolderTable, project.FolderColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryOrg chains the current query on the "org" edge.
-func (_q *ProjectQuery) QueryOrg() *OrgQuery {
-	query := (&OrgClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(project.Table, project.FieldID, selector),
-			sqlgraph.To(org.Table, org.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, project.OrgTable, project.OrgColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -301,7 +277,6 @@ func (_q *ProjectQuery) Clone() *ProjectQuery {
 		inters:     append([]Interceptor{}, _q.inters...),
 		predicates: append([]predicate.Project{}, _q.predicates...),
 		withFolder: _q.withFolder.Clone(),
-		withOrg:    _q.withOrg.Clone(),
 		// clone intermediate query.
 		sql:  _q.sql.Clone(),
 		path: _q.path,
@@ -316,17 +291,6 @@ func (_q *ProjectQuery) WithFolder(opts ...func(*FolderQuery)) *ProjectQuery {
 		opt(query)
 	}
 	_q.withFolder = query
-	return _q
-}
-
-// WithOrg tells the query-builder to eager-load the nodes that are connected to
-// the "org" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *ProjectQuery) WithOrg(opts ...func(*OrgQuery)) *ProjectQuery {
-	query := (&OrgClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withOrg = query
 	return _q
 }
 
@@ -409,12 +373,11 @@ func (_q *ProjectQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Proj
 		nodes       = []*Project{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [1]bool{
 			_q.withFolder != nil,
-			_q.withOrg != nil,
 		}
 	)
-	if _q.withFolder != nil || _q.withOrg != nil {
+	if _q.withFolder != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -441,12 +404,6 @@ func (_q *ProjectQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Proj
 	if query := _q.withFolder; query != nil {
 		if err := _q.loadFolder(ctx, query, nodes, nil,
 			func(n *Project, e *Folder) { n.Edges.Folder = e }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withOrg; query != nil {
-		if err := _q.loadOrg(ctx, query, nodes, nil,
-			func(n *Project, e *Org) { n.Edges.Org = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -478,38 +435,6 @@ func (_q *ProjectQuery) loadFolder(ctx context.Context, query *FolderQuery, node
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "folder_projects" returned %v`, n.ID)
-		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
-	}
-	return nil
-}
-func (_q *ProjectQuery) loadOrg(ctx context.Context, query *OrgQuery, nodes []*Project, init func(*Project), assign func(*Project, *Org)) error {
-	ids := make([]uuid.UUID, 0, len(nodes))
-	nodeids := make(map[uuid.UUID][]*Project)
-	for i := range nodes {
-		if nodes[i].org_projects == nil {
-			continue
-		}
-		fk := *nodes[i].org_projects
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
-	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(org.IDIn(ids...))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "org_projects" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

@@ -660,22 +660,6 @@ func (c *OrgClient) QueryFolders(_m *Org) *FolderQuery {
 	return query
 }
 
-// QueryProjects queries the projects edge of a Org.
-func (c *OrgClient) QueryProjects(_m *Org) *ProjectQuery {
-	query := (&ProjectClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(org.Table, org.FieldID, id),
-			sqlgraph.To(project.Table, project.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, org.ProjectsTable, org.ProjectsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // Hooks returns the client hooks.
 func (c *OrgClient) Hooks() []Hook {
 	return c.hooks.Org
@@ -818,22 +802,6 @@ func (c *ProjectClient) QueryFolder(_m *Project) *FolderQuery {
 			sqlgraph.From(project.Table, project.FieldID, id),
 			sqlgraph.To(folder.Table, folder.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, project.FolderTable, project.FolderColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryOrg queries the org edge of a Project.
-func (c *ProjectClient) QueryOrg(_m *Project) *OrgQuery {
-	query := (&OrgClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(project.Table, project.FieldID, id),
-			sqlgraph.To(org.Table, org.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, project.OrgTable, project.OrgColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil

@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent/folder"
-	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent/org"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent/project"
 )
 
@@ -34,7 +33,6 @@ type Project struct {
 	// The values are being populated by the ProjectQuery when eager-loading is set.
 	Edges           ProjectEdges `json:"edges"`
 	folder_projects *uuid.UUID
-	org_projects    *uuid.UUID
 	selectValues    sql.SelectValues
 }
 
@@ -42,11 +40,9 @@ type Project struct {
 type ProjectEdges struct {
 	// Folder holds the value of the folder edge.
 	Folder *Folder `json:"folder,omitempty"`
-	// Org holds the value of the org edge.
-	Org *Org `json:"org,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [1]bool
 }
 
 // FolderOrErr returns the Folder value or an error if the edge
@@ -58,17 +54,6 @@ func (e ProjectEdges) FolderOrErr() (*Folder, error) {
 		return nil, &NotFoundError{label: folder.Label}
 	}
 	return nil, &NotLoadedError{edge: "folder"}
-}
-
-// OrgOrErr returns the Org value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e ProjectEdges) OrgOrErr() (*Org, error) {
-	if e.Org != nil {
-		return e.Org, nil
-	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: org.Label}
-	}
-	return nil, &NotLoadedError{edge: "org"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -83,8 +68,6 @@ func (*Project) scanValues(columns []string) ([]any, error) {
 		case project.FieldID:
 			values[i] = new(uuid.UUID)
 		case project.ForeignKeys[0]: // folder_projects
-			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
-		case project.ForeignKeys[1]: // org_projects
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
@@ -145,13 +128,6 @@ func (_m *Project) assignValues(columns []string, values []any) error {
 				_m.folder_projects = new(uuid.UUID)
 				*_m.folder_projects = *value.S.(*uuid.UUID)
 			}
-		case project.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullScanner); !ok {
-				return fmt.Errorf("unexpected type %T for field org_projects", values[i])
-			} else if value.Valid {
-				_m.org_projects = new(uuid.UUID)
-				*_m.org_projects = *value.S.(*uuid.UUID)
-			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -168,11 +144,6 @@ func (_m *Project) Value(name string) (ent.Value, error) {
 // QueryFolder queries the "folder" edge of the Project entity.
 func (_m *Project) QueryFolder() *FolderQuery {
 	return NewProjectClient(_m.config).QueryFolder(_m)
-}
-
-// QueryOrg queries the "org" edge of the Project entity.
-func (_m *Project) QueryOrg() *OrgQuery {
-	return NewProjectClient(_m.config).QueryOrg(_m)
 }
 
 // Update returns a builder for updating this Project.

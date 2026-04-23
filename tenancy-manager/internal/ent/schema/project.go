@@ -33,7 +33,6 @@ func (Project) Fields() []ent.Field {
 func (Project) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("folder", Folder.Type).Ref("projects").Unique().Required(),
-		edge.From("org", Org.Type).Ref("projects").Unique().Required(),
 	}
 }
 

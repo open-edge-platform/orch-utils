@@ -27,8 +27,6 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// EdgeFolders holds the string denoting the folders edge name in mutations.
 	EdgeFolders = "folders"
-	// EdgeProjects holds the string denoting the projects edge name in mutations.
-	EdgeProjects = "projects"
 	// Table holds the table name of the org in the database.
 	Table = "orgs"
 	// FoldersTable is the table that holds the folders relation/edge.
@@ -38,13 +36,6 @@ const (
 	FoldersInverseTable = "folders"
 	// FoldersColumn is the table column denoting the folders relation/edge.
 	FoldersColumn = "org_folders"
-	// ProjectsTable is the table that holds the projects relation/edge.
-	ProjectsTable = "projects"
-	// ProjectsInverseTable is the table name for the Project entity.
-	// It exists in this package in order to avoid circular dependency with the "project" package.
-	ProjectsInverseTable = "projects"
-	// ProjectsColumn is the table column denoting the projects relation/edge.
-	ProjectsColumn = "org_projects"
 )
 
 // Columns holds all SQL columns for org fields.
@@ -128,31 +119,10 @@ func ByFolders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newFoldersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-
-// ByProjectsCount orders the results by projects count.
-func ByProjectsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newProjectsStep(), opts...)
-	}
-}
-
-// ByProjects orders the results by projects terms.
-func ByProjects(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProjectsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
 func newFoldersStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FoldersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, FoldersTable, FoldersColumn),
-	)
-}
-func newProjectsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProjectsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ProjectsTable, ProjectsColumn),
 	)
 }
