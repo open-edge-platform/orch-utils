@@ -36,6 +36,7 @@ keycloakAdmin:
   passwordSecret:
     name: platform-keycloak  # name of the secret
     key: admin-password  # key of the secret
+tenantManagerURL: "http://tenancy-manager.orch-iam:8080"
 keycloak_realm: "master"
 keycloak_si_groups: |-
   {

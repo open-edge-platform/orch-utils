@@ -92,6 +92,8 @@ spec:
               value: "{{ .Values.keycloakAdmin.url }}"
             - name: KTC_SERVER_LOG_LEVEL
               value: "info"
+            - name: TENANT_MANAGER_URL
+              value: "{{ .Values.tenantManagerURL }}"
             - name: KEYCLOAK_REALM
               value: {{ .Values.keycloak_realm | default "master" }}
             - name: KEYCLOAK_SI_GROUPS

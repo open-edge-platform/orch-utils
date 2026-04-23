@@ -86,3 +86,6 @@ nexus-api-gw/*venv
 *.test
 
 vendor/
+# go workspace files (local dev only)
+go.work
+go.work.sum
