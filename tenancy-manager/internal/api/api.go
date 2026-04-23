@@ -181,7 +181,9 @@ func (h *Handler) CreateOrUpdateOrg(w http.ResponseWriter, r *http.Request) {
 	var body struct {
 		Description string `json:"description"`
 	}
-	decodeBody(w, r, &body) // description is optional; empty body is valid
+	if !decodeBody(w, r, &body) { // description is optional; empty body is valid
+		return
+	}
 
 	updateIfExists := r.URL.Query().Get("update_if_exists") != "false" // default true
 
@@ -314,7 +316,9 @@ func (h *Handler) CreateOrUpdateProject(w http.ResponseWriter, r *http.Request) 
 	var body struct {
 		Description string `json:"description"`
 	}
-	decodeBody(w, r, &body) // description is optional; empty body is valid
+	if !decodeBody(w, r, &body) { // description is optional; empty body is valid
+		return
+	}
 
 	updateIfExists := r.URL.Query().Get("update_if_exists") != "false" // default true
 
