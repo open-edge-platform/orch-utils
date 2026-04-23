@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: 2026 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+---
+{{- if .Values.ingress.enabled -}}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "iam.fullname" . }}
+  namespace: {{ default .Release.Namespace .Values.global.namespace }}
+  labels:
+    {{- include "iam.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  entryPoints:
+    {{- toYaml .Values.ingress.entryPoints | nindent 4 }}
+  routes:
+    - match: {{ .Values.ingress.pathMatch | quote }}
+      kind: Rule
+      services:
+        - name: {{ include "iam.fullname" . }}
+          port: {{ .Values.service.port }}
+      {{- if .Values.ingress.middlewares }}
+      middlewares:
+        {{- toYaml .Values.ingress.middlewares | nindent 8 }}
+      {{- end }}
+{{- end }}

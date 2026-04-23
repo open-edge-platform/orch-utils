@@ -6,9 +6,32 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: tenancy-config
+  namespace: {{ default .Release.Namespace .Values.global.namespace }}
 data:
   config.yaml: |
-    OrgCreateTimeoutInSecs: 300
-    OrgDeleteTimeoutInSecs: 300
-    ProjectCreateTimeoutInSecs: 300
-    ProjectDeleteTimeoutInSecs: 300
+    # Tenancy Manager configuration
+    listen_addr: "0.0.0.0:8080"
+
+    # Default org/project for bootstrap
+    default_org_name: {{ .Values.tenancyManager.defaultOrgName | quote }}
+    default_project_name: {{ .Values.tenancyManager.defaultProjectName | quote }}
+
+    # Registered controllers
+    controllers:
+      org:
+        {{- range .Values.tenancyManager.controllers.org }}
+        - {{ . | quote }}
+        {{- end }}
+      project:
+        {{- range .Values.tenancyManager.controllers.project }}
+        - {{ . | quote }}
+        {{- end }}
+
+    # Resource lifecycle timeouts (seconds)
+    org_create_timeout: 300
+    org_delete_timeout: 300
+    project_create_timeout: 300
+    project_delete_timeout: 300
+
+    # Cleanup interval for hard-deleting soft-deleted resources
+    cleanup_interval: 60

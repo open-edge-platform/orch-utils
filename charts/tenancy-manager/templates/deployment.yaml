@@ -36,21 +36,42 @@ spec:
         value: api
       {{- end }}
       serviceAccountName: {{ include "iam.serviceAccountName" . }}
+      {{- if .Values.postgresql.enabled }}
       initContainers:
-      - name: wait-for-job
-        image: alpine/kubectl:1.35.2
+      - name: wait-for-postgres
+        image: postgres:15-alpine
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
         command: ["/bin/sh", "-c"]
         args:
         - |
           set -e
-          echo "admin.nexus.com CRD is available, waiting for CR..."
-          echo "Waiting for CRD 'orgs.org.edge-orchestrator.intel.com' to be available..."
-          until kubectl get orgs.org.edge-orchestrator.intel.com; do
-            echo "edge-orchestrator.intel.com CRD not found, waiting..."
-            sleep 10
+          echo "Waiting for PostgreSQL to be ready..."
+          {{- if .Values.postgresql.existingSecret }}
+          export PGPASSWORD=$(cat /secrets/{{ .Values.postgresql.existingSecretPasswordKey }})
+          {{- else }}
+          export PGPASSWORD="${POSTGRESQL_PASSWORD}"
+          {{- end }}
+          until pg_isready -h {{ .Values.global.postgresql.host | default .Values.postgresql.host }} -p {{ .Values.postgresql.port }} -U {{ .Values.postgresql.username }}; do
+            echo "PostgreSQL not ready, waiting..."
+            sleep 2
           done
+          echo "PostgreSQL is ready"
+        env:
+        {{- if not .Values.postgresql.existingSecret }}
+        - name: POSTGRESQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.postgresql.existingSecret | default "postgresql" }}
+              key: {{ .Values.postgresql.existingSecretPasswordKey }}
+        {{- end }}
+        {{- if .Values.postgresql.existingSecret }}
+        volumeMounts:
+        - name: postgres-secret
+          mountPath: /secrets
+          readOnly: true
+        {{- end }}
+      {{- end }}
       containers:
       - name: {{ include "iam.fullname" . }}
         securityContext:
@@ -59,17 +80,63 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         resources:
             {{- toYaml .Values.resources | nindent 12 }}
-        command:
-        - /usr/local/bin/tenancy-manager
-        - -serviceaccount
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
         env:
         - name: LOG_LEVEL
-          value: {{ .Values.logging.level }}
-        - name: NEXUS_LOG_LEVEL
-          value: {{ .Values.logging.level }}
+          value: {{ .Values.logging.level | default "info" }}
+        # PostgreSQL connection
+        - name: PGHOST
+          value: {{ .Values.global.postgresql.host | default .Values.postgresql.host | quote }}
+        - name: PGPORT
+          value: {{ .Values.postgresql.port | quote }}
+        - name: PGDATABASE
+          value: {{ .Values.postgresql.database | quote }}
+        - name: PGUSER
+          value: {{ .Values.postgresql.username | quote }}
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.postgresql.existingSecret | default "postgresql" }}
+              key: {{ .Values.postgresql.existingSecretPasswordKey }}
+        # OIDC configuration
+        {{- if .Values.tenancyManager.oidcServerURL }}
+        - name: OIDC_SERVER_URL
+          value: {{ .Values.tenancyManager.oidcServerURL | quote }}
+        {{- end }}
+        # Internal auth token for controller endpoints
+        {{- if .Values.tenancyManager.internalAuthTokenSecret }}
+        - name: INTERNAL_AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.tenancyManager.internalAuthTokenSecret }}
+              key: {{ .Values.tenancyManager.internalAuthTokenSecretKey }}
+        {{- else if .Values.tenancyManager.internalAuthToken }}
+        - name: INTERNAL_AUTH_TOKEN
+          value: {{ .Values.tenancyManager.internalAuthToken | quote }}
+        {{- end }}
         volumeMounts:
         - name: config-volume
           mountPath: /etc/config
+          readOnly: true
       volumes:
       - name: config-volume
         configMap:

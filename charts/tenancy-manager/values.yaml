@@ -82,3 +82,58 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+service:
+  type: ClusterIP
+  port: 8080
+  annotations: {}
+
+ingress:
+  enabled: true
+  annotations: {}
+  # Path match for tenancy API endpoints
+  pathMatch: "PathRegexp(`^/v1/(orgs|projects)`)"
+  entryPoints:
+    - web
+  middlewares:
+    - name: validate-jwt
+      namespace: orch-iam
+
+# PostgreSQL configuration
+postgresql:
+  enabled: true
+  # Host can be overridden via global.postgresql.host or postgresql.host
+  host: ""
+  port: 5432
+  database: tenancy
+  username: postgres
+  # Password should be provided via existingSecret or set explicitly
+  existingSecret: ""
+  existingSecretPasswordKey: "postgresql-password"
+
+# Tenancy Manager specific configuration
+tenancyManager:
+  # Default org and project for bootstrap (leave empty to skip bootstrap)
+  defaultOrgName: "intel"
+  defaultProjectName: "default"
+
+  # OIDC configuration for JWT validation
+  oidcServerURL: ""
+
+  # Internal auth token for controller endpoints
+  # Should be provided via existingSecret in production
+  internalAuthToken: ""
+  internalAuthTokenSecret: ""
+  internalAuthTokenSecretKey: "internal-auth-token"
+
+  # Registered controllers that will be tracked
+  controllers:
+    org:
+      - keycloak-tenant-controller
+    project:
+      - app-orch-tenant-controller
+      - infra-tenant-controller
+      - cluster-manager
+      - app-deployment-manager
+      - observability-tenant-controller
+      - metadata-broker
