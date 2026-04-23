@@ -77,7 +77,7 @@ ginkgo: ## Run all ginkgo tests in sub-projects
 	make -C nexus-api-gw        ginkgo
 	make -C nexus               ginkgo
 	make -C secrets             ginkgo
-	make -C tenancy-manager     ginkgo
+	cd tenancy-manager && mage test:unit
 	# make -C tenancy-api-mapping ginkgo  # needs to be fixed
 
 #### Help Target ####
