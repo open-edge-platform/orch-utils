@@ -154,6 +154,10 @@ yamllint:
 	yamllint --version
 	yamllint -c yamllint_conf.yml -s $(YAML_FILES)
 
+.PHONY: ginkgo
+ginkgo: ## run ginkgo tests
+	ginkgo run -v -r -p --race -randomize-all -randomize-suites \
+		--skip-package="fuzztest"
 
 help:
 	@printf "%-20s %s\n" "Target" "Description"
