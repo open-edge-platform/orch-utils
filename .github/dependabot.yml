@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# Define common configurations
+# Define common configurations to reduce repetition
 x-gomod-config: &gomod-config
   package-ecosystem: "gomod"
   ignore:
@@ -51,7 +51,7 @@ x-docker-config: &docker-config
 version: 2
 enable-beta-ecosystems: true
 updates:
-  # Go modules
+  # Go modules - separate block for each directory
   - <<: *gomod-config
     directory: "/"
   - <<: *gomod-config
@@ -123,7 +123,7 @@ updates:
   - <<: *gomod-config
     directory: "/tenancy-datamodel"
 
-  # Helm charts
+  # Helm charts - separate block for each directory
   - <<: *helm-config
     directory: "/charts/secrets-config"
   - <<: *helm-config
@@ -205,7 +205,7 @@ updates:
   - <<: *helm-config
     directory: "/charts/oci-secret"
 
-  # Docker
+  # Docker - separate block for each directory
   - <<: *docker-config
     directory: "/tenancy-api-mapping"
   - <<: *docker-config
