@@ -569,6 +569,10 @@ func resolveOrgNames(r *http.Request) []string {
 	if orgParam := r.URL.Query().Get("org"); orgParam != "" {
 		// If auth is active, validate that the caller has access to this org.
 		if ac != nil {
+			// Admin bypass: KC 'admin' role is superuser — allow any org.
+			if hasRole(ac.Roles, "admin") {
+				return []string{orgParam}
+			}
 			for _, name := range ac.OrgNames {
 				if name == orgParam {
 					return []string{orgParam}
