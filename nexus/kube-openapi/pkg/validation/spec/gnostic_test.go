@@ -20,7 +20,7 @@ import (
 	"github.com/stretchr/testify/require"
 	. "github.com/vmware-tanzu/graph-framework-for-microservices/kube-openapi/pkg/validation/spec"
 	"google.golang.org/protobuf/proto"
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
 )
 
 var SpecV2DiffOptions = []cmp.Option{
