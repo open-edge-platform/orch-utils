@@ -16,6 +16,11 @@ data:
     default_org_name: {{ .Values.tenancyManager.defaultOrgName | quote }}
     default_project_name: {{ .Values.tenancyManager.defaultProjectName | quote }}
 
+    # OIDC server URL for JWT authentication
+    {{- if .Values.tenancyManager.oidcServerURL }}
+    oidc_server_url: {{ .Values.tenancyManager.oidcServerURL | quote }}
+    {{- end }}
+
     # Registered controllers
     controllers:
       org:

@@ -64,10 +64,8 @@ func DefaultConfig() *Config {
 				"keycloak-tenant-controller",
 			},
 			Project: []string{
-				"app-orch-tenant-controller",
-				"app-deployment-manager",
 				"keycloak-tenant-controller",
-				"infra-tenant-controller",
+				"tenant-controller",
 				"cluster-manager",
 				"observability-tenant-controller",
 				"metadata-broker",
