@@ -1,154 +1,243 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-FileCopyrightText: 2026 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
+
+# Define common configurations
+x-gomod-config: &gomod-config
+  package-ecosystem: "gomod"
+  ignore:
+    - dependency-name: "*"
+      update-types:
+        - "version-update:semver-major"
+        - "version-update:semver-minor"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  commit-message:
+    prefix: "go.mod"
+  reviewers:
+    - "dmytroye"
+
+x-helm-config: &helm-config
+  package-ecosystem: "helm"
+  ignore:
+    - dependency-name: "*"
+      update-types:
+        - "version-update:semver-major"
+        - "version-update:semver-minor"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  commit-message:
+    prefix: "Helm charts"
+  reviewers:
+    - "dmytroye"
+
+x-docker-config: &docker-config
+  package-ecosystem: "docker"
+  ignore:
+    - dependency-name: "*"
+      update-types:
+        - "version-update:semver-major"
+        - "version-update:semver-minor"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  commit-message:
+    prefix: "Dockerfile"
+  reviewers:
+    - "dmytroye"
 
 version: 2
 enable-beta-ecosystems: true
 updates:
-  # Enable version updates for Go modules
-  - package-ecosystem: "gomod"
-    directories:
-      - "/"
-      - "/tenancy-api-mapping"
-      - "/traefik-plugins/jwt-plugin"
-      - "/auth-service"
-      - "/nexus/gqlgen"
-      - "/nexus/openapi-generator"
-      - "/nexus/install-validator"
-      - "/nexus/compiler"
-      - "/nexus/compiler/example/test-utils/invalid-singleton-child"
-      - "/nexus/compiler/example/test-utils/global-package"
-      - "/nexus/compiler/example/test-utils/pointer-type-datamodel"
-      - "/nexus/compiler/example/test-utils/duplicated-uris-datamodel"
-      - "/nexus/compiler/example/test-utils/invalid-type-name-datamodel"
-      - "/nexus/compiler/example/test-utils/group-name-with-hyphen-datamodel"
-      - "/nexus/compiler/example/test-utils/map-type-child"
-      - "/nexus/compiler/example/test-utils/output-group-name-with-hyphen-datamodel"
-      - "/nexus/compiler/example/test-utils/array-type-child"
-      - "/nexus/compiler/example/test-utils/invalid-pkg-name-datamodel"
-      - "/nexus/compiler/example/test-utils/nexus-rest-api-gen-wrong-name"
-      - "/nexus/compiler/example/test-utils/non-singleton-root"
-      - "/nexus/compiler/example/output/generated"
-      - "/nexus/compiler/example/output/generated/nexus-gql"
-      - "/nexus/compiler/example/tests"
-      - "/nexus/compiler/example/tests/custom_query_grpc_server"
-      - "/nexus/compiler/example/datamodel/build/nexus-gql"
-      - "/nexus/compiler/example/datamodel"
-      - "/nexus/common-library"
-      - "/nexus/nexus"
-      - "/nexus/kube-openapi"
-      - "/nexus-api-gw"
-      - "/cert-synchronizer"
-      - "/keycloak-tenant-controller"
-      - "/tenancy-manager"
-      - "/tenancy-datamodel/test"
-      - "/tenancy-datamodel"
-    # Only update patch versions to reduce the chance of regressions getting introduced
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
+  # Go modules
+  - <<: *gomod-config
+    directory: "/"
+  - <<: *gomod-config
+    directory: "/tenancy-api-mapping"
+  - <<: *gomod-config
+    directory: "/traefik-plugins/jwt-plugin"
+  - <<: *gomod-config
+    directory: "/auth-service"
+  - <<: *gomod-config
+    directory: "/nexus/gqlgen"
+  - <<: *gomod-config
+    directory: "/nexus/openapi-generator"
+  - <<: *gomod-config
+    directory: "/nexus/install-validator"
+  - <<: *gomod-config
+    directory: "/nexus/compiler"
+  - <<: *gomod-config
+    directory: "/nexus/compiler/example/test-utils/invalid-singleton-child"
+  - <<: *gomod-config
+    directory: "/nexus/compiler/example/test-utils/global-package"
+  - <<: *gomod-config
+    directory: "/nexus/compiler/example/test-utils/pointer-type-datamodel"
+  - <<: *gomod-config
+    directory: "/nexus/compiler/example/test-utils/duplicated-uris-datamodel"
+  - <<: *gomod-config
+    directory: "/nexus/compiler/example/test-utils/invalid-type-name-datamodel"
+  - <<: *gomod-config
+    directory: "/nexus/compiler/example/test-utils/group-name-with-hyphen-datamodel"
+  - <<: *gomod-config
+    directory: "/nexus/compiler/example/test-utils/map-type-child"
+  - <<: *gomod-config
+    directory: "/nexus/compiler/example/test-utils/output-group-name-with-hyphen-datamodel"
+  - <<: *gomod-config
+    directory: "/nexus/compiler/example/test-utils/array-type-child"
+  - <<: *gomod-config
+    directory: "/nexus/compiler/example/test-utils/invalid-pkg-name-datamodel"
+  - <<: *gomod-config
+    directory: "/nexus/compiler/example/test-utils/nexus-rest-api-gen-wrong-name"
+  - <<: *gomod-config
+    directory: "/nexus/compiler/example/test-utils/non-singleton-root"
+  - <<: *gomod-config
+    directory: "/nexus/compiler/example/output/generated"
+  - <<: *gomod-config
+    directory: "/nexus/compiler/example/output/generated/nexus-gql"
+  - <<: *gomod-config
+    directory: "/nexus/compiler/example/tests"
+  - <<: *gomod-config
+    directory: "/nexus/compiler/example/tests/custom_query_grpc_server"
+  - <<: *gomod-config
+    directory: "/nexus/compiler/example/datamodel/build/nexus-gql"
+  - <<: *gomod-config
+    directory: "/nexus/compiler/example/datamodel"
+  - <<: *gomod-config
+    directory: "/nexus/common-library"
+  - <<: *gomod-config
+    directory: "/nexus/nexus"
+  - <<: *gomod-config
+    directory: "/nexus/kube-openapi"
+  - <<: *gomod-config
+    directory: "/nexus-api-gw"
+  - <<: *gomod-config
+    directory: "/cert-synchronizer"
+  - <<: *gomod-config
+    directory: "/keycloak-tenant-controller"
+  - <<: *gomod-config
+    directory: "/tenancy-manager"
+  - <<: *gomod-config
+    directory: "/tenancy-datamodel/test"
+  - <<: *gomod-config
+    directory: "/tenancy-datamodel"
 
-  # Enable version updates for Helm charts
-  - package-ecosystem: "helm"
-    directories:
-      - "/charts/secrets-config"
-      - "/charts/kyverno-traefik-policy"
-      - "/charts/traefik-pre"
-      - "/charts/token-refresh"
-      - "/charts/job-wait"
-      - "/charts/statefulset-wait"
-      - "/charts/postgresql-secrets"
-      - "/charts/kyverno-extra-policies"
-      - "/charts/rs-proxy"
-      - "/charts/rs-image-pull-secrets"
-      - "/charts/auth-service"
-      - "/charts/secret-wait"
-      - "/charts/aws-sm-proxy"
-      - "/charts/certificate-file-server"
-      - "/charts/namespace-label"
-      - "/charts/tenancy-api-mapping"
-      - "/charts/fleet-rs-secret"
-      - "/charts/aws-lb-tgb"
-      - "/charts/self-signed-cert"
-      - "/charts/tenancy-datamodel"
-      - "/charts/kyverno-istio-policy"
-      - "/charts/nexus-api-gw"
-      - "/charts/k8s-metrics-server"
-      - "/charts/metallb-config"
-      - "/charts/platform-autocert"
-      - "/charts/capi-operator-pre"
-      - "/charts/adm-secret"
-      - "/charts/aws-sm-get-rs-token"
-      - "/charts/vertical-pod-autoscaler"
-      - "/charts/cert-synchronizer"
-      - "/charts/nginx-ingress-pxe-boots"
-      - "/charts/keycloak-tenant-controller"
-      - "/charts/istio-policy"
-      - "/charts/token-file-server"
-      - "/charts/tenancy-manager"
-      - "/charts/traefik-extra-objects"
-      - "/charts/deployment-wait"
-      - "/charts/copy-secret"
-      - "/charts/squid-proxy"
-      - "/charts/oci-secret"
-    # Only update patch versions to reduce the chance of regressions getting introduced
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "Helm charts"
-    reviewers:
-      - "dmytroye"
+  # Helm charts
+  - <<: *helm-config
+    directory: "/charts/secrets-config"
+  - <<: *helm-config
+    directory: "/charts/kyverno-traefik-policy"
+  - <<: *helm-config
+    directory: "/charts/traefik-pre"
+  - <<: *helm-config
+    directory: "/charts/token-refresh"
+  - <<: *helm-config
+    directory: "/charts/job-wait"
+  - <<: *helm-config
+    directory: "/charts/statefulset-wait"
+  - <<: *helm-config
+    directory: "/charts/postgresql-secrets"
+  - <<: *helm-config
+    directory: "/charts/kyverno-extra-policies"
+  - <<: *helm-config
+    directory: "/charts/rs-proxy"
+  - <<: *helm-config
+    directory: "/charts/rs-image-pull-secrets"
+  - <<: *helm-config
+    directory: "/charts/auth-service"
+  - <<: *helm-config
+    directory: "/charts/secret-wait"
+  - <<: *helm-config
+    directory: "/charts/aws-sm-proxy"
+  - <<: *helm-config
+    directory: "/charts/certificate-file-server"
+  - <<: *helm-config
+    directory: "/charts/namespace-label"
+  - <<: *helm-config
+    directory: "/charts/tenancy-api-mapping"
+  - <<: *helm-config
+    directory: "/charts/fleet-rs-secret"
+  - <<: *helm-config
+    directory: "/charts/aws-lb-tgb"
+  - <<: *helm-config
+    directory: "/charts/self-signed-cert"
+  - <<: *helm-config
+    directory: "/charts/tenancy-datamodel"
+  - <<: *helm-config
+    directory: "/charts/kyverno-istio-policy"
+  - <<: *helm-config
+    directory: "/charts/nexus-api-gw"
+  - <<: *helm-config
+    directory: "/charts/k8s-metrics-server"
+  - <<: *helm-config
+    directory: "/charts/metallb-config"
+  - <<: *helm-config
+    directory: "/charts/platform-autocert"
+  - <<: *helm-config
+    directory: "/charts/capi-operator-pre"
+  - <<: *helm-config
+    directory: "/charts/adm-secret"
+  - <<: *helm-config
+    directory: "/charts/aws-sm-get-rs-token"
+  - <<: *helm-config
+    directory: "/charts/vertical-pod-autoscaler"
+  - <<: *helm-config
+    directory: "/charts/cert-synchronizer"
+  - <<: *helm-config
+    directory: "/charts/nginx-ingress-pxe-boots"
+  - <<: *helm-config
+    directory: "/charts/keycloak-tenant-controller"
+  - <<: *helm-config
+    directory: "/charts/istio-policy"
+  - <<: *helm-config
+    directory: "/charts/token-file-server"
+  - <<: *helm-config
+    directory: "/charts/tenancy-manager"
+  - <<: *helm-config
+    directory: "/charts/traefik-extra-objects"
+  - <<: *helm-config
+    directory: "/charts/deployment-wait"
+  - <<: *helm-config
+    directory: "/charts/copy-secret"
+  - <<: *helm-config
+    directory: "/charts/squid-proxy"
+  - <<: *helm-config
+    directory: "/charts/oci-secret"
 
-  # Enable version updates for Docker
-  - package-ecosystem: "docker"
-    directories:
-      - "/tenancy-api-mapping"
-      - "/auth-service"
-      - "/aws-sm-proxy"
-      - "/nexus/openapi-generator"
-      - "/nexus/compiler/builder"
-      - "/nexus/compiler"
-      - "/token-fs"
-      - "/nexus-api-gw"
-      - "/secrets"
-      - "/cert-synchronizer"
-      - "/keycloak-tenant-controller/images"
-      - "/tenancy-manager"
-      - "/tenancy-datamodel"
-      - "/squid-proxy"
-    # Only update patch versions to reduce the chance of regressions getting introduced
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "Dockerfile"
-    reviewers:
-      - "dmytroye"
+  # Docker
+  - <<: *docker-config
+    directory: "/tenancy-api-mapping"
+  - <<: *docker-config
+    directory: "/auth-service"
+  - <<: *docker-config
+    directory: "/aws-sm-proxy"
+  - <<: *docker-config
+    directory: "/nexus/openapi-generator"
+  - <<: *docker-config
+    directory: "/nexus/compiler/builder"
+  - <<: *docker-config
+    directory: "/nexus/compiler"
+  - <<: *docker-config
+    directory: "/token-fs"
+  - <<: *docker-config
+    directory: "/nexus-api-gw"
+  - <<: *docker-config
+    directory: "/secrets"
+  - <<: *docker-config
+    directory: "/cert-synchronizer"
+  - <<: *docker-config
+    directory: "/keycloak-tenant-controller/images"
+  - <<: *docker-config
+    directory: "/tenancy-manager"
+  - <<: *docker-config
+    directory: "/tenancy-datamodel"
+  - <<: *docker-config
+    directory: "/squid-proxy"
 
-  # Enable version updates for GitHub Actions
+  # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
-    # Only update patch versions to reduce the chance of regressions getting introduced
     ignore:
       - dependency-name: "*"
         update-types:
