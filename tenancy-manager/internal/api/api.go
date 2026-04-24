@@ -181,7 +181,9 @@ func (h *Handler) CreateOrUpdateOrg(w http.ResponseWriter, r *http.Request) {
 	var body struct {
 		Description string `json:"description"`
 	}
-	decodeBody(w, r, &body) // description is optional; empty body is valid
+	if !decodeBody(w, r, &body) { // description is optional; empty body is valid
+		return
+	}
 
 	updateIfExists := r.URL.Query().Get("update_if_exists") != "false" // default true
 
@@ -314,7 +316,9 @@ func (h *Handler) CreateOrUpdateProject(w http.ResponseWriter, r *http.Request) 
 	var body struct {
 		Description string `json:"description"`
 	}
-	decodeBody(w, r, &body) // description is optional; empty body is valid
+	if !decodeBody(w, r, &body) { // description is optional; empty body is valid
+		return
+	}
 
 	updateIfExists := r.URL.Query().Get("update_if_exists") != "false" // default true
 
@@ -606,6 +610,10 @@ func resolveOrgNames(r *http.Request) []string {
 	if orgParam := r.URL.Query().Get("org"); orgParam != "" {
 		// If auth is active, validate that the caller has access to this org.
 		if ac != nil {
+			// Admin bypass: KC 'admin' role is superuser — allow any org.
+			if hasRole(ac.Roles, "admin") {
+				return []string{orgParam}
+			}
 			for _, name := range ac.OrgNames {
 				if name == orgParam {
 					return []string{orgParam}

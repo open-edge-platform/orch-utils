@@ -134,7 +134,7 @@ tenancyManager:
       - keycloak-tenant-controller
     project:
       - app-orch-tenant-controller
-      - infra-tenant-controller
+      - tenant-controller
       - cluster-manager
       - app-deployment-manager
       - observability-tenant-controller

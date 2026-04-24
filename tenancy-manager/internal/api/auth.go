@@ -373,14 +373,22 @@ func AuthzMiddleware() func(http.Handler) http.Handler {
 			method := r.Method
 
 			var allowed bool
-			switch {
-			case isOrgEndpoint(path):
-				allowed = checkOrgAuthz(ac.Roles, method)
-			case isProjectEndpoint(path):
-				allowed = checkProjectAuthz(ac.Roles, ac.OrgUUIDs, method)
-			default:
-				// Should not reach here if middleware is applied correctly.
-				allowed = false
+			// Keycloak built-in "admin" realm role is treated as superuser —
+			// grants access to all TM endpoints regardless of method. This allows
+			// the Keycloak admin account (used by orch-cli and mage setup targets)
+			// to manage orgs/projects without needing per-resource role assignment.
+			if hasRole(ac.Roles, "admin") {
+				allowed = true
+			} else {
+				switch {
+				case isOrgEndpoint(path):
+					allowed = checkOrgAuthz(ac.Roles, method)
+				case isProjectEndpoint(path):
+					allowed = checkProjectAuthz(ac.Roles, ac.OrgUUIDs, method)
+				default:
+					// Should not reach here if middleware is applied correctly.
+					allowed = false
+				}
 			}
 
 			if !allowed {
@@ -418,19 +426,28 @@ func checkOrgAuthz(roles []string, method string) bool {
 
 // checkProjectAuthz checks if the caller has an org-scoped project role
 // or a member-role fallback for reads.
+// Global project-*-role values (without org prefix) are accepted as an admin
+// bypass — consistent with the org endpoint model where global org-write-role
+// grants access across all orgs. This allows admin tooling (e.g. mage targets)
+// to manage projects without needing per-org role assignment.
 func checkProjectAuthz(roles []string, orgUUIDs []uuid.UUID, method string) bool {
 	switch method {
 	case http.MethodGet:
-		// Org-admin project read
+		// Global admin read or org-admin project read.
+		if hasRole(roles, "project-read-role") {
+			return true
+		}
 		if hasOrgScopedRole(roles, orgUUIDs, "project-read-role") {
 			return true
 		}
 		// Member-role fallback: project members can read
 		return hasMemberRole(roles, orgUUIDs)
 	case http.MethodPut:
-		return hasOrgScopedRole(roles, orgUUIDs, "project-write-role")
+		// Global admin write or org-scoped write.
+		return hasRole(roles, "project-write-role") || hasOrgScopedRole(roles, orgUUIDs, "project-write-role")
 	case http.MethodDelete:
-		return hasOrgScopedRole(roles, orgUUIDs, "project-delete-role")
+		// Global admin delete or org-scoped delete.
+		return hasRole(roles, "project-delete-role") || hasOrgScopedRole(roles, orgUUIDs, "project-delete-role")
 	}
 	return false
 }
