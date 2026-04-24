@@ -5,6 +5,7 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"io"
@@ -22,16 +23,52 @@ import (
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/store"
 )
 
+// storeBackend is the subset of store.Store used by the API handlers.
+// Defined as an interface so handler logic can be unit-tested without a real DB.
+type storeBackend interface {
+	OrgNameResolver
+	ProjectDeletionChecker
+
+	// Org operations
+	ListOrgs(ctx context.Context) ([]*ent.Org, error)
+	GetOrg(ctx context.Context, name string) (*ent.Org, error)
+	CreateOrg(ctx context.Context, name, description string) (*ent.Org, error)
+	UpdateOrg(ctx context.Context, name, description string) (*ent.Org, error)
+	DeleteOrg(ctx context.Context, name string) error
+
+	// Project operations
+	ListProjects(ctx context.Context, orgNames []string) ([]*ent.Project, error)
+	GetProject(ctx context.Context, name string, orgNames []string) (*ent.Project, *ent.Org, error)
+	CreateProject(ctx context.Context, orgName, projectName, description string) (*ent.Project, *ent.Org, error)
+	UpdateProject(ctx context.Context, name string, orgNames []string, description string) (*ent.Project, *ent.Org, error)
+	DeleteProject(ctx context.Context, name string, orgNames []string) error
+	GetProjectByID(ctx context.Context, id uuid.UUID) (*ent.Project, *ent.Org, error)
+
+	// Event operations
+	GetEventsAfter(ctx context.Context, afterID int64, limit int) ([]*ent.TenancyEvent, error)
+	SynthesizeReplayEvents(ctx context.Context) ([]store.ReplayEvent, int64, error)
+
+	// Controller status operations
+	UpsertControllerStatus(ctx context.Context, controllerName, resourceType string, resourceID uuid.UUID, status, message string) error
+	DeleteControllerStatus(ctx context.Context, controllerName, resourceType string, resourceID uuid.UUID) error
+
+	// Status derivation
+	DeriveStatus(ctx context.Context, resourceType string, resourceID uuid.UUID, isDeleted bool, registeredControllers []string) (string, string)
+}
+
+// Compile-time assertion: store.Store must satisfy storeBackend.
+var _ storeBackend = (*store.Store)(nil)
+
 // Handler provides HTTP handlers for the Tenant Manager REST API.
 type Handler struct {
-	store         *store.Store
+	store         storeBackend
 	cfg           *config.Config
 	jwtValidator  *JWTValidator // nil when auth is disabled
 	internalToken string        // shared secret for internal endpoints; empty = rely on network policy
 }
 
 // NewHandler creates a new API handler.
-func NewHandler(s *store.Store, cfg *config.Config, jwtValidator *JWTValidator, internalToken string) *Handler {
+func NewHandler(s storeBackend, cfg *config.Config, jwtValidator *JWTValidator, internalToken string) *Handler {
 	return &Handler{store: s, cfg: cfg, jwtValidator: jwtValidator, internalToken: internalToken}
 }
 
