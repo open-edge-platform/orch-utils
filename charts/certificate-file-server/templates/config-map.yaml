@@ -12,28 +12,22 @@ data:
     # The Caddyfile is an easy way to configure your Caddy web server.
     #
     :{{ required "A valid service.port entry required!" .Values.service.port }}
+{{- if .Values.infraConfig }}
 
-    # Handle /boots path for CA certificates
-    route /boots* {
-      uri strip_prefix /boots
-      root * {{ required "A valid rootFolder entry required!" .Values.rootFolder }}
-      file_server
-    }
-
-    # Handle /installer path for installer script
+    # Handle /installer path for installer script (vPro profile only)
     route /installer* {
       uri strip_prefix /installer
       root * {{ required "A valid rootFolder entry required!" .Values.rootFolder }}installer/
       file_server
     }
-
-    # Default route for root path
-    route {
-      root * {{ required "A valid rootFolder entry required!" .Values.rootFolder }}
-      file_server
-    }
-
+{{- else }}
+    root * {{ required "A valid rootFolder entry required!" .Values.rootFolder }}
+    uri strip_prefix /boots
+    file_server
+{{- end }}
     # Refer to the Caddy docs for more information:
     # https://caddyserver.com/docs/caddyfile
+{{- if .Values.infraConfig }}
   edge-node-installer.sh: |-
 {{- include "certificate-file-server.edge-node-installer" . | nindent 4 }}
+{{- end }}

@@ -12,7 +12,11 @@ secretName: "boots-ca-cert"
 rootMatchHost:
 orchSecretName:
 
-# Source ConfigMap containing orchestrator configuration
+# Infrastructure configuration (vPro profile only)
+# When set, enables installer script generation and serving
+infraConfig: {}
+
+# Source ConfigMap containing orchestrator configuration (vPro profile only)
 sourceConfigMap:
   name: infra-config
   namespace: orch-infra

@@ -55,19 +55,26 @@ spec:
             - name: config
               mountPath: /etc/caddy
               readOnly: true
+            {{- if ne .Values.secretName "" }}
             - name: data
               mountPath: {{ required "A valid rootFolder entry required!" .Values.rootFolder }}
               readOnly: true
+            {{- end }}
+            {{- if .Values.infraConfig }}
             - name: installer-script
               mountPath: {{ required "A valid rootFolder entry required!" .Values.rootFolder }}installer/
               readOnly: true
+            {{- end }}
       volumes:
         - name: config
           configMap:
             name: {{ include "certificate-file-server.fullname" . }}
+        {{- if ne .Values.secretName "" }}
         - name: data
           secret:
-            secretName: {{ required "A valid secretName entry required!" .Values.secretName }}
+            secretName: {{ .Values.secretName }}
+        {{- end }}
+        {{- if .Values.infraConfig }}
         - name: installer-script
           configMap:
             name: {{ include "certificate-file-server.fullname" . }}
@@ -75,6 +82,7 @@ spec:
               - key: edge-node-installer.sh
                 path: edge-node-installer.sh
                 mode: 0755
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
