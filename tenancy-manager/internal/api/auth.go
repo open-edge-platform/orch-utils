@@ -373,14 +373,22 @@ func AuthzMiddleware() func(http.Handler) http.Handler {
 			method := r.Method
 
 			var allowed bool
-			switch {
-			case isOrgEndpoint(path):
-				allowed = checkOrgAuthz(ac.Roles, method)
-			case isProjectEndpoint(path):
-				allowed = checkProjectAuthz(ac.Roles, ac.OrgUUIDs, method)
-			default:
-				// Should not reach here if middleware is applied correctly.
-				allowed = false
+			// Keycloak built-in "admin" realm role is treated as superuser —
+			// grants access to all TM endpoints regardless of method. This allows
+			// the Keycloak admin account (used by orch-cli and mage setup targets)
+			// to manage orgs/projects without needing per-resource role assignment.
+			if hasRole(ac.Roles, "admin") {
+				allowed = true
+			} else {
+				switch {
+				case isOrgEndpoint(path):
+					allowed = checkOrgAuthz(ac.Roles, method)
+				case isProjectEndpoint(path):
+					allowed = checkProjectAuthz(ac.Roles, ac.OrgUUIDs, method)
+				default:
+					// Should not reach here if middleware is applied correctly.
+					allowed = false
+				}
 			}
 
 			if !allowed {
