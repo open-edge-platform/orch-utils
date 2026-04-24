@@ -40,6 +40,10 @@ TM_PORT=18080
 TM_BIN="${REPO_DIR}/bin/tenancy-manager"
 TM_PID=""
 
+SNAP_LIVE="/tmp/tm-snap-live.txt"
+SNAP_PROJ_DEL="/tmp/tm-snap-proj-del.txt"
+SNAP_ORG_DEL="/tmp/tm-snap-org-del.txt"
+
 SKIP_BUILD=false
 [[ "${1:-}" == "--skip-build" ]] && SKIP_BUILD=true
 
@@ -92,6 +96,25 @@ wait_for() {
     done
     err "${desc} did not become ready after ${retries}s"
     return 1
+}
+
+# pg_snapshot captures a full DB state into a file silently (no output during tests).
+pg_snapshot() {
+    local file="$1"
+    local psql_cmd="docker exec ${PG_CONTAINER} psql -U ${PG_USER} -d ${PG_DB} -x"
+    (
+        echo "=== orgs ==="
+        ${psql_cmd} -c "SELECT id, name, description, created_at, updated_at, deleted_at FROM orgs ORDER BY created_at;" || true
+        echo ""
+        echo "=== folders ==="
+        ${psql_cmd} -c "SELECT id, name, org_folders AS org_id, created_at, updated_at FROM folders ORDER BY created_at;" || true
+        echo ""
+        echo "=== projects ==="
+        ${psql_cmd} -c "SELECT id, name, description, folder_projects AS folder_id, created_at, updated_at, deleted_at FROM projects ORDER BY created_at;" || true
+        echo ""
+        echo "=== tenancy_events ==="
+        ${psql_cmd} -c "SELECT id, event_type, resource_type, resource_name, org_name, folder_id, created_at FROM tenancy_events ORDER BY id;" || true
+    ) > "${file}"
 }
 
 TM="http://localhost:${TM_PORT}"
@@ -162,7 +185,7 @@ step "Org CRUD"
 check "PUT /v1/orgs/test-org → 200 (create)" \
     "200" "$(curl -so /dev/null -w '%{http_code}' \
         -X PUT -H 'Content-Type: application/json' \
-        -d '{"description":"integration test org"}' \
+        -d '{"description":"description set on create"}' \
         "${TM}/v1/orgs/test-org")"
 
 check "GET /v1/orgs/test-org → 200" \
@@ -172,7 +195,7 @@ check "GET /v1/orgs/test-org body contains name" \
     '"name":"test-org"' "$(curl -s "${TM}/v1/orgs/test-org")"
 
 check "GET /v1/orgs/test-org body contains description" \
-    '"description":"integration test org"' "$(curl -s "${TM}/v1/orgs/test-org")"
+    '"description":"description set on create"' "$(curl -s "${TM}/v1/orgs/test-org")"
 
 check "GET /v1/orgs → list includes test-org" \
     "test-org" "$(curl -s "${TM}/v1/orgs")"
@@ -180,11 +203,11 @@ check "GET /v1/orgs → list includes test-org" \
 check "PUT /v1/orgs/test-org → 200 (update description)" \
     "200" "$(curl -so /dev/null -w '%{http_code}' \
         -X PUT -H 'Content-Type: application/json' \
-        -d '{"description":"updated"}' \
+        -d '{"description":"description updated to test update path"}' \
         "${TM}/v1/orgs/test-org")"
 
 check "GET /v1/orgs/test-org body has updated description" \
-    '"description":"updated"' "$(curl -s "${TM}/v1/orgs/test-org")"
+    '"description":"description updated to test update path"' "$(curl -s "${TM}/v1/orgs/test-org")"
 
 step "Project CRUD"
 check "PUT /v1/projects/test-proj?org=test-org → 200 (create)" \
@@ -202,9 +225,13 @@ check "GET /v1/projects/test-proj body contains name" \
 check "GET /v1/projects → list includes test-proj" \
     "test-proj" "$(curl -s "${TM}/v1/projects")"
 
+pg_snapshot "${SNAP_LIVE}"
+
 check "DELETE /v1/projects/test-proj?org=test-org → 200" \
     "200" "$(curl -so /dev/null -w '%{http_code}' \
         -X DELETE "${TM}/v1/projects/test-proj?org=test-org")"
+
+pg_snapshot "${SNAP_PROJ_DEL}"
 
 step "Error handling"
 check "GET /v1/orgs/does-not-exist → 404" \
@@ -245,6 +272,35 @@ step "Cleanup test data"
 check "DELETE /v1/orgs/test-org → 200" \
     "200" "$(curl -so /dev/null -w '%{http_code}' \
         -X DELETE "${TM}/v1/orgs/test-org")"
+
+pg_snapshot "${SNAP_ORG_DEL}"
+
+step "DB State History"
+TERM_WIDTH=$(tput cols 2>/dev/null || echo 200)
+COL=$(( (TERM_WIDTH - 6) / 3 ))
+(( COL < 60 )) && COL=60
+SEP=$(printf '%*s' "$(( COL * 3 + 6 ))" '' | tr ' ' '-')
+
+# Pad a file to a target line count so paste produces aligned columns.
+pad_to() {
+    local file="$1" target="$2"
+    local cur; cur=$(wc -l < "$file")
+    cat "$file"
+    for (( i=cur; i<target; i++ )); do printf '\n'; done
+}
+MAX_LINES=$(wc -l < "${SNAP_ORG_DEL}")  # longest snapshot is always the last
+
+printf "${CYAN}%-*s${NC} | ${CYAN}%-*s${NC} | ${CYAN}%-*s${NC}\n" \
+    "$COL" "1. After project create" \
+    "$COL" "2. After project delete" \
+    "$COL" "3. After org delete"
+echo "${SEP}"
+
+paste \
+    <(pad_to "${SNAP_LIVE}"     "$MAX_LINES" | awk -v w="$COL" '{printf "%-*.*s\n", w, w, $0}') \
+    <(pad_to "${SNAP_PROJ_DEL}" "$MAX_LINES" | awk -v w="$COL" '{printf "%-*.*s\n", w, w, $0}') \
+    <(pad_to "${SNAP_ORG_DEL}"  "$MAX_LINES" | awk -v w="$COL" '{printf "%-*.*s\n", w, w, $0}') \
+    | sed 's/	/ | /g'
 
 # Final result is printed by the cleanup trap.
 [[ ${FAIL} -eq 0 ]]
