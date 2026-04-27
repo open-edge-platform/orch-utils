@@ -19,6 +19,7 @@ import (
 
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/config"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent"
+	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent/migrate"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent/controllerstatus"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent/folder"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/ent/org"
@@ -45,7 +46,11 @@ func New(ctx context.Context, cfg *config.Config) (*Store, error) {
 	drv := entsql.OpenDB(dialect.Postgres, db)
 	client := ent.NewClient(ent.Driver(drv))
 
-	if err := client.Schema.Create(ctx); err != nil {
+	if err := client.Schema.Create(
+		ctx,
+		migrate.WithDropColumn(true),
+		migrate.WithDropIndex(true),
+	); err != nil {
 		return nil, fmt.Errorf("create schema: %w", err)
 	}
 
