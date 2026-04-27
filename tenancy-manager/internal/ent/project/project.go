@@ -27,8 +27,6 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// EdgeFolder holds the string denoting the folder edge name in mutations.
 	EdgeFolder = "folder"
-	// EdgeOrg holds the string denoting the org edge name in mutations.
-	EdgeOrg = "org"
 	// Table holds the table name of the project in the database.
 	Table = "projects"
 	// FolderTable is the table that holds the folder relation/edge.
@@ -38,13 +36,6 @@ const (
 	FolderInverseTable = "folders"
 	// FolderColumn is the table column denoting the folder relation/edge.
 	FolderColumn = "folder_projects"
-	// OrgTable is the table that holds the org relation/edge.
-	OrgTable = "projects"
-	// OrgInverseTable is the table name for the Org entity.
-	// It exists in this package in order to avoid circular dependency with the "org" package.
-	OrgInverseTable = "orgs"
-	// OrgColumn is the table column denoting the org relation/edge.
-	OrgColumn = "org_projects"
 )
 
 // Columns holds all SQL columns for project fields.
@@ -61,7 +52,6 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"folder_projects",
-	"org_projects",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -133,24 +123,10 @@ func ByFolderField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newFolderStep(), sql.OrderByField(field, opts...))
 	}
 }
-
-// ByOrgField orders the results by org field.
-func ByOrgField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOrgStep(), sql.OrderByField(field, opts...))
-	}
-}
 func newFolderStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FolderInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, FolderTable, FolderColumn),
-	)
-}
-func newOrgStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(OrgInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, OrgTable, OrgColumn),
 	)
 }

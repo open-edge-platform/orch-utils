@@ -38,11 +38,9 @@ type Org struct {
 type OrgEdges struct {
 	// Folders holds the value of the folders edge.
 	Folders []*Folder `json:"folders,omitempty"`
-	// Projects holds the value of the projects edge.
-	Projects []*Project `json:"projects,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [1]bool
 }
 
 // FoldersOrErr returns the Folders value or an error if the edge
@@ -52,15 +50,6 @@ func (e OrgEdges) FoldersOrErr() ([]*Folder, error) {
 		return e.Folders, nil
 	}
 	return nil, &NotLoadedError{edge: "folders"}
-}
-
-// ProjectsOrErr returns the Projects value or an error if the edge
-// was not loaded in eager-loading.
-func (e OrgEdges) ProjectsOrErr() ([]*Project, error) {
-	if e.loadedTypes[1] {
-		return e.Projects, nil
-	}
-	return nil, &NotLoadedError{edge: "projects"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -142,11 +131,6 @@ func (_m *Org) Value(name string) (ent.Value, error) {
 // QueryFolders queries the "folders" edge of the Org entity.
 func (_m *Org) QueryFolders() *FolderQuery {
 	return NewOrgClient(_m.config).QueryFolders(_m)
-}
-
-// QueryProjects queries the "projects" edge of the Org entity.
-func (_m *Org) QueryProjects() *ProjectQuery {
-	return NewOrgClient(_m.config).QueryProjects(_m)
 }
 
 // Update returns a builder for updating this Org.

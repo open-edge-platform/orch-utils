@@ -181,8 +181,8 @@ func (s *Store) DeleteOrg(ctx context.Context, name string) error {
 	// The WHERE deleted_at IS NULL guard ensures each project is only soft-deleted
 	// once even if a concurrent request is in flight.
 	activeProjects, err := tx.Project.Query().
-		Where(project.HasOrgWith(org.ID(o.ID)), project.DeletedAtIsNil()).
-		WithFolder().
+		Where(project.HasFolderWith(folder.HasOrgWith(org.ID(o.ID))), project.DeletedAtIsNil()).
+		WithFolder(func(q *ent.FolderQuery) { q.WithOrg() }).
 		All(ctx)
 	if err != nil {
 		return rollback(tx, err)
@@ -277,7 +277,6 @@ func (s *Store) CreateProject(ctx context.Context, orgName, projectName, descrip
 		SetName(projectName).
 		SetDescription(description).
 		SetFolder(f).
-		SetOrg(o).
 		Save(ctx)
 	if err != nil {
 		return nil, nil, rollback(tx, err)
@@ -306,12 +305,15 @@ func (s *Store) CreateProject(ctx context.Context, orgName, projectName, descrip
 func (s *Store) GetProjectByID(ctx context.Context, id uuid.UUID) (*ent.Project, *ent.Org, error) {
 	p, err := s.client.Project.Query().
 		Where(project.ID(id), project.DeletedAtIsNil()).
-		WithOrg().
+		WithFolder(func(q *ent.FolderQuery) { q.WithOrg() }).
 		Only(ctx)
 	if err != nil {
 		return nil, nil, err
 	}
-	return p, p.Edges.Org, nil
+	if p.Edges.Folder == nil {
+		return p, nil, nil
+	}
+	return p, p.Edges.Folder.Edges.Org, nil
 }
 
 // GetProject returns an active project by name within the specified orgs.
@@ -319,10 +321,10 @@ func (s *Store) GetProjectByID(ctx context.Context, id uuid.UUID) (*ent.Project,
 func (s *Store) GetProject(ctx context.Context, name string, orgNames []string) (*ent.Project, *ent.Org, error) {
 	q := s.client.Project.Query().
 		Where(project.Name(name), project.DeletedAtIsNil()).
-		WithOrg()
+		WithFolder(func(q *ent.FolderQuery) { q.WithOrg() })
 
 	if len(orgNames) > 0 {
-		q = q.Where(project.HasOrgWith(org.NameIn(orgNames...), org.DeletedAtIsNil()))
+		q = q.Where(project.HasFolderWith(folder.HasOrgWith(org.NameIn(orgNames...), org.DeletedAtIsNil())))
 	}
 
 	projects, err := q.All(ctx)
@@ -338,18 +340,21 @@ func (s *Store) GetProject(ctx context.Context, name string, orgNames []string) 
 	}
 
 	p := projects[0]
-	return p, p.Edges.Org, nil
+	if p.Edges.Folder == nil {
+		return p, nil, nil
+	}
+	return p, p.Edges.Folder.Edges.Org, nil
 }
 
 // ListProjects returns active projects, optionally filtered by org name.
 func (s *Store) ListProjects(ctx context.Context, orgNames []string) ([]*ent.Project, error) {
 	q := s.client.Project.Query().
 		Where(project.DeletedAtIsNil()).
-		WithOrg().
+		WithFolder(func(q *ent.FolderQuery) { q.WithOrg() }).
 		Order(ent.Asc(project.FieldName))
 
 	if len(orgNames) > 0 {
-		q = q.Where(project.HasOrgWith(org.NameIn(orgNames...), org.DeletedAtIsNil()))
+		q = q.Where(project.HasFolderWith(folder.HasOrgWith(org.NameIn(orgNames...), org.DeletedAtIsNil())))
 	}
 
 	return q.All(ctx)
@@ -364,9 +369,9 @@ func (s *Store) UpdateProject(ctx context.Context, name string, orgNames []strin
 	}
 	q := tx.Project.Query().
 		Where(project.Name(name), project.DeletedAtIsNil()).
-		WithOrg()
+		WithFolder(func(q *ent.FolderQuery) { q.WithOrg() })
 	if len(orgNames) > 0 {
-		q = q.Where(project.HasOrgWith(org.NameIn(orgNames...), org.DeletedAtIsNil()))
+		q = q.Where(project.HasFolderWith(folder.HasOrgWith(org.NameIn(orgNames...), org.DeletedAtIsNil())))
 	}
 	projects, err := q.All(ctx)
 	if err != nil {
@@ -386,7 +391,10 @@ func (s *Store) UpdateProject(ctx context.Context, name string, orgNames []strin
 	if err := tx.Commit(); err != nil {
 		return nil, nil, err
 	}
-	return updated, p.Edges.Org, nil
+	if p.Edges.Folder == nil {
+		return updated, nil, nil
+	}
+	return updated, p.Edges.Folder.Edges.Org, nil
 }
 
 // DeleteProject soft-deletes a project, emitting a deleted event.
@@ -401,10 +409,9 @@ func (s *Store) DeleteProject(ctx context.Context, name string, orgNames []strin
 	// Query inside the transaction so the row is consistent.
 	q := tx.Project.Query().
 		Where(project.Name(name), project.DeletedAtIsNil()).
-		WithOrg().
-		WithFolder()
+		WithFolder(func(q *ent.FolderQuery) { q.WithOrg() })
 	if len(orgNames) > 0 {
-		q = q.Where(project.HasOrgWith(org.NameIn(orgNames...), org.DeletedAtIsNil()))
+		q = q.Where(project.HasFolderWith(folder.HasOrgWith(org.NameIn(orgNames...), org.DeletedAtIsNil())))
 	}
 	projects, err := q.All(ctx)
 	if err != nil {
@@ -418,7 +425,10 @@ func (s *Store) DeleteProject(ctx context.Context, name string, orgNames []strin
 	}
 
 	p := projects[0]
-	o := p.Edges.Org
+	var o *ent.Org
+	if p.Edges.Folder != nil {
+		o = p.Edges.Folder.Edges.Org
+	}
 
 	now := time.Now()
 	n, err := tx.Project.Update().
@@ -437,9 +447,10 @@ func (s *Store) DeleteProject(ctx context.Context, name string, orgNames []strin
 		SetEventType("deleted").
 		SetResourceType("project").
 		SetResourceID(p.ID).
-		SetResourceName(p.Name).
-		SetOrgID(o.ID).
-		SetOrgName(o.Name)
+		SetResourceName(p.Name)
+	if o != nil {
+		ev = ev.SetOrgID(o.ID).SetOrgName(o.Name)
+	}
 	if p.Edges.Folder != nil {
 		ev = ev.SetFolderID(p.Edges.Folder.ID)
 	}
@@ -454,10 +465,10 @@ func (s *Store) DeleteProject(ctx context.Context, name string, orgNames []strin
 func (s *Store) GetProjectIncludingDeleted(ctx context.Context, name string, orgNames []string) (*ent.Project, *ent.Org, error) {
 	q := s.client.Project.Query().
 		Where(project.Name(name)).
-		WithOrg()
+		WithFolder(func(q *ent.FolderQuery) { q.WithOrg() })
 
 	if len(orgNames) > 0 {
-		q = q.Where(project.HasOrgWith(org.NameIn(orgNames...)))
+		q = q.Where(project.HasFolderWith(folder.HasOrgWith(org.NameIn(orgNames...))))
 	}
 
 	projects, err := q.All(ctx)
@@ -471,7 +482,10 @@ func (s *Store) GetProjectIncludingDeleted(ctx context.Context, name string, org
 		return nil, nil, fmt.Errorf("ambiguous project name %q exists in multiple orgs", name)
 	}
 	p := projects[0]
-	return p, p.Edges.Org, nil
+	if p.Edges.Folder == nil {
+		return p, nil, nil
+	}
+	return p, p.Edges.Folder.Edges.Org, nil
 }
 
 // --- Event operations ---
@@ -545,8 +559,7 @@ func (s *Store) SynthesizeReplayEvents(ctx context.Context) ([]ReplayEvent, int6
 	// Active projects -> created events
 	activeProjects, err := tx.Project.Query().
 		Where(project.DeletedAtIsNil()).
-		WithOrg().
-		WithFolder().
+		WithFolder(func(q *ent.FolderQuery) { q.WithOrg() }).
 		Order(ent.Asc(project.FieldCreatedAt)).
 		All(ctx)
 	if err != nil {
@@ -559,12 +572,12 @@ func (s *Store) SynthesizeReplayEvents(ctx context.Context) ([]ReplayEvent, int6
 			ResourceID:   p.ID,
 			ResourceName: p.Name,
 		}
-		if p.Edges.Org != nil {
-			ev.OrgID = &p.Edges.Org.ID
-			ev.OrgName = &p.Edges.Org.Name
-		}
 		if p.Edges.Folder != nil {
 			ev.FolderID = &p.Edges.Folder.ID
+			if p.Edges.Folder.Edges.Org != nil {
+				ev.OrgID = &p.Edges.Folder.Edges.Org.ID
+				ev.OrgName = &p.Edges.Folder.Edges.Org.Name
+			}
 		}
 		events = append(events, ev)
 	}
@@ -572,8 +585,7 @@ func (s *Store) SynthesizeReplayEvents(ctx context.Context) ([]ReplayEvent, int6
 	// Soft-deleted projects -> deleted events
 	deletedProjects, err := tx.Project.Query().
 		Where(project.DeletedAtNotNil()).
-		WithOrg().
-		WithFolder().
+		WithFolder(func(q *ent.FolderQuery) { q.WithOrg() }).
 		Order(ent.Asc(project.FieldDeletedAt)).
 		All(ctx)
 	if err != nil {
@@ -586,12 +598,12 @@ func (s *Store) SynthesizeReplayEvents(ctx context.Context) ([]ReplayEvent, int6
 			ResourceID:   p.ID,
 			ResourceName: p.Name,
 		}
-		if p.Edges.Org != nil {
-			ev.OrgID = &p.Edges.Org.ID
-			ev.OrgName = &p.Edges.Org.Name
-		}
 		if p.Edges.Folder != nil {
 			ev.FolderID = &p.Edges.Folder.ID
+			if p.Edges.Folder.Edges.Org != nil {
+				ev.OrgID = &p.Edges.Folder.Edges.Org.ID
+				ev.OrgName = &p.Edges.Folder.Edges.Org.Name
+			}
 		}
 		events = append(events, ev)
 	}
@@ -837,7 +849,7 @@ func (s *Store) CleanupHardDelete(ctx context.Context, cfg *config.Config) error
 	for _, o := range deletedOrgs {
 		// Check no projects remain (including soft-deleted).
 		projectCount, err := s.client.Project.Query().
-			Where(project.HasOrgWith(org.ID(o.ID))).
+			Where(project.HasFolderWith(folder.HasOrgWith(org.ID(o.ID)))).
 			Count(ctx)
 		if err != nil || projectCount > 0 {
 			continue

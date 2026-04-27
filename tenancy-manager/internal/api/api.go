@@ -274,8 +274,8 @@ func (h *Handler) ListProjects(w http.ResponseWriter, r *http.Request) {
 	for _, p := range projects {
 		status, msg := h.store.DeriveStatus(r.Context(), "project", p.ID, false, h.cfg.ControllersForResource("project"))
 		orgName := ""
-		if p.Edges.Org != nil {
-			orgName = p.Edges.Org.Name
+		if p.Edges.Folder != nil && p.Edges.Folder.Edges.Org != nil {
+			orgName = p.Edges.Folder.Edges.Org.Name
 		}
 		result = append(result, toProjectResponse(p, orgName, status, msg))
 	}

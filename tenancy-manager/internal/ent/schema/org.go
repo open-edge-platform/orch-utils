@@ -32,6 +32,5 @@ func (Org) Fields() []ent.Field {
 func (Org) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("folders", Folder.Type),
-		edge.To("projects", Project.Type),
 	}
 }

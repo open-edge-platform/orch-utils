@@ -1227,24 +1227,21 @@ func (m *FolderMutation) ResetEdge(name string) error {
 // OrgMutation represents an operation that mutates the Org nodes in the graph.
 type OrgMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *uuid.UUID
-	name            *string
-	description     *string
-	created_at      *time.Time
-	updated_at      *time.Time
-	deleted_at      *time.Time
-	clearedFields   map[string]struct{}
-	folders         map[uuid.UUID]struct{}
-	removedfolders  map[uuid.UUID]struct{}
-	clearedfolders  bool
-	projects        map[uuid.UUID]struct{}
-	removedprojects map[uuid.UUID]struct{}
-	clearedprojects bool
-	done            bool
-	oldValue        func(context.Context) (*Org, error)
-	predicates      []predicate.Org
+	op             Op
+	typ            string
+	id             *uuid.UUID
+	name           *string
+	description    *string
+	created_at     *time.Time
+	updated_at     *time.Time
+	deleted_at     *time.Time
+	clearedFields  map[string]struct{}
+	folders        map[uuid.UUID]struct{}
+	removedfolders map[uuid.UUID]struct{}
+	clearedfolders bool
+	done           bool
+	oldValue       func(context.Context) (*Org, error)
+	predicates     []predicate.Org
 }
 
 var _ ent.Mutation = (*OrgMutation)(nil)
@@ -1598,60 +1595,6 @@ func (m *OrgMutation) ResetFolders() {
 	m.removedfolders = nil
 }
 
-// AddProjectIDs adds the "projects" edge to the Project entity by ids.
-func (m *OrgMutation) AddProjectIDs(ids ...uuid.UUID) {
-	if m.projects == nil {
-		m.projects = make(map[uuid.UUID]struct{})
-	}
-	for i := range ids {
-		m.projects[ids[i]] = struct{}{}
-	}
-}
-
-// ClearProjects clears the "projects" edge to the Project entity.
-func (m *OrgMutation) ClearProjects() {
-	m.clearedprojects = true
-}
-
-// ProjectsCleared reports if the "projects" edge to the Project entity was cleared.
-func (m *OrgMutation) ProjectsCleared() bool {
-	return m.clearedprojects
-}
-
-// RemoveProjectIDs removes the "projects" edge to the Project entity by IDs.
-func (m *OrgMutation) RemoveProjectIDs(ids ...uuid.UUID) {
-	if m.removedprojects == nil {
-		m.removedprojects = make(map[uuid.UUID]struct{})
-	}
-	for i := range ids {
-		delete(m.projects, ids[i])
-		m.removedprojects[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedProjects returns the removed IDs of the "projects" edge to the Project entity.
-func (m *OrgMutation) RemovedProjectsIDs() (ids []uuid.UUID) {
-	for id := range m.removedprojects {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ProjectsIDs returns the "projects" edge IDs in the mutation.
-func (m *OrgMutation) ProjectsIDs() (ids []uuid.UUID) {
-	for id := range m.projects {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ResetProjects resets all changes to the "projects" edge.
-func (m *OrgMutation) ResetProjects() {
-	m.projects = nil
-	m.clearedprojects = false
-	m.removedprojects = nil
-}
-
 // Where appends a list predicates to the OrgMutation builder.
 func (m *OrgMutation) Where(ps ...predicate.Org) {
 	m.predicates = append(m.predicates, ps...)
@@ -1862,12 +1805,9 @@ func (m *OrgMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrgMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 1)
 	if m.folders != nil {
 		edges = append(edges, org.EdgeFolders)
-	}
-	if m.projects != nil {
-		edges = append(edges, org.EdgeProjects)
 	}
 	return edges
 }
@@ -1882,24 +1822,15 @@ func (m *OrgMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case org.EdgeProjects:
-		ids := make([]ent.Value, 0, len(m.projects))
-		for id := range m.projects {
-			ids = append(ids, id)
-		}
-		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrgMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 1)
 	if m.removedfolders != nil {
 		edges = append(edges, org.EdgeFolders)
-	}
-	if m.removedprojects != nil {
-		edges = append(edges, org.EdgeProjects)
 	}
 	return edges
 }
@@ -1914,24 +1845,15 @@ func (m *OrgMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case org.EdgeProjects:
-		ids := make([]ent.Value, 0, len(m.removedprojects))
-		for id := range m.removedprojects {
-			ids = append(ids, id)
-		}
-		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrgMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 1)
 	if m.clearedfolders {
 		edges = append(edges, org.EdgeFolders)
-	}
-	if m.clearedprojects {
-		edges = append(edges, org.EdgeProjects)
 	}
 	return edges
 }
@@ -1942,8 +1864,6 @@ func (m *OrgMutation) EdgeCleared(name string) bool {
 	switch name {
 	case org.EdgeFolders:
 		return m.clearedfolders
-	case org.EdgeProjects:
-		return m.clearedprojects
 	}
 	return false
 }
@@ -1963,9 +1883,6 @@ func (m *OrgMutation) ResetEdge(name string) error {
 	case org.EdgeFolders:
 		m.ResetFolders()
 		return nil
-	case org.EdgeProjects:
-		m.ResetProjects()
-		return nil
 	}
 	return fmt.Errorf("unknown Org edge %s", name)
 }
@@ -1984,8 +1901,6 @@ type ProjectMutation struct {
 	clearedFields map[string]struct{}
 	folder        *uuid.UUID
 	clearedfolder bool
-	org           *uuid.UUID
-	clearedorg    bool
 	done          bool
 	oldValue      func(context.Context) (*Project, error)
 	predicates    []predicate.Project
@@ -2327,45 +2242,6 @@ func (m *ProjectMutation) ResetFolder() {
 	m.clearedfolder = false
 }
 
-// SetOrgID sets the "org" edge to the Org entity by id.
-func (m *ProjectMutation) SetOrgID(id uuid.UUID) {
-	m.org = &id
-}
-
-// ClearOrg clears the "org" edge to the Org entity.
-func (m *ProjectMutation) ClearOrg() {
-	m.clearedorg = true
-}
-
-// OrgCleared reports if the "org" edge to the Org entity was cleared.
-func (m *ProjectMutation) OrgCleared() bool {
-	return m.clearedorg
-}
-
-// OrgID returns the "org" edge ID in the mutation.
-func (m *ProjectMutation) OrgID() (id uuid.UUID, exists bool) {
-	if m.org != nil {
-		return *m.org, true
-	}
-	return
-}
-
-// OrgIDs returns the "org" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// OrgID instead. It exists only for internal usage by the builders.
-func (m *ProjectMutation) OrgIDs() (ids []uuid.UUID) {
-	if id := m.org; id != nil {
-		ids = append(ids, *id)
-	}
-	return
-}
-
-// ResetOrg resets all changes to the "org" edge.
-func (m *ProjectMutation) ResetOrg() {
-	m.org = nil
-	m.clearedorg = false
-}
-
 // Where appends a list predicates to the ProjectMutation builder.
 func (m *ProjectMutation) Where(ps ...predicate.Project) {
 	m.predicates = append(m.predicates, ps...)
@@ -2576,12 +2452,9 @@ func (m *ProjectMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProjectMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 1)
 	if m.folder != nil {
 		edges = append(edges, project.EdgeFolder)
-	}
-	if m.org != nil {
-		edges = append(edges, project.EdgeOrg)
 	}
 	return edges
 }
@@ -2594,17 +2467,13 @@ func (m *ProjectMutation) AddedIDs(name string) []ent.Value {
 		if id := m.folder; id != nil {
 			return []ent.Value{*id}
 		}
-	case project.EdgeOrg:
-		if id := m.org; id != nil {
-			return []ent.Value{*id}
-		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProjectMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 1)
 	return edges
 }
 
@@ -2616,12 +2485,9 @@ func (m *ProjectMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProjectMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 1)
 	if m.clearedfolder {
 		edges = append(edges, project.EdgeFolder)
-	}
-	if m.clearedorg {
-		edges = append(edges, project.EdgeOrg)
 	}
 	return edges
 }
@@ -2632,8 +2498,6 @@ func (m *ProjectMutation) EdgeCleared(name string) bool {
 	switch name {
 	case project.EdgeFolder:
 		return m.clearedfolder
-	case project.EdgeOrg:
-		return m.clearedorg
 	}
 	return false
 }
@@ -2645,9 +2509,6 @@ func (m *ProjectMutation) ClearEdge(name string) error {
 	case project.EdgeFolder:
 		m.ClearFolder()
 		return nil
-	case project.EdgeOrg:
-		m.ClearOrg()
-		return nil
 	}
 	return fmt.Errorf("unknown Project unique edge %s", name)
 }
@@ -2658,9 +2519,6 @@ func (m *ProjectMutation) ResetEdge(name string) error {
 	switch name {
 	case project.EdgeFolder:
 		m.ResetFolder()
-		return nil
-	case project.EdgeOrg:
-		m.ResetOrg()
 		return nil
 	}
 	return fmt.Errorf("unknown Project edge %s", name)

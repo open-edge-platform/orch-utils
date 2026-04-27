@@ -89,7 +89,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "folder_projects", Type: field.TypeUUID},
-		{Name: "org_projects", Type: field.TypeUUID},
 	}
 	// ProjectsTable holds the schema information for the "projects" table.
 	ProjectsTable = &schema.Table{
@@ -101,12 +100,6 @@ var (
 				Symbol:     "projects_folders_projects",
 				Columns:    []*schema.Column{ProjectsColumns[6]},
 				RefColumns: []*schema.Column{FoldersColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
-				Symbol:     "projects_orgs_projects",
-				Columns:    []*schema.Column{ProjectsColumns[7]},
-				RefColumns: []*schema.Column{OrgsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 		},
@@ -156,5 +149,4 @@ var (
 func init() {
 	FoldersTable.ForeignKeys[0].RefTable = OrgsTable
 	ProjectsTable.ForeignKeys[0].RefTable = FoldersTable
-	ProjectsTable.ForeignKeys[1].RefTable = OrgsTable
 }
