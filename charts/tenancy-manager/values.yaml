@@ -5,8 +5,6 @@
 global:
   tainted: false
   name: tenancy-manager
-  postgresql:
-    host: ""
 
 replicaCount: 1
 
@@ -116,8 +114,9 @@ postgresql:
 # Tenancy Manager specific configuration
 tenancyManager:
   # Default org and project for bootstrap (leave empty to skip bootstrap)
-  defaultOrgName: "intel"
-  defaultProjectName: "default"
+  # Disabled: org/project setup is handled by the deploy script / mage tenantUtils:createDefaultMtSetup
+  defaultOrgName: ""
+  defaultProjectName: ""
 
   # OIDC configuration for JWT validation
   oidcServerURL: ""
@@ -134,7 +133,7 @@ tenancyManager:
       - keycloak-tenant-controller
     project:
       - app-orch-tenant-controller
-      - tenant-controller
+      - infra-tenant-controller
       - cluster-manager
       - app-deployment-manager
       - observability-tenant-controller

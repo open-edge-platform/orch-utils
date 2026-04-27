@@ -111,13 +111,18 @@ func resolveProjectUUID(ctx context.Context, projectName, authHeader, tenancyMan
 	}
 
 	var result struct {
-		UID string `json:"uID"`
+		Status struct {
+			ProjectStatus struct {
+				UID string `json:"uID"`
+			} `json:"projectStatus"`
+		} `json:"status"`
 	}
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		return "", fmt.Errorf("decode TM response: %w", err)
 	}
-	if result.UID == "" {
+	uid := result.Status.ProjectStatus.UID
+	if uid == "" {
 		return "", fmt.Errorf("tenancy manager returned empty UUID for project %q", projectName)
 	}
-	return result.UID, nil
+	return uid, nil
 }
