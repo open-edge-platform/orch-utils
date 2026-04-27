@@ -703,3 +703,155 @@ spec:
   forwardAuth:
     address: {{ required "A valid forwardAuth address!" .Values.authServiceForwardAddress }}
 ---
+{{- if and .Values.nexusReplacement .Values.nexusReplacement.enabled }}
+# ─── nexus-replacement: project-prefix routing ────────────────────────────────
+# These resources replace the routing that the Nexus API gateway previously
+# provided for cluster-manager and alerting-monitor. Traefik strips the project
+# name from the URL path and injects the project UUID as the Activeprojectid /
+# ActiveProjectID headers expected by the downstream services.
+#
+# strip-project-prefix: /v{N}/projects/{name}/foo → /v{N}/foo
+apiVersion: {{ .Values.traefikApiGroup }}
+kind: Middleware
+metadata:
+  name: strip-project-prefix
+  namespace: orch-gateway
+spec:
+  replacePathRegex:
+    regex: "^/(v[0-9]+)/projects/[^/]+(.*)"
+    replacement: "/$1$2"
+---
+# resolve-project-id: ForwardAuth to auth-service /resolveproject.
+# auth-service validates the JWT and calls Tenant Manager to resolve the project
+# name found in X-Forwarded-Uri to its UUID, returning Activeprojectid /
+# ActiveProjectID response headers. Traefik copies those headers into the
+# upstream request via authResponseHeaders so downstream services receive the UUID.
+# NOTE: this middleware must appear BEFORE any path-rewriting middlewares in each
+# IngressRoute so that X-Forwarded-Uri still contains the project name when the
+# ForwardAuth call is made.
+apiVersion: {{ .Values.traefikApiGroup }}
+kind: Middleware
+metadata:
+  name: resolve-project-id
+  namespace: orch-gateway
+spec:
+  forwardAuth:
+    address: http://auth-service.orch-gateway.svc:8080/resolveproject
+    authResponseHeaders:
+      - Activeprojectid
+      - ActiveProjectID
+---
+# rewrite-alerting-monitor: /v1/projects/{name}/alerts* → /api/v1/alerts*
+apiVersion: {{ .Values.traefikApiGroup }}
+kind: Middleware
+metadata:
+  name: rewrite-alerting-monitor
+  namespace: orch-gateway
+spec:
+  replacePathRegex:
+    regex: "^/v1/projects/[^/]+/(alerts.*)"
+    replacement: "/api/v1/$1"
+---
+# cluster-manager IngressRoute: /v2/projects/{name}/clusters and /templates
+apiVersion: {{ .Values.traefikApiGroup }}
+kind: IngressRoute
+metadata:
+  name: cluster-manager-http
+  namespace: orch-gateway
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: {{ required "A valid apiMatchHost entry required!" .Values.apiMatchHost }} && PathRegexp(`^/v2/projects/[^/]+/(clusters|templates)`)
+      priority: 50
+      middlewares:
+        - name: resolve-project-id
+        - name: strip-project-prefix
+        - name: secure-headers
+      services:
+        - kind: Service
+          name: cluster-manager
+          namespace: orch-cluster
+          port: 8080
+  tls:
+    secretName: {{ required "A valid orchSecretName entry required!" .Values.orchSecretName }}
+    {{- if .Values.tlsOption }}
+    options:
+      name: {{ .Values.tlsOption }}
+      namespace: orch-gateway
+    {{- end }}
+---
+# alerting-monitor IngressRoute: /v1/projects/{name}/alerts*
+apiVersion: {{ .Values.traefikApiGroup }}
+kind: IngressRoute
+metadata:
+  name: alerting-monitor-http
+  namespace: orch-gateway
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: {{ required "A valid apiMatchHost entry required!" .Values.apiMatchHost }} && PathRegexp(`^/v1/projects/[^/]+/alerts`)
+      priority: 50
+      middlewares:
+        - name: resolve-project-id
+        - name: rewrite-alerting-monitor
+        - name: secure-headers
+      services:
+        - kind: Service
+          name: alerting-monitor
+          namespace: orch-infra
+          port: 8080
+  tls:
+    secretName: {{ required "A valid orchSecretName entry required!" .Values.orchSecretName }}
+    {{- if .Values.tlsOption }}
+    options:
+      name: {{ .Values.tlsOption }}
+      namespace: orch-gateway
+    {{- end }}
+---
+# rewrite-metadata-broker: /v1/projects/{name}/metadata(.*)
+#                        → /metadata.orchestrator.apis/v1/metadata$1
+apiVersion: {{ .Values.traefikApiGroup }}
+kind: Middleware
+metadata:
+  name: rewrite-metadata-broker
+  namespace: orch-gateway
+spec:
+  replacePathRegex:
+    regex: "^/v1/projects/[^/]+/metadata(.*)"
+    replacement: "/metadata.orchestrator.apis/v1/metadata$1"
+---
+# metadata-broker IngressRoute: /v1/projects/{name}/metadata*
+apiVersion: {{ .Values.traefikApiGroup }}
+kind: IngressRoute
+metadata:
+  name: metadata-broker-http
+  namespace: orch-gateway
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: {{ required "A valid apiMatchHost entry required!" .Values.apiMatchHost }} && PathRegexp(`^/v1/projects/[^/]+/metadata`)
+      priority: 50
+      middlewares:
+        - name: resolve-project-id
+        - name: rewrite-metadata-broker
+        - name: secure-headers
+      services:
+        - kind: Service
+          name: metadata-broker-orch-metadata-broker-rest
+          namespace: orch-ui
+          port: 9988
+  tls:
+    secretName: {{ required "A valid orchSecretName entry required!" .Values.orchSecretName }}
+    {{- if .Values.tlsOption }}
+    options:
+      name: {{ .Values.tlsOption }}
+      namespace: orch-gateway
+    {{- end }}
+---
+{{- end }}

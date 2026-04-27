@@ -27,7 +27,7 @@ import (
 const port = ":8080"
 
 func main() {
-	var jwksURL, rolesFile, otcURL string
+	var jwksURL, rolesFile, otcURL, tenancyManagerURL string
 	flag.StringVar(&jwksURL, "jwksURL",
 		"http://platform-keycloak.orch-platform.svc:8080/realms/master/protocol/openid-connect/certs",
 		"jwksURL endpoint contains public key for input token validation")
@@ -36,6 +36,9 @@ func main() {
 	flag.StringVar(&otcURL, "otc-url",
 		"observability-tenant-controller.orch-platform.svc.cluster.local:50051",
 		"set observability tenant controller URL")
+	flag.StringVar(&tenancyManagerURL, "tenancy-manager-url",
+		"http://tenancy-manager.orch-iam.svc:8080",
+		"Tenant Manager REST URL used by /resolveproject to look up project UUIDs")
 
 	flag.Parse()
 	if rolesFile == "" {
@@ -79,6 +82,7 @@ func main() {
 	}
 
 	http.HandleFunc("/verifyall", internal.NewHandler(keySet, roleStore))
+	http.HandleFunc("/resolveproject", internal.NewProjectResolverHandler(keySet, tenancyManagerURL))
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, _ *http.Request) {
 		_, _ = w.Write([]byte("success"))
 	})
