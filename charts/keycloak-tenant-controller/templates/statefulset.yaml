@@ -53,20 +53,6 @@ spec:
             - mountPath: /ktc-credentials.sh
               subPath: ktc-credentials.sh
               name: ktc-credentials
-        - name: wait-for-crd
-          image: alpine/kubectl:1.35.2
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          command: ["/bin/sh", "-c"]
-          args:
-            - |
-              set -e
-              echo "edge-orchestrator.intel.com, waiting for CR..."
-              echo "Waiting for CR 'orgs.org.infra-host.com' to be available..."
-              until kubectl get orgs.org.edge-orchestrator.intel.com; do
-                echo "orgs.org.edge-orchestrator.intel.com CR not found, waiting..."
-                sleep 10
-              done
       volumes:
         - name: ktc-credentials
           configMap:

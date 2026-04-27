@@ -36,30 +36,6 @@ spec:
         value: api
       {{- end }}
       serviceAccountName: {{ include "iam.serviceAccountName" . }}
-      initContainers:
-      - name: wait-for-job
-        image: alpine/kubectl:1.35.2
-        securityContext:
-          {{- toYaml .Values.securityContext | nindent 12 }}
-        command: ["/bin/sh", "-c"]
-        args:
-        - |
-          set -e
-          echo "edge-orchestrator.intel.com CRD is available, waiting for CR..."
-          echo "Waiting for CR 'apimappingconfigs.apimappingconfig.edge-orchestrator.intel.com' to be available..."
-          until kubectl get apimappingconfigs.apimappingconfig.edge-orchestrator.intel.com; do
-            echo "edge-orchestrator.intel.com CRD not found, waiting..."
-            sleep 10
-          done
-          while true; do
-            OUTPUT=$(kubectl get apimappingconfigs.apimappingconfig.edge-orchestrator.intel.com 2>&1)
-            if echo "$OUTPUT" | grep -q "No resources found"; then
-              echo "edge-orchestrator.intel.com CRD not found, waiting..."
-              sleep 10
-            else
-              break
-            fi
-          done
       containers:
       - name: {{ include "iam.fullname" . }}
         securityContext:
