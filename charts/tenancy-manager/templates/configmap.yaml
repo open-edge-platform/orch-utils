@@ -32,11 +32,5 @@ data:
         - {{ . | quote }}
         {{- end }}
 
-    # Resource lifecycle timeouts (seconds)
-    org_create_timeout: 300
-    org_delete_timeout: 300
-    project_create_timeout: 300
-    project_delete_timeout: 300
-
     # Cleanup interval for hard-deleting soft-deleted resources
-    cleanup_interval: 60
+    cleanup_interval: "1m"
