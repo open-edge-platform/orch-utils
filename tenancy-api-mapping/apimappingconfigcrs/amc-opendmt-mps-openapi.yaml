@@ -21,3 +21,7 @@ spec:
       serviceURI: api/v1/amt/generalSettings/{guid}
     - externalURI: /v1/projects/{projectName}/dm/devices/{guid}
       serviceURI: api/v1/devices/{guid}
+    - externalURI: /v1/projects/{projectName}/oob/amt/userConsentCode/{guid}
+      serviceURI: api/v1/amt/userConsentCode/{guid}
+    - externalURI: /v1/projects/{projectName}/oob/authorize/redirection/{guid}
+      serviceURI: api/v1/authorize/redirection/{guid}
