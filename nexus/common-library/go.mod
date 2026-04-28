@@ -15,7 +15,7 @@ require (
 	github.com/gonvenience/ytbx v1.4.9
 	github.com/homeport/dyff v1.10.5
 	github.com/lucasb-eyer/go-colorful v1.4.0
-	github.com/onsi/ginkgo/v2 v2.28.1
+	github.com/onsi/ginkgo/v2 v2.28.2
 	github.com/onsi/gomega v1.39.1
 	github.com/sergi/go-diff v1.4.0
 	github.com/texttheater/golang-levenshtein v1.0.1
