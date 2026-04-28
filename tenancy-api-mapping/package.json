@@ -20,9 +20,12 @@
     "minimatch": "^10.2.4",
     "openapi-format": "^1.31.0",
     "openapi-sampler": "1.7.2",
+    "postcss": ">=8.5.10",
+    "styled-components": ">=6.4.1",
     "undici": "^6.24.1"
   },
   "overrides": {
+    "styled-components": ">=6.4.1",
     "postcss": ">=8.5.10",
     "brace-expansion": ">=5.0.5",
     "openapi-sampler": {
