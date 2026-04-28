@@ -5,21 +5,22 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
+    argocd.argoproj.io/sync-wave: "-10"
     nexus: |
-      {"name":"runtimeproject.RuntimeProject","hierarchy":["multitenancies.tenancy.edge-orchestrator.intel.com","runtimes.runtime.edge-orchestrator.intel.com","runtimeorgs.runtimeorg.edge-orchestrator.intel.com","runtimefolders.runtimefolder.edge-orchestrator.intel.com"],"children":{"projectactivewatchers.projectactivewatcher.edge-orchestrator.intel.com":{"fieldName":"ActiveWatchers","fieldNameGvk":"activeWatchersGvk","goFieldNameGvk":"ActiveWatchersGvk","isNamed":true}},"is_singleton":false,"nexus-rest-api-gen":{"uris":null}}
+      {"name":"orgwatcher.OrgWatcher","hierarchy":["multitenancies.tenancy.edge-orchestrator.intel.com","configs.config.edge-orchestrator.intel.com"],"is_singleton":false,"nexus-rest-api-gen":{"uris":null}}
   creationTimestamp: null
-  name: runtimeprojects.runtimeproject.edge-orchestrator.intel.com
+  name: orgwatchers.orgwatcher.edge-orchestrator.intel.com
 spec:
   conversion:
     strategy: None
-  group: runtimeproject.edge-orchestrator.intel.com
+  group: orgwatcher.edge-orchestrator.intel.com
   names:
-    kind: RuntimeProject
-    listKind: RuntimeProjectList
-    plural: runtimeprojects
+    kind: OrgWatcher
+    listKind: OrgWatcherList
+    plural: orgwatchers
     shortNames:
-    - runtimeproject
-    singular: runtimeproject
+    - orgwatcher
+    singular: orgwatcher
   scope: Cluster
   versions:
   - name: v1
@@ -37,28 +38,6 @@ spec:
               submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
             type: string
           metadata:
-            type: object
-          spec:
-            properties:
-              activeWatchersGvk:
-                additionalProperties:
-                  properties:
-                    group:
-                      type: string
-                    kind:
-                      type: string
-                    name:
-                      type: string
-                  required:
-                  - group
-                  - kind
-                  - name
-                  type: object
-                type: object
-              deleted:
-                type: boolean
-            required:
-            - deleted
             type: object
           status:
             properties:

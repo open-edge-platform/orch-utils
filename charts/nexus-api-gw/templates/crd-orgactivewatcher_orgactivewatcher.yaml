@@ -5,21 +5,22 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
+    argocd.argoproj.io/sync-wave: "-10"
     nexus: |
-      {"name":"projectactivewatcher.ProjectActiveWatcher","hierarchy":["multitenancies.tenancy.edge-orchestrator.intel.com","runtimes.runtime.edge-orchestrator.intel.com","runtimeorgs.runtimeorg.edge-orchestrator.intel.com","runtimefolders.runtimefolder.edge-orchestrator.intel.com","runtimeprojects.runtimeproject.edge-orchestrator.intel.com"],"is_singleton":false,"nexus-rest-api-gen":{"uris":null}}
+      {"name":"orgactivewatcher.OrgActiveWatcher","hierarchy":["multitenancies.tenancy.edge-orchestrator.intel.com","runtimes.runtime.edge-orchestrator.intel.com","runtimeorgs.runtimeorg.edge-orchestrator.intel.com"],"is_singleton":false,"nexus-rest-api-gen":{"uris":null}}
   creationTimestamp: null
-  name: projectactivewatchers.projectactivewatcher.edge-orchestrator.intel.com
+  name: orgactivewatchers.orgactivewatcher.edge-orchestrator.intel.com
 spec:
   conversion:
     strategy: None
-  group: projectactivewatcher.edge-orchestrator.intel.com
+  group: orgactivewatcher.edge-orchestrator.intel.com
   names:
-    kind: ProjectActiveWatcher
-    listKind: ProjectActiveWatcherList
-    plural: projectactivewatchers
+    kind: OrgActiveWatcher
+    listKind: OrgActiveWatcherList
+    plural: orgactivewatchers
     shortNames:
-    - projectactivewatcher
-    singular: projectactivewatcher
+    - orgactivewatcher
+    singular: orgactivewatcher
   scope: Cluster
   versions:
   - name: v1

@@ -5,21 +5,22 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
+    argocd.argoproj.io/sync-wave: "-10"
     nexus: |
-      {"name":"org.Org","hierarchy":["multitenancies.tenancy.edge-orchestrator.intel.com","configs.config.edge-orchestrator.intel.com"],"children":{"folders.folder.edge-orchestrator.intel.com":{"fieldName":"Folders","fieldNameGvk":"foldersGvk","goFieldNameGvk":"FoldersGvk","isNamed":true}},"is_singleton":false,"nexus-rest-api-gen":{"uris":[{"uri":"/v1/orgs/{org.Org}","methods":{"DELETE":{"200":{"description":"OK"},"404":{"description":"Not Found"},"501":{"description":"Not Implemented"}},"GET":{"200":{"description":"OK"},"404":{"description":"Not Found"},"501":{"description":"Not Implemented"}},"PUT":{"200":{"description":"OK"},"201":{"description":"Created"},"501":{"description":"Not Implemented"}}}},{"uri":"/v1/orgs","methods":{"LIST":{"200":{"description":"OK"},"404":{"description":"Not Found"},"501":{"description":"Not Implemented"}}}}]},"deferred-delete":true}
+      {"name":"network.Network","hierarchy":["multitenancies.tenancy.edge-orchestrator.intel.com","configs.config.edge-orchestrator.intel.com","orgs.org.edge-orchestrator.intel.com","folders.folder.edge-orchestrator.intel.com","projects.project.edge-orchestrator.intel.com"],"is_singleton":false,"nexus-rest-api-gen":{"uris":[{"uri":"/v1/projects/{project.Project}/networks/{network.Network}","methods":{"DELETE":{"200":{"description":"OK"},"404":{"description":"Not Found"},"501":{"description":"Not Implemented"}},"GET":{"200":{"description":"OK"},"404":{"description":"Not Found"},"501":{"description":"Not Implemented"}},"PUT":{"200":{"description":"OK"},"201":{"description":"Created"},"501":{"description":"Not Implemented"}}}},{"uri":"/v1/projects/{project.Project}/networks","methods":{"LIST":{"200":{"description":"OK"},"404":{"description":"Not Found"},"501":{"description":"Not Implemented"}}}}]}}
   creationTimestamp: null
-  name: orgs.org.edge-orchestrator.intel.com
+  name: networks.network.edge-orchestrator.intel.com
 spec:
   conversion:
     strategy: None
-  group: org.edge-orchestrator.intel.com
+  group: network.edge-orchestrator.intel.com
   names:
-    kind: Org
-    listKind: OrgList
-    plural: orgs
+    kind: Network
+    listKind: NetworkList
+    plural: networks
     shortNames:
-    - org
-    singular: org
+    - network
+    singular: network
   scope: Cluster
   versions:
   - name: v1
@@ -42,23 +43,10 @@ spec:
             properties:
               description:
                 type: string
-              foldersGvk:
-                additionalProperties:
-                  properties:
-                    group:
-                      type: string
-                    kind:
-                      type: string
-                    name:
-                      type: string
-                  required:
-                  - group
-                  - kind
-                  - name
-                  type: object
-                type: object
+              type:
+                type: string
             required:
-            - description
+            - type
             type: object
           status:
             properties:
@@ -80,22 +68,12 @@ spec:
                         type: integer
                     type: object
                 type: object
-              orgStatus:
+              status:
                 properties:
-                  message:
-                    type: string
-                  statusIndicator:
-                    type: string
-                  timeStamp:
-                    format: int64
-                    type: integer
-                  uID:
+                  currentState:
                     type: string
                 required:
-                - statusIndicator
-                - message
-                - timeStamp
-                - uID
+                - currentState
                 type: object
             type: object
         type: object

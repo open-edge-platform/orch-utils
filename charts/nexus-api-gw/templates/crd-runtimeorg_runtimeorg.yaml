@@ -5,21 +5,22 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
+    argocd.argoproj.io/sync-wave: "-10"
     nexus: |
-      {"name":"config.Config","hierarchy":["multitenancies.tenancy.edge-orchestrator.intel.com"],"children":{"apimappingconfigs.apimappingconfig.edge-orchestrator.intel.com":{"fieldName":"APIMappings","fieldNameGvk":"aPIMappingsGvk","goFieldNameGvk":"APIMappingsGvk","isNamed":true},"orgs.org.edge-orchestrator.intel.com":{"fieldName":"Orgs","fieldNameGvk":"orgsGvk","goFieldNameGvk":"OrgsGvk","isNamed":true},"orgwatchers.orgwatcher.edge-orchestrator.intel.com":{"fieldName":"OrgWatchers","fieldNameGvk":"orgWatchersGvk","goFieldNameGvk":"OrgWatchersGvk","isNamed":true},"projectwatchers.projectwatcher.edge-orchestrator.intel.com":{"fieldName":"ProjectWatchers","fieldNameGvk":"projectWatchersGvk","goFieldNameGvk":"ProjectWatchersGvk","isNamed":true}},"is_singleton":true,"nexus-rest-api-gen":{"uris":null}}
+      {"name":"runtimeorg.RuntimeOrg","hierarchy":["multitenancies.tenancy.edge-orchestrator.intel.com","runtimes.runtime.edge-orchestrator.intel.com"],"children":{"orgactivewatchers.orgactivewatcher.edge-orchestrator.intel.com":{"fieldName":"ActiveWatchers","fieldNameGvk":"activeWatchersGvk","goFieldNameGvk":"ActiveWatchersGvk","isNamed":true},"runtimefolders.runtimefolder.edge-orchestrator.intel.com":{"fieldName":"Folders","fieldNameGvk":"foldersGvk","goFieldNameGvk":"FoldersGvk","isNamed":true}},"is_singleton":false,"nexus-rest-api-gen":{"uris":null}}
   creationTimestamp: null
-  name: configs.config.edge-orchestrator.intel.com
+  name: runtimeorgs.runtimeorg.edge-orchestrator.intel.com
 spec:
   conversion:
     strategy: None
-  group: config.edge-orchestrator.intel.com
+  group: runtimeorg.edge-orchestrator.intel.com
   names:
-    kind: Config
-    listKind: ConfigList
-    plural: configs
+    kind: RuntimeOrg
+    listKind: RuntimeOrgList
+    plural: runtimeorgs
     shortNames:
-    - config
-    singular: config
+    - runtimeorg
+    singular: runtimeorg
   scope: Cluster
   versions:
   - name: v1
@@ -40,7 +41,7 @@ spec:
             type: object
           spec:
             properties:
-              aPIMappingsGvk:
+              activeWatchersGvk:
                 additionalProperties:
                   properties:
                     group:
@@ -55,7 +56,9 @@ spec:
                   - name
                   type: object
                 type: object
-              orgWatchersGvk:
+              deleted:
+                type: boolean
+              foldersGvk:
                 additionalProperties:
                   properties:
                     group:
@@ -70,36 +73,8 @@ spec:
                   - name
                   type: object
                 type: object
-              orgsGvk:
-                additionalProperties:
-                  properties:
-                    group:
-                      type: string
-                    kind:
-                      type: string
-                    name:
-                      type: string
-                  required:
-                  - group
-                  - kind
-                  - name
-                  type: object
-                type: object
-              projectWatchersGvk:
-                additionalProperties:
-                  properties:
-                    group:
-                      type: string
-                    kind:
-                      type: string
-                    name:
-                      type: string
-                  required:
-                  - group
-                  - kind
-                  - name
-                  type: object
-                type: object
+            required:
+            - deleted
             type: object
           status:
             properties:

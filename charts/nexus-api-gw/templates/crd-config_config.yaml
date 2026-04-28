@@ -5,21 +5,22 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
+    argocd.argoproj.io/sync-wave: "-10"
     nexus: |
-      {"name":"folder.Folder","hierarchy":["multitenancies.tenancy.edge-orchestrator.intel.com","configs.config.edge-orchestrator.intel.com","orgs.org.edge-orchestrator.intel.com"],"children":{"projects.project.edge-orchestrator.intel.com":{"fieldName":"Projects","fieldNameGvk":"projectsGvk","goFieldNameGvk":"ProjectsGvk","isNamed":true}},"is_singleton":false,"nexus-rest-api-gen":{"uris":null}}
+      {"name":"config.Config","hierarchy":["multitenancies.tenancy.edge-orchestrator.intel.com"],"children":{"apimappingconfigs.apimappingconfig.edge-orchestrator.intel.com":{"fieldName":"APIMappings","fieldNameGvk":"aPIMappingsGvk","goFieldNameGvk":"APIMappingsGvk","isNamed":true},"orgs.org.edge-orchestrator.intel.com":{"fieldName":"Orgs","fieldNameGvk":"orgsGvk","goFieldNameGvk":"OrgsGvk","isNamed":true},"orgwatchers.orgwatcher.edge-orchestrator.intel.com":{"fieldName":"OrgWatchers","fieldNameGvk":"orgWatchersGvk","goFieldNameGvk":"OrgWatchersGvk","isNamed":true},"projectwatchers.projectwatcher.edge-orchestrator.intel.com":{"fieldName":"ProjectWatchers","fieldNameGvk":"projectWatchersGvk","goFieldNameGvk":"ProjectWatchersGvk","isNamed":true}},"is_singleton":true,"nexus-rest-api-gen":{"uris":null}}
   creationTimestamp: null
-  name: folders.folder.edge-orchestrator.intel.com
+  name: configs.config.edge-orchestrator.intel.com
 spec:
   conversion:
     strategy: None
-  group: folder.edge-orchestrator.intel.com
+  group: config.edge-orchestrator.intel.com
   names:
-    kind: Folder
-    listKind: FolderList
-    plural: folders
+    kind: Config
+    listKind: ConfigList
+    plural: configs
     shortNames:
-    - folder
-    singular: folder
+    - config
+    singular: config
   scope: Cluster
   versions:
   - name: v1
@@ -40,7 +41,52 @@ spec:
             type: object
           spec:
             properties:
-              projectsGvk:
+              aPIMappingsGvk:
+                additionalProperties:
+                  properties:
+                    group:
+                      type: string
+                    kind:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                  - group
+                  - kind
+                  - name
+                  type: object
+                type: object
+              orgWatchersGvk:
+                additionalProperties:
+                  properties:
+                    group:
+                      type: string
+                    kind:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                  - group
+                  - kind
+                  - name
+                  type: object
+                type: object
+              orgsGvk:
+                additionalProperties:
+                  properties:
+                    group:
+                      type: string
+                    kind:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                  - group
+                  - kind
+                  - name
+                  type: object
+                type: object
+              projectWatchersGvk:
                 additionalProperties:
                   properties:
                     group:

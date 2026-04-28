@@ -5,21 +5,22 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
+    argocd.argoproj.io/sync-wave: "-10"
     nexus: |
-      {"name":"apimappingconfig.APIMappingConfig","hierarchy":["multitenancies.tenancy.edge-orchestrator.intel.com","configs.config.edge-orchestrator.intel.com"],"is_singleton":false,"nexus-rest-api-gen":{"uris":null}}
+      {"name":"folder.Folder","hierarchy":["multitenancies.tenancy.edge-orchestrator.intel.com","configs.config.edge-orchestrator.intel.com","orgs.org.edge-orchestrator.intel.com"],"children":{"projects.project.edge-orchestrator.intel.com":{"fieldName":"Projects","fieldNameGvk":"projectsGvk","goFieldNameGvk":"ProjectsGvk","isNamed":true}},"is_singleton":false,"nexus-rest-api-gen":{"uris":null}}
   creationTimestamp: null
-  name: apimappingconfigs.apimappingconfig.edge-orchestrator.intel.com
+  name: folders.folder.edge-orchestrator.intel.com
 spec:
   conversion:
     strategy: None
-  group: apimappingconfig.edge-orchestrator.intel.com
+  group: folder.edge-orchestrator.intel.com
   names:
-    kind: APIMappingConfig
-    listKind: APIMappingConfigList
-    plural: apimappingconfigs
+    kind: Folder
+    listKind: FolderList
+    plural: folders
     shortNames:
-    - apimappingconfig
-    singular: apimappingconfig
+    - folder
+    singular: folder
   scope: Cluster
   versions:
   - name: v1
@@ -40,58 +41,21 @@ spec:
             type: object
           spec:
             properties:
-              backend:
-                properties:
-                  port:
-                    format: int64
-                    type: integer
-                  service:
-                    type: string
-                required:
-                - service
-                - port
-                type: object
-              downloadConf:
-                properties:
-                  url:
-                    type: string
-                  version:
-                    type: string
-                required:
-                - version
-                - url
-                type: object
-              mappings:
-                items:
+              projectsGvk:
+                additionalProperties:
                   properties:
-                    externalURI:
+                    group:
                       type: string
-                    serviceURI:
+                    kind:
+                      type: string
+                    name:
                       type: string
                   required:
-                  - externalURI
-                  - serviceURI
+                  - group
+                  - kind
+                  - name
                   type: object
-                type: array
-              repoConf:
-                properties:
-                  specFilePath:
-                    type: string
-                  tag:
-                    type: string
-                  url:
-                    type: string
-                required:
-                - url
-                - tag
-                - specFilePath
                 type: object
-              specGenEnabled:
-                type: boolean
-            required:
-            - specGenEnabled
-            - mappings
-            - backend
             type: object
           status:
             properties:

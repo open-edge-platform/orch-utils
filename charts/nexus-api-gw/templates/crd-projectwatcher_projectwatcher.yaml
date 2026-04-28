@@ -5,21 +5,22 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
+    argocd.argoproj.io/sync-wave: "-10"
     nexus: |
-      {"name":"orgwatcher.OrgWatcher","hierarchy":["multitenancies.tenancy.edge-orchestrator.intel.com","configs.config.edge-orchestrator.intel.com"],"is_singleton":false,"nexus-rest-api-gen":{"uris":null}}
+      {"name":"projectwatcher.ProjectWatcher","hierarchy":["multitenancies.tenancy.edge-orchestrator.intel.com","configs.config.edge-orchestrator.intel.com"],"is_singleton":false,"nexus-rest-api-gen":{"uris":null}}
   creationTimestamp: null
-  name: orgwatchers.orgwatcher.edge-orchestrator.intel.com
+  name: projectwatchers.projectwatcher.edge-orchestrator.intel.com
 spec:
   conversion:
     strategy: None
-  group: orgwatcher.edge-orchestrator.intel.com
+  group: projectwatcher.edge-orchestrator.intel.com
   names:
-    kind: OrgWatcher
-    listKind: OrgWatcherList
-    plural: orgwatchers
+    kind: ProjectWatcher
+    listKind: ProjectWatcherList
+    plural: projectwatchers
     shortNames:
-    - orgwatcher
-    singular: orgwatcher
+    - projectwatcher
+    singular: projectwatcher
   scope: Cluster
   versions:
   - name: v1

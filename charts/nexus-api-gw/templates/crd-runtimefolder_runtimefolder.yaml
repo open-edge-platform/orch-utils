@@ -5,6 +5,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
+    argocd.argoproj.io/sync-wave: "-10"
     nexus: |
       {"name":"runtimefolder.RuntimeFolder","hierarchy":["multitenancies.tenancy.edge-orchestrator.intel.com","runtimes.runtime.edge-orchestrator.intel.com","runtimeorgs.runtimeorg.edge-orchestrator.intel.com"],"children":{"runtimeprojects.runtimeproject.edge-orchestrator.intel.com":{"fieldName":"Projects","fieldNameGvk":"projectsGvk","goFieldNameGvk":"ProjectsGvk","isNamed":true}},"is_singleton":false,"nexus-rest-api-gen":{"uris":null}}
   creationTimestamp: null
