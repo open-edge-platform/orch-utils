@@ -5,6 +5,8 @@
 global:
   tainted: false
   name: tenancy-manager
+  postgresql:
+    host: ""
 
 replicaCount: 1
 
@@ -127,14 +129,18 @@ tenancyManager:
   internalAuthTokenSecret: ""
   internalAuthTokenSecretKey: "internal-auth-token"
 
-  # Registered controllers that will be tracked
+  # Registered controllers that will be tracked.
+  # Note: keycloak-tenant-controller handles BOTH org and project events
+  # (creates Keycloak realm groups/roles for orgs AND projects), so it is
+  # listed under both `org` and `project`.
   controllers:
     org:
       - keycloak-tenant-controller
     project:
       - app-orch-tenant-controller
+      - app-deployment-manager
+      - keycloak-tenant-controller
       - infra-tenant-controller
       - cluster-manager
-      - app-deployment-manager
       - observability-tenant-controller
       - metadata-broker

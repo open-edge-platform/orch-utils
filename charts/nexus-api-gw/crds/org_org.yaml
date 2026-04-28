@@ -1,0 +1,112 @@
+---
+# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    nexus: |
+      {"name":"org.Org","hierarchy":["multitenancies.tenancy.edge-orchestrator.intel.com","configs.config.edge-orchestrator.intel.com"],"children":{"folders.folder.edge-orchestrator.intel.com":{"fieldName":"Folders","fieldNameGvk":"foldersGvk","goFieldNameGvk":"FoldersGvk","isNamed":true}},"is_singleton":false,"nexus-rest-api-gen":{"uris":[{"uri":"/v1/orgs/{org.Org}","methods":{"DELETE":{"200":{"description":"OK"},"404":{"description":"Not Found"},"501":{"description":"Not Implemented"}},"GET":{"200":{"description":"OK"},"404":{"description":"Not Found"},"501":{"description":"Not Implemented"}},"PUT":{"200":{"description":"OK"},"201":{"description":"Created"},"501":{"description":"Not Implemented"}}}},{"uri":"/v1/orgs","methods":{"LIST":{"200":{"description":"OK"},"404":{"description":"Not Found"},"501":{"description":"Not Implemented"}}}}]},"deferred-delete":true}
+  creationTimestamp: null
+  name: orgs.org.edge-orchestrator.intel.com
+spec:
+  conversion:
+    strategy: None
+  group: org.edge-orchestrator.intel.com
+  names:
+    kind: Org
+    listKind: OrgList
+    plural: orgs
+    shortNames:
+    - org
+    singular: org
+  scope: Cluster
+  versions:
+  - name: v1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              description:
+                type: string
+              foldersGvk:
+                additionalProperties:
+                  properties:
+                    group:
+                      type: string
+                    kind:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                  - group
+                  - kind
+                  - name
+                  type: object
+                type: object
+            required:
+            - description
+            type: object
+          status:
+            properties:
+              nexus:
+                properties:
+                  remoteGeneration:
+                    format: int64
+                    type: integer
+                  sourceGeneration:
+                    format: int64
+                    type: integer
+                  syncerStatus:
+                    properties:
+                      cRGenerationId:
+                        format: int64
+                        type: integer
+                      etcdVersion:
+                        format: int64
+                        type: integer
+                    type: object
+                type: object
+              orgStatus:
+                properties:
+                  message:
+                    type: string
+                  statusIndicator:
+                    type: string
+                  timeStamp:
+                    format: int64
+                    type: integer
+                  uID:
+                    type: string
+                required:
+                - statusIndicator
+                - message
+                - timeStamp
+                - uID
+                type: object
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: null
+  storedVersions:
+  - v1
