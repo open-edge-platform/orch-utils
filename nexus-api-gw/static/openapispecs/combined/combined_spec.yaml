@@ -1,5 +1,5 @@
 ---
-# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-FileCopyrightText: 2026 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
 components:
@@ -1108,7 +1108,7 @@ components:
 info:
   description: Tenancy aware APIs for the Open Edge Platform services
   title: Multi tenancy APIs
-  version: 26.1.1
+  version: 26.1.3
 openapi: 3.0.3
 paths:
   /v1/orgs:
