@@ -857,4 +857,93 @@ spec:
       namespace: orch-gateway
     {{- end }}
 ---
+# rewrite-mps: /v1/projects/{name}/dm/(.*)  →  /api/v1/$1
+# Strips the /v1/projects/{name}/dm/ prefix before forwarding to mps (DMT).
+apiVersion: {{ .Values.traefikApiGroup }}
+kind: Middleware
+metadata:
+  name: rewrite-mps
+  namespace: orch-gateway
+spec:
+  replacePathRegex:
+    regex: "^/v1/projects/[^/]+/dm/(.*)"
+    replacement: "/api/v1/$1"
+---
+# mps IngressRoute: /v1/projects/{name}/dm/(amt/generalSettings|devices)*
+# resolve-project-id must appear before rewrite-mps so X-Forwarded-Uri still
+# contains the project name when the ForwardAuth call is made.
+apiVersion: {{ .Values.traefikApiGroup }}
+kind: IngressRoute
+metadata:
+  name: mps-http
+  namespace: orch-gateway
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: {{ required "A valid apiMatchHost entry required!" .Values.apiMatchHost }} && PathRegexp(`^/v1/projects/[^/]+/dm/(amt/generalSettings|devices)`)
+      priority: 50
+      middlewares:
+        - name: validate-jwt
+        - name: resolve-project-id
+        - name: rewrite-mps
+        - name: secure-headers
+      services:
+        - kind: Service
+          name: mps
+          namespace: orch-infra
+          port: 3000
+  tls:
+    secretName: {{ required "A valid orchSecretName entry required!" .Values.orchSecretName }}
+    {{- if .Values.tlsOption }}
+    options:
+      name: {{ .Values.tlsOption }}
+      namespace: orch-gateway
+    {{- end }}
+---
+# rewrite-rps: /v1/projects/{name}/dm/amt/(.*)  →  /api/v1/$1
+apiVersion: {{ .Values.traefikApiGroup }}
+kind: Middleware
+metadata:
+  name: rewrite-rps
+  namespace: orch-gateway
+spec:
+  replacePathRegex:
+    regex: "^/v1/projects/[^/]+/dm/amt/(.*)"
+    replacement: "/api/v1/$1"
+---
+# rps IngressRoute: /v1/projects/{name}/dm/amt/admin*
+# resolve-project-id must appear before rewrite-rps so X-Forwarded-Uri still
+# contains the project name when the ForwardAuth call is made.
+apiVersion: {{ .Values.traefikApiGroup }}
+kind: IngressRoute
+metadata:
+  name: rps-http
+  namespace: orch-gateway
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: {{ required "A valid apiMatchHost entry required!" .Values.apiMatchHost }} && PathRegexp(`^/v1/projects/[^/]+/dm/amt/admin`)
+      priority: 50
+      middlewares:
+        - name: validate-jwt
+        - name: resolve-project-id
+        - name: rewrite-rps
+        - name: secure-headers
+      services:
+        - kind: Service
+          name: rps
+          namespace: orch-infra
+          port: 8081
+  tls:
+    secretName: {{ required "A valid orchSecretName entry required!" .Values.orchSecretName }}
+    {{- if .Values.tlsOption }}
+    options:
+      name: {{ .Values.tlsOption }}
+      namespace: orch-gateway
+    {{- end }}
+---
 {{- end }}
