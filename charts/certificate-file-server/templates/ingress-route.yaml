@@ -27,3 +27,29 @@ spec:
       name: {{ .Values.tlsOption }}
       namespace: orch-gateway
 {{- end }}
+---
+# IngressRoute for installer script at /installer path
+apiVersion: {{ .Values.traefikApiGroup }}
+kind: IngressRoute
+metadata:
+  name: traefik-installer-script
+  namespace: orch-gateway
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: ({{ required "A valid rootMatchHost entry required!" .Values.rootMatchHost }}) && PathPrefix(`/installer`)
+      kind: Rule
+      priority: 30
+      services:
+        - name: certificate-file-server
+          port: 8080
+          scheme: http
+          namespace: orch-gateway
+  tls:
+    secretName: {{ required "A valid orchSecretName entry required!" .Values.orchSecretName }}
+{{- if .Values.tlsOption }}
+    options:
+      name: {{ .Values.tlsOption }}
+      namespace: orch-gateway
+{{- end }}
