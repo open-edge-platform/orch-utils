@@ -30,4 +30,6 @@ data:
 {{- if .Values.infraConfig }}
   edge-node-installer.sh: |-
 {{- include "certificate-file-server.edge-node-installer" . | nindent 4 }}
+  edge-node-uninstaller.sh: |-
+{{- .Files.Get "scripts/edge-node-uninstaller.sh" | nindent 4 }}
 {{- end }}
