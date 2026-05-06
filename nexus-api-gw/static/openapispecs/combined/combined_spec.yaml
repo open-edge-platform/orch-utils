@@ -303,6 +303,306 @@ components:
                 type: string
       description: Not Found
   schemas:
+    AMTVersionResponse:
+      example:
+        AMT_SetupAndConfigurationService:
+          response:
+            CreationClassName: AMT_SetupAndConfigurationService
+            ElementName: Intel(r) AMT Setup and Configuration Service
+            EnabledState: 5
+            Name: Intel(r) AMT Setup and Configuration Service
+            PasswordModel: 1
+            ProvisioningMode: 1
+            ProvisioningServerOTP: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+            ProvisioningState: 2
+            RequestedState: 12
+            SystemCreationClassName: CIM_ComputerSystem
+            SystemName: Intel(r) AMT
+            ZeroTouchConfigurationEnabled: true
+          responses:
+            Body:
+              CreationClassName: AMT_SetupAndConfigurationService
+              ElementName: Intel(r) AMT Setup and Configuration Service
+              EnabledState: 5
+              Name: Intel(r) AMT Setup and Configuration Service
+              PasswordModel: 1
+              ProvisioningMode: 1
+              ProvisioningServerOTP: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+              ProvisioningState: 2
+              RequestedState: 12
+              SystemCreationClassName: CIM_ComputerSystem
+              SystemName: Intel(r) AMT
+              ZeroTouchConfigurationEnabled: true
+            Header:
+              Action: http://schemas.xmlsoap.org/ws/2004/09/transfer/GetResponse
+              MessageID: uuid:00000000-8086-8086-8086-0000000006A4
+              Method: AMT_SetupAndConfigurationService
+              RelatesTo: 3
+              ResourceURI: http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService
+              To: http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous
+          status: 200
+        CIM_SoftwareIdentity:
+          responses:
+            - InstanceID: Flash
+              IsEntity: true
+              VersionString: 11.8.50
+            - InstanceID: Netstack
+              IsEntity: true
+              VersionString: 11.8.50
+            - InstanceID: AMTApps
+              IsEntity: true
+              VersionString: 11.8.50
+            - InstanceID: AMT
+              IsEntity: true
+              VersionString: 11.8.50
+            - InstanceID: Sku
+              IsEntity: true
+              VersionString: 16392
+            - InstanceID: VendorID
+              IsEntity: true
+              VersionString: 8086
+            - InstanceID: Build Number
+              IsEntity: true
+              VersionString: 3425
+            - InstanceID: Recovery Version
+              IsEntity: true
+              VersionString: 11.8.50
+            - InstanceID: Recovery Build Num
+              IsEntity: true
+              VersionString: 3425
+            - InstanceID: Legacy Mode
+              IsEntity: true
+              VersionString: "False"
+            - InstanceID: AMT FW Core Version
+              IsEntity: true
+              VersionString: 11.8.50
+          status: 200
+      properties:
+        AMT_SetupAndConfigurationService:
+          properties:
+            response:
+              properties:
+                CreationClassName:
+                  type: string
+                ElementName:
+                  type: string
+                EnabledState:
+                  type: integer
+                Name:
+                  type: string
+                PasswordModel:
+                  type: integer
+                ProvisioningMode:
+                  type: integer
+                ProvisioningServerOTP:
+                  type: string
+                ProvisioningState:
+                  type: integer
+                RequestedState:
+                  type: integer
+                SystemCreationClassName:
+                  type: string
+                SystemName:
+                  type: string
+                ZeroTouchConfigurationEnabled:
+                  type: boolean
+              type: object
+            responses:
+              properties:
+                Body:
+                  properties:
+                    CreationClassName:
+                      type: string
+                    ElementName:
+                      type: string
+                    EnabledState:
+                      type: integer
+                    Name:
+                      type: string
+                    PasswordModel:
+                      type: integer
+                    ProvisioningMode:
+                      type: integer
+                    ProvisioningServerOTP:
+                      type: string
+                    ProvisioningState:
+                      type: integer
+                    RequestedState:
+                      type: integer
+                    SystemCreationClassName:
+                      type: string
+                    SystemName:
+                      type: string
+                    ZeroTouchConfigurationEnabled:
+                      type: boolean
+                  type: object
+                Header:
+                  properties:
+                    Action:
+                      type: string
+                    MessageID:
+                      type: string
+                    Method:
+                      type: string
+                    RelatesTo:
+                      type: string
+                    ResourceURI:
+                      type: string
+                    To:
+                      type: string
+                  type: object
+              type: object
+            status:
+              type: integer
+          type: object
+        CIM_SoftwareIdentity:
+          properties:
+            responses:
+              items:
+                properties:
+                  InstanceID:
+                    type: string
+                  IsEntity:
+                    type: boolean
+                  VersionString:
+                    type: string
+                type: object
+              maxItems: 100
+              type: array
+            status:
+              type: integer
+          type: object
+      title: VersionResponse
+    APIResponse:
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+      title: APIResponse
+      type: object
+    AddDevice:
+      example:
+        friendlyName: store12pos2
+        guid: 123e4567-e89b-12d3-a456-426614174000
+        hostname: AMTDEVICENUC1
+        tags:
+          - Texas
+          - NUC
+          - 'Store #123'
+      properties:
+        deviceInfo:
+          properties:
+            currentMode:
+              type: string
+            fwBuild:
+              type: string
+            fwSku:
+              type: string
+            fwVersion:
+              type: string
+            ipAddress:
+              type: string
+          type: object
+        guid:
+          type: string
+        hostname:
+          type: string
+        tags:
+          items:
+            type: string
+          maxItems: 100
+          type: array
+      required:
+        - guid
+        - hostname
+        - tags
+      title: AddDevice
+    AddDeviceResponse:
+      example:
+        connectionStatus: false
+        deviceInfo:
+          currentMode: "0"
+          features: AMT Pro Corporate
+          fwBuild: "1111"
+          fwSku: "16392"
+          fwVersion: "16.1"
+          ipAddress: ""
+          lastUpdated: "2023-11-13T17:20:59.043Z"
+        dnsSuffix: null
+        friendlyName: store12pos2
+        guid: 123e4567-e89b-12d3-a456-426614174000
+        hostname: AMTDEVICENUC1
+        lastConnected: "2023-11-13T17:21:57.885Z"
+        lastDisconnected: "2023-11-13T17:22:57.885Z"
+        lastSeen: "2023-11-13T17:33:57.915Z"
+        mpsInstance: null
+        mpsusername: null
+        tags:
+          - Texas
+          - NUC
+          - 'Store #123'
+        tenantID: ""
+      properties:
+        connectionStatus:
+          type: boolean
+        deviceInfo:
+          properties:
+            currentMode:
+              type: string
+            features:
+              type: string
+            fwBuild:
+              type: string
+            fwSku:
+              type: string
+            fwVersion:
+              type: string
+            ipAddress:
+              type: string
+            lastUpdated:
+              format: date-time
+              type: string
+          type: object
+        dnsSuffix:
+          type: string
+        friendlyName:
+          type: string
+        guid:
+          type: string
+        hostname:
+          type: string
+        lastConnected:
+          format: date-time
+          type: string
+        lastDisconnected:
+          format: date-time
+          type: string
+        lastSeen:
+          format: date-time
+          type: string
+        mpsInstance:
+          type: string
+        mpsusername:
+          type: string
+        tags:
+          items:
+            type: string
+          maxItems: 100
+          type: array
+        tenantID:
+          type: string
+      required:
+        - guid
+        - hostname
+        - tags
+        - mpsInstance
+        - connectionStatus
+        - mpsusername
+        - tenantID
+        - friendlyName
+        - dnsSuffix
+      title: DeviceResponse
     Alert:
       properties:
         alertDefinitionId:
@@ -386,6 +686,237 @@ components:
           maxItems: 100
           type: array
       type: object
+    AuditLogResponse:
+      example:
+        records:
+          - AuditApp: Redirection Manager
+            AuditAppID: 18
+            Event: KVM Enabled
+            EventID: 10
+            Ex: ""
+            ExStr: null
+            Initiator: admin
+            InitiatorType: 0
+            MCLocationType: 0
+            NetAddress: 1.2.3.4
+            Time: "2003-12-29T05:46:37.000Z"
+          - AuditApp: Security Admin
+            AuditAppID: 16
+            Event: Unprovisioning Started
+            EventID: 19
+            Ex:
+              type: Buffer
+            ExStr: Remote WSMAN
+            Initiator: admin
+            InitiatorType: 0
+            MCLocationType: 1
+            NetAddress: ::1
+            Time: "2017-12-21T17:30:39.000Z"
+        totalCnt: 2
+      properties:
+        AuditApp:
+          type: string
+        AuditAppID:
+          type: integer
+        Event:
+          type: string
+        EventID:
+          type: integer
+        Ex:
+          properties:
+            data:
+              items:
+                type: integer
+              maxItems: 100
+              type: array
+            type:
+              type: string
+          type: object
+        ExStr:
+          type: string
+        Initiator:
+          type: string
+        InitiatorType:
+          type: integer
+        MCLocationType:
+          type: integer
+        NetAddress:
+          type: string
+        Time:
+          type: string
+        records:
+          type: string
+        totalCnt:
+          type: integer
+      title: AuditLogResponse
+    CIRAConfigPATCH:
+      example:
+        authMethod: 2
+        commonName: 192.168.8.50
+        configName: ciraconfig
+        mpsPort: 4433
+        mpsRootCertificate: U3dhZ2dlciByb2Nrcw==
+        mpsServerAddress: 192.168.8.50
+        password: G@ppm0ym
+        proxyDetails: ""
+        regeneratePassword: false
+        serverAddressFormat: 3
+        username: mpsuser
+        version: "3000"
+      properties:
+        authMethod:
+          format: int32
+          type: integer
+        commonName:
+          type: string
+        configName:
+          type: string
+        mpsPort:
+          format: int32
+          type: integer
+        mpsRootCertificate:
+          format: byte
+          type: string
+        mpsServerAddress:
+          type: string
+        password:
+          format: password
+          type: string
+        proxyDetails:
+          type: string
+        regeneratePassword:
+          type: boolean
+        serverAddressFormat:
+          format: int32
+          type: integer
+        username:
+          maxLength: 16
+          minLength: 5
+          type: string
+        version:
+          type: string
+      required:
+        - configName
+        - mpsServerAddress
+        - mpsPort
+        - username
+        - commonName
+        - serverAddressFormat
+        - authMethod
+        - mpsRootCertificate
+        - proxyDetails
+        - regeneratePassword
+        - version
+      title: CIRAConfigPATCH
+      type: object
+    CIRAConfigPOST:
+      example:
+        authMethod: 2
+        commonName: 192.168.8.50
+        configName: ciraconfig
+        mpsPort: 4433
+        mpsRootCertificate: MIIEOzCCAqOgAwIBAgIDAjVCMA0GCSqGSIb3DQEBDAUAMD0xFzAVBgNVBAMTDk1QU1Jvb3QtNmZhNMSDIWEdsqwe89dsNNJSOW2Db3duMRAwDgYDVQQGEwd1bmtub3duMCAXDTIyMDkwNTE4MTgwMloYDzIwNTMwOTA1MTgxODAyWjA9MRcwFQYDVQQDEw5NUFNSb290LTZmYTQ5NEQMA4GA1UEChMHdW5rbm93bjEQMA4GA1UEBhMHdW5rbm93bjCCAaIwDQYJKoZIhNMSDANdnSdsnmasSDWED8oCggGBAPiA+YEPjIlryv8PdJsfIwkqd/7wJriASiM3W5VePKtO5gXKCg3piuUAAIj8Lk36TK6Lvz5He818o1YMLposvTzZJHVPILye5aqp2Lgs079nESgoAt0/yxSMh53S8dzEf5CXBmlA5foEebVUKQoei/bqSkbIC3CvZ/NMIGHF0nUMoKeigzeJbADDQVIMCnqZoPq0pRLUTbCyogAaPQ+9N72XNPw3HYX7voH2EOJxHtZHH8LTJZXKc4ozt/JU9G0onfnSTCJAirbZSfY0bdxdaSEOJg4tGAFAseHikYP6hHGqjutUC7/WiT/3EBcQnO5OjckWDXVOiG6AmNsIqW2cfJnNjd0kOwbdyEC+Tmt3w9VR8491wFexfLodbbk5JUS99bBwf856y70zfmAiCSgQcIjU5Yra7eIkNtqBv1RG4tSBm0fD5YB/mArICoYF0zNWGrqqcbfuyARdEiNCjxIbSZt+l1onUfFWfjoBcE7AhL0EaZmUTbQKP9hl+1zffpa0wIDAQABo0IwQDAMBgNVHRMEBTADAQH/MBEGCWCGSAGG+EIBAQQEAwIABzAdBgNVHQ4EFgQUb6SWpSxsakc8AP/bm+gwt0qIsMEwDQYJKoZIhvcBHgfIJKLOpnmASfdHQaft0QROp4vl1J/hcAfPw0j+l3dMEpKbzJQhaRoRkIECpxhvaYgAUq7hA7MNNn4QV20BOiDfV8ZURFrEmnehP13I7jd7YDLxpfK17x5r6wlAYZ/pGb8u9lgexE14kERmmRZvuh7wxQy0rTcYKe9+jM5R8Ugv/8gWYdpp1gr8fGJJx/e2DfSs+ViXEOWwgWmidTwPgerwWR8AcvW8IXkylXO6+SlTXnv3cWcY3BEh9r0xXBa4lkFAse2+Zj/X9rudYGqOLYtIsef0Q5fOopHJ7JBXUbMQySAIdAbBb0X14rgEC2kwow1NCm0vzi8CAL/14D1csd0c1K8fRu//lQgj+gh7Tk4B7RMZOOwTMAUQj1LoYnjSDNJS87sAmkmNNJOS09PTi9RVW3nddcgMVSSa2wehS4ZpYkZOxLdgcV58dfW9wBKBWuqmnMGPjI5pjNCRK8foPePwuP1avckSdKsen5qT0tfthDV+2TrZuV07eKVrmTXq0GBNEIVQplV1yyA==
+        mpsServerAddress: 192.168.8.50
+        password: G@ppm0ym
+        proxyDetails: ""
+        serverAddressFormat: 3
+        username: mpsuser
+      properties:
+        authMethod:
+          format: int32
+          type: integer
+        commonName:
+          type: string
+        configName:
+          type: string
+        mpsPort:
+          format: int32
+          type: integer
+        mpsRootCertificate:
+          format: byte
+          type: string
+        mpsServerAddress:
+          type: string
+        password:
+          format: password
+          type: string
+        proxyDetails:
+          type: string
+        serverAddressFormat:
+          format: int32
+          type: integer
+        username:
+          maxLength: 16
+          minLength: 5
+          type: string
+      required:
+        - configName
+        - mpsServerAddress
+        - mpsPort
+        - username
+        - commonName
+        - serverAddressFormat
+        - authMethod
+        - mpsRootCertificate
+        - proxyDetails
+      title: CIRAConfigPOST
+      type: object
+    CIRAConfigResponse:
+      example:
+        authMethod: 2
+        commonName: 192.168.8.50
+        configName: ciraconfig
+        mpsPort: 4433
+        mpsRootCertificate: U3dhZ2dlciByb2Nrcw==
+        mpsServerAddress: 192.168.8.50
+        proxyDetails: ""
+        serverAddressFormat: 3
+        tenantId: ""
+        username: mps
+        version: "2000"
+      properties:
+        authMethod:
+          format: int32
+          type: integer
+        commonName:
+          type: string
+        configName:
+          type: string
+        mpsPort:
+          format: int32
+          type: integer
+        mpsRootCertificate:
+          format: byte
+          type: string
+        mpsServerAddress:
+          type: string
+        proxyDetails:
+          type: string
+        serverAddressFormat:
+          format: int32
+          type: integer
+        tenantId:
+          type: string
+        username:
+          type: string
+        version:
+          type: string
+      required:
+        - configName
+        - mpsServerAddress
+        - mpsPort
+        - username
+        - commonName
+        - serverAddressFormat
+        - authMethod
+        - mpsRootCertificate
+        - proxyDetails
+      title: CIRAConfigResponse
+      type: object
+    CiracertResponse:
+      example: |
+        "-----BEGIN CERTIFICATE-----        MIIEOzCCAqOgAwIBAgIDAjVCMA0GCSqGSIb3DQEBDAUAMD0xFzAVBgNVBAMTDk1QU1Jvb3QtNmZhNMSDIWEdsqwe89dsNNJSOW2Db3duMRAwDgYDVQQGEwd1bmtub3duMCAXDTIyMDkwNTE4MTgwMloYDzIwNTMwOTA1MTgxODAyWjA9MRcwFQYDVQQDEw5NUFNSb290LTZmYTQ5NEQMA4GA1UEChMHdW5rbm93bjEQMA4GA1UEBhMHdW5rbm93bjCCAaIwDQYJKoZIhNMSDANdnSdsnmasSDWED8oCggGBAPiA+YEPjIlryv8PdJsfIwkqd/7wJriASiM3W5VePKtO5gXKCg3piuUAAIj8Lk36TK6Lvz5He818o1YMLposvTzZJHVPILye5aqp2Lgs079nESgoAt0/yxSMh53S8dzEf5CXBmlA5foEebVUKQoei/bqSkbIC3CvZ/NMIGHF0nUMoKeigzeJbADDQVIMCnqZoPq0pRLUTbCyogAaPQ+9N72XNPw3HYX7voH2EOJxHtZHH8LTJZXKc4ozt/JU9G0onfnSTCJAirbZSfY0bdxdaSEOJg4tGAFAseHikYP6hHGqjutUC7/WiT/3EBcQnO5OjckWDXVOiG6AmNsIqW2cfJnNjd0kOwbdyEC+Tmt3w9VR8491wFexfLodbbk5JUS99bBwf856y70zfmAiCSgQcIjU5Yra7eIkNtqBv1RG4tSBm0fD5YB/mArICoYF0zNWGrqqcbfuyARdEiNCjxIbSZt+l1onUfFWfjoBcE7AhL0EaZmUTbQKP9hl+1zffpa0wIDAQABo0IwQDAMBgNVHRMEBTADAQH/MBEGCWCGSAGG+EIBAQQEAwIABzAdBgNVHQ4EFgQUb6SWpSxsakc8AP/bm+gwt0qIsMEwDQYJKoZIhvcBHgfIJKLOpnmASfdHQaft0QROp4vl1J/hcAfPw0j+l3dMEpKbzJQhaRoRkIECpxhvaYgAUq7hA7MNNn4QV20BOiDfV8ZURFrEmnehP13I7jd7YDLxpfK17x5r6wlAYZ/pGb8u9lgexE14kERmmRZvuh7wxQy0rTcYKe9+jM5R8Ugv/8gWYdpp1gr8fGJJx/e2DfSs+ViXEOWwgWmidTwPgerwWR8AcvW8IXkylXO6+SlTXnv3cWcY3BEh9r0xXBa4lkFAse2+Zj/X9rudYGqOLYtIsef0Q5fOopHJ7JBXUbMQySAIdAbBb0X14rgEC2kwow1NCm0vzi8CAL/14D1csd0c1K8fRu//lQgj+gh7Tk4B7RMZOOwTMAUQj1LoYnjSDNJS87sAmkmNNJOS09PTi9RVW3nddcgMVSSa2wehS4ZpYkZOxLdgcV58dfW9wBKBWuqmnMGPjI5pjNCRK8foPePwuP1avckSdKsen5qT0tfthDV+2TrZuV07eKVrmTXq0GBNEIVQplV1yyA== -----END CERTIFICATE-----"
+      title: CiracertResponse
     ClusterDetailInfo:
       properties:
         controlPlaneReady:
@@ -527,6 +1058,79 @@ components:
         - name
         - version
       type: object
+    CountCIRAResponse:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/CIRAConfigResponse'
+          maxItems: 100
+          type: array
+        totalCount:
+          type: integer
+      title: CountCIRAResponse
+      type: object
+    CountDevicesResponse:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/Device'
+          maxItems: 100
+          type: array
+        totalCount:
+          type: integer
+      title: CountDevicesResponse
+      type: object
+    CountDomainResponse:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/DomainResponse'
+          maxItems: 100
+          type: array
+        totalCount:
+          type: integer
+      title: CountDomainResponse
+      type: object
+    CountIEEE8021xResponse:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/IEEE8021xConfigResponse'
+          maxItems: 100
+          type: array
+        totalCount:
+          type: integer
+      title: CountIEEE8021xResponse
+      type: object
+    CountProfileResponse:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/ProfileResponse'
+          maxItems: 100
+          type: array
+        totalCount:
+          type: integer
+      title: CountProfileResponse
+      type: object
+    CountWirelessResponse:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/WirelessConfigResponse'
+          maxItems: 100
+          type: array
+        totalCount:
+          type: integer
+      title: CountWirelessResponse
+      type: object
+    DeactivateResponse:
+      example:
+        status: SUCCESS
+      properties:
+        status:
+          type: string
+      title: DeactivateResponse
     DefaultTemplateInfo:
       properties:
         name:
@@ -545,6 +1149,361 @@ components:
       required:
         - version
       type: object
+    DeleteAlarmErrorResponse:
+      example:
+        error: Alarm instance not found
+        errorDescription: 'Alarm occurrence delete request failed for guid : 4c4c4544-005a-3510-8047-b4c04f564433.'
+      properties:
+        error:
+          description: server error message
+          type: string
+        errorDescription:
+          description: contains device guid
+          type: string
+        success:
+          description: HTTP returncode
+          type: integer
+      title: DeleteAlarmErrorResponse
+    DeleteErrorResponse:
+      example:
+        error: Device not found/connected. Please connect again using CIRA.
+        errorDescription: 'guid : 038d0240-045c-05f4-7706-980700080009'
+      properties:
+        error:
+          description: server error message
+          type: string
+        errorDescription:
+          description: contains device guid
+          type: string
+        success:
+          description: HTTP returncode
+          type: integer
+      title: DeleteErrorResponse
+    DeleteResponse:
+      example:
+        success: 204
+      properties:
+        success:
+          description: HTTP returncode
+          type: integer
+      title: DeleteResponse
+    Device:
+      example:
+        connectionStatus: true
+        deviceInfo:
+          currentMode: "0"
+          features: AMT Pro Corporate
+          fwBuild: "1111"
+          fwSku: "16392"
+          fwVersion: "16.1"
+          ipAddress: ""
+          lastUpdate: "2023-11-13T17:20:59.043Z"
+        dnsSuffix: ""
+        friendlyName: ""
+        guid: 123e4567-e89b-12d3-a456-426614174000
+        hostname: AMTDEVICENUC1
+        lastConnected: "2023-11-13T17:21:57.885Z"
+        lastDisconnected: "2023-11-13T17:22:57.885Z"
+        lastSeen: "2023-11-13T17:33:57.915Z"
+        mpsInstance: test.mystack.com
+        mpsusername: admin
+        tags:
+          - Texas
+          - NUC
+          - 'Store #123'
+        tenantId: ""
+      properties:
+        connectionStatus:
+          type: boolean
+        deviceInfo:
+          properties:
+            currentMode:
+              type: string
+            features:
+              type: string
+            fwBuild:
+              type: string
+            fwSku:
+              type: string
+            fwVersion:
+              type: string
+            ipAddress:
+              type: string
+            lastUpdated:
+              format: date-time
+              type: string
+          type: object
+        dnsSuffix:
+          type: string
+        friendlyName:
+          type: string
+        guid:
+          type: string
+        hostname:
+          type: string
+        lastConnected:
+          format: date-time
+          type: string
+        lastDisconnected:
+          format: date-time
+          type: string
+        lastSeen:
+          format: date-time
+          type: string
+        mpsInstance:
+          type: string
+        mpsusername:
+          type: string
+        tags:
+          items:
+            type: string
+          maxItems: 100
+          type: array
+        tenantid:
+          type: string
+      title: Device
+    DisconnectErrorResponse:
+      example:
+        error: Device not found/connected. Please connect again using CIRA.
+        errorDescription: 'guid : 038d0240-045c-05f4-7706-980700080009'
+      properties:
+        error:
+          description: server error message
+          type: string
+        errorDescription:
+          description: contains device guid
+          type: string
+        success:
+          description: HTTP returncode
+          type: integer
+      title: DisconnectErrorResponse
+    DisconnectResponse:
+      example:
+        description: 'CIRA connection disconnected : 038d0240-045c-05f4-7706-980700080009'
+      properties:
+        description:
+          description: server response message containing guid
+          type: string
+        success:
+          description: HTTP returncode
+          type: integer
+      title: DisconnectResponse
+    DomainPATCH:
+      example:
+        domainSuffix: NewDomain.com
+        profileName: NewDomain
+        provisioningCert: U3dhZ2dlciByb2Nrcw==
+        provisioningCertPassword: G@ppm0ym
+        provisioningCertStorageFormat: string
+        version: "3000"
+      properties:
+        domainSuffix:
+          type: string
+        profileName:
+          type: string
+        provisioningCert:
+          format: byte
+          type: string
+        provisioningCertPassword:
+          format: password
+          type: string
+        provisioningCertStorageFormat:
+          type: string
+        version:
+          type: string
+      required:
+        - profileName
+        - domainSuffix
+        - provisioningCertStorageFormat
+        - provisioningCert
+        - provisioningCertPassword
+        - version
+      title: DomainPATCH
+      type: object
+    DomainPOST:
+      example:
+        domainSuffix: NewDomain.com
+        profileName: NewDomain
+        provisioningCert: U3dhZ2dlciByb2Nrcw==
+        provisioningCertPassword: G@ppm0ym
+        provisioningCertStorageFormat: string
+      properties:
+        domainSuffix:
+          type: string
+        profileName:
+          type: string
+        provisioningCert:
+          format: byte
+          type: string
+        provisioningCertPassword:
+          format: password
+          type: string
+        provisioningCertStorageFormat:
+          type: string
+      required:
+        - profileName
+        - domainSuffix
+        - provisioningCertStorageFormat
+        - provisioningCert
+        - provisioningCertPassword
+      title: DomainPOST
+      type: object
+    DomainResponse:
+      example:
+        domainSuffix: NewDomain.com
+        expirationDate: "2024-12-31T23:59:00Z"
+        profileName: NewDomain
+        provisioningCertStorageFormat: string
+        tenantId: ""
+        version: "2000"
+      properties:
+        domainSuffix:
+          type: string
+        expirationDate:
+          format: date-time
+          type: string
+        profileName:
+          type: string
+        provisioningCertStorageFormat:
+          type: string
+        tenantId:
+          type: string
+        version:
+          type: string
+      required:
+        - profileName
+        - domainSuffix
+        - provisioningCertStorageFormat
+        - tenantId
+        - version
+        - expirationDate
+      title: DomainResponse
+      type: object
+    EditDevice:
+      example:
+        dnsSuffix: os.suffix.com
+        friendlyName: store12pos2
+        guid: 123e4567-e89b-12d3-a456-426614174000
+        hostname: AMTDEVICENUC1
+        tags:
+          - Texas
+          - NUC
+          - 'Store #123'
+      properties:
+        deviceInfo:
+          properties:
+            currentMode:
+              type: string
+            fwBuild:
+              type: string
+            fwSku:
+              type: string
+            fwVersion:
+              type: string
+            ipAddress:
+              type: string
+          type: object
+        dnsSuffix:
+          type: string
+        friendlyName:
+          type: string
+        guid:
+          type: string
+        hostname:
+          type: string
+        tags:
+          items:
+            type: string
+          maxItems: 100
+          type: array
+      required:
+        - guid
+      title: EditDevice
+    EditDeviceResponse:
+      example:
+        connectionStatus: false
+        deviceInfo:
+          currentMode: "0"
+          features: AMT Pro Corporate
+          fwBuild: "1111"
+          fwSku: "16392"
+          fwVersion: "16.1"
+          ipAddress: ""
+          lastUpdated: "2023-11-13T17:20:59.043Z"
+        dnsSuffix: os.suffix.com
+        friendlyName: store12pos2
+        guid: 123e4567-e89b-12d3-a456-426614174000
+        hostname: AMTDEVICENUC1
+        lastConnected: "2023-11-13T17:21:57.885Z"
+        lastDisconnected: "2023-11-13T17:22:57.885Z"
+        lastSeen: "2023-11-13T17:33:57.915Z"
+        mpsInstance: null
+        mpsusername: admin
+        tags:
+          - Texas
+          - NUC
+          - 'Store #123'
+        tenantID: ""
+      properties:
+        connectionStatus:
+          type: boolean
+        deviceInfo:
+          properties:
+            currentMode:
+              type: string
+            features:
+              type: string
+            fwBuild:
+              type: string
+            fwSku:
+              type: string
+            fwVersion:
+              type: string
+            ipAddress:
+              type: string
+            lastUpdated:
+              format: date-time
+              type: string
+          type: object
+        dnsSuffix:
+          type: string
+        friendlyName:
+          type: string
+        guid:
+          type: string
+        hostname:
+          type: string
+        lastConnected:
+          format: date-time
+          type: string
+        lastDisconnected:
+          format: date-time
+          type: string
+        lastSeen:
+          format: date-time
+          type: string
+        mpsInstance:
+          type: string
+        mpsusername:
+          type: string
+        tags:
+          items:
+            type: string
+          maxItems: 100
+          type: array
+        tenantID:
+          type: string
+      required:
+        - guid
+        - hostname
+        - tags
+        - mpsInstance
+        - connectionStatus
+        - mpsusername
+        - tenantID
+        - friendlyName
+        - dnsSuffix
+      title: DeviceResponse
     Email:
       type: string
     EmailConfig:
@@ -578,6 +1537,156 @@ components:
         $ref: '#/components/schemas/Email'
       maxItems: 100
       type: array
+    EventLogResponse:
+      example:
+        - Desc: USB resource configuration
+          DeviceAddress: 255
+          Entity: 34
+          EntityInstance: 0
+          EntityStr: BIOS
+          EventData:
+            - 64
+            - 6
+            - 0
+            - 0
+            - 0
+            - 0
+            - 0
+            - 0
+          EventOffset: 2
+          EventSensorType: 15
+          EventSeverity: 1
+          EventSourceType: 104
+          EventType: 111
+          SensorNumber: 255
+          TimeStamp: "2019-04-11T17:57:40.000Z"
+      properties:
+        Desc:
+          type: string
+        DeviceAddress:
+          type: integer
+        Entity:
+          type: integer
+        EntityInstance:
+          type: integer
+        EntityStr:
+          type: string
+        EventData:
+          items:
+            type: integer
+          maxItems: 100
+          type: array
+        EventOffset:
+          type: integer
+        EventSensorType:
+          type: integer
+        EventSeverity:
+          type: integer
+        EventSourceType:
+          type: integer
+        EventType:
+          type: integer
+        SensorNumber:
+          type: integer
+        TimeStamp:
+          type: string
+      title: EventLogResponse
+    GeneralSettingsResponse:
+      example:
+        Body:
+          AMTNetworkEnabled: 1
+          DDNSPeriodicUpdateInterval: 1440
+          DDNSTTL: 900
+          DDNSUpdateByDHCPServerEnabled: true
+          DDNSUpdateEnabled: false
+          DHCPv6ConfigurationTimeout: 0
+          DigestRealm: Digest:A4070000000000000000000000000000
+          DomainName: ""
+          ElementName: 'Intel(r) AMT: General Settings'
+          HostOSFQDN: GEN7-AMT118-W10
+          Hostname: ""
+          IdleWakeTimeout: 65535
+          InstanceID: 'Intel(r) AMT: General Settings'
+          NetworkInterfaceEnabled: true
+          PingResponseEnabled: true
+          PowerSource: 0
+          PreferredAddressFamily: 0
+          PresenceNotificationInterval: 0
+          PrivacyLevel: 0
+          RmcpPingResponseEnabled: true
+          SharedFQDN: true
+          WsmanOnlyMode: false
+        Header:
+          Action: http://schemas.xmlsoap.org/ws/2004/09/transfer/GetResponse
+          MessageID: uuid:00000000-8086-8086-8086-000000000699
+          Method: AMT_GeneralSettings
+          RelatesTo: "1"
+          ResourceURI: http://intel.com/wbem/wscim/1/amt-schema/1/AMT_GeneralSettings
+          To: http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous
+      properties:
+        Body:
+          properties:
+            AMTNetworkEnabled:
+              type: integer
+            DDNSPeriodicUpdateInterval:
+              type: integer
+            DDNSTTL:
+              type: integer
+            DDNSUpdateByDHCPServerEnabled:
+              type: boolean
+            DDNSUpdateEnabled:
+              type: boolean
+            DHCPv6ConfigurationTimeout:
+              type: integer
+            DigestRealm:
+              type: string
+            DomainName:
+              type: string
+            ElementName:
+              type: string
+            HostName:
+              type: string
+            HostOSFQDN:
+              type: string
+            IdleWakeTimeout:
+              type: integer
+            InstanceID:
+              type: string
+            NetworkInterfaceEnabled:
+              type: boolean
+            PingResponseEnabled:
+              type: boolean
+            PowerSource:
+              type: integer
+            PreferredAddressFamily:
+              type: integer
+            PresenceNotificationInterval:
+              type: integer
+            PrivacyLevel:
+              type: integer
+            RmcpPingResponseEnabled:
+              type: boolean
+            SharedFQDN:
+              type: boolean
+            WsmanOnlyMode:
+              type: boolean
+          type: object
+        Header:
+          properties:
+            Action:
+              type: string
+            MessageID:
+              type: string
+            Method:
+              type: string
+            RelatesTo:
+              type: string
+            ResourceURI:
+              type: string
+            To:
+              type: string
+          type: object
+      title: GeneralSettingsResponse
     GenericStatus:
       description: A generic status object.
       properties:
@@ -600,6 +1709,835 @@ components:
         - indicator
         - timestamp
       type: object
+    GetAMTFeaturesResponse:
+      example:
+        IDER: true
+        KVM: false
+        SOL: true
+        optInState: 0
+        redirection: false
+        userConsent: kvm
+      properties:
+        IDER:
+          type: boolean
+        KVM:
+          type: boolean
+        SOL:
+          type: boolean
+        optInState:
+          enum:
+            - 0
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+          type: integer
+        redirection:
+          type: boolean
+        userConsent:
+          type: string
+      title: GetAMTFeaturesResponse
+    GetAlarmClockResponse:
+      example:
+        DeleteOnCompletion: false
+        ElementName: testAlarm
+        InstanceID: testAlarm
+        Interval:
+          Interval: PT10M
+        StartTime:
+          DateTime: "2024-12-31T23:59:00Z"
+      properties:
+        DeleteOnCompletion:
+          type: boolean
+        ElementName:
+          type: string
+        InstanceID:
+          type: string
+        Interval:
+          properties:
+            Interval:
+              type: string
+          type: object
+        StartTime:
+          properties:
+            DateTime:
+              format: date-time
+              type: string
+          type: object
+      title: GetAlarmClockResponse
+    HardwareInfoResponse:
+      example:
+        CIM_BIOSElement:
+          response:
+            ElementName: Primary BIOS
+            Manufacturer: Intel Corp.
+            Name: Primary BIOS
+            OperationalStatus: 0
+            PrimaryBIOS: true
+            ReleaseDate:
+              Datetime: "2018-03-15T00:00:00Z"
+            SoftwareElementID: DNKBLi5v.86A.0040.2018.0315.1451
+            SoftwareElementState: 2
+            TargetOperatingSystem: 66
+            Version: DNKBLi5v.86A.0040.2018.0315.1451
+          status: 200
+        CIM_Card:
+          response:
+            CanBeFRUed: true
+            CreationClassName: CIM_Card
+            ElementName: Managed System Base Board
+            Manufacturer: Intel Corporation
+            Model: NUC7i5DNB
+            OperationalStatus: 0
+            PackageType: 9
+            SerialNumber: BTDN7490016E
+            Tag: CIM_Card
+            Version: J57626-503
+          status: 200
+        CIM_Chassis:
+          response:
+            ChassisPackageType: 0
+            CreationClassName: CIM_Chassis
+            ElementName: Managed System Chassis
+            Manufacturer: Intel Corporation
+            Model: NUC7i5DNHE
+            OperationalStatus: 0
+            PackageType: 3
+            SerialNumber: DW1646647500075
+            Tag: CIM_Chassis
+            Version: J57828-503
+          status: 200
+        CIM_Chip:
+          responses:
+            - CanBeFRUed: true
+              CreationClassName: CIM_Chip
+              ElementName: Managed System Processor Chip
+              Manufacturer: Intel(R) Corporation
+              OperationalStatus: 0
+              Tag: CPU 0
+              Version: Intel(R) Core(TM) i5-7300U CPU @ 2.60GHz
+            - BankLabel: BANK 0
+              Capacity: 4.294967296e+09
+              CreationClassName: CIM_PhysicalMemory
+              ElementName: Managed System Memory Chip
+              FormFactor: 13
+              Manufacturer: 04EF
+              MemoryType: 26
+              PartNumber: 'TEAMGROUP-SD4-2133  '
+              SerialNumber: 020300C5
+              Speed: 0
+              Tag: 9.87654321e+09
+            - BankLabel: BANK 2
+              Capacity: 4.294967296e+09
+              CreationClassName: CIM_PhysicalMemory
+              ElementName: Managed System Memory Chip
+              FormFactor: 13
+              Manufacturer: 04EF
+              MemoryType: 26
+              PartNumber: 'TEAMGROUP-SD4-2133  '
+              SerialNumber: 020300BD
+              Speed: 0
+              Tag: 9876543210 (#2)
+          status: 200
+        CIM_ComputerSystemPackage:
+          response:
+            Antecedent:
+              Address: http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous
+              ReferenceParameters:
+                ResourceURI: http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/  CIM_Chassis
+                SelectorSet:
+                  Selector:
+                    - '@name': CreationClassName
+                      value: CIM_Chassis
+                    - '@name': Tag
+                      value: CIM_Chassis
+            Dependent:
+              Address: http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous
+              ReferenceParameters:
+                ResourceURI: http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/  CIM_ComputerSystem
+                SelectorSet:
+                  Selector:
+                    - '@name': CreationClassName
+                      value: CIM_ComputerSystem
+                    - '@name': Name
+                      value: ManagedSystem
+            PlatformGUID: 1095AC4BA6042143BAE2D45DDF07B684
+          status: 200
+        CIM_MediaAccessDevice:
+          responses:
+            - Capabilities:
+                - 4
+                - 10
+              CreationClassName: CIM_MediaAccessDevice
+              DeviceID: MEDIA DEV 0
+              ElementName: Managed System Media Access Device
+              EnabledDefault: 2
+              EnabledState: 0
+              MaxMediaSize: 2.5005935e+08
+              OperationalStatus: 0
+              RequestedState: 12
+              Security: 2
+              SystemCreationClassName: CIM_ComputerSystem
+              SystemName: ManagedSystem
+          status: 200
+        CIM_PhysicalMemory:
+          responses:
+            - BankLabel: BANK 0
+              Capacity: 4.294967296e+09
+              CreationClassName: CIM_PhysicalMemory
+              ElementName: Managed System Memory Chip
+              FormFactor: 13
+              Manufacturer: 04EF
+              MemoryType: 26
+              PartNumber: 'TEAMGROUP-SD4-2133  '
+              SerialNumber: 020300C5
+              Speed: 0
+              Tag: 9.87654321e+09
+            - BankLabel: BANK 2
+              Capacity: 4.294967296e+09
+              CreationClassName: CIM_PhysicalMemory
+              ElementName: Managed System Memory Chip
+              FormFactor: 13
+              Manufacturer: 04EF
+              MemoryType: 26
+              PartNumber: 'TEAMGROUP-SD4-2133  '
+              SerialNumber: 020300BD
+              Speed: 0
+              Tag: 9876543210 (#2)
+          status: 200
+        CIM_PhysicalPackage:
+          responses:
+            - CanBeFRUed: true
+              CreationClassName: CIM_Card
+              ElementName: Managed System Base Board
+              Manufacturer: Intel Corporation
+              Model: NUC7i5DNB
+              OperationalStatus: 0
+              PackageType: 9
+              SerialNumber: BTDN7490016E
+              Tag: CIM_Card
+              Version: J57626-503
+            - CreationClassName: CIM_PhysicalPackage
+              ElementName: Managed System Storage Media Package
+              Model: 'Samsung SSD 850 EVO M.2 250GB           '
+              OperationalStatus: 0
+              PackageType: 15
+              SerialNumber: 'S33CNX0JC36654D     '
+              Tag: Storage Media Package 0
+            - ChassisPackageType: 0
+              CreationClassName: CIM_Chassis
+              ElementName: Managed System Chassis
+              Manufacturer: Intel Corporation
+              Model: NUC7i5DNHE
+              OperationalStatus: 0
+              PackageType: 3
+              SerialNumber: DW1646647500075
+              Tag: CIM_Chassis
+              Version: J57828-503
+          status: 200
+        CIM_Processor:
+          responses:
+            - CPUStatus: 1
+              CreationClassName: CIM_Processor
+              CurrentClockSpeed: 2500
+              DeviceID: CPU 0
+              ElementName: Managed System CPU
+              EnabledState: 2
+              ExternalBusClockSpeed: 100
+              Family: 205
+              HealthState: 0
+              MaxClockSpeed: 8300
+              OperationalStatus: 0
+              RequestedState: 12
+              Role: Central
+              Stepping: 9
+              SystemCreationClassName: CIM_ComputerSystem
+              SystemName: ManagedSystem
+              UpgradeMethod: 2
+          status: 200
+        CIM_SystemPackaging:
+          responses:
+            - Antecedent:
+                Address: http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous
+                ReferenceParameters:
+                  ResourceURI: http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/  CIM_Chassis
+                  SelectorSet:
+                    Selector:
+                      - '@name': CreationClassName
+                        value: CIM_Chassis
+                      - '@name': Tag
+                        value: CIM_Chassis
+              Dependent:
+                Address: http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous
+                ReferenceParameters:
+                  ResourceURI: http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/  CIM_ComputerSystem
+                  SelectorSet:
+                    Selector:
+                      - '@name': CreationClassName
+                        value: CIM_ComputerSystem
+                      - '@name': Name
+                        value: ManagedSystem
+              PlatformGUID: 1095AC4BA6042143BAE2D45DDF07B684
+          status: 200
+      properties:
+        CIM_BIOSElement:
+          properties:
+            response:
+              properties:
+                ElementName:
+                  type: string
+                Manufacturer:
+                  type: string
+                Name:
+                  type: string
+                OperationalStatus:
+                  type: integer
+                PrimaryBIOS:
+                  type: boolean
+                ReleaseDate:
+                  properties:
+                    Datetime:
+                      type: string
+                  type: object
+                SoftwareElementID:
+                  type: string
+                SoftwareElementState:
+                  type: integer
+                TargetOperatingSystem:
+                  type: integer
+                Version:
+                  type: string
+              type: object
+            responses:
+              properties:
+                Body:
+                  properties:
+                    ElementName:
+                      type: string
+                    Manufacturer:
+                      type: string
+                    Name:
+                      type: string
+                    OperationalStatus:
+                      type: integer
+                    PrimaryBIOS:
+                      type: boolean
+                    ReleaseDate:
+                      properties:
+                        Datetime:
+                          type: string
+                      type: object
+                    SoftwareElementID:
+                      type: string
+                    SoftwareElementState:
+                      type: integer
+                    TargetOperatingSystem:
+                      type: integer
+                    Version:
+                      type: string
+                  type: object
+                Header:
+                  properties:
+                    Action:
+                      type: string
+                    MessageID:
+                      type: string
+                    Method:
+                      type: string
+                    RelatesTo:
+                      type: integer
+                    ResourceURI:
+                      type: string
+                    To:
+                      type: string
+                  type: object
+              type: object
+            status:
+              type: integer
+          type: object
+        CIM_Card:
+          properties:
+            response:
+              properties:
+                CanBeFRUed:
+                  type: boolean
+                CreationClassName:
+                  type: string
+                ElementName:
+                  type: string
+                Manufacturer:
+                  type: string
+                Model:
+                  type: string
+                OperationalStatus:
+                  type: integer
+                PackageType:
+                  type: integer
+                SerialNumber:
+                  type: string
+                Tag:
+                  type: string
+                Version:
+                  type: string
+              type: object
+            responses:
+              properties:
+                Body:
+                  properties:
+                    CanBeFRUed:
+                      type: boolean
+                    CreationClassName:
+                      type: string
+                    ElementName:
+                      type: string
+                    Manufacturer:
+                      type: string
+                    Model:
+                      type: string
+                    OperationalStatus:
+                      type: integer
+                    PackageType:
+                      type: integer
+                    SerialNumber:
+                      type: string
+                    Tag:
+                      type: string
+                    Version:
+                      type: string
+                  type: object
+                Header:
+                  properties:
+                    Action:
+                      type: string
+                    MessageID:
+                      type: string
+                    Method:
+                      type: string
+                    RelatesTo:
+                      type: integer
+                    ResourceURI:
+                      type: string
+                    To:
+                      type: string
+                  type: object
+              type: object
+            status:
+              type: integer
+          type: object
+        CIM_Chassis:
+          properties:
+            response:
+              properties:
+                ChassisPackageType:
+                  type: integer
+                CreationClassName:
+                  type: string
+                ElementName:
+                  type: string
+                Manufacturer:
+                  type: string
+                Model:
+                  type: string
+                OperationalStatus:
+                  type: integer
+                PackageType:
+                  type: integer
+                SerialNumber:
+                  type: string
+                Tag:
+                  type: string
+                Version:
+                  type: string
+              type: object
+            responses:
+              properties:
+                Body:
+                  properties:
+                    ChassisPackageType:
+                      type: integer
+                    CreationClassName:
+                      type: string
+                    ElementName:
+                      type: string
+                    Manufacturer:
+                      type: string
+                    Model:
+                      type: string
+                    OperationalStatus:
+                      type: integer
+                    PackageType:
+                      type: integer
+                    SerialNumber:
+                      type: string
+                    Tag:
+                      type: string
+                    Version:
+                      type: string
+                  type: object
+                Header:
+                  properties:
+                    Action:
+                      type: string
+                    MessageID:
+                      type: string
+                    Method:
+                      type: string
+                    RelatesTo:
+                      type: integer
+                    ResourceURI:
+                      type: string
+                    To:
+                      type: string
+                  type: object
+              type: object
+            status:
+              type: integer
+          type: object
+        CIM_Chip:
+          properties:
+            responses:
+              items:
+                properties:
+                  BankLabel:
+                    type: string
+                  CanBeFRUed:
+                    type: boolean
+                  Capacity:
+                    type: integer
+                  CreationClassName:
+                    type: string
+                  ElementName:
+                    type: string
+                  FormFactor:
+                    type: integer
+                  Manufacturer:
+                    type: string
+                  MemoryType:
+                    type: integer
+                  OperationalStatus:
+                    type: integer
+                  PartNumber:
+                    type: string
+                  SerialNumber:
+                    type: string
+                  Speed:
+                    type: integer
+                  Tag:
+                    type: string
+                  Version:
+                    type: string
+                type: object
+              maxItems: 100
+              type: array
+            status:
+              type: integer
+          type: object
+        CIM_ComputerSystemPackage:
+          properties:
+            response:
+              properties:
+                Antecedent:
+                  properties:
+                    Address:
+                      type: string
+                    ReferenceParameters:
+                      properties:
+                        ResourceURI:
+                          type: string
+                        SelectorSet:
+                          properties:
+                            Selector:
+                              properties:
+                                '@name':
+                                  type: string
+                                value:
+                                  type: string
+                              type: object
+                          type: object
+                      type: object
+                  type: object
+                Dependent:
+                  properties:
+                    Address:
+                      type: string
+                    ReferenceParameters:
+                      properties:
+                        ResourceURI:
+                          type: string
+                        SelectorSet:
+                          properties:
+                            Selector:
+                              properties:
+                                '@name':
+                                  type: string
+                                value:
+                                  type: string
+                              type: object
+                          type: object
+                      type: object
+                  type: object
+                PlatformGUID:
+                  type: string
+              type: object
+            status:
+              type: integer
+          type: object
+        CIM_MediaAccessDevice:
+          properties:
+            responses:
+              items:
+                properties:
+                  Capabilities:
+                    items:
+                      type: integer
+                    maxItems: 100
+                    type: array
+                  CreationClassName:
+                    type: string
+                  DeviceID:
+                    type: string
+                  ElementName:
+                    type: string
+                  EnabledDefault:
+                    type: integer
+                  EnabledState:
+                    type: integer
+                  MaxMediaSize:
+                    type: integer
+                  OperationalStatus:
+                    type: integer
+                  RequestedState:
+                    type: integer
+                  Security:
+                    type: integer
+                  SystemCreationClassName:
+                    type: string
+                  SystemName:
+                    type: string
+                type: object
+              maxItems: 100
+              type: array
+            status:
+              type: integer
+          type: object
+        CIM_PhysicalMemory:
+          properties:
+            responses:
+              items:
+                properties:
+                  BankLabel:
+                    type: string
+                  Capacity:
+                    type: integer
+                  CreationClassName:
+                    type: string
+                  ElementName:
+                    type: string
+                  FormFactor:
+                    type: integer
+                  Manufacturer:
+                    type: string
+                  MemoryType:
+                    type: integer
+                  PartNumber:
+                    type: string
+                  SerialNumber:
+                    type: string
+                  Speed:
+                    type: integer
+                  Tag:
+                    type: integer
+                type: object
+              maxItems: 100
+              type: array
+            status:
+              type: integer
+          type: object
+        CIM_PhysicalPackage:
+          properties:
+            responses:
+              items:
+                properties:
+                  CanBeFRUed:
+                    type: boolean
+                  ChassisPackageType:
+                    type: integer
+                  CreationClassName:
+                    type: string
+                  ElementName:
+                    type: string
+                  Manufacturer:
+                    type: string
+                  Model:
+                    type: string
+                  OperationalStatus:
+                    type: integer
+                  PackageType:
+                    type: integer
+                  SerialNumber:
+                    type: string
+                  Tag:
+                    type: string
+                  Version:
+                    type: string
+                type: object
+              maxItems: 100
+              type: array
+            status:
+              type: integer
+          type: object
+        CIM_Processor:
+          properties:
+            responses:
+              items:
+                properties:
+                  CPUStatus:
+                    type: integer
+                  CreationClassName:
+                    type: string
+                  CurrentClockSpeed:
+                    type: integer
+                  DeviceID:
+                    type: string
+                  ElementName:
+                    type: string
+                  EnabledState:
+                    type: integer
+                  ExternalBusClockSpeed:
+                    type: integer
+                  Family:
+                    type: integer
+                  HealthState:
+                    type: integer
+                  MaxClockSpeed:
+                    type: integer
+                  OperationalStatus:
+                    type: integer
+                  RequestedState:
+                    type: integer
+                  Role:
+                    type: string
+                  Stepping:
+                    type: integer
+                  SystemCreationClassName:
+                    type: string
+                  SystemName:
+                    type: string
+                  UpgradeMethod:
+                    type: integer
+                type: object
+              maxItems: 100
+              type: array
+            status:
+              type: integer
+          type: object
+        CIM_SystemPackaging:
+          properties:
+            responses:
+              properties:
+                Antecedent:
+                  properties:
+                    Address:
+                      type: string
+                    ReferenceParameters:
+                      properties:
+                        ResourceURI:
+                          type: string
+                        SelectorSet:
+                          properties:
+                            Selector:
+                              properties:
+                                '@name':
+                                  type: string
+                                value:
+                                  type: string
+                              type: object
+                          type: object
+                      type: object
+                  type: object
+                PlatformGUID:
+                  type: string
+                dependent:
+                  properties:
+                    Address:
+                      type: string
+                    ReferenceParameters:
+                      properties:
+                        ResourceURI:
+                          type: string
+                        SelectorSet:
+                          properties:
+                            Selector:
+                              properties:
+                                '@name':
+                                  type: string
+                                value:
+                                  type: string
+                              type: object
+                          type: object
+                      type: object
+                  type: object
+              type: object
+            status:
+              type: integer
+          type: object
+      title: HardwareInfoResponse
+    HealthcheckResponse:
+      example:
+        db:
+          name: POSTGRES
+          status: OK
+        secretStore:
+          name: VAULT
+          status:
+            cluster_id: 469ada72-d74b-4d1e-6e77-476bf9902b72
+            cluster_name: vault-cluster-3dc0c596
+            initialized: true
+            performance_standby: false
+            replication_dr_mode: disabled
+            replication_performance_mode: disabled
+            sealed: false
+            server_time_utc: 1.646337196e+09
+            standby: false
+            version: 1.9.3
+      properties:
+        db:
+          properties:
+            name:
+              type: string
+            status:
+              type: string
+          type: object
+        secretStore:
+          properties:
+            name:
+              type: string
+            status:
+              properties:
+                cluster_id:
+                  type: string
+                cluster_name:
+                  type: string
+                initialized:
+                  type: boolean
+                performance_standby:
+                  type: boolean
+                replication_dr_mode:
+                  type: string
+                replication_performance_mode:
+                  type: string
+                sealed:
+                  type: boolean
+                server_time_utc:
+                  type: integer
+                standby:
+                  type: boolean
+                version:
+                  type: string
+              type: object
+          type: object
+      title: HealthcheckResponse
     HttpError:
       properties:
         code:
@@ -611,6 +2549,116 @@ components:
       required:
         - message
         - code
+      type: object
+    IEEE8021xConfigPATCH:
+      example:
+        authenticationProtocol: 0
+        profileName: wired8021xConfig
+        pxeTimeout: 120
+        tenantId: ""
+        version: "5000"
+        wiredInterface: true
+      properties:
+        authenticationProtocol:
+          items:
+            enum:
+              - 0
+              - 3
+              - 5
+              - 10
+            type: integer
+          maxItems: 100
+          type: array
+        profileName:
+          type: string
+        pxeTimeout:
+          type: integer
+        tenantId:
+          type: string
+        version:
+          type: string
+        wiredInterface:
+          type: boolean
+      required:
+        - profileName
+        - authenticationProtocol
+        - wiredInterface
+        - version
+      title: IEEE8021xConfigPATCH
+      type: object
+    IEEE8021xConfigPOST:
+      example:
+        authenticationProtocol: 0
+        profileName: wired8021xConfig
+        pxeTimeout: 120
+        tenantId: ""
+        wiredInterface: true
+      properties:
+        authenticationProtocol:
+          items:
+            enum:
+              - 0
+              - 2
+              - 3
+              - 5
+              - 10
+            type: integer
+          maxItems: 100
+          type: array
+        profileName:
+          type: string
+        pxeTimeout:
+          type: integer
+        tenantId:
+          type: string
+        version:
+          type: string
+        wiredInterface:
+          type: boolean
+      required:
+        - profileName
+        - authenticationProtocol
+        - wiredInterface
+      title: IEEE8021xConfigPOST
+      type: object
+    IEEE8021xConfigResponse:
+      example:
+        authenticationProtocol: 0
+        profileName: wired8021xConfig
+        pxeTimeout: 120
+        tenantId: ""
+        version: "3000"
+        wiredInterface: true
+      properties:
+        authenticationProtocol:
+          items:
+            enum:
+              - 0
+              - 2
+              - 3
+              - 5
+              - 10
+            type: integer
+          maxItems: 100
+          type: array
+        profileName:
+          type: string
+        pxeTimeout:
+          type: integer
+        tenantId:
+          type: string
+        version:
+          type: string
+        wiredInterface:
+          type: boolean
+      required:
+        - profileName
+        - authenticationProtocol
+        - pxeTimeout
+        - wiredInterface
+        - tenantId
+        - version
+      title: IEEE8021xConfigResponse
       type: object
     KubeconfigInfo:
       properties:
@@ -690,11 +2738,405 @@ components:
         - id
         - role
       type: object
+    PowerActionRequest:
+      example:
+        action: 8
+        useSOL: false
+      properties:
+        action:
+          enum:
+            - 2
+            - 5
+            - 8
+            - 10
+            - 4
+            - 7
+            - 12
+            - 14
+            - 100
+            - 101
+            - 104
+            - 200
+            - 201
+            - 202
+            - 203
+            - 300
+            - 301
+            - 400
+            - 401
+          type: integer
+        useSOL:
+          type: boolean
+      required:
+        - action
+        - useSOL
+      title: PowerActionRequest
+    PowerActionResponse:
+      example:
+        returnValue: 0
+        returnValueStr: SUCCESS
+      properties:
+        returnValue:
+          type: integer
+        returnValueStr:
+          type: string
+      title: PowerActionResponse
+    PowerCapabilitiesResponse:
+      example:
+        Hibernate: 7
+        Power cycle: 5
+        Power down: 8
+        Power on to IDE-R CDROM: 203
+        Power on to IDE-R Floppy: 201
+        Power on to PXE: 401
+        Power up: 2
+        Power up to BIOS: 100
+        Reset: 10
+        Reset to BIOS: 101
+        Reset to IDE-R CDROM: 202
+        Reset to IDE-R Floppy: 200
+        Reset to PXE: 400
+        Reset to Secure Erase: 104
+        Sleep: 4
+        Soft-off: 12
+        Soft-reset: 14
+      properties:
+        hibernate:
+          type: integer
+        powerCycle:
+          type: integer
+        powerDown:
+          type: integer
+        powerOnToIDE-RCDROM:
+          type: integer
+        powerOnToIDE-RFloppy:
+          type: integer
+        powerOnToPXE:
+          type: integer
+        powerUp:
+          type: integer
+        powerUpToBIOS:
+          type: integer
+        reset:
+          type: integer
+        resetToBIOS:
+          type: integer
+        resetToIDE-RCDROM:
+          type: integer
+        resetToIDE-RFloppy:
+          type: integer
+        resetToPXE:
+          type: integer
+        resetToSecureErase:
+          type: integer
+        sleep:
+          type: integer
+        softOff:
+          type: integer
+        softReset:
+          type: integer
+      title: PowerCapabilitiesResponse
+    PowerStateResponse:
+      example:
+        powerstate: 2
+      properties:
+        powerstate:
+          type: integer
+      title: PowerStateResponse
     ProblemDetails:
       properties:
         message:
           description: error message
           type: string
+      type: object
+    ProfilePATCH:
+      example:
+        activation: acmactivate
+        amtPassword: G@ppm0ym
+        ciraConfigName: ciraconfig
+        dhcpEnabled: true
+        generateRandomMEBxPassword: false
+        generateRandomPassword: false
+        iderEnabled: false
+        ipSyncEnabled: false
+        kvmEnabled: true
+        localWifiSyncEnabled: true
+        mebxPassword: G@ppm0ym
+        profileName: profile1
+        solEnabled: true
+        tags:
+          - tag1
+          - tag2
+        tlsMode: null
+        tlsSigningAuthority: MicrosoftCA
+        userConsent: None
+        version: "3000"
+        wifiConfigs:
+          - priority: 1
+            profileName: home
+          - priority: 2
+            profileName: office
+      properties:
+        activation:
+          type: string
+        amtPassword:
+          format: password
+          type: string
+        ciraConfigName:
+          type: string
+        dhcpEnabled:
+          type: boolean
+        generateRandomMEBxPassword:
+          type: boolean
+        generateRandomPassword:
+          type: boolean
+        iderEnabled:
+          type: boolean
+        ieee8021xProfile:
+          type: string
+        ipSyncEnabled:
+          type: boolean
+        kvmEnabled:
+          type: boolean
+        localWifiSyncEnabled:
+          type: boolean
+        mebxPassword:
+          format: password
+          type: string
+        profileName:
+          type: string
+        solEnabled:
+          type: boolean
+        tags:
+          items:
+            type: string
+          maxItems: 100
+          type: array
+        tlsMode:
+          description: Server Authentication Only (1), Server and Non-TLS Authentication (2)
+          enum:
+            - 1
+            - 2
+          type: number
+        tlsSigningAuthority:
+          type: string
+        userConsent:
+          description: User Consent must be one of None, All, KVM. It should be 'All' in client control mode
+          enum:
+            - None
+            - All
+            - KVM
+          type: string
+        version:
+          type: string
+        wifiConfigs:
+          items:
+            type: object
+          maxItems: 100
+          type: array
+      required:
+        - profileName
+        - generateRandomPassword
+        - activation
+        - ciraConfigName
+        - generateRandomMEBxPassword
+        - tags
+        - dhcpEnabled
+        - wifiConfigs
+        - tlsMode
+        - userConsent
+        - iderEnabled
+        - kvmEnabled
+        - solEnabled
+        - version
+      title: ProfilePATCH
+      type: object
+    ProfilePOST:
+      example:
+        activation: acmactivate
+        amtPassword: G@ppm0ym
+        ciraConfigName: ciraconfig
+        dhcpEnabled: true
+        generateRandomMEBxPassword: false
+        generateRandomPassword: false
+        iderEnabled: false
+        ieee8021xProfile: wired8021xProfile
+        ipSyncEnabled: false
+        kvmEnabled: true
+        localWifiSyncEnabled: true
+        mebxPassword: G@ppm0ym
+        profileName: profile1
+        solEnabled: true
+        tags:
+          - tag1
+          - tag2
+        tlsMode: null
+        tlsSigningAuthority: MicrosoftCA
+        userConsent: None
+        wifiConfigs:
+          - priority: 1
+            profileName: home
+          - priority: 2
+            profileName: office
+      properties:
+        activation:
+          type: string
+        amtPassword:
+          format: password
+          type: string
+        ciraConfigName:
+          type: string
+        dhcpEnabled:
+          type: boolean
+        generateRandomMEBxPassword:
+          type: boolean
+        generateRandomPassword:
+          type: boolean
+        iderEnabled:
+          type: boolean
+        ieee8021xProfile:
+          type: string
+        ipSyncEnabled:
+          type: boolean
+        kvmEnabled:
+          type: boolean
+        localWifiSyncEnabled:
+          type: boolean
+        mebxPassword:
+          format: password
+          type: string
+        networkConfigName:
+          type: string
+        profileName:
+          type: string
+        solEnabled:
+          type: boolean
+        tags:
+          items:
+            type: string
+          maxItems: 100
+          type: array
+        tlsMode:
+          description: Server Authentication Only (1), Server and Non-TLS Authentication (2)
+          enum:
+            - 1
+            - 2
+          type: number
+        tlsSigningAuthority:
+          type: string
+        userConsent:
+          description: User Consent must be one of None, All, KVM. It should be 'All' in client control mode
+          enum:
+            - None
+            - All
+            - KVM
+          type: string
+        wifiConfigs:
+          items:
+            type: object
+          maxItems: 100
+          type: array
+      required:
+        - profileName
+        - generateRandomPassword
+        - activation
+        - generateRandomMEBxPassword
+        - tags
+        - dhcpEnabled
+        - tlsSigningAuthority
+      title: ProfilePOST
+      type: object
+    ProfileResponse:
+      example:
+        activation: acmactivate
+        ciraConfigName: ciraconfig
+        dhcpEnabled: true
+        generateRandomMEBxPassword: false
+        generateRandomPassword: false
+        iderEnabled: false
+        ieee8021xProfile: wired8021xProfile
+        ipSyncEnabled: false
+        kvmEnabled: true
+        localWifiSyncEnabled: true
+        profileName: profile1
+        solEnabled: true
+        tags:
+          - tag1
+          - tag2
+        tenantId: ""
+        tlsMode: null
+        tlsSigningAuthority: MicrosoftCA
+        userConsent: None
+        version: "2000"
+        wifiConfigs:
+          - priority: 1
+            profileName: home
+          - priority: 2
+            profileName: office
+      properties:
+        activation:
+          type: string
+        ciraConfigName:
+          type: string
+        dhcpEnabled:
+          type: boolean
+        generateRandomMEBxPassword:
+          type: boolean
+        generateRandomPassword:
+          type: boolean
+        iderEnabled:
+          type: boolean
+        ieee8021xProfile:
+          type: string
+        ipSyncEnabled:
+          type: boolean
+        kvmEnabled:
+          type: boolean
+        localWifiSyncEnabled:
+          type: boolean
+        profileName:
+          type: string
+        solEnabled:
+          type: boolean
+        tags:
+          items:
+            type: string
+          maxItems: 100
+          type: array
+        tenantId:
+          type: string
+        tlsMode:
+          description: Server Authentication Only(1), Server and Non-TLS Authentication (2), Mutual TLS only (3), Mutual and Non-TLS authentication (4)
+          type: number
+        tlsSigningAuthority:
+          type: string
+        userConsent:
+          description: User Consenst must be one of None, All, KVM. It must be 'All' in client control mode
+          type: string
+        version:
+          type: string
+        wifiConfigs:
+          items:
+            type: object
+          maxItems: 100
+          type: array
+      required:
+        - profileName
+        - activation
+        - ciraConfigName
+        - generateRandomPassword
+        - generateRandomMEBxPassword
+        - tags
+        - dhcpEnabled
+        - tlsMode
+        - userConsent
+        - iderEnabled
+        - kvmEnabled
+        - solEnabled
+        - wifiConfigs
+        - tlsSigningAuthority
+        - ieee8021xProfile
+      title: ProfileResponse
       type: object
     Receiver:
       properties:
@@ -716,6 +3158,28 @@ components:
           maxItems: 100
           type: array
       type: object
+    RedirectStatus:
+      example:
+        isIDERConnected: false
+        isKVMConnected: false
+        isSOLConnected: false
+      properties:
+        isIDERConnected:
+          type: boolean
+        isKVMConnected:
+          type: boolean
+        isSOLConnected:
+          type: boolean
+      title: RedirectStatus
+    RefreshResponse:
+      example:
+        description: 'Device info refreshed : 4c4c4544-004c-4d10-8050-c2c04f325133'
+        success: 200
+      properties:
+        success:
+          description: HTTP returncode
+          type: integer
+      title: DeleteResponse
     ServiceStatus:
       properties:
         state:
@@ -726,6 +3190,64 @@ components:
       required:
         - state
       type: object
+    SetAMTFeaturesRequest:
+      properties:
+        enableAll:
+          type: boolean
+        enableIDER:
+          type: boolean
+        enableKVM:
+          type: boolean
+        enableSOL:
+          type: boolean
+        redirection:
+          type: boolean
+        userConsent:
+          enum:
+            - kvm
+            - all
+            - none
+          type: string
+      required:
+        - userConsent
+        - enableSOL
+        - enableIDER
+        - enableKVM
+      title: SetAMTFeaturesRequest
+    SetAMTFeaturesResponse:
+      example:
+        status: Updated AMT Features
+      properties:
+        status:
+          type: string
+      type: string
+    SetAlarmClockRequest:
+      properties:
+        DeleteOnCompletion:
+          type: boolean
+        ElementName:
+          type: string
+        Interval:
+          type: integer
+        StartTime:
+          format: date-time
+          type: string
+      required:
+        - ElementName
+        - StartTime
+        - Interval
+        - DeleteOnCompletion
+      title: SetAlarmClockRequest
+    SetAlarmClockResponse:
+      example:
+        ReturnValue: 0
+        status: SUCCESS
+      properties:
+        ReturnValue:
+          type: integer
+        status:
+          type: string
+      type: string
     StateDefinition:
       enum:
         - new
@@ -734,6 +3256,19 @@ components:
         - error
         - applied
       type: string
+    Stats:
+      example:
+        connectedCount: 1
+        disconnectedCount: 0
+        totalCount: 1
+      properties:
+        connectedCount:
+          type: integer
+        disconnectedCount:
+          type: integer
+        totalCount:
+          type: integer
+      title: Stats
     StatusIndicator:
       description: The status indicator.
       enum:
@@ -874,6 +3409,50 @@ components:
           format: int32
           type: integer
       type: object
+    UserConsentRequest:
+      example:
+        consentCode: 123456
+      properties:
+        consentCode:
+          type: integer
+      required:
+        - consentCode
+    UserConsentResponse:
+      example:
+        Body:
+          ReturnValue: 0
+          ReturnValueStr: SUCCESS
+        Header:
+          Action: http://intel.com/wbem/wscim/1/ips-schema/1/IPS_OptInService/StartOptInResponse
+          MessageID: uuid:00000000-8086-8086-8086-000000001ACD
+          Method: StartOptIn
+          RelatesTo: "1"
+          ResourceURI: http://intel.com/wbem/wscim/1/ips-schema/1/IPS_OptInService
+          To: http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous
+      properties:
+        Body:
+          properties:
+            ReturnValue:
+              type: integer
+            ReturnValueStr:
+              type: string
+          type: object
+        Header:
+          properties:
+            Action:
+              type: string
+            MessageID:
+              type: string
+            Method:
+              type: string
+            RelatesTo:
+              type: string
+            ResourceURI:
+              type: string
+            To:
+              type: string
+          type: object
+      type: object
     VersionList:
       properties:
         versionList:
@@ -884,6 +3463,1055 @@ components:
           maxItems: 100
           type: array
       type: object
+    VersionResponse:
+      example:
+        protocolVersion: 4.0.0
+        serviceVersion: 2.9.0
+      properties:
+        protocolVersion:
+          type: string
+        serviceVersion:
+          type: string
+      required:
+        - serviceVersion
+        - protocolVersion
+      title: VersionResponse
+      type: object
+    WirelessConfigPATCH:
+      example:
+        authenticationMethod: 4
+        encryptionMethod: 4
+        ieee8021xProfile: wireless8021xconfig
+        linkPolicy:
+          - 14
+          - 16
+        profileName: homeWifiConfig
+        pskPassphrase: P@ssw0rd
+        ssid: home
+        version: "3000"
+      properties:
+        authenticationMethod:
+          type: integer
+        encryptionMethod:
+          type: integer
+        ieee8021xProfile:
+          type: string
+        linkPolicy:
+          items:
+            enum:
+              - 1
+              - 14
+              - 16
+              - 224
+            type: integer
+          maxItems: 100
+          type: array
+        profileName:
+          type: string
+        pskPassphrase:
+          type: string
+        ssid:
+          type: string
+        version:
+          type: string
+      required:
+        - profileName
+        - authenticationMethod
+        - encryptionMethod
+        - ssid
+        - linkPolicy
+        - version
+      title: WirelessConfigPATCH
+      type: object
+    WirelessConfigPOST:
+      example:
+        authenticationMethod: 4
+        encryptionMethod: 4
+        ieee8021xProfile: wireless8021xconfig
+        linkPolicy:
+          - 14
+          - 16
+        profileName: homeWifiConfig
+        pskPassphrase: P@ssw0rd
+        ssid: home
+      properties:
+        authenticationMethod:
+          type: integer
+        encryptionMethod:
+          type: integer
+        ieee8021xProfile:
+          type: string
+        linkPolicy:
+          items:
+            enum:
+              - 1
+              - 14
+              - 16
+              - 224
+            type: integer
+          maxItems: 100
+          type: array
+        profileName:
+          type: string
+        pskPassphrase:
+          type: string
+        ssid:
+          type: string
+      required:
+        - profileName
+        - authenticationMethod
+        - encryptionMethod
+        - ssid
+        - linkPolicy
+      title: WirelessConfigPOST
+      type: object
+    WirelessConfigResponse:
+      example:
+        authenticationMethod: 4
+        encryptionMethod: 4
+        ieee8021xProfile: wireless8021xconfig
+        linkPolicy:
+          - 14
+          - 16
+        profileName: homeWifiConfig
+        pskValue: "null"
+        ssid: home
+        tenantId: ""
+        version: "2000"
+      properties:
+        authenticationMethod:
+          type: integer
+        encryptionMethod:
+          type: integer
+        ieee8021xProfile:
+          type: string
+        linkPolicy:
+          items:
+            type: integer
+          maxItems: 100
+          type: array
+        profileName:
+          type: string
+        pskValue:
+          type: string
+        ssid:
+          type: string
+        tenantId:
+          type: string
+        total_count:
+          type: string
+        version:
+          type: string
+      required:
+        - profileName
+        - authenticationMethod
+        - encryptionMethod
+        - ssid
+        - pskValue
+        - linkPolicy
+      title: WirelessConfigResponse
+      type: object
+    catalog.v3.APIExtension:
+      additionalProperties: false
+      description: APIExtensions represents some form of an extension to the external API provided by deployment package.
+      properties:
+        description:
+          description: (OPTIONAL) Description of the API extension. Displayed on user interfaces.
+          maxLength: 1000
+          title: description
+          type: string
+        displayName:
+          description: |-
+            (OPTIONAL) Display name is an optional human-readable name for the API extension. When specified, it must be unique among all
+             extensions of a given deployment package. It is used for display purposes on user interfaces.
+          maxLength: 40
+          pattern: ^\PC*$
+          title: display_name
+          type: string
+        endpoints:
+          description: One or more API endpoints provided by the API extension.
+          items:
+            $ref: '#/components/schemas/catalog.v3.Endpoint'
+          maxItems: 50
+          title: endpoints
+          type: array
+        name:
+          description: |-
+            Name is a human-readable unique identifier for the API extension and must be unique for all extensions of a
+             given deployment package.
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: name
+          type: string
+        uiExtension:
+          $ref: '#/components/schemas/catalog.v3.UIExtension'
+        version:
+          description: Version of the API extension.
+          maxLength: 20
+          minLength: 1
+          pattern: ^v?[0-9]+\.[0-9]+\.[0-9]+(-[a-z0-9]+(-[a-z0-9]+)*)?(\+[a-z0-9]+([.-][a-z0-9]+)*)?$
+          title: version
+          type: string
+      required:
+        - name
+        - version
+      title: APIExtension
+      type: object
+    catalog.v3.Application:
+      additionalProperties: false
+      description: Application represents a Helm chart that can be deployed to one or more Kubernetes pods.
+      properties:
+        chartName:
+          description: Helm chart name.
+          maxLength: 200
+          minLength: 1
+          pattern: ^[0-9a-z-/]*$
+          title: chart_name
+          type: string
+        chartVersion:
+          description: Helm chart version.
+          maxLength: 53
+          minLength: 1
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9-.+]{0,51}[a-zA-Z0-9]{0,1}$
+          title: chart_version
+          type: string
+        createTime:
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+        defaultProfileName:
+          description: |-
+            (OPTIONAL) Name of the profile to be used by default when deploying this application.
+             If at least one profile is available, this field must be set.
+          title: default_profile_name
+          type: string
+        description:
+          description: (OPTIONAL) Description of the application. Displayed on user interfaces.
+          maxLength: 1000
+          title: description
+          type: string
+        displayName:
+          description: |-
+            (OPTIONAL) Display name is an optional human-readable name for the application. When specified, it must be unique among all
+             applications within a project. It is used for display purposes on user interfaces.
+          maxLength: 40
+          pattern: ^\PC*$
+          title: display_name
+          type: string
+        helmRegistryName:
+          description: ID of the project's registry where the Helm chart of the application is available for download.
+          title: helm_registry_name
+          type: string
+        ignoredResources:
+          description: (OPTIONAL) List of Kubernetes resources that must be ignored during the application deployment.
+          items:
+            $ref: '#/components/schemas/catalog.v3.ResourceReference'
+          maxItems: 100
+          title: ignored_resources
+          type: array
+        imageRegistryName:
+          description: (OPTIONAL) ID of the project's registry where the Docker image of the application is available for download.
+          title: image_registry_name
+          type: string
+        kind:
+          $ref: '#/components/schemas/catalog.v3.Kind'
+        name:
+          description: |-
+            Name is a human readable unique identifier for the application and must be unique for all applications of a
+             given project. Used in network URIs.
+          maxLength: 26
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,24}[a-z0-9]{0,1}$
+          title: name
+          type: string
+        profiles:
+          description: Set of profiles that can be used when deploying the application.
+          items:
+            $ref: '#/components/schemas/catalog.v3.Profile'
+          maxItems: 50
+          title: profiles
+          type: array
+        updateTime:
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+        version:
+          description: Version of the application. Used in combination with the name to identify a unique application within a project.
+          maxLength: 20
+          minLength: 1
+          pattern: ^v?[0-9]+\.[0-9]+\.[0-9]+(-[a-z0-9]+(-[a-z0-9]+)*)?(\+[a-z0-9]+([.-][a-z0-9]+)*)?$
+          title: version
+          type: string
+      required:
+        - name
+        - version
+        - chartName
+        - chartVersion
+        - helmRegistryName
+      title: Application
+      type: object
+    catalog.v3.ApplicationDependency:
+      additionalProperties: false
+      description: |-
+        ApplicationDependency represents the dependency of one application on another within the context of a deployment package.
+         This dependency is specified as the name of the application that has the dependency, and the name of the application
+         that is the dependency.
+      properties:
+        name:
+          description: Name of the application that has the dependency on the other.
+          maxLength: 26
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,24}[a-z0-9]{0,1}$
+          title: name
+          type: string
+        requires:
+          description: Name of the application that is required by the other.
+          maxLength: 26
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,24}[a-z0-9]{0,1}$
+          title: requires
+          type: string
+      required:
+        - name
+        - requires
+      title: ApplicationDependency
+      type: object
+    catalog.v3.ApplicationReference:
+      additionalProperties: false
+      description: ApplicationReference represents a reference to an application by its name and its version.
+      properties:
+        name:
+          description: Name of the referenced application.
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: name
+          type: string
+        version:
+          description: Version of the referenced application.
+          maxLength: 20
+          minLength: 1
+          pattern: ^v?[0-9]+\.[0-9]+\.[0-9]+(-[a-z0-9]+(-[a-z0-9]+)*)?(\+[a-z0-9]+([.-][a-z0-9]+)*)?$
+          title: version
+          type: string
+      required:
+        - name
+        - version
+      title: ApplicationReference
+      type: object
+    catalog.v3.Artifact:
+      additionalProperties: false
+      description: |-
+        Artifact represents a binary artifact that can be used for various purposes, e.g. icon or thumbnail for UI display, or
+         auxiliary artifacts for integration with various platform services such as Grafana dashboard and similar. An artifact may be
+         used by multiple deployment packages.
+      properties:
+        artifact:
+          description: |
+            Raw byte content of the artifact encoded as base64. The limits refer to the number of raw bytes.
+            bytes.const = []
+          format: byte
+          maxLength: 4000000
+          minLength: 4
+          title: artifact
+          type: string
+        createTime:
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+        description:
+          description: (OPTIONAL) Description of the artifact. Displayed on user interfaces.
+          maxLength: 1000
+          title: description
+          type: string
+        displayName:
+          description: |-
+            (OPTIONAL) Display name is an optional human-readable name for the artifact. When specified, it must be unique among all
+             artifacts within a project. It is used for display purposes on user interfaces.
+          maxLength: 40
+          pattern: ^\PC*$
+          title: display_name
+          type: string
+        mimeType:
+          description: |-
+            Artifact's MIME type. Only text/plain, application/json, application/yaml, image/png, and image/jpeg are allowed at this time.
+
+             MIME types are defined and standardized in IETF's RFC 6838.
+          maxLength: 40
+          minLength: 1
+          pattern: ^(text/plain)$|^(application/json)$|^(application/yaml)$|^(image/png)$|^(image/jpeg)$
+          title: mime_type
+          type: string
+        name:
+          description: Name is a human-readable unique identifier for the artifact and must be unique for all artifacts within a project.
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: name
+          type: string
+        updateTime:
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+      required:
+        - name
+        - mimeType
+        - artifact
+      title: Artifact
+      type: object
+    catalog.v3.ArtifactReference:
+      additionalProperties: false
+      description: ArtifactReference serves as a reference to an artifact, together with the artifact's purpose within a deployment package.
+      properties:
+        name:
+          description: Name of the artifact.
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: name
+          type: string
+        purpose:
+          description: Purpose of the artifact, e.g. icon, thumbnail, Grafana dashboard, etc.
+          maxLength: 20
+          pattern: ^\PC*$
+          title: purpose
+          type: string
+      required:
+        - name
+        - purpose
+      title: ArtifactReference
+      type: object
+    catalog.v3.DeploymentPackage:
+      additionalProperties: false
+      description: |-
+        DeploymentPackage represents a collection of applications (referenced by their name and a version) that are
+         deployed together. The package can define one or more deployment profiles that specify the individual application
+         profiles to be used when deploying each application. If applications need to be deployed in a particular order, the
+         package can also define any startup dependencies between its constituent applications as a set of dependency graph edges.
+
+         The deployment package can also refer to a set of artifacts used for miscellaneous purposes,
+         e.g. a thumbnail, icon, or a Grafana extension.
+      properties:
+        applicationDependencies:
+          description: |-
+            (OPTIONAL) Optional set of application deployment dependencies, expressed as (name, requires) pairs of edges in the
+             deployment order dependency graph.
+          items:
+            $ref: '#/components/schemas/catalog.v3.ApplicationDependency'
+          maxItems: 100
+          title: application_dependencies
+          type: array
+        applicationReferences:
+          description: List of applications comprising this deployment package. Expressed as (name, version) pairs.
+          items:
+            $ref: '#/components/schemas/catalog.v3.ApplicationReference'
+          maxItems: 100
+          title: application_references
+          type: array
+        artifacts:
+          description: |-
+            Optional list of artifacts required for displaying or deploying this package. For example, icon or thumbnail
+             artifacts can be used by the UI; Grafana\* dashboard definitions can be used by the deployment manager.
+          items:
+            $ref: '#/components/schemas/catalog.v3.ArtifactReference'
+          maxItems: 100
+          title: artifacts
+          type: array
+        createTime:
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+        defaultNamespaces:
+          additionalProperties:
+            title: value
+            type: string
+          description: |-
+            (OPTIONAL) Optional map of application-to-namespace bindings to be used as a default when deploying the applications that
+             comprise the package.
+             If a namespace is not defined in the set of "namespaces" in this Deployment Package,
+             it will be inferred that it is a simple namespace with no predefined labels or annotations.
+          title: default_namespaces
+          type: object
+        defaultProfileName:
+          description: (OPTIONAL) Name of the default deployment profile to be used by default when deploying this package.
+          title: default_profile_name
+          type: string
+        description:
+          description: (OPTIONAL) Description of the deployment package. Displayed on user interfaces.
+          maxLength: 1000
+          title: description
+          type: string
+        displayName:
+          description: |-
+            (OPTIONAL) Display name is an optional human-readable name for the deployment package. When specified, it must be unique among all
+             packages within a project. It is used for display purposes on user interfaces.
+          maxLength: 40
+          pattern: ^\PC*$
+          title: display_name
+          type: string
+        extensions:
+          description: Optional list of API and UI extensions.
+          items:
+            $ref: '#/components/schemas/catalog.v3.APIExtension'
+          maxItems: 100
+          title: extensions
+          type: array
+        forbidsMultipleDeployments:
+          description: (OPTIONAL) Optional flag indicating whether multiple deployments of this package are forbidden within the same realm.
+          title: forbids_multiple_deployments
+          type: boolean
+        isDeployed:
+          description: |-
+            (OPTIONAL) Flag indicating whether the deployment package has been deployed.
+             The mutability of the deployment package entity can be limited when this flag is true. For example, one may
+             not be able to update when an application is removed from a package after it has been marked as
+             deployed.
+          title: is_deployed
+          type: boolean
+        isVisible:
+          description: |-
+            (OPTIONAL) Flag indicating whether the deployment package is visible in the UI.
+             Some deployment packages can be classified as auxiliary platform extensions and therefore are to be deployed
+             indirectly only when specified as deployment requirements, rather than directly by the platform operator.
+          title: is_visible
+          type: boolean
+        kind:
+          $ref: '#/components/schemas/catalog.v3.Kind'
+        name:
+          description: |-
+            Name is a human-readable unique identifier for the deployment package and must be unique for all packages of a
+             given project.
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: name
+          type: string
+        namespaces:
+          description: |-
+            (OPTIONAL) Namespace definitions to be created before resources are deployed.
+             This allows complex namespaces to be defined with predefined labels and annotations.
+             If not defined, simple namespaces will be created as needed.
+          items:
+            $ref: '#/components/schemas/catalog.v3.Namespace'
+          maxItems: 50
+          title: namespaces
+          type: array
+        profiles:
+          description: Set of deployment profiles to choose from when deploying this package.
+          items:
+            $ref: '#/components/schemas/catalog.v3.DeploymentProfile'
+          maxItems: 50
+          title: profiles
+          type: array
+        updateTime:
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+        version:
+          description: Version of the deployment package.
+          maxLength: 20
+          minLength: 1
+          pattern: ^v?[0-9]+\.[0-9]+\.[0-9]+(-[a-z0-9]+(-[a-z0-9]+)*)?(\+[a-z0-9]+([.-][a-z0-9]+)*)?$
+          title: version
+          type: string
+      required:
+        - name
+        - version
+        - applicationReferences
+        - extensions
+        - artifacts
+      title: DeploymentPackage
+      type: object
+    catalog.v3.DeploymentProfile:
+      additionalProperties: false
+      description: DeploymentProfile specifies which application profiles will be used for deployment of which applications.
+      properties:
+        applicationProfiles:
+          additionalProperties:
+            title: value
+            type: string
+          description: |-
+            Application profiles map application names to the names of its profile, to be used when deploying the application
+             as part of the deployment package together with the deployment profile.
+          title: application_profiles
+          type: object
+        createTime:
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+        description:
+          description: (OPTIONAL) Description of the deployment profile. Displayed on user interfaces.
+          maxLength: 1000
+          title: description
+          type: string
+        displayName:
+          description: |-
+            (OPTIONAL) Display name is an optional human-readable name for the registry. When specified, it must be unique among all
+             profiles of a given package. It is used for display purposes on user interfaces.
+          maxLength: 40
+          pattern: ^\PC*$
+          title: display_name
+          type: string
+        name:
+          description: |-
+            Name is a human-readable unique identifier for the profile and must be unique for all profiles of a
+             given deployment package.
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: name
+          type: string
+        updateTime:
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+      required:
+        - name
+        - applicationProfiles
+      title: DeploymentProfile
+      type: object
+    catalog.v3.DeploymentRequirement:
+      additionalProperties: false
+      description: |-
+        DeploymentRequirement is a reference to the deployment package that must be deployed first,
+         as a requirement for an application to be deployed.
+      properties:
+        deploymentProfileName:
+          description: (OPTIONAL) Optional name of the deployment profile to be used. When not provided, the default deployment profile will be used.
+          title: deployment_profile_name
+          type: string
+        name:
+          description: Name of the required deployment package.
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: name
+          type: string
+        version:
+          description: Version of the required deployment package.
+          maxLength: 20
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-.]{0,18}[a-z0-9]{0,1}$
+          title: version
+          type: string
+      required:
+        - name
+        - version
+      title: DeploymentRequirement
+      type: object
+    catalog.v3.Endpoint:
+      additionalProperties: false
+      description: Endpoint represents an application service endpoint.
+      properties:
+        appName:
+          description: (OPTIONAL) The name of the application providing this endpoint.
+          maxLength: 40
+          title: app_name
+          type: string
+        authType:
+          description: Authentication type expected by the endpoint.
+          maxLength: 16
+          pattern: ^[a-z]{0,16}$
+          title: auth_type
+          type: string
+        externalPath:
+          description: Externally accessible path to the endpoint.
+          maxLength: 128
+          minLength: 1
+          title: external_path
+          type: string
+        internalPath:
+          description: Internally accessible path to the endpoint.
+          maxLength: 128
+          minLength: 1
+          title: internal_path
+          type: string
+        scheme:
+          description: Protocol scheme provided by the endpoint.
+          maxLength: 32
+          pattern: ^([a-z][a-z0-9-]{0,30}[a-z0-9]){0,1}$
+          title: scheme
+          type: string
+        serviceName:
+          description: The name of the service hosted by the endpoint.
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: service_name
+          type: string
+      required:
+        - serviceName
+        - externalPath
+        - internalPath
+        - scheme
+        - authType
+      title: Endpoint
+      type: object
+    catalog.v3.Event:
+      additionalProperties: false
+      description: |-
+        Event message carries the event type detected by the catalog service during the invocation of
+         the "watch" RPC.
+      properties:
+        projectId:
+          description: ID of the project to which the subject belongs.
+          title: project_id
+          type: string
+        type:
+          description: |-
+            Type field specifies whether an entity was created, updated, or deleted. The replayed type is used
+             to annotate entities during the replay phase of the watch RPC.
+          maxLength: 7
+          minLength: 7
+          pattern: ^(replayed)$|^(created)$|^(updated)$|^(deleted)$
+          title: type
+          type: string
+      required:
+        - type
+        - projectId
+      title: Event
+      type: object
+    catalog.v3.Kind:
+      description: Kind designation for applications and packages, normal (unspecified), extension, or addon.
+      enum:
+        - KIND_UNSPECIFIED
+        - KIND_NORMAL
+        - KIND_EXTENSION
+        - KIND_ADDON
+      title: Kind
+      type: string
+    catalog.v3.Namespace:
+      additionalProperties: false
+      description: |-
+        Namespace represents a complex namespace definition with predefined labels and annotations.
+         They are created before any other resources in the deployment.
+      properties:
+        annotations:
+          additionalProperties:
+            title: value
+            type: string
+          description: '(OPTIONAL) '
+          title: annotations
+          type: object
+        labels:
+          additionalProperties:
+            title: value
+            type: string
+          description: '(OPTIONAL) '
+          title: labels
+          type: object
+        name:
+          description: |-
+            namespace names must be valid RFC 1123 DNS labels.
+             Avoid creating namespaces with the prefix `kube-`, since it is reserved for Kubernetes\* system namespaces.
+             Avoid `default` - will already exist
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: name
+          type: string
+      required:
+        - name
+      title: Namespace
+      type: object
+    catalog.v3.ParameterTemplate:
+      additionalProperties: false
+      description: ParameterTemplate describes override values for Helm chart values
+      properties:
+        default:
+          description: (OPTIONAL) Default value for the parameter.
+          maxLength: 4096
+          title: default
+          type: string
+        displayName:
+          description: (OPTIONAL) Display name is an optional human-readable name for the template. It is used for display purposes on user interfaces.
+          maxLength: 100
+          pattern: ^\PC*$
+          title: display_name
+          type: string
+        mandatory:
+          description: (OPTIONAL) Optional mandatory flag for the parameter.
+          title: mandatory
+          type: boolean
+        name:
+          description: Human-readable name for the parameter template.
+          maxLength: 4096
+          minLength: 1
+          pattern: ^[A-Za-z0-9-/_\[\]\.\\]*$
+          title: name
+          type: string
+        secret:
+          description: (OPTIONAL) Optional secret flag for the parameter.
+          title: secret
+          type: boolean
+        suggestedValues:
+          description: (OPTIONAL) List of suggested values to use, to override the default value.
+          items:
+            description: '(OPTIONAL) '
+            maxItems: 100
+            maxLength: 4096
+            minLength: 1
+            type: string
+            uniqueItems: true
+          maxItems: 100
+          title: suggested_values
+          type: array
+          uniqueItems: true
+        type:
+          description: 'Type of parameter: string, number, or boolean.'
+          minLength: 1
+          pattern: ^(string)$|^(number)$|^(boolean)$
+          title: type
+          type: string
+        validator:
+          description: (OPTIONAL) Optional validator for the parameter. Usage TBD.
+          maxLength: 40
+          title: validator
+          type: string
+      required:
+        - name
+        - type
+      title: ParameterTemplate
+      type: object
+    catalog.v3.Profile:
+      additionalProperties: false
+      description: Profile is a set of configuration values for customizing application deployment.
+      properties:
+        chartValues:
+          description: (OPTIONAL) Raw byte value containing the chart values as raw YAML bytes.
+          maxLength: 4000000
+          title: chart_values
+          type: string
+        createTime:
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+        deploymentRequirement:
+          description: (OPTIONAL) List of deployment requirements for this profile.
+          items:
+            $ref: '#/components/schemas/catalog.v3.DeploymentRequirement'
+          maxItems: 100
+          title: deployment_requirement
+          type: array
+        description:
+          description: (OPTIONAL) Description of the profile. Displayed on user interfaces.
+          maxLength: 1000
+          title: description
+          type: string
+        displayName:
+          description: |-
+            (OPTIONAL) Display name is an optional human-readable name for the profile. When specified, it must be unique among all
+             profiles of a given application. It is used for display purposes on user interfaces.
+          maxLength: 40
+          pattern: ^\PC*$
+          title: display_name
+          type: string
+        name:
+          description: Human-readable name for the profile. Unique among all profiles of the same application.
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: name
+          type: string
+        parameterTemplates:
+          description: (OPTIONAL) Parameter templates available for this profile.
+          items:
+            $ref: '#/components/schemas/catalog.v3.ParameterTemplate'
+          maxItems: 100
+          title: parameter_templates
+          type: array
+        updateTime:
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+      required:
+        - name
+      title: Profile
+      type: object
+    catalog.v3.Registry:
+      additionalProperties: false
+      description: |-
+        Registry represents a repository from which various artifacts, such as application Docker\* images or Helm\* charts
+         can be retrieved. As such, the registry entity holds information used for finding and accessing the represented repository.
+      properties:
+        apiType:
+          description: (OPTIONAL) Optional type of the API used to obtain inventory of the articles hosted by the registry.
+          maxLength: 16
+          pattern: ^\PC*$
+          title: api_type
+          type: string
+        authToken:
+          description: Optional authentication token or password for accessing the registry.
+          maxLength: 4500
+          pattern: ^\PC*$
+          title: auth_token
+          type: string
+        cacerts:
+          description: (OPTIONAL) Optional CA certificates for accessing the registry using secure channels, such as HTTPS.
+          maxLength: 16384
+          title: cacerts
+          type: string
+        createTime:
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+        description:
+          description: (OPTIONAL) Description of the registry. Displayed on user interfaces.
+          maxLength: 1000
+          title: description
+          type: string
+        displayName:
+          description: |-
+            (OPTIONAL) Display name is an optional human-readable name for the registry. When specified, it must be unique among all
+             registries within a project. It is used for display purposes on user interfaces.
+          maxLength: 40
+          pattern: ^\PC*$
+          title: display_name
+          type: string
+        inventoryUrl:
+          description: (OPTIONAL) Optional URL of the API for accessing inventory of artifacts hosted by the registry.
+          maxLength: 1000
+          title: inventory_url
+          type: string
+        name:
+          description: |-
+            Name is a human-readable unique identifier for the registry and must be unique for all registries of a
+             given project.
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: name
+          type: string
+        rootUrl:
+          description: Root URL for retrieving artifacts, e.g. Docker images and Helm charts, from the registry.
+          maxLength: 1000
+          minLength: 1
+          pattern: ^(https?|oci)://[a-z0-9-]+(.[a-z0-9-]+)+([/?][\w_\-@:%.+~#?&/=]*)?$
+          title: root_url
+          type: string
+        type:
+          description: Type indicates whether the registry holds Docker images or Helm charts; defaults to Helm charts.
+          maxLength: 40
+          minLength: 1
+          pattern: ^(HELM)$|^(IMAGE)$
+          title: type
+          type: string
+        updateTime:
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+        username:
+          description: Optional username for accessing the registry.
+          maxLength: 1000
+          pattern: ^\PC*$
+          title: username
+          type: string
+      required:
+        - name
+        - rootUrl
+        - type
+      title: Registry
+      type: object
+    catalog.v3.ResourceReference:
+      additionalProperties: false
+      description: ResourceReference represents a Kubernetes resource identifier.
+      properties:
+        ignore:
+          description: (OPTIONAL) Ignore whole resource if true. Will use "remove" if false or not present.
+          title: ignore
+          type: boolean
+        kind:
+          description: Kubernetes resource kind, e.g. ConfigMap.
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9._-]{0,38}[a-zA-Z0-9]{0,1}$
+          title: kind
+          type: string
+        name:
+          description: Kubernetes resource name.
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-._-]{0,38}[a-z0-9]{0,1}$
+          title: name
+          type: string
+        namespace:
+          description: (OPTIONAL) Kubernetes namespace where the ignored resource resides. When empty, the application namespace will be used.
+          title: namespace
+          type: string
+      required:
+        - name
+        - kind
+      title: ResourceReference
+      type: object
+    catalog.v3.UIExtension:
+      additionalProperties: false
+      description: UIExtension is an augmentation of an API extension.
+      properties:
+        appName:
+          description: The name of the application corresponding to this UI extension.
+          maxLength: 40
+          minLength: 1
+          title: app_name
+          type: string
+        description:
+          description: Description of the API extension, used on the main UI dashboard.
+          maxLength: 1000
+          minLength: 1
+          title: description
+          type: string
+        fileName:
+          description: The name of the main file to load this specific UI extension.
+          maxLength: 40
+          minLength: 1
+          title: file_name
+          type: string
+        label:
+          description: Label is a human readable text used for display in the main UI dashboard
+          maxLength: 40
+          pattern: ^\PC*$
+          title: label
+          type: string
+        moduleName:
+          description: Name of the application module to be loaded.
+          maxLength: 40
+          minLength: 1
+          title: module_name
+          type: string
+        serviceName:
+          description: The name of the API extension endpoint.
+          maxLength: 40
+          minLength: 1
+          title: service_name
+          type: string
+      required:
+        - label
+        - serviceName
+        - description
+        - fileName
+        - appName
+        - moduleName
+      title: UIExtension
+      type: object
+    catalog.v3.Upload:
+      additionalProperties: false
+      description: Upload represents a single file-upload record.
+      properties:
+        artifact:
+          description: Raw bytes content of the file being uploaded.
+          format: byte
+          title: artifact
+          type: string
+        fileName:
+          description: Name of the file being uploaded.
+          title: file_name
+          type: string
+      required:
+        - fileName
+        - artifact
+      title: Upload
+      type: object
+    catalog.v3.UploadCatalogEntitiesResponse:
+      additionalProperties: false
+      description: Response message for the UploadCatalogItems method
+      properties:
+        errorMessages:
+          description: Any error messages encountered either during YAML parsing or entity creation or update.
+          items:
+            maxItems: 100
+            type: string
+          maxItems: 100
+          title: error_messages
+          type: array
+        sessionId:
+          description: Session ID, generated by the server after the first upload request has been processed.
+          title: session_id
+          type: string
+        uploadNumber:
+          description: 'Deprecated: Next expected upload number or total number of uploads on the last upload request.'
+          title: upload_number
+          type: integer
+      required:
+        - sessionId
+        - uploadNumber
+      title: UploadCatalogEntitiesResponse
+      type: object
     clusterNetwork:
       description: Cluster network configuration, including pod and service CIDR blocks.
       properties:
@@ -891,6 +4519,584 @@ components:
           $ref: '#/components/schemas/NetworkRanges'
         services:
           $ref: '#/components/schemas/NetworkRanges'
+      type: object
+    connect-protocol-version:
+      description: Define the version of the Connect protocol
+      enum:
+        - 1
+      title: Connect-Protocol-Version
+      type: number
+    connect-timeout-header:
+      description: Define the timeout, in ms
+      title: Connect-Timeout-Ms
+      type: number
+    connect.error:
+      additionalProperties: true
+      description: 'Error type returned by Connect: https://connectrpc.com/docs/go/errors/#http-representation'
+      properties:
+        code:
+          description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+          enum:
+            - canceled
+            - unknown
+            - invalid_argument
+            - deadline_exceeded
+            - not_found
+            - already_exists
+            - permission_denied
+            - resource_exhausted
+            - failed_precondition
+            - aborted
+            - out_of_range
+            - unimplemented
+            - internal
+            - unavailable
+            - data_loss
+            - unauthenticated
+          example: not_found
+          type: string
+        details:
+          description: A list of messages that carry the error details. There is no limit on the number of messages.
+          items:
+            $ref: '#/components/schemas/connect.error_details.Any'
+          maxItems: 100
+          type: array
+        message:
+          description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+          type: string
+      title: Connect Error
+      type: object
+    connect.error_details.Any:
+      additionalProperties: true
+      description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message, with an additional debug field for ConnectRPC error details.
+      properties:
+        debug:
+          additionalProperties: true
+          description: Detailed error information.
+          title: Any
+          type: object
+        type:
+          description: 'A URL that acts as a globally unique identifier for the type of the serialized message. For example: `type.googleapis.com/google.rpc.ErrorInfo`. This is used to determine the schema of the data in the `value` field and is the discriminator for the `debug` field.'
+          type: string
+        value:
+          description: The Protobuf message, serialized as bytes and base64-encoded. The specific message type is identified by the `type` field.
+          format: binary
+          type: string
+      type: object
+    deployment.v1.App:
+      additionalProperties: false
+      description: Details of application.
+      properties:
+        id:
+          description: |-
+            Id of the app (same as Fleet bundle name) which is,
+             concatenated from name and deploy_id (uid which comes from k8s).
+          readOnly: true
+          title: id
+          type: string
+        name:
+          description: The deployment package app name.
+          readOnly: true
+          title: name
+          type: string
+        status:
+          $ref: '#/components/schemas/deployment.v1.Deployment.Status'
+      title: App
+      type: object
+    deployment.v1.Cluster:
+      additionalProperties: false
+      description: Details of cluster.
+      properties:
+        apps:
+          description: Apps has per-app details.
+          items:
+            $ref: '#/components/schemas/deployment.v1.App'
+          maxItems: 100
+          readOnly: true
+          title: apps
+          type: array
+        id:
+          description: ID is the cluster id which ECM generates and assigns to the Rancher cluster name.
+          readOnly: true
+          title: id
+          type: string
+        name:
+          description: Name is the display name which user provides and ECM creates and assigns clustername label to Fleet cluster object.
+          readOnly: true
+          title: name
+          type: string
+        status:
+          $ref: '#/components/schemas/deployment.v1.Deployment.Status'
+      title: Cluster
+      type: object
+    deployment.v1.ClusterInfo:
+      additionalProperties: false
+      description: Cluster defines the message for the Cluster object.
+      properties:
+        createTime:
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+        id:
+          description: ID is the cluster id which ECM generates and assigns to the Rancher cluster name.
+          readOnly: true
+          title: id
+          type: string
+        labels:
+          additionalProperties:
+            title: value
+            type: string
+          description: List of cluster labels retrieved from Fleet cluster object.
+          readOnly: true
+          title: labels
+          type: object
+        name:
+          description: Name is the display name which user provides and ECM creates and assigns clustername label to Fleet cluster object.
+          readOnly: true
+          title: name
+          type: string
+      title: ClusterInfo
+      type: object
+    deployment.v1.DeleteType:
+      description: |-
+        Different delete types to handle parent and child
+         lists, for dependency support. Available options: PARENT_ONLY, ALL.
+      enum:
+        - PARENT_ONLY
+        - ALL
+      title: DeleteType
+      type: string
+    deployment.v1.Deployment:
+      additionalProperties: false
+      description: Deployment defines the specification to deploy a Deployment Package onto a set of clusters.
+      properties:
+        allAppTargetClusters:
+          $ref: '#/components/schemas/deployment.v1.TargetClusters'
+        appName:
+          description: The deployment package name to deploy from the catalog.
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: app_name
+          type: string
+        appVersion:
+          description: The version of the deployment package.
+          maxLength: 20
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-.]{0,18}[a-z0-9]{0,1}$
+          title: app_version
+          type: string
+        apps:
+          description: Application details.
+          items:
+            $ref: '#/components/schemas/deployment.v1.App'
+          maxItems: 100
+          readOnly: true
+          title: apps
+          type: array
+        createTime:
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+        deployId:
+          description: The id of the deployment.
+          readOnly: true
+          title: deploy_id
+          type: string
+        deploymentType:
+          description: |-
+            (OPTIONAL) The deployment type for the target cluster deployment can be either auto-scaling or targeted.
+             In Auto-scaling type, the application will be automatically deployed on all the
+             clusters which match the Target cluster label. In Targeted type, the user has to select among pre created
+             clusters to deploy the application.
+          maxLength: 20
+          pattern: ^[a-z0-9]*[a-z0-9-]{0,18}[a-z0-9]{0,1}$
+          title: deployment_type
+          type: string
+        displayName:
+          description: (OPTIONAL) Deployment display name.
+          maxLength: 40
+          pattern: ^([a-zA-Z0-9][\w\- \.\/_]{0,38}[a-zA-Z0-9]{0,1}|)$
+          title: display_name
+          type: string
+        name:
+          description: Deployment name (unique string assigned by Orchestrator).
+          readOnly: true
+          title: name
+          type: string
+        networkName:
+          description: (OPTIONAL) network_name is the name of the interconnect network that deployment be part of
+          maxLength: 40
+          pattern: ^[a-z0-9]*[a-z0-9-]{0,18}[a-z0-9]{0,1}$
+          title: network_name
+          type: string
+        overrideValues:
+          description: (OPTIONAL) The Override values can be used to override any of the base profile values based on Deployment scenario.
+          items:
+            $ref: '#/components/schemas/deployment.v1.OverrideValues'
+          maxItems: 100
+          title: override_values
+          type: array
+        profileName:
+          description: (OPTIONAL) The selected profile name to be used for the base Helm values of the different applications in the deployment package
+          maxLength: 40
+          pattern: ^[a-z0-9]*[a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: profile_name
+          type: string
+        serviceExports:
+          description: '(OPTIONAL) '
+          items:
+            $ref: '#/components/schemas/deployment.v1.ServiceExport'
+          maxItems: 10
+          title: service_exports
+          type: array
+        status:
+          $ref: '#/components/schemas/deployment.v1.Deployment.Status'
+        targetClusters:
+          description: (OPTIONAL) Cluster labels on which we want to deploy the application.
+          items:
+            $ref: '#/components/schemas/deployment.v1.TargetClusters'
+          maxItems: 50
+          title: target_clusters
+          type: array
+      required:
+        - appName
+        - appVersion
+      title: Deployment
+      type: object
+    deployment.v1.Deployment.Status:
+      additionalProperties: false
+      description: Status has details of the deployment.
+      properties:
+        message:
+          readOnly: true
+          title: message
+          type: string
+        state:
+          $ref: '#/components/schemas/deployment.v1.State'
+        summary:
+          $ref: '#/components/schemas/deployment.v1.Summary'
+      title: Status
+      type: object
+    deployment.v1.DeploymentInstancesCluster:
+      additionalProperties: false
+      properties:
+        apps:
+          description: Apps has per-app details.
+          items:
+            $ref: '#/components/schemas/deployment.v1.App'
+          maxItems: 100
+          readOnly: true
+          title: apps
+          type: array
+        deploymentDisplayName:
+          description: (OPTIONAL) Deployment display name.
+          maxLength: 40
+          pattern: ^([a-zA-Z0-9][\w\- \.\/_]{0,38}[a-zA-Z0-9]{0,1}|)$
+          title: deployment_display_name
+          type: string
+        deploymentName:
+          description: Deployment name (unique string assigned by Orchestrator).
+          readOnly: true
+          title: deployment_name
+          type: string
+        deploymentUid:
+          description: Deployment CR UID.
+          readOnly: true
+          title: deployment_uid
+          type: string
+        status:
+          $ref: '#/components/schemas/deployment.v1.Deployment.Status'
+      title: DeploymentInstancesCluster
+      type: object
+    deployment.v1.KubeConfigInfo:
+      additionalProperties: false
+      properties:
+        kubeConfig:
+          format: byte
+          readOnly: true
+          title: kube_config
+          type: string
+      title: KubeConfigInfo
+      type: object
+    deployment.v1.OverrideValues:
+      additionalProperties: false
+      description: |-
+        The Override values can be used to override any of the base helm values of
+         applications based on Deployment scenario.
+      properties:
+        appName:
+          description: deployment package name to use when overriding values.
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: app_name
+          type: string
+        targetNamespace:
+          description: (OPTIONAL) The namespace to deploy the app onto, default namespace is default.
+          maxLength: 63
+          pattern: (^$)|^[a-z0-9]([-a-z0-9]{0,61}[a-z0-9])?$
+          title: target_namespace
+          type: string
+        values:
+          $ref: '#/components/schemas/google.protobuf.Struct'
+      required:
+        - appName
+      title: OverrideValues
+      type: object
+    deployment.v1.ServiceExport:
+      additionalProperties: false
+      properties:
+        appName:
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: app_name
+          type: string
+        enabled:
+          title: enabled
+          type: boolean
+      required:
+        - appName
+      title: ServiceExport
+      type: object
+    deployment.v1.State:
+      description: State are the different states a deployment/cluster/app can be in.
+      enum:
+        - UNKNOWN
+        - RUNNING
+        - DOWN
+        - INTERNAL_ERROR
+        - DEPLOYING
+        - UPDATING
+        - TERMINATING
+        - ERROR
+        - NO_TARGET_CLUSTERS
+      title: State
+      type: string
+    deployment.v1.Summary:
+      additionalProperties: false
+      description: Count of status.
+      properties:
+        down:
+          description: Number of down apps/clusters in the deployment.
+          format: int32
+          readOnly: true
+          title: down
+          type: integer
+        running:
+          description: Number of running apps/clusters in the deployment, value from owned GitRepo objects.
+          format: int32
+          readOnly: true
+          title: running
+          type: integer
+        total:
+          description: Total count of apps/clusters in the deployment, value from owned GitRepo objects.
+          format: int32
+          readOnly: true
+          title: total
+          type: integer
+        type:
+          description: Type of thing that we're counting, ie clusters, apps.
+          readOnly: true
+          title: type
+          type: string
+        unknown:
+          description: Unknown status to indicate cluster not reachable.
+          format: int32
+          readOnly: true
+          title: unknown
+          type: integer
+      title: Summary
+      type: object
+    deployment.v1.TargetClusters:
+      additionalProperties: false
+      description: Set target clusters based on labels.
+      properties:
+        appName:
+          description: (OPTIONAL) The targeted deployment package name.
+          maxLength: 40
+          pattern: (^$)|^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: app_name
+          type: string
+        clusterId:
+          description: (OPTIONAL) Cluster id to match the target cluster when targeted deployment.
+          maxLength: 100
+          pattern: (^$)|^[a-zA-Z0-9][a-zA-Z0-9-_\.]{0,98}[a-zA-Z0-9]?$
+          title: cluster_id
+          type: string
+        labels:
+          additionalProperties:
+            maxLength: 40
+            minLength: 1
+            pattern: (^$)|^[a-z0-9]([-_.=,a-z0-9/]{0,38}[a-z0-9])?$
+            title: value
+            type: string
+          description: (OPTIONAL) Cluster labels to match the target cluster when auto-scaling deployment.
+          maxProperties: 10
+          title: labels
+          type: object
+      title: TargetClusters
+      type: object
+    google.protobuf.Empty:
+      description: |-
+        A generic empty message that you can re-use to avoid defining duplicated
+         empty messages in your APIs. A typical example is to use it as the request
+         or the response type of an API method. For instance:
+
+             service Foo {
+               rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);
+             }
+      type: object
+    google.protobuf.ListValue:
+      additionalProperties: false
+      description: |-
+        `ListValue` is a wrapper around a repeated field of values.
+
+         The JSON representation for `ListValue` is JSON array.
+      properties:
+        values:
+          description: Repeated field of dynamically typed values.
+          items:
+            $ref: '#/components/schemas/google.protobuf.Value'
+          maxItems: 100
+          title: values
+          type: array
+      title: ListValue
+      type: object
+    google.protobuf.NullValue:
+      description: |-
+        `NullValue` is a singleton enumeration to represent the null value for the
+         `Value` type union.
+
+         The JSON representation for `NullValue` is JSON `null`.
+      enum:
+        - NULL_VALUE
+      title: NullValue
+      type: string
+    google.protobuf.Struct:
+      additionalProperties:
+        $ref: '#/components/schemas/google.protobuf.Value'
+      description: |-
+        `Struct` represents a structured data value, consisting of fields
+         which map to dynamically typed values. In some languages, `Struct`
+         might be supported by a native representation. For example, in
+         scripting languages like JS a struct is represented as an
+         object. The details of that representation are described together
+         with the proto support for the language.
+
+         The JSON representation for `Struct` is JSON object.
+      type: object
+    google.protobuf.Struct.FieldsEntry:
+      additionalProperties: false
+      properties:
+        key:
+          title: key
+          type: string
+        value:
+          $ref: '#/components/schemas/google.protobuf.Value'
+      title: FieldsEntry
+      type: object
+    google.protobuf.Timestamp:
+      description: |-
+        A Timestamp represents a point in time independent of any time zone or local
+         calendar, encoded as a count of seconds and fractions of seconds at
+         nanosecond resolution. The count is relative to an epoch at UTC midnight on
+         January 1, 1970, in the proleptic Gregorian calendar which extends the
+         Gregorian calendar backwards to year one.
+
+         All minutes are 60 seconds long. Leap seconds are "smeared" so that no leap
+         second table is needed for interpretation, using a [24-hour linear
+         smear](https://developers.google.com/time/smear).
+
+         The range is from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59.999999999Z. By
+         restricting to that range, we ensure that we can convert to and from [RFC
+         3339](https://www.ietf.org/rfc/rfc3339.txt) date strings.
+
+         # Examples
+
+         Example 1: Compute Timestamp from POSIX `time()`.
+
+             Timestamp timestamp;
+             timestamp.set_seconds(time(NULL));
+             timestamp.set_nanos(0);
+
+         Example 2: Compute Timestamp from POSIX `gettimeofday()`.
+
+             struct timeval tv;
+             gettimeofday(&tv, NULL);
+
+             Timestamp timestamp;
+             timestamp.set_seconds(tv.tv_sec);
+             timestamp.set_nanos(tv.tv_usec * 1000);
+
+         Example 3: Compute Timestamp from Win32 `GetSystemTimeAsFileTime()`.
+
+             FILETIME ft;
+             GetSystemTimeAsFileTime(&ft);
+             UINT64 ticks = (((UINT64)ft.dwHighDateTime) << 32) | ft.dwLowDateTime;
+
+             // A Windows tick is 100 nanoseconds. Windows epoch 1601-01-01T00:00:00Z
+             // is 11644473600 seconds before Unix epoch 1970-01-01T00:00:00Z.
+             Timestamp timestamp;
+             timestamp.set_seconds((INT64) ((ticks / 10000000) - 11644473600LL));
+             timestamp.set_nanos((INT32) ((ticks % 10000000) * 100));
+
+         Example 4: Compute Timestamp from Java `System.currentTimeMillis()`.
+
+             long millis = System.currentTimeMillis();
+
+             Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)
+                 .setNanos((int) ((millis % 1000) * 1000000)).build();
+
+         Example 5: Compute Timestamp from Java `Instant.now()`.
+
+             Instant now = Instant.now();
+
+             Timestamp timestamp =
+                 Timestamp.newBuilder().setSeconds(now.getEpochSecond())
+                     .setNanos(now.getNano()).build();
+
+         Example 6: Compute Timestamp from current time in Python.
+
+             timestamp = Timestamp()
+             timestamp.GetCurrentTime()
+
+         # JSON Mapping
+
+         In JSON format, the Timestamp type is encoded as a string in the
+         [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format. That is, the
+         format is "{year}-{month}-{day}T{hour}:{min}:{sec}[.{frac_sec}]Z"
+         where {year} is always expressed using four digits while {month}, {day},
+         {hour}, {min}, and {sec} are zero-padded to two digits each. The fractional
+         seconds, which can go up to 9 digits (i.e. up to 1 nanosecond resolution),
+         are optional. The "Z" suffix indicates the timezone ("UTC"); the timezone
+         is required. A proto3 JSON serializer should always use UTC (as indicated by
+         "Z") when printing the Timestamp type and a proto3 JSON parser should be
+         able to accept both UTC and other timezones (as indicated by an offset).
+
+         For example, "2017-01-15T01:30:15.01Z" encodes 15.01 seconds past
+         01:30 UTC on January 15, 2017.
+
+         In JavaScript, one can convert a Date object to this format using the
+         standard
+         [toISOString()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString)
+         method. In Python, a standard `datetime.datetime` object can be converted
+         to this format using
+         [`strftime`](https://docs.python.org/2/library/time.html#time.strftime) with
+         the time format spec '%Y-%m-%dT%H:%M:%S.%fZ'. Likewise, in Java, one can use
+         the Joda Time's [`ISODateTimeFormat.dateTime()`](
+         http://joda-time.sourceforge.net/apidocs/org/joda/time/format/ISODateTimeFormat.html#dateTime()
+         ) to obtain a formatter capable of generating timestamps in this format.
+      example: "2023-01-15T01:30:15.01Z"
+      format: date-time
+      type: string
+    google.protobuf.Value:
+      additionalProperties: true
+      description: |-
+        `Value` represents a dynamically typed value which can be either
+         null, a number, a string, a boolean, a recursive struct value, or a
+         list of values. A producer of value is expected to set one of these
+         variants. Absence of any variant indicates an error.
+
+         The JSON representation for `Value` is JSON value.
+      nullable: true
       type: object
     network.Network.Get:
       properties:
@@ -1096,6 +5302,588 @@ components:
             uID:
               type: string
       type: object
+    resource.v2.AdminStatus:
+      additionalProperties: false
+      description: Represents the associated VirtualMachineInstance's state, either created (up state) or not (down state).
+      properties:
+        state:
+          $ref: '#/components/schemas/resource.v2.AdminStatus.State'
+      title: AdminStatus
+      type: object
+    resource.v2.AdminStatus.State:
+      enum:
+        - STATE_UNSPECIFIED
+        - STATE_UP
+        - STATE_DOWN
+      title: State
+      type: string
+    resource.v2.AppEndpoint:
+      additionalProperties: false
+      description: Represents an endpoint for accessing the application outside of a cluster.
+      properties:
+        endpointStatus:
+          $ref: '#/components/schemas/resource.v2.EndpointStatus'
+        fqdns:
+          description: Fully qualified domain name (FQDN) for external access.
+          items:
+            $ref: '#/components/schemas/resource.v2.Fqdn'
+          maxItems: 10
+          readOnly: true
+          title: fqdns
+          type: array
+        id:
+          description: Endpoint object UID (e.g. service or ingress UID)
+          format: uuid
+          readOnly: true
+          title: id
+          type: string
+        name:
+          description: Endpoint name
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          readOnly: true
+          title: name
+          type: string
+        ports:
+          description: List of ports exposed by a service for external access
+          items:
+            $ref: '#/components/schemas/resource.v2.Port'
+          maxItems: 20
+          readOnly: true
+          title: ports
+          type: array
+      title: AppEndpoint
+      type: object
+    resource.v2.AppWorkload:
+      additionalProperties: false
+      allOf:
+        - properties:
+            createTime:
+              $ref: '#/components/schemas/google.protobuf.Timestamp'
+            id:
+              description: Workload UUID
+              format: uuid
+              title: id
+              type: string
+            name:
+              description: Workload name
+              maxLength: 253
+              minLength: 1
+              pattern: ^[a-z0-9]([-a-z0-9-]*[a-z0-9])?$
+              title: name
+              type: string
+            namespace:
+              description: Namespace where the workload is created.
+              readOnly: true
+              title: namespace
+              type: string
+            type:
+              $ref: '#/components/schemas/resource.v2.AppWorkload.Type'
+            workloadReady:
+              description: Ready status to determines if a workload is fully functional or not.
+              readOnly: true
+              title: workload_ready
+              type: boolean
+        - oneOf:
+            - properties:
+                pod:
+                  $ref: '#/components/schemas/resource.v2.Pod'
+              required:
+                - pod
+              title: pod
+            - properties:
+                virtualMachine:
+                  $ref: '#/components/schemas/resource.v2.VirtualMachine'
+              required:
+                - virtualMachine
+              title: virtual_machine
+      description: |-
+        AppWorkload a high-level abstraction for representing different types of application workloads.
+         The application workloads can be virtual machine-based or container-based.
+      required:
+        - id
+        - name
+      title: AppWorkload
+      type: object
+    resource.v2.AppWorkload.Type:
+      enum:
+        - TYPE_UNSPECIFIED
+        - TYPE_VIRTUAL_MACHINE
+        - TYPE_POD
+      title: Type
+      type: string
+    resource.v2.Container:
+      additionalProperties: false
+      description: Represents a container resource.
+      properties:
+        imageName:
+          description: image_name container image name
+          readOnly: true
+          title: image_name
+          type: string
+        name:
+          description: Container name
+          maxLength: 63
+          minLength: 1
+          pattern: ^[a-z0-9]([-a-z0-9-]*[a-z0-9])?$
+          title: name
+          type: string
+        restartCount:
+          description: Number of times that a container is restarted.
+          format: int32
+          readOnly: true
+          title: restart_count
+          type: integer
+        status:
+          $ref: '#/components/schemas/resource.v2.ContainerStatus'
+      required:
+        - name
+      title: Container
+      type: object
+    resource.v2.ContainerStateRunning:
+      additionalProperties: false
+      description: Running status of a container.
+      title: ContainerStateRunning
+      type: object
+    resource.v2.ContainerStateTerminated:
+      additionalProperties: false
+      description: Termination status of a container.
+      properties:
+        exitCode:
+          description: Exit code of the termination status.
+          format: int32
+          readOnly: true
+          title: exit_code
+          type: integer
+        message:
+          description: Message of the termination status.
+          readOnly: true
+          title: message
+          type: string
+        reason:
+          description: Reason of the termination.
+          readOnly: true
+          title: reason
+          type: string
+      title: ContainerStateTerminated
+      type: object
+    resource.v2.ContainerStateWaiting:
+      additionalProperties: false
+      description: Waiting status of a container including the reason and message.
+      properties:
+        message:
+          description: Message of the waiting status.
+          readOnly: true
+          title: message
+          type: string
+        reason:
+          description: Reason of the waiting status.
+          readOnly: true
+          title: reason
+          type: string
+      title: ContainerStateWaiting
+      type: object
+    resource.v2.ContainerStatus:
+      additionalProperties: false
+      description: ContainerStatus status of a container
+      oneOf:
+        - properties:
+            containerStateRunning:
+              $ref: '#/components/schemas/resource.v2.ContainerStateRunning'
+          required:
+            - containerStateRunning
+          title: container_state_running
+        - properties:
+            containerStateTerminated:
+              $ref: '#/components/schemas/resource.v2.ContainerStateTerminated'
+          required:
+            - containerStateTerminated
+          title: container_state_terminated
+        - properties:
+            containerStateWaiting:
+              $ref: '#/components/schemas/resource.v2.ContainerStateWaiting'
+          required:
+            - containerStateWaiting
+          title: container_state_waiting
+      title: ContainerStatus
+      type: object
+    resource.v2.DeletePodRequest:
+      additionalProperties: false
+      description: Request message for DeletePod method
+      properties:
+        clusterId:
+          description: Cluster ID
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: cluster_id
+          type: string
+        namespace:
+          description: Namespace that the pod is running on.
+          maxLength: 253
+          minLength: 1
+          pattern: ^[a-z0-9]([-a-z0-9-]*[a-z0-9])?$
+          title: namespace
+          type: string
+        podName:
+          description: Name of the pod.
+          maxLength: 253
+          minLength: 1
+          pattern: ^[a-z0-9]([-a-z0-9-]*[a-z0-9])?$
+          title: pod_name
+          type: string
+      required:
+        - clusterId
+        - namespace
+        - podName
+      title: DeletePodRequest
+      type: object
+    resource.v2.DeletePodResponse:
+      additionalProperties: false
+      description: Response message for the DeletePod method.
+      title: DeletePodResponse
+      type: object
+    resource.v2.EndpointStatus:
+      additionalProperties: false
+      description: Status of the endpoint.
+      properties:
+        state:
+          $ref: '#/components/schemas/resource.v2.EndpointStatus.State'
+      title: EndpointStatus
+      type: object
+    resource.v2.EndpointStatus.State:
+      enum:
+        - STATE_UNSPECIFIED
+        - STATE_READY
+        - STATE_NOT_READY
+      title: State
+      type: string
+    resource.v2.Fqdn:
+      additionalProperties: false
+      description: Fully qualified domain name.
+      properties:
+        fqdn:
+          format: hostname
+          title: fqdn
+          type: string
+      title: Fqdn
+      type: object
+    resource.v2.GetVNCRequest:
+      additionalProperties: false
+      description: Request message for GetVNC method
+      properties:
+        appId:
+          description: Application ID
+          maxLength: 80
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,78}[a-z0-9]{0,1}$
+          title: app_id
+          type: string
+        clusterId:
+          description: Cluster ID
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: cluster_id
+          type: string
+        virtualMachineId:
+          description: Virtual machine ID
+          format: uuid
+          title: virtual_machine_id
+          type: string
+      required:
+        - appId
+        - clusterId
+        - virtualMachineId
+      title: GetVNCRequest
+      type: object
+    resource.v2.GetVNCResponse:
+      additionalProperties: false
+      description: Response message for the GetVNC method.
+      properties:
+        address:
+          title: address
+          type: string
+      required:
+        - address
+      title: GetVNCResponse
+      type: object
+    resource.v2.ListAppEndpointsRequest:
+      additionalProperties: false
+      description: Request message for ListAppEndpoints method
+      properties:
+        appId:
+          description: Application ID
+          maxLength: 80
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,78}[a-z0-9]{0,1}$
+          title: app_id
+          type: string
+        clusterId:
+          description: Cluster ID
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: cluster_id
+          type: string
+      required:
+        - appId
+        - clusterId
+      title: ListAppEndpointsRequest
+      type: object
+    resource.v2.ListAppEndpointsResponse:
+      additionalProperties: false
+      description: Response message for the ListAppEndpoints method.
+      properties:
+        appEndpoints:
+          description: List of services.
+          items:
+            $ref: '#/components/schemas/resource.v2.AppEndpoint'
+          maxItems: 100
+          readOnly: true
+          title: app_endpoints
+          type: array
+      title: ListAppEndpointsResponse
+      type: object
+    resource.v2.ListAppWorkloadsRequest:
+      additionalProperties: false
+      description: Request message for ListAppWorkloadsRequest method
+      properties:
+        appId:
+          description: Application ID
+          maxLength: 80
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,78}[a-z0-9]{0,1}$
+          title: app_id
+          type: string
+        clusterId:
+          description: Cluster ID
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: cluster_id
+          type: string
+      required:
+        - appId
+        - clusterId
+      title: ListAppWorkloadsRequest
+      type: object
+    resource.v2.ListAppWorkloadsResponse:
+      additionalProperties: false
+      description: Response message for the ListAppWorkloadsResponse method.
+      properties:
+        appWorkloads:
+          description: A list of virtual machines.
+          items:
+            $ref: '#/components/schemas/resource.v2.AppWorkload'
+          maxItems: 500
+          title: app_workloads
+          type: array
+      title: ListAppWorkloadsResponse
+      type: object
+    resource.v2.Pod:
+      additionalProperties: false
+      description: Represents a pod resource.
+      properties:
+        containers:
+          description: containers list of containers per pod
+          items:
+            $ref: '#/components/schemas/resource.v2.Container'
+          maxItems: 50
+          title: containers
+          type: array
+        status:
+          $ref: '#/components/schemas/resource.v2.PodStatus'
+      title: Pod
+      type: object
+    resource.v2.PodStatus:
+      additionalProperties: false
+      description: The status of the pod during its lifecycle.
+      properties:
+        state:
+          $ref: '#/components/schemas/resource.v2.PodStatus.State'
+      title: PodStatus
+      type: object
+    resource.v2.PodStatus.State:
+      enum:
+        - STATE_UNSPECIFIED
+        - STATE_PENDING
+        - STATE_RUNNING
+        - STATE_SUCCEEDED
+        - STATE_FAILED
+      title: State
+      type: string
+    resource.v2.Port:
+      additionalProperties: false
+      description: Port information
+      properties:
+        name:
+          description: Port name
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          readOnly: true
+          title: name
+          type: string
+        protocol:
+          description: Protocol for a port.
+          readOnly: true
+          title: protocol
+          type: string
+        serviceProxyUrl:
+          description: Service proxy URL for a port.
+          readOnly: true
+          title: service_proxy_url
+          type: string
+        value:
+          description: Port value
+          format: int32
+          readOnly: true
+          title: value
+          type: integer
+      title: Port
+      type: object
+    resource.v2.RestartVirtualMachineRequest:
+      additionalProperties: false
+      description: Request message for RestartVirtualMachine method
+      properties:
+        appId:
+          description: Application ID
+          maxLength: 80
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,78}[a-z0-9]{0,1}$
+          title: app_id
+          type: string
+        clusterId:
+          description: Cluster ID
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: cluster_id
+          type: string
+        virtualMachineId:
+          description: Virtual machine ID
+          format: uuid
+          title: virtual_machine_id
+          type: string
+      required:
+        - appId
+        - clusterId
+        - virtualMachineId
+      title: RestartVirtualMachineRequest
+      type: object
+    resource.v2.RestartVirtualMachineResponse:
+      additionalProperties: false
+      description: Response message for the RestartVirtualMachine method.
+      title: RestartVirtualMachineResponse
+      type: object
+    resource.v2.StartVirtualMachineRequest:
+      additionalProperties: false
+      description: Request message for StartVirtualMachine method
+      properties:
+        appId:
+          description: Application ID
+          maxLength: 80
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,78}[a-z0-9]{0,1}$
+          title: app_id
+          type: string
+        clusterId:
+          description: Cluster ID
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: cluster_id
+          type: string
+        virtualMachineId:
+          description: Virtual machine ID
+          format: uuid
+          title: virtual_machine_id
+          type: string
+      required:
+        - appId
+        - clusterId
+        - virtualMachineId
+      title: StartVirtualMachineRequest
+      type: object
+    resource.v2.StartVirtualMachineResponse:
+      additionalProperties: false
+      description: Response message for the StartVirtualMachine method.
+      title: StartVirtualMachineResponse
+      type: object
+    resource.v2.StopVirtualMachineRequest:
+      additionalProperties: false
+      description: Request message for StopVirtualMachine method
+      properties:
+        appId:
+          description: Application ID
+          maxLength: 80
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,78}[a-z0-9]{0,1}$
+          title: app_id
+          type: string
+        clusterId:
+          description: Cluster ID
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]{0,1}$
+          title: cluster_id
+          type: string
+        virtualMachineId:
+          description: Virtual machine ID
+          format: uuid
+          title: virtual_machine_id
+          type: string
+      required:
+        - appId
+        - clusterId
+        - virtualMachineId
+      title: StopVirtualMachineRequest
+      type: object
+    resource.v2.StopVirtualMachineResponse:
+      additionalProperties: false
+      description: Response message for the StopVirtualMachine method.
+      title: StopVirtualMachineResponse
+      type: object
+    resource.v2.VirtualMachine:
+      additionalProperties: false
+      description: Represents a virtual machine.
+      properties:
+        adminStatus:
+          $ref: '#/components/schemas/resource.v2.AdminStatus'
+        status:
+          $ref: '#/components/schemas/resource.v2.VirtualMachineStatus'
+      title: VirtualMachine
+      type: object
+    resource.v2.VirtualMachineStatus:
+      additionalProperties: false
+      description: Status of a virtual machine.
+      properties:
+        state:
+          $ref: '#/components/schemas/resource.v2.VirtualMachineStatus.State'
+      title: VirtualMachineStatus
+      type: object
+    resource.v2.VirtualMachineStatus.State:
+      enum:
+        - STATE_UNSPECIFIED
+        - STATE_STOPPED
+        - STATE_PROVISIONING
+        - STATE_STARTING
+        - STATE_RUNNING
+        - STATE_PAUSED
+        - STATE_STOPPING
+        - STATE_TERMINATING
+        - STATE_CRASH_LOOP_BACKOFF
+        - STATE_MIGRATING
+        - STATE_ERROR_UNSCHEDULABLE
+        - STATE_ERROR_IMAGE_PULL
+        - STATE_ERROR_IMAGE_PULL_BACKOFF
+        - STATE_ERROR_PVC_NOT_FOUND
+        - STATE_ERROR_DATA_VOLUME
+        - STATE_WAITING_FOR_VOLUME_BINDING
+      title: State
+      type: string
   securitySchemes:
     BearerAuth:
       bearerFormat: JWT
@@ -1108,7 +5896,7 @@ components:
 info:
   description: Tenancy aware APIs for the Open Edge Platform services
   title: Multi tenancy APIs
-  version: 26.1.3
+  version: 26.0.4
 openapi: 3.0.3
 paths:
   /v1/orgs:
@@ -1655,6 +6443,317 @@ paths:
           $ref: '#/components/responses/503'
       tags:
         - alert-receiver
+  /v1/projects/{projectName}/dm/amt/admin/domains:
+    get:
+      description: Retrieves all of the domain configuration profiles stored in the database.  Will not return the provisioning certificate or certificate password to protect the privacy of these assets.
+      operationId: GetAllDomains
+      parameters:
+        - description: The number of items to skip before starting to collect the result set
+          in: query
+          name: $skip
+          schema:
+            type: integer
+        - description: The numbers of items to return
+          in: query
+          name: $top
+          schema:
+            type: integer
+        - description: The total number of domains
+          in: query
+          name: $count
+          schema:
+            type: boolean
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - items:
+                      $ref: '#/components/schemas/DomainResponse'
+                    maxItems: 100
+                    type: array
+                  - $ref: '#/components/schemas/CountDomainResponse'
+          description: successful operation
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: internal server error
+      summary: Get All Domains
+      tags:
+        - Domains
+    patch:
+      description: |
+        Edits an existing domain configuration profile.
+
+        The profileName field can not be changed.
+
+        Version must be provided to ensure the correct profile is edited.
+
+        The provisioning certificate and certificate password are stored in a secrets manager and are only used when required during activation.  Provisioning certificate must be a base64 string of the Personal Information Exchange (PFX) certificate that includes the entire certificate chain and private key.
+      operationId: UpdateDomainSuffix
+      parameters:
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DomainPATCH'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainResponse'
+          description: successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: bad request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: internal server error
+      summary: Update Domain Suffix
+      tags:
+        - Domains
+    post:
+      description: Creates a new domain configuration profile to the database.  The provisioning certificate and certificate password are stored in a secrets manager and are only used when required during activation.
+      operationId: CreateDomain
+      parameters:
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DomainPOST'
+        description: |
+          **provisioningCert** must be a base64 string of the Personal Information Exchange (PFX) certificate that includes the entire certificate chain and private key.
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainResponse'
+          description: successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: bad request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: internal server error
+      summary: Create Domain
+      tags:
+        - Domains
+  /v1/projects/{projectName}/dm/amt/admin/domains/{profileName}:
+    delete:
+      description: Removes the specific domain configuration profile
+      operationId: RemoveDomain
+      parameters:
+        - description: Name of domain profile to remove
+          in: path
+          name: profileName
+          required: true
+          schema:
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: successful operation
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: internal server error
+      summary: Remove Domain
+      tags:
+        - Domains
+    get:
+      description: Retrieves the specific domain configuration profile.
+      operationId: GetDomain
+      parameters:
+        - description: Name of domain profile to return
+          in: path
+          name: profileName
+          required: true
+          schema:
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainResponse'
+          description: successful operation
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+          description: internal server error
+      summary: Get Domain
+      tags:
+        - Domains
+  /v1/projects/{projectName}/dm/amt/generalSettings/{guid}:
+    get:
+      description: Retrieve the Intel® AMT general settings.
+      parameters:
+        - description: GUID of device
+          example: 123e4567-e89b-12d3-a456-426614174000
+          in: path
+          name: guid
+          required: true
+          schema:
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralSettingsResponse'
+          description: Successful operation
+      summary: Return Intel® AMT General Settings
+      tags:
+        - AMT
+  /v1/projects/{projectName}/dm/devices/{guid}:
+    delete:
+      description: Removes the device with a specific GUID and all device information from the database.  This will prevent the device from connecting to MPS, even if the device has not yet been unprovisioned.  Use the disconnect API after this call to remove a device and prevent it from reconnecting to the MPS.
+      parameters:
+        - description: GUID of device to return
+          example: 123e4567-e89b-12d3-a456-426614174000
+          in: path
+          name: guid
+          required: true
+          schema:
+            type: string
+        - description: 'Delete device information from both the Database **AND Secret Storage**. Caution: This will delete the stored device passwords in Secret Storage.'
+          example: isSecretToBeDeleted=true
+          in: query
+          name: isSecretToBeDeleted
+          schema:
+            type: boolean
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+          description: Successful operation
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteErrorResponse'
+          description: Device does not exist
+        "500":
+          description: Internal server error
+      summary: Delete Device Information
+      tags:
+        - Devices
+    get:
+      description: Retrieves the device with a specific GUID and all device information from the database.
+      parameters:
+        - description: GUID of device to return
+          example: 123e4567-e89b-12d3-a456-426614174000
+          in: path
+          name: guid
+          required: true
+          schema:
+            type: string
+        - description: unique projectName for the resource
+          in: path
+          name: projectName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+          description: Successful operation
+        "400":
+          description: Error in request.  A list of errors will be returned
+        "404":
+          description: Device does not exist
+        "500":
+          description: Internal server error
+      summary: Find Device by GUID
+      tags:
+        - Devices
   /v1/projects/{projectName}/metadata:
     delete:
       description: Delete deletes the specified metadata, returning the newly updated set.
@@ -2380,7 +7479,6 @@ paths:
         schema:
           type: string
 security:
-  - HTTP: []
   - BearerAuth: []
 servers:
   - url: '{apiRoot}'
@@ -2388,11 +7486,3 @@ servers:
       apiRoot:
         default: https://<multitenancy-gateway-host>
 tags:
-  - description: Operations related to managing clusters
-    name: Clusters
-  - description: Operations related to managing kubeconfig files of created clusters
-    name: Kubeconfigs
-  - description: Operations related to managing cluster templates
-    name: Cluster Templates
-  - description: Operations related to checking the health status of the CM REST API
-    name: Health Check
