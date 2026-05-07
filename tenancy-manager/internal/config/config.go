@@ -5,7 +5,6 @@
 package config
 
 import (
-	"fmt"
 	"net/url"
 	"os"
 	"time"
@@ -118,8 +117,16 @@ func databaseURLFromEnv() string {
 	if sslmode == "" {
 		sslmode = "disable"
 	}
-	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s",
-		user, password, host, port, dbName, sslmode)
+	u := &url.URL{
+		Scheme: "postgres",
+		User:   url.UserPassword(user, password),
+		Host:   host + ":" + port,
+		Path:   "/" + dbName,
+	}
+	q := u.Query()
+	q.Set("sslmode", sslmode)
+	u.RawQuery = q.Encode()
+	return u.String()
 }
 
 // RedactedDatabaseURL returns the database URL with the password replaced by
