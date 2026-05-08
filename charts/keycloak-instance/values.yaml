@@ -1543,6 +1543,7 @@ argo:
 m2mSecretsExtractor:
   # Enable/disable the M2M secrets extractor job
   enabled: true
+  keycloak_url: http://platform-keycloak.${KEYCLOAK_NAMESPACE}.svc.cluster.local:8080
   # List of M2M client IDs to extract secrets for
   clients:
     - alerts-m2m-client
