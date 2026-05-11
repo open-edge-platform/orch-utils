@@ -82,6 +82,9 @@ spec:
               - key: edge-node-installer.sh
                 path: edge-node-installer.sh
                 mode: 0755
+              - key: edge-node-uninstaller.sh
+                path: edge-node-uninstaller.sh
+                mode: 0755
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

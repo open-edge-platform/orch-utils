@@ -1,0 +1,23 @@
+---
+# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+apiVersion: apimappingconfig.edge-orchestrator.intel.com/v1
+kind: APIMappingConfig
+metadata:
+  name: amc-opendmt-rps-openapi
+  labels:
+    configs.config.edge-orchestrator.intel.com: default
+spec:
+  specGenEnabled: true
+  downloadConf:
+    version: "2.22.0"
+    url: "https://api.swaggerhub.com/apis/rbheopenamt/rps/2.22.0/swagger.yaml"
+  backend:
+    service: "rps.orch-infra.svc.cluster.local"
+    port: 8081  # https://github.com/device-management-toolkit/rps/
+  mappings:
+    - externalURI: /v1/projects/{projectName}/dm/amt/admin/domains
+      serviceURI: api/v1/admin/domains
+    - externalURI: /v1/projects/{projectName}/dm/amt/admin/domains/{profileName}
+      serviceURI: api/v1/admin/domains/{profileName}
