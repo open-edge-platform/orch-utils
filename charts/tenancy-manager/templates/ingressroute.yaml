@@ -20,6 +20,9 @@ spec:
   routes:
     - match: {{ .Values.ingress.pathMatch | quote }}
       kind: Rule
+      {{- if .Values.ingress.priority }}
+      priority: {{ .Values.ingress.priority }}
+      {{- end }}
       services:
         - name: {{ include "iam.fullname" . }}
           port: {{ .Values.service.port }}
@@ -27,4 +30,8 @@ spec:
       middlewares:
         {{- toYaml .Values.ingress.middlewares | nindent 8 }}
       {{- end }}
+  {{- with .Values.ingress.tls }}
+  tls:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 {{- end }}
