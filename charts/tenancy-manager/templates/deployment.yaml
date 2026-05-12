@@ -47,30 +47,18 @@ spec:
         - |
           set -e
           echo "Waiting for PostgreSQL to be ready..."
-          {{- if .Values.postgresql.existingSecret }}
-          export PGPASSWORD=$(cat /secrets/{{ .Values.postgresql.existingSecretPasswordKey }})
-          {{- else }}
           export PGPASSWORD="${POSTGRESQL_PASSWORD}"
-          {{- end }}
           until pg_isready -h {{ .Values.global.postgresql.host | default .Values.postgresql.host }} -p {{ .Values.postgresql.port }} -U {{ .Values.postgresql.username }}; do
             echo "PostgreSQL not ready, waiting..."
             sleep 2
           done
           echo "PostgreSQL is ready"
         env:
-        {{- if not .Values.postgresql.existingSecret }}
         - name: POSTGRESQL_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ .Values.postgresql.existingSecret | default "postgresql" }}
               key: {{ .Values.postgresql.existingSecretPasswordKey }}
-        {{- end }}
-        {{- if .Values.postgresql.existingSecret }}
-        volumeMounts:
-        - name: postgres-secret
-          mountPath: /secrets
-          readOnly: true
-        {{- end }}
       {{- end }}
       containers:
       - name: {{ include "iam.fullname" . }}
@@ -141,9 +129,4 @@ spec:
       - name: config-volume
         configMap:
           name: tenancy-config
-      {{- if .Values.postgresql.existingSecret }}
-      - name: postgres-secret
-        secret:
-          secretName: {{ .Values.postgresql.existingSecret }}
-      {{- end }}
       restartPolicy: Always
