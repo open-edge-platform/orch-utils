@@ -36,6 +36,7 @@ connectCSPsAppOrch:
 clusterOrchNodeMatchHost: "cluster-orch-node.domain"
 logsNodeMatchHost: "logs-node.domain"
 metricsNodeMatchHost: "metrics-node.domain"
+metricsNodeCliMatchHost: "metrics-node-cli.domain"
 giteaMatchHost: "gitea.domain"
 # Connection limit for raw tcp port
 tcpLimit:
