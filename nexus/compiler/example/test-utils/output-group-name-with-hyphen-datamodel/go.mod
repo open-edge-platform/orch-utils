@@ -4,7 +4,7 @@
 
 module nexustempmodule
 
-go 1.26.1
+go 1.26.3
 
 require (
 	github.com/vmware-tanzu/graph-framework-for-microservices/common-library v0.0.0-20221028160844-d70f863bc31b

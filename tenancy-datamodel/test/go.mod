@@ -4,7 +4,7 @@
 
 module tenancy-test-app
 
-go 1.26.1
+go 1.26.3
 
 replace github.com/open-edge-platform/orch-utils/tenancy-datamodel => ../
 

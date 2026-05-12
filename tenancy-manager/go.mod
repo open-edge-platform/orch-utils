@@ -4,7 +4,7 @@
 
 module github.com/open-edge-platform/orch-utils/tenancy-manager
 
-go 1.26.1
+go 1.26.3
 
 require (
 	entgo.io/ent v0.14.6

@@ -4,7 +4,7 @@
 
 module github.com/vmware-tanzu/graph-framework-for-microservices/compiler/example/tests/custom_query_grpc_server
 
-go 1.26.1
+go 1.26.3
 
 require (
 	github.com/vmware-tanzu/graph-framework-for-microservices/nexus v0.0.0-20231031085545-baa1f0ece453
