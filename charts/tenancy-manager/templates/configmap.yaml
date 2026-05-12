@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-FileCopyrightText: 2026 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
 ---
@@ -8,7 +8,20 @@ metadata:
   name: tenancy-config
 data:
   config.yaml: |
-    OrgCreateTimeoutInSecs: 300
-    OrgDeleteTimeoutInSecs: 300
-    ProjectCreateTimeoutInSecs: 300
-    ProjectDeleteTimeoutInSecs: 300
+    listen_addr: ":8080"
+    event_retention: {{ .Values.config.eventRetention | default "168h" }}
+    cleanup_interval: {{ .Values.config.cleanupInterval | default "1m" }}
+    default_org_name: {{ .Values.config.defaultOrgName | default "" | quote }}
+    default_project_name: {{ .Values.config.defaultProjectName | default "" | quote }}
+    {{- if .Values.config.oidcServerURL }}
+    oidc_server_url: {{ .Values.config.oidcServerURL | quote }}
+    {{- end }}
+    controllers:
+      org:
+      {{- range .Values.config.controllers.org }}
+        - {{ . | quote }}
+      {{- end }}
+      project:
+      {{- range .Values.config.controllers.project }}
+        - {{ . | quote }}
+      {{- end }}

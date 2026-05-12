@@ -1,5 +1,4 @@
-// Copyright (C) 2025 Intel Corporation
-// SPDX-FileCopyrightText: 2025 Intel Corporation
+// SPDX-FileCopyrightText: 2026 Intel Corporation
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -62,15 +61,15 @@ func main() {
 		log.Infof("KTC stress test complete. Application will continue as normal...")
 	}
 
-	tdmclient := tdmclient.NewMTClient(common.AppName, kcClient)
-	if err := tdmclient.Init(); err != nil {
+	client := tdmclient.NewMTClient(common.AppName, kcClient)
+	if err := client.Init(); err != nil {
 		log.Errorf("Error initialising TDM Client: %v", err)
 		panic("Error initialising TDM Client")
 	}
 
 	<-done
 	log.Infof("Shutting down")
-	tdmclient.Stop()
+	client.Stop()
 }
 
 func stressKtc(client keycloak.Client, numCreates int) {

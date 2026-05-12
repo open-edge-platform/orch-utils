@@ -2,10 +2,6 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 ---
-{{- $registry := .Values.global.registry -}}
-{{ if .Values.image.registry }}
-  {{- $registry = .Values.image.registry -}}
-{{ end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -36,21 +32,6 @@ spec:
         value: api
       {{- end }}
       serviceAccountName: {{ include "iam.serviceAccountName" . }}
-      initContainers:
-      - name: wait-for-job
-        image: alpine/kubectl:1.35.2
-        securityContext:
-          {{- toYaml .Values.securityContext | nindent 12 }}
-        command: ["/bin/sh", "-c"]
-        args:
-        - |
-          set -e
-          echo "admin.nexus.com CRD is available, waiting for CR..."
-          echo "Waiting for CRD 'orgs.org.edge-orchestrator.intel.com' to be available..."
-          until kubectl get orgs.org.edge-orchestrator.intel.com; do
-            echo "edge-orchestrator.intel.com CRD not found, waiting..."
-            sleep 10
-          done
       containers:
       - name: {{ include "iam.fullname" . }}
         securityContext:
@@ -61,17 +42,41 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
         command:
         - /usr/local/bin/tenancy-manager
-        - -serviceaccount
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        {{- if .Values.postgres }}
+        {{- if .Values.postgres.secrets }}
+        envFrom:
+        - secretRef:
+            name: {{ .Values.postgres.secrets }}
+        {{- end }}
+        {{- end }}
         env:
         - name: LOG_LEVEL
           value: {{ .Values.logging.level }}
-        - name: NEXUS_LOG_LEVEL
-          value: {{ .Values.logging.level }}
+        {{- with .Values.extraEnv }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
         volumeMounts:
-        - name: config-volume
+        - name: config
           mountPath: /etc/config
+          readOnly: true
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 10
       volumes:
-      - name: config-volume
+      - name: config
         configMap:
           name: tenancy-config
       restartPolicy: Always
