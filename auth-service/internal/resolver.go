@@ -14,8 +14,8 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/lestrrat-go/jwx/v2/jws"
 	"github.com/lestrrat-go/jwx/v2/jwk"
+	"github.com/lestrrat-go/jwx/v2/jws"
 	"github.com/lestrrat-go/jwx/v2/jwt"
 )
 
@@ -34,6 +34,8 @@ var (
 //  4. Returns 200 with Activeprojectid / ActiveProjectID response headers.
 //     Traefik's authResponseHeaders config copies these into the upstream request
 //     so cluster-manager, alerting-monitor, and metadata-broker receive the UUID.
+//     NOTE: both casings are intentional — cluster-manager's OpenAPI spec defines
+//     the header as Activeprojectid and orch-library middleware uses ActiveProjectID.
 func NewProjectResolverHandler(keyset jwk.Set, tenancyManagerURL string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// 1. Validate JWT.
@@ -73,8 +75,10 @@ func NewProjectResolverHandler(keyset jwk.Set, tenancyManagerURL string) http.Ha
 			return
 		}
 
-		// 4. Return UUID in response headers. Traefik copies authResponseHeaders
-		//    (Activeprojectid, ActiveProjectID) into the upstream request.
+		// 4. Return UUID in both header casings. Traefik copies authResponseHeaders
+		//    into the upstream request. Activeprojectid is required by cluster-manager
+		//    (defined in its OpenAPI spec) and ActiveProjectID is used by services
+		//    that consume the orch-library projectcontext middleware.
 		w.Header().Set("Activeprojectid", projectUUID)
 		w.Header().Set("ActiveProjectID", projectUUID)
 		w.WriteHeader(http.StatusOK)

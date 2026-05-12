@@ -726,6 +726,8 @@ spec:
 # name found in X-Forwarded-Uri to its UUID, returning Activeprojectid /
 # ActiveProjectID response headers. Traefik copies those headers into the
 # upstream request via authResponseHeaders so downstream services receive the UUID.
+# NOTE: both names are intentional — cluster-manager's OpenAPI spec defines the
+# header as "Activeprojectid" and orch-library middleware uses "ActiveProjectID".
 # NOTE: this middleware must appear BEFORE any path-rewriting middlewares in each
 # IngressRoute so that X-Forwarded-Uri still contains the project name when the
 # ForwardAuth call is made.
