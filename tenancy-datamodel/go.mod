@@ -4,7 +4,7 @@
 
 module github.com/open-edge-platform/orch-utils/tenancy-datamodel
 
-go 1.26.1
+go 1.26.3
 
 require (
 	github.com/elliotchance/orderedmap v1.8.0

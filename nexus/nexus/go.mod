@@ -4,7 +4,7 @@
 
 module github.com/open-edge-platform/orch-utils/nexus/nexus
 
-go 1.26.1
+go 1.26.3
 
 require (
 	github.com/golang/mock v1.6.0

@@ -6,6 +6,6 @@ apiVersion: v2
 name: tenancy-datamodel
 description: Tenancy Datamodel
 type: application
-version: 26.1.0
-appVersion: "26.1.0"
+version: 26.1.1
+appVersion: "26.1.1"
 annotations: {}
