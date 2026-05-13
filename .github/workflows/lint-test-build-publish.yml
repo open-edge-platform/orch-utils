@@ -325,7 +325,6 @@ jobs:
             squidProxy,
             tokenFS,
             tenancyManager,
-            tenancyDatamodel,
             nexusAPIGateway,
             keycloakTenantController,
             nexusCompiler,

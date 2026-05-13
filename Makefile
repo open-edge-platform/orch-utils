@@ -54,9 +54,6 @@ docker-build-secrets-config:
 docker-build-squid-proxy:
 	mage build:squidProxy
 
-docker-build-tenancy-datamodel:
-	mage build:tenancyDatamodel
-
 docker-build-tenancy-manager:
 	mage build:tenancyManager
 

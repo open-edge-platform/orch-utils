@@ -892,23 +892,6 @@ updates:
       default-days: 7
 
   - package-ecosystem: "helm"
-    directory: "/charts/tenancy-datamodel"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "Helm charts"
-    reviewers:
-      - "dmytroye"
-    cooldown:
-      default-days: 7
-
-  - package-ecosystem: "helm"
     directory: "/charts/kyverno-istio-policy"
     ignore:
       - dependency-name: "*"
@@ -1421,23 +1404,6 @@ updates:
 
   - package-ecosystem: "docker"
     directory: "/tenancy-manager"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "Dockerfile"
-    reviewers:
-      - "dmytroye"
-    cooldown:
-      default-days: 7
-
-  - package-ecosystem: "docker"
-    directory: "/tenancy-datamodel"
     ignore:
       - dependency-name: "*"
         update-types:

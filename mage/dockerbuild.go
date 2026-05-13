@@ -290,45 +290,6 @@ func datamodelCompilerBuild() error {
 	return runCommand(cmdCompilerBuild)
 }
 
-// Builds the Tenancy Datamodel container image.
-func tenancyDatamodelBuild() error {
-	projectDir := "tenancy-datamodel"
-	nexusFile := "nexus.yaml"
-	baseImage := "alpine/kubectl:1.35.2"
-
-	nexusConf := struct {
-		GroupName string `yaml:"groupName"`
-	}{}
-
-	yamlFile, err := os.ReadFile(filepath.Join(projectDir, nexusFile))
-	if err != nil {
-		return err
-	}
-
-	if err := yaml.Unmarshal(yamlFile, &nexusConf); err != nil {
-		return err
-	}
-
-	appVersion, err := getChartAppVersion(projectDir)
-	if err != nil {
-		return err
-	}
-
-	return sh.RunV(
-		"docker",
-		"build",
-		"--load",
-		"--build-arg", "DOCKER_BASE_IMAGE="+baseImage,
-		"--build-arg", "IMAGE_NAME="+OpenEdgePlatformContainerRegistry+"/tenancy-datamodel:"+appVersion,
-		"--build-arg", "NAME="+nexusConf.GroupName,
-		"--tag", OpenEdgePlatformContainerRegistry+"/tenancy-datamodel:"+appVersion,
-		"--file", filepath.Join(projectDir, "Dockerfile"),
-		projectDir,
-	)
-}
-
-// Builds the Tenancy API Mapping container image.
-
 // Builds the Tenancy Manager container image.
 func tenancyManagerBuild() error {
 	// some errors below are deliberately ignored to suppress “file already/doesn’t” exist errors
@@ -416,7 +377,6 @@ func listTaggedContainers() error {
 		"nexus-api-gw",
 		"secrets-config",
 		"squid-proxy",
-		"tenancy-datamodel",
 		"tenancy-manager",
 		"token-fs",
 	}

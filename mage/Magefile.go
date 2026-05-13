@@ -161,11 +161,6 @@ func (Build) NexusCompiler() error {
 	return datamodelCompilerBuild()
 }
 
-// Builds the Tenancy Datamodel container image.
-func (Build) TenancyDatamodel() error {
-	return tenancyDatamodelBuild()
-}
-
 // Builds the Tenancy Manager container image.
 func (Build) TenancyManager() error {
 	return tenancyManagerBuild()
@@ -241,11 +236,6 @@ func (Push) PublicCharts() error {
 // Push the Nexus compiler container image to the registry.
 func (Push) NexusCompiler() error {
 	return pushNexusCompilerImage()
-}
-
-// Push the Tenancy Datamodel container image to the registry.
-func (Push) TenancyDatamodel() error {
-	return pushImage("tenancy-datamodel", "tenancy-datamodel")
 }
 
 // Push the Tenancy Manager container image to the registry.
