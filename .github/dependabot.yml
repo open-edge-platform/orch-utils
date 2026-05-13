@@ -20,6 +20,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/tenancy-api-mapping"
@@ -35,6 +37,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/traefik-plugins/jwt-plugin"
@@ -50,6 +54,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/auth-service"
@@ -65,6 +71,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/gqlgen"
@@ -80,6 +88,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/openapi-generator"
@@ -95,6 +105,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/install-validator"
@@ -110,6 +122,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/compiler"
@@ -125,6 +139,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/compiler/example/test-utils/invalid-singleton-child"
@@ -140,6 +156,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/compiler/example/test-utils/global-package"
@@ -155,6 +173,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/compiler/example/test-utils/pointer-type-datamodel"
@@ -170,6 +190,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/compiler/example/test-utils/duplicated-uris-datamodel"
@@ -185,6 +207,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/compiler/example/test-utils/invalid-type-name-datamodel"
@@ -200,6 +224,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/compiler/example/test-utils/group-name-with-hyphen-datamodel"
@@ -215,6 +241,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/compiler/example/test-utils/map-type-child"
@@ -230,6 +258,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/compiler/example/test-utils/output-group-name-with-hyphen-datamodel"
@@ -245,6 +275,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/compiler/example/test-utils/array-type-child"
@@ -260,6 +292,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/compiler/example/test-utils/invalid-pkg-name-datamodel"
@@ -275,6 +309,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/compiler/example/test-utils/nexus-rest-api-gen-wrong-name"
@@ -290,6 +326,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/compiler/example/test-utils/non-singleton-root"
@@ -305,6 +343,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/compiler/example/output/generated"
@@ -320,6 +360,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/compiler/example/output/generated/nexus-gql"
@@ -335,6 +377,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/compiler/example/tests"
@@ -350,6 +394,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/compiler/example/tests/custom_query_grpc_server"
@@ -365,6 +411,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/compiler/example/datamodel/build/nexus-gql"
@@ -380,6 +428,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/compiler/example/datamodel"
@@ -395,6 +445,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/common-library"
@@ -410,6 +462,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/nexus"
@@ -425,6 +479,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus/kube-openapi"
@@ -440,6 +496,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/nexus-api-gw"
@@ -455,6 +513,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/cert-synchronizer"
@@ -470,6 +530,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/keycloak-tenant-controller"
@@ -485,6 +547,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/tenancy-manager"
@@ -500,6 +564,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/tenancy-datamodel/test"
@@ -515,6 +581,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/tenancy-datamodel"
@@ -530,6 +598,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   # Helm charts - separate block for each directory
   - package-ecosystem: "helm"
@@ -546,6 +616,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/kyverno-traefik-policy"
@@ -561,6 +633,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/traefik-pre"
@@ -576,6 +650,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/token-refresh"
@@ -591,6 +667,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/job-wait"
@@ -606,6 +684,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/statefulset-wait"
@@ -621,6 +701,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/postgresql-secrets"
@@ -636,6 +718,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/kyverno-extra-policies"
@@ -651,6 +735,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/rs-proxy"
@@ -666,6 +752,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/rs-image-pull-secrets"
@@ -681,6 +769,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/auth-service"
@@ -696,6 +786,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/secret-wait"
@@ -711,6 +803,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/aws-sm-proxy"
@@ -726,6 +820,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/certificate-file-server"
@@ -741,6 +837,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/namespace-label"
@@ -756,6 +854,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/tenancy-api-mapping"
@@ -771,6 +871,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/fleet-rs-secret"
@@ -786,6 +888,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/aws-lb-tgb"
@@ -801,6 +905,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/self-signed-cert"
@@ -816,6 +922,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/tenancy-datamodel"
@@ -831,6 +939,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/kyverno-istio-policy"
@@ -846,6 +956,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/nexus-api-gw"
@@ -861,6 +973,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/k8s-metrics-server"
@@ -876,6 +990,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/metallb-config"
@@ -891,6 +1007,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/platform-autocert"
@@ -906,6 +1024,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/capi-operator-pre"
@@ -921,6 +1041,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/adm-secret"
@@ -936,6 +1058,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/aws-sm-get-rs-token"
@@ -951,6 +1075,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/vertical-pod-autoscaler"
@@ -966,6 +1092,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/cert-synchronizer"
@@ -981,6 +1109,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/nginx-ingress-pxe-boots"
@@ -996,6 +1126,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/keycloak-tenant-controller"
@@ -1011,6 +1143,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/istio-policy"
@@ -1026,6 +1160,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/token-file-server"
@@ -1041,6 +1177,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/tenancy-manager"
@@ -1056,6 +1194,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/traefik-extra-objects"
@@ -1071,6 +1211,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/deployment-wait"
@@ -1086,6 +1228,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/copy-secret"
@@ -1101,6 +1245,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/squid-proxy"
@@ -1116,6 +1262,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/oci-secret"
@@ -1131,6 +1279,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   # Docker - separate block for each directory
   - package-ecosystem: "docker"
@@ -1147,6 +1297,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/auth-service"
@@ -1162,6 +1314,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/aws-sm-proxy"
@@ -1177,6 +1331,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/nexus/openapi-generator"
@@ -1192,6 +1348,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/nexus/compiler/builder"
@@ -1207,6 +1365,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/nexus/compiler"
@@ -1222,6 +1382,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/token-fs"
@@ -1237,6 +1399,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/nexus-api-gw"
@@ -1252,6 +1416,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/secrets"
@@ -1267,6 +1433,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/cert-synchronizer"
@@ -1282,6 +1450,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/keycloak-tenant-controller/images"
@@ -1297,6 +1467,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/tenancy-manager"
@@ -1312,6 +1484,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/tenancy-datamodel"
@@ -1327,6 +1501,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/squid-proxy"
@@ -1342,6 +1518,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
@@ -1358,3 +1536,5 @@ updates:
       prefix: "Github Actions"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
