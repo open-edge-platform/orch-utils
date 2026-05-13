@@ -6,6 +6,6 @@ apiVersion: v2
 name: tenancy-manager
 description: Multi Tenancy Manager
 type: application
-version: 26.1.1
-appVersion: "26.1.1"
+version: 26.1.2
+appVersion: "26.1.2"
 annotations: {}
