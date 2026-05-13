@@ -166,16 +166,6 @@ func (Build) TenancyDatamodel() error {
 	return tenancyDatamodelBuild()
 }
 
-// Builds the Tenancy API Mapping container image.
-func (Build) TenancyAPIMapping() error {
-	return tenancyAPIMappingBuild()
-}
-
-// Builds the Tenancy API Mapping container image.
-func (Build) TenancyInit() error {
-	return tenancyInitBuild()
-}
-
 // Builds the Tenancy Manager container image.
 func (Build) TenancyManager() error {
 	return tenancyManagerBuild()
@@ -256,16 +246,6 @@ func (Push) NexusCompiler() error {
 // Push the Tenancy Datamodel container image to the registry.
 func (Push) TenancyDatamodel() error {
 	return pushImage("tenancy-datamodel", "tenancy-datamodel")
-}
-
-// Push the Tenancy API Mapping container image to the registry.
-func (Push) TenancyAPIMapping() error {
-	return pushImage("tenancy-api-mapping", "tenancy-api-mapping")
-}
-
-// Push the Tenancy API Mapping container image to the registry.
-func (Push) TenancyInit() error {
-	return pushImage("tenancy-init", "tenancy-init")
 }
 
 // Push the Tenancy Manager container image to the registry.

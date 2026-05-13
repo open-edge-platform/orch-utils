@@ -703,12 +703,12 @@ spec:
   forwardAuth:
     address: {{ required "A valid forwardAuth address!" .Values.authServiceForwardAddress }}
 ---
-{{- if and .Values.nexusReplacement .Values.nexusReplacement.enabled }}
-# ─── nexus-replacement: project-prefix routing ────────────────────────────────
+# ─── tenancy v2: project-prefix routing ──────────────────────────────────────
 # These resources replace the routing that the Nexus API gateway previously
 # provided for cluster-manager and alerting-monitor. Traefik strips the project
 # name from the URL path and injects the project UUID as the Activeprojectid /
 # ActiveProjectID headers expected by the downstream services.
+
 #
 # strip-project-prefix: /v{N}/projects/{name}/foo → /v{N}/foo
 apiVersion: {{ .Values.traefikApiGroup }}
@@ -947,5 +947,4 @@ spec:
       name: {{ .Values.tlsOption }}
       namespace: orch-gateway
     {{- end }}
----
-{{- end }}
+

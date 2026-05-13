@@ -54,12 +54,6 @@ docker-build-secrets-config:
 docker-build-squid-proxy:
 	mage build:squidProxy
 
-docker-build-tenancy-api-mapping:
-	mage build:tenancyAPIMapping
-
-docker-build-tenancy-init:
-	mage build:tenancyInit
-
 docker-build-tenancy-datamodel:
 	mage build:tenancyDatamodel
 
@@ -78,7 +72,6 @@ ginkgo: ## Run all ginkgo tests in sub-projects
 	make -C nexus               ginkgo
 	make -C secrets             ginkgo
 	cd tenancy-manager && mage test:unit
-	# make -C tenancy-api-mapping ginkgo  # needs to be fixed
 
 #### Help Target ####
 help: ## print help for each target

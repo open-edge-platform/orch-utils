@@ -68,13 +68,9 @@ keycloakProxyHeaders: {}
 # X-Forwarded-Host: keycloak.example.com
 # X-Forwarded-Port: "443"
 
-# API host for nexus-replacement routing (cluster-manager, alerting-monitor, etc.)
+# API host for tenancy v2 routing (cluster-manager, alerting-monitor, etc.)
 # Set to "api.<clusterDomain>" in the EMF custom template.
 apiMatchHost: "api.domain"
 
-# nexus-replacement: IngressRoutes for services that previously relied on the
-# Nexus API gateway to strip the project prefix and inject the Activeprojectid
-# header. These routes are disabled by default and enabled only in deployments
-# that use the nexus-replacement architecture.
-nexusReplacement:
-  enabled: false
+# Tenancy v2: project-prefix routing IngressRoutes are always rendered.
+# (Replaced the legacy nexusReplacement.enabled toggle.)

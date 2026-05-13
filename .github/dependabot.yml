@@ -22,21 +22,6 @@ updates:
       - "dmytroye"
 
   - package-ecosystem: "gomod"
-    directory: "/tenancy-api-mapping"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
     directory: "/traefik-plugins/jwt-plugin"
     ignore:
       - dependency-name: "*"
@@ -758,21 +743,6 @@ updates:
       - "dmytroye"
 
   - package-ecosystem: "helm"
-    directory: "/charts/tenancy-api-mapping"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "Helm charts"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "helm"
     directory: "/charts/fleet-rs-secret"
     ignore:
       - dependency-name: "*"
@@ -1133,21 +1103,6 @@ updates:
       - "dmytroye"
 
   # Docker - separate block for each directory
-  - package-ecosystem: "docker"
-    directory: "/tenancy-api-mapping"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "Dockerfile"
-    reviewers:
-      - "dmytroye"
-
   - package-ecosystem: "docker"
     directory: "/auth-service"
     ignore:
