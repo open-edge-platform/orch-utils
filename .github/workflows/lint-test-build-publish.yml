@@ -324,8 +324,6 @@ jobs:
             secretsConfig,
             squidProxy,
             tokenFS,
-            tenancyAPIMapping,
-            tenancyInit,
             tenancyManager,
             tenancyDatamodel,
             nexusAPIGateway,
