@@ -904,6 +904,53 @@ spec:
       namespace: orch-gateway
     {{- end }}
 ---
+# rewrite-mps-oob: /v1/projects/{name}/oob/(.*)  →  /api/v1/$1
+# Strips the /v1/projects/{name}/oob/ prefix before forwarding to mps.
+# Handles MPS out-of-band endpoints used during KVM/SOL session setup:
+#   /v1/projects/{name}/oob/amt/userConsentCode/{guid}
+#   /v1/projects/{name}/oob/authorize/redirection/{guid}
+apiVersion: {{ .Values.traefikApiGroup }}
+kind: Middleware
+metadata:
+  name: rewrite-mps-oob
+  namespace: orch-gateway
+spec:
+  replacePathRegex:
+    regex: "^/v1/projects/[^/]+/oob/(.*)"
+    replacement: "/api/v1/$1"
+---
+# mps-oob IngressRoute: /v1/projects/{name}/oob/*
+# Used by orch-cli `set host --session-type kvm|sol` to obtain user consent
+# code and a relay (redirect) token from MPS for KVM/SOL session start.
+apiVersion: {{ .Values.traefikApiGroup }}
+kind: IngressRoute
+metadata:
+  name: mps-oob-http
+  namespace: orch-gateway
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: {{ required "A valid apiMatchHost entry required!" .Values.apiMatchHost }} && PathRegexp(`^/v1/projects/[^/]+/oob/`)
+      priority: 50
+      middlewares:
+        - name: validate-jwt
+        - name: rewrite-mps-oob
+        - name: secure-headers
+      services:
+        - kind: Service
+          name: mps
+          namespace: orch-infra
+          port: 3000
+  tls:
+    secretName: {{ required "A valid orchSecretName entry required!" .Values.orchSecretName }}
+    {{- if .Values.tlsOption }}
+    options:
+      name: {{ .Values.tlsOption }}
+      namespace: orch-gateway
+    {{- end }}
+---
 # rewrite-rps: /v1/projects/{name}/dm/amt/(.*)  →  /api/v1/$1
 apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
