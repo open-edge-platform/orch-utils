@@ -121,6 +121,34 @@ spec:
         - name: INTERNAL_AUTH_TOKEN
           value: {{ .Values.tenancyManager.internalAuthToken | quote }}
         {{- end }}
+        # Tenant-admin bootstrap (Keycloak user + group membership for the
+        # default org/project, see internal/bootstrap).
+        {{- if and .Values.tenancyManager.bootstrapTenantAdmin .Values.tenancyManager.bootstrapTenantAdmin.enabled }}
+        - name: BOOTSTRAP_TENANT_ADMIN_ENABLED
+          value: "true"
+        - name: KEYCLOAK_SERVICE
+          value: {{ .Values.tenancyManager.bootstrapTenantAdmin.keycloakService | quote }}
+        - name: KEYCLOAK_NAMESPACE
+          value: {{ .Values.tenancyManager.bootstrapTenantAdmin.keycloakNamespace | quote }}
+        - name: KEYCLOAK_PORT
+          value: {{ .Values.tenancyManager.bootstrapTenantAdmin.keycloakPort | quote }}
+        - name: KEYCLOAK_REALM
+          value: {{ .Values.tenancyManager.bootstrapTenantAdmin.keycloakRealm | quote }}
+        - name: KEYCLOAK_ADMIN_USER
+          value: {{ .Values.tenancyManager.bootstrapTenantAdmin.keycloakAdminUser | quote }}
+        - name: TENANT_ADMIN_USER
+          value: {{ .Values.tenancyManager.bootstrapTenantAdmin.tenantAdminUser | quote }}
+        - name: TENANT_ADMIN_SECRET_NAME
+          value: {{ .Values.tenancyManager.bootstrapTenantAdmin.secretName | quote }}
+        {{- if .Values.tenancyManager.bootstrapTenantAdmin.secretNamespace }}
+        - name: TENANT_ADMIN_SECRET_NAMESPACE
+          value: {{ .Values.tenancyManager.bootstrapTenantAdmin.secretNamespace | quote }}
+        {{- end }}
+        - name: PROJECT_ADMIN_GROUPS
+          value: {{ .Values.tenancyManager.bootstrapTenantAdmin.projectAdminGroups | quote }}
+        - name: PROJECT_EDGE_GROUPS
+          value: {{ .Values.tenancyManager.bootstrapTenantAdmin.projectEdgeGroups | quote }}
+        {{- end }}
         volumeMounts:
         - name: config-volume
           mountPath: /etc/config

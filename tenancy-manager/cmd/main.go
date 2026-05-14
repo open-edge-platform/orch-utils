@@ -17,6 +17,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/api"
+	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/bootstrap"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/config"
 	"github.com/open-edge-platform/orch-utils/tenancy-manager/internal/store"
 )
@@ -74,6 +75,21 @@ func main() {
 	// Bootstrap default org/project.
 	if err := s.Bootstrap(ctx, cfg.DefaultOrgName, cfg.DefaultProjectName); err != nil {
 		log.Fatal().Err(err).Msg("bootstrap failed")
+	}
+
+	// Tenant-admin bootstrap (creates Keycloak user + groups for the default
+	// org/project when EMF_DEFAULT_TENANCY=true → BOOTSTRAP_TENANT_ADMIN_ENABLED=true).
+	// Runs asynchronously: it must wait for keycloak-tenant-controller to
+	// report the org/project IDLE, which can take a few minutes after first
+	// install. Failure is logged but not fatal — org/project still exist and
+	// an operator can re-trigger by restarting the pod.
+	bcfg := bootstrap.LoadConfig()
+	if bcfg.Enabled && cfg.DefaultOrgName != "" && cfg.DefaultProjectName != "" {
+		go func() {
+			if err := bootstrap.Run(ctx, s, cfg, bcfg, cfg.DefaultOrgName, cfg.DefaultProjectName); err != nil {
+				log.Error().Err(err).Msg("tenant-admin bootstrap failed (non-fatal)")
+			}
+		}()
 	}
 
 	// Initialize JWT validator (nil if OIDC not configured).

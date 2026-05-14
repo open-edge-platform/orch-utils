@@ -120,6 +120,26 @@ tenancyManager:
   defaultOrgName: ""
   defaultProjectName: ""
 
+  # Tenant-admin bootstrap. When enabled (typically driven by
+  # EMF_DEFAULT_TENANCY=true), the tenancy-manager Pod creates a Keycloak
+  # `tenant-admin` user, stores its password in a Secret, and adds the user
+  # to the org-level admin group and the project-level edge groups for the
+  # default org/project created by store.Bootstrap.
+  bootstrapTenantAdmin:
+    enabled: false
+    keycloakService: platform-keycloak
+    keycloakNamespace: orch-platform
+    keycloakPort: "8080"
+    keycloakRealm: master
+    keycloakAdminUser: admin
+    tenantAdminUser: tenant-admin
+    # Namespace where the generated password Secret is stored.
+    # Defaults to the pod's own namespace (empty string).
+    secretNamespace: ""
+    secretName: tenant-admin-password
+    projectAdminGroups: Project-Manager-Group
+    projectEdgeGroups: Edge-Manager-Group,Edge-Onboarding-Group,Edge-Operator-Group,Host-Manager-Group
+
   # OIDC configuration for JWT validation
   oidcServerURL: ""
 
