@@ -112,6 +112,7 @@ spec:
     customResponseHeaders:
       X-Content-Type-Options: nosniff
       X-Frame-Options: DENY
+{{- if .Values.routes.harbor.enabled }}
 ---
 apiVersion: {{ .Values.traefikApiGroup }}
 kind: IngressRoute
@@ -147,6 +148,7 @@ spec:
       name: {{ .Values.tlsOption }}
       namespace: orch-gateway
 {{- end }}
+{{- end }}
 ---
 apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
@@ -157,6 +159,7 @@ spec:
   stripPrefix:
     prefixes:
       - /api
+{{- if .Values.routes.observability.enabled }}
 ---
 apiVersion: {{ .Values.traefikApiGroup }}
 kind: IngressRoute
@@ -225,6 +228,7 @@ spec:
   headers:
     customRequestHeaders:
       Host: edgenode-observability-opentelemetry-collector.orch-infra.svc
+{{- end }}
 ---
 apiVersion: {{ .Values.traefikApiGroup }}
 kind: IngressRoute
@@ -285,6 +289,7 @@ spec:
   headers:
     customRequestHeaders:
       Host: ecm-api.orch-cluster.svc
+{{- if .Values.routes.gitea.enabled }}
 ---
 apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
@@ -320,6 +325,7 @@ spec:
     options:
       name: {{ .Values.tlsOption }}
       namespace: orch-gateway
+{{- end }}
 {{- end }}
 ---
 
@@ -571,6 +577,7 @@ spec:
       X-dtHealthCheck: ""
       X-dtInjectedServlet: ""
       X-ruxit-JS-Agent: ""
+{{- if .Values.routes.observability.enabled }}
 ---
 apiVersion: {{ .Values.traefikApiGroup }}
 kind: IngressRoute
@@ -627,6 +634,8 @@ spec:
       name: {{ .Values.tlsOption }}
       namespace: orch-gateway
 {{- end }}
+{{- end }}
+{{- if .Values.routes.fleet.enabled }}
 ---
 apiVersion: {{ .Values.traefikApiGroup }}
 kind: ServersTransport
@@ -662,6 +671,7 @@ spec:
       name: {{ .Values.tlsOption }}
       namespace: orch-gateway
     {{- end }}
+{{- end }}
 ---
 apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
@@ -693,6 +703,7 @@ metadata:
 spec:
   buffering:
     maxRequestBodyBytes: {{ required "A valid RequestBodyBytesLimit entry required!" .Values.RequestBodyBytesLimit }}
+{{- if .Values.routes.observability.enabled }}
 ---
 # Forward authentication to /verifyall
 apiVersion: {{ .Values.traefikApiGroup }}
@@ -702,6 +713,7 @@ metadata:
 spec:
   forwardAuth:
     address: {{ required "A valid forwardAuth address!" .Values.authServiceForwardAddress }}
+{{- end }}
 ---
 # ─── tenancy v2: project-prefix routing ──────────────────────────────────────
 # These resources replace the routing that the Nexus API gateway previously
@@ -709,6 +721,7 @@ spec:
 # name from the URL path and injects the project UUID as the Activeprojectid /
 # ActiveProjectID headers expected by the downstream services.
 
+{{- if .Values.routes.clusterManager.enabled }}
 #
 # strip-project-prefix: /v{N}/projects/{name}/foo → /v{N}/foo
 apiVersion: {{ .Values.traefikApiGroup }}
@@ -720,17 +733,16 @@ spec:
   replacePathRegex:
     regex: "^/(v[0-9]+)/projects/[^/]+(.*)"
     replacement: "/$1$2"
+{{- end }}
+{{- if .Values.routes.alertingMonitor.enabled }}
 ---
 # resolve-project-id: ForwardAuth to auth-service /resolveproject.
 # auth-service validates the JWT and calls Tenant Manager to resolve the project
 # name found in X-Forwarded-Uri to its UUID, returning Activeprojectid /
 # ActiveProjectID response headers. Traefik copies those headers into the
 # upstream request via authResponseHeaders so downstream services receive the UUID.
-# NOTE: both names are intentional — cluster-manager's OpenAPI spec defines the
-# header as "Activeprojectid" and orch-library middleware uses "ActiveProjectID".
-# NOTE: this middleware must appear BEFORE any path-rewriting middlewares in each
-# IngressRoute so that X-Forwarded-Uri still contains the project name when the
-# ForwardAuth call is made.
+# Currently only consumed by alerting-monitor-http (cluster-manager and
+# metadata-broker self-resolve via orch-library projectcontext middleware).
 apiVersion: {{ .Values.traefikApiGroup }}
 kind: Middleware
 metadata:
@@ -753,6 +765,8 @@ spec:
   replacePathRegex:
     regex: "^/v1/projects/[^/]+/(alerts.*)"
     replacement: "/api/v1/$1"
+{{- end }}
+{{- if .Values.routes.clusterManager.enabled }}
 ---
 # cluster-manager IngressRoute: /v2/projects/{name}/clusters and /templates
 apiVersion: {{ .Values.traefikApiGroup }}
@@ -787,6 +801,8 @@ spec:
       name: {{ .Values.tlsOption }}
       namespace: orch-gateway
     {{- end }}
+{{- end }}
+{{- if .Values.routes.alertingMonitor.enabled }}
 ---
 # alerting-monitor IngressRoute: /v1/projects/{name}/alerts*
 apiVersion: {{ .Values.traefikApiGroup }}
@@ -818,6 +834,8 @@ spec:
       name: {{ .Values.tlsOption }}
       namespace: orch-gateway
     {{- end }}
+{{- end }}
+{{- if .Values.routes.metadataBroker.enabled }}
 ---
 # rewrite-metadata-broker: /v1/projects/{name}/metadata(.*)
 #                        → /metadata.orchestrator.apis/v1/metadata$1
@@ -864,6 +882,8 @@ spec:
       name: {{ .Values.tlsOption }}
       namespace: orch-gateway
     {{- end }}
+{{- end }}
+{{- if .Values.routes.amt.enabled }}
 ---
 # rewrite-mps: /v1/projects/{name}/dm/(.*)  →  /api/v1/$1
 # Strips the /v1/projects/{name}/dm/ prefix before forwarding to mps (DMT).
@@ -1001,3 +1021,4 @@ spec:
       namespace: orch-gateway
     {{- end }}
 
+{{- end }}

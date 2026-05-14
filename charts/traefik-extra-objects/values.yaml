@@ -33,6 +33,33 @@ scriptSources:
   - "https://app-service-proxy.domain"
 connectCSPsAppOrch:
   - "https://keycloak.domain"
+
+# ─── Per-route toggles ───────────────────────────────────────────────────────
+# Each toggle gates the IngressRoute(s) and Middleware(s) for one downstream
+# component. Defaults preserve historical behaviour (everything rendered).
+# EMF profiles override individual toggles to false so that IngressRoutes are
+# only created for components actually deployed by that profile.
+routes:
+  harbor:
+    enabled: true            # harbor-oci (registry-oci.* host)
+  gitea:
+    enabled: true            # ma-gitea (gitea.* host)
+  fleet:
+    enabled: true            # svc-fleet-https (fleet.* host)
+  observability:
+    enabled: true            # edgenode-observability-grafana, orch-platform-grafana,
+                             # orch-platform-logs-node, orch-platform-metrics-node,
+                             # svc-observability-* hostname middlewares,
+                             # forward-auth-service middleware (only consumed here)
+  amt:
+    enabled: true            # mps-http, mps-oob-http, rps-http + their rewrite middlewares
+  metadataBroker:
+    enabled: true            # metadata-broker-http + rewrite-metadata-broker
+  clusterManager:
+    enabled: true            # cluster-manager-http + strip-project-prefix
+  alertingMonitor:
+    enabled: true            # alerting-monitor-http + rewrite-alerting-monitor +
+                             # resolve-project-id middleware (only remaining consumer)
 clusterOrchNodeMatchHost: "cluster-orch-node.domain"
 logsNodeMatchHost: "logs-node.domain"
 metricsNodeMatchHost: "metrics-node.domain"
