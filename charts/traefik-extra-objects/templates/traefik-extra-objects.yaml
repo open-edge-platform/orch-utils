@@ -768,8 +768,11 @@ spec:
       match: {{ required "A valid apiMatchHost entry required!" .Values.apiMatchHost }} && PathRegexp(`^/v2/projects/[^/]+/(clusters|templates)`)
       priority: 50
       middlewares:
+        # resolve-project-id intentionally omitted: cluster-manager self-resolves
+        # via orch-library projectcontext.InjectActiveProjectID middleware
+        # (extracts project from JWT roles / URL path and resolves UUID via
+        # tenancy-manager). See cluster-manager PRs #458 and #491.
         - name: validate-jwt
-        - name: resolve-project-id
         - name: strip-project-prefix
         - name: secure-headers
       services:
@@ -842,8 +845,11 @@ spec:
       match: {{ required "A valid apiMatchHost entry required!" .Values.apiMatchHost }} && PathRegexp(`^/v1/projects/[^/]+/metadata`)
       priority: 50
       middlewares:
+        # resolve-project-id intentionally omitted: orch-metadata-broker self-resolves
+        # via orch-library projectcontext.InjectActiveProjectID middleware
+        # (internal/rest/rest.go) — extracts project from JWT roles and resolves
+        # UUID via tenancy-manager.
         - name: validate-jwt
-        - name: resolve-project-id
         - name: rewrite-metadata-broker
         - name: secure-headers
       services:
