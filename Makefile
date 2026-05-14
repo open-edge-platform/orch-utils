@@ -39,15 +39,6 @@ docker-build-component-status:
 docker-build-keycloak-tenant-controller:
 	mage build:keycloakTenantController
 
-docker-build-nexus-api-gw:
-	mage build:nexusAPIGateway
-
-docker-build-nexus/compiler:
-	mage build:nexusCompiler
-
-docker-build-nexus/openapi-generator:
-	mage build:openAPIGenerator
-
 docker-build-secrets-config:
 	mage build:secretsConfig
 
@@ -65,8 +56,6 @@ ginkgo: ## Run all ginkgo tests in sub-projects
 	make -C aws-sm-proxy        ginkgo
 	make -C component-status    ginkgo
 	make -C internal            ginkgo
-	make -C nexus-api-gw        ginkgo
-	make -C nexus               ginkgo
 	make -C secrets             ginkgo
 	cd tenancy-manager && mage test:unit
 

@@ -1,9 +1,0 @@
-# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
-# SPDX-License-Identifier: Apache-2.0
-
-schema:
-  - "testdata/schema.graphql"
-
-models:
-  Resolver:
-    model: github.com/99designs/invalid/invalid/invalid/nope.Resolver

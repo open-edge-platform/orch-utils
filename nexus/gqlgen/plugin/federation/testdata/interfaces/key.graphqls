@@ -1,7 +1,0 @@
-# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
-# SPDX-License-Identifier: Apache-2.0
-
-extend interface Hello @key(fields: "name") {
-    name: String!
-    secondary: String!
-}

@@ -872,8 +872,9 @@ spec:
     replacement: "/api/v1/$1"
 ---
 # mps IngressRoute: /v1/projects/{name}/dm/(amt/generalSettings|devices)*
-# resolve-project-id must appear before rewrite-mps so X-Forwarded-Uri still
-# contains the project name when the ForwardAuth call is made.
+# resolve-project-id is intentionally omitted: the upstream MPS service does not
+# enforce ActiveProjectID (tenancyMiddleware.enabled=false in mps Helm values),
+# so no auth-service ForwardAuth dependency is required.
 apiVersion: {{ .Values.traefikApiGroup }}
 kind: IngressRoute
 metadata:
@@ -888,7 +889,6 @@ spec:
       priority: 50
       middlewares:
         - name: validate-jwt
-        - name: resolve-project-id
         - name: rewrite-mps
         - name: secure-headers
       services:
@@ -916,8 +916,9 @@ spec:
     replacement: "/api/v1/$1"
 ---
 # rps IngressRoute: /v1/projects/{name}/dm/amt/admin*
-# resolve-project-id must appear before rewrite-rps so X-Forwarded-Uri still
-# contains the project name when the ForwardAuth call is made.
+# resolve-project-id is intentionally omitted: the upstream RPS service does not
+# enforce ActiveProjectID (tenancyMiddleware.enabled=false in rps Helm values),
+# so no auth-service ForwardAuth dependency is required.
 apiVersion: {{ .Values.traefikApiGroup }}
 kind: IngressRoute
 metadata:
@@ -932,7 +933,6 @@ spec:
       priority: 50
       middlewares:
         - name: validate-jwt
-        - name: resolve-project-id
         - name: rewrite-rps
         - name: secure-headers
       services:

@@ -156,19 +156,9 @@ func (Build) KeycloakTenantController() error {
 	return keycloakTenantControllerBuild()
 }
 
-// Builds the Nexus compiler builder container image.
-func (Build) NexusCompiler() error {
-	return datamodelCompilerBuild()
-}
-
 // Builds the Tenancy Manager container image.
 func (Build) TenancyManager() error {
 	return tenancyManagerBuild()
-}
-
-// Builds the Nexus API Gateway container image.
-func (Build) NexusAPIGateway() error {
-	return nexusAPIGatewayBuild()
 }
 
 type Push mg.Namespace
@@ -219,10 +209,6 @@ func (Push) SquidProxy() error {
 }
 
 // Push the openapi-generator container image to the registry.
-func (Push) OpenAPIGenerator() error {
-	return pushOpenAPIGeneratorImage()
-}
-
 // Push helm charts to the AMR registry.
 func (Push) Charts() error {
 	return pushCharts(OpenEdgePlatformChartRegistry)
@@ -233,28 +219,13 @@ func (Push) PublicCharts() error {
 	return pushSpecificCharts(PublicCharts, ECRPublicChartRegistry)
 }
 
-// Push the Nexus compiler container image to the registry.
-func (Push) NexusCompiler() error {
-	return pushNexusCompilerImage()
-}
-
 // Push the Tenancy Manager container image to the registry.
 func (Push) TenancyManager() error {
 	return pushImage("tenancy-manager", "tenancy-manager")
 }
 
-// Push the Nexus API Gateway container image to the registry.
-func (Push) NexusAPIGateway() error {
-	return pushImage("nexus-api-gw", "nexus-api-gw")
-}
-
 // Namespace contains clean targets.
 type Clean mg.Namespace
-
-// Builds the OpenAPI-Generator container image.
-func (Build) OpenAPIGenerator() error {
-	return openAPIGeneratorBuild()
-}
 
 // Builds the OpenAPI-Generator container image.
 func ListContainers() error {
