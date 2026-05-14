@@ -36,4 +36,6 @@ FROM scratch
 
 COPY --from=build /workspace/build/app /app
 
+USER 65534:65534
+
 ENTRYPOINT [ "/app" ]
