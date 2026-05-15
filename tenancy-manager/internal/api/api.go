@@ -11,6 +11,7 @@ import (
 	"io"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -657,7 +658,7 @@ func resolveOrgNamesWithDefault(r *http.Request, defaultOrg string) []string {
 }
 
 func isAmbiguous(err error) bool {
-	return err != nil && err.Error() != "" && len(err.Error()) > 9 && err.Error()[:9] == "ambiguous"
+	return err != nil && strings.Contains(strings.ToLower(err.Error()), "ambiguous")
 }
 
 func writeJSON(w http.ResponseWriter, status int, v interface{}) {

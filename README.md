@@ -43,13 +43,8 @@ mage build:awsSmProxy
 mage build:certSynchronizer
 mage build:componentStatus
 mage build:keycloakTenantController
-mage build:nexusAPIGateway
-mage build:nexusCompiler
-mage build:openAPIGenerator
 mage build:secretsConfig
 mage build:squidProxy
-mage build:tenancyAPIMapping
-mage build:tenancyDatamodel
 mage build:tenancyManager
 mage build:tokenFS
 mage chartsBuild
@@ -64,15 +59,10 @@ mage push:certSynchronizer
 mage push:componentStatus
 mage push:charts
 mage push:keycloakTenantController
-mage push:nexusAPIGateway
-mage push:nexusCompiler
-mage push:openAPIGenerator
 mage push:publicAwsSmProxy
 mage push:publicCharts
 mage push:secretsConfig
 mage push:squidProxy
-mage push:tenancyAPIMapping
-mage push:tenancyDatamodel
 mage push:tenancyManager
 mage push:tokenFs
 ```

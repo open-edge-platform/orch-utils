@@ -40,13 +40,11 @@ type AuthContext struct {
 	OrgNames []string    // resolved org names (from DB lookup)
 }
 
-// getAuthContext retrieves the auth context from a request, or nil if absent.
+// getAuthContext retrieves the auth context from a request, or nil if absent
+// or if the stored value is not an *AuthContext.
 func getAuthContext(r *http.Request) *AuthContext {
-	v := r.Context().Value(authContextKey)
-	if v == nil {
-		return nil
-	}
-	return v.(*AuthContext)
+	ac, _ := r.Context().Value(authContextKey).(*AuthContext)
+	return ac
 }
 
 // --- JWT Validator ---
@@ -212,8 +210,10 @@ func (v *JWTValidator) refreshKeys() error {
 
 // --- Role parsing ---
 
-// Regex patterns matching the Keycloak role format used by the nexus-api-gw
-// and documented in CURRENT-NEXUS-IMPLEMENTATION.md section 7.4.
+// Regex patterns matching the Keycloak role format inherited from the
+// previous tenancy gateway:
+//   {orgId}_project-(read|write|delete)-role
+//   {orgId}_{projectId}_(member-role|m)
 var (
 	// Matches: {orgId}_project-(read|write|delete)-role
 	projectRoleRegex = regexp.MustCompile(`^([a-f0-9-]+)_project-(read|write|delete)-role$`)
@@ -454,9 +454,9 @@ func checkProjectAuthz(roles []string, orgUUIDs []uuid.UUID, method string) bool
 
 // --- Deletion check middleware ---
 
-// DeletionCheckMiddleware blocks PUT/DELETE on soft-deleted resources.
-// Matching the nexus-api-gw behavior, returns 400 Bad Request if the target
-// resource is soft-deleted and the request method is not GET.
+// DeletionCheckMiddleware blocks PUT/DELETE on soft-deleted resources,
+// returning 400 Bad Request if the target resource is soft-deleted and the
+// request method is not GET.
 // This runs after authorization and applies regardless of whether JWT auth
 // is enabled.
 func DeletionCheckMiddleware(s OrgNameResolver, projectChecker ProjectDeletionChecker) func(http.Handler) http.Handler {

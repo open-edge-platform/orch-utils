@@ -14,11 +14,7 @@ path = [
   "**/*.txt",
   "**/VERSION",
   "**/.tool-versions",
-  "tenancy-datamodel/IMAGE",
-  "tenancy-datamodel/NAME",
-  "nexus/compiler/example/output/generated/nexus-gql/server",
-  "nexus/docs/Nexus-Config-Propagation-Calculator.csv",
   "tenancy-manager/internal/ent/**",
 ]
-SPDX-FileCopyrightText = "2025 Intel Corporation"
+SPDX-FileCopyrightText = "2026 Intel Corporation"
 SPDX-License-Identifier = "Apache-2.0"
