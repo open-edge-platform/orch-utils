@@ -322,8 +322,14 @@ func (s *Store) GetProjectByID(ctx context.Context, id uuid.UUID) (*ent.Project,
 }
 
 // GetProject returns an active project by name within the specified orgs.
-// If orgNames is empty, searches all orgs. Returns the project and its org.
+// If orgNames is nil, searches all orgs. A non-nil empty slice means the
+// caller explicitly has no valid org scope (e.g. asked for an org they do
+// not have access to) and the result is always NotFound — never fall back
+// to an unscoped query.
 func (s *Store) GetProject(ctx context.Context, name string, orgNames []string) (*ent.Project, *ent.Org, error) {
+	if orgNames != nil && len(orgNames) == 0 {
+		return nil, nil, &ent.NotFoundError{}
+	}
 	q := s.client.Project.Query().
 		Where(project.Name(name), project.DeletedAtIsNil()).
 		WithFolder(func(q *ent.FolderQuery) { q.WithOrg() })
@@ -352,7 +358,12 @@ func (s *Store) GetProject(ctx context.Context, name string, orgNames []string) 
 }
 
 // ListProjects returns active projects, optionally filtered by org name.
+// A non-nil empty orgNames slice means the caller has no valid org scope,
+// so the result is always empty.
 func (s *Store) ListProjects(ctx context.Context, orgNames []string) ([]*ent.Project, error) {
+	if orgNames != nil && len(orgNames) == 0 {
+		return []*ent.Project{}, nil
+	}
 	q := s.client.Project.Query().
 		Where(project.DeletedAtIsNil()).
 		WithFolder(func(q *ent.FolderQuery) { q.WithOrg() }).
@@ -367,7 +378,12 @@ func (s *Store) ListProjects(ctx context.Context, orgNames []string) ([]*ent.Pro
 
 // UpdateProject updates a project's description inside a transaction,
 // preventing a concurrent update from overwriting a stale read.
+// A non-nil empty orgNames slice means the caller has no valid org scope
+// and is treated as NotFound.
 func (s *Store) UpdateProject(ctx context.Context, name string, orgNames []string, description string) (*ent.Project, *ent.Org, error) {
+	if orgNames != nil && len(orgNames) == 0 {
+		return nil, nil, &ent.NotFoundError{}
+	}
 	tx, err := s.client.Tx(ctx)
 	if err != nil {
 		return nil, nil, err
@@ -405,7 +421,12 @@ func (s *Store) UpdateProject(ctx context.Context, name string, orgNames []strin
 // DeleteProject soft-deletes a project, emitting a deleted event.
 // Uses a compare-and-set style UPDATE guarded by deleted_at IS NULL to
 // prevent duplicate events from concurrent requests.
+// A non-nil empty orgNames slice means the caller has no valid org scope
+// and is treated as NotFound.
 func (s *Store) DeleteProject(ctx context.Context, name string, orgNames []string) error {
+	if orgNames != nil && len(orgNames) == 0 {
+		return &ent.NotFoundError{}
+	}
 	tx, err := s.client.Tx(ctx)
 	if err != nil {
 		return err
@@ -467,7 +488,12 @@ func (s *Store) DeleteProject(ctx context.Context, name string, orgNames []strin
 }
 
 // GetProjectIncludingDeleted returns a project by name regardless of state.
+// A non-nil empty orgNames slice means the caller has no valid org scope
+// and is treated as NotFound.
 func (s *Store) GetProjectIncludingDeleted(ctx context.Context, name string, orgNames []string) (*ent.Project, *ent.Org, error) {
+	if orgNames != nil && len(orgNames) == 0 {
+		return nil, nil, &ent.NotFoundError{}
+	}
 	q := s.client.Project.Query().
 		Where(project.Name(name)).
 		WithFolder(func(q *ent.FolderQuery) { q.WithOrg() })

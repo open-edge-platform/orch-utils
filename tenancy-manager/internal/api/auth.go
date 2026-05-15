@@ -485,6 +485,14 @@ func DeletionCheckMiddleware(s OrgNameResolver, projectChecker ProjectDeletionCh
 				}
 			case isProjectEndpoint(path):
 				orgNames := resolveOrgNames(r)
+				if isOrgScopeDenied(orgNames) {
+					// Caller specified an org they do not have access to.
+					// Do not call isProjectDeleted with an empty slice; the
+					// store treats that as "any org" and would leak across
+					// org boundaries.
+					writeError(w, http.StatusNotFound, "project not found")
+					return
+				}
 				if isProjectDeleted(r.Context(), projectChecker, name, orgNames) {
 					writeError(w, http.StatusBadRequest,
 						"Operation not supported. Requested resource is marked for delete.")

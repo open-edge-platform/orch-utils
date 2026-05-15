@@ -264,6 +264,10 @@ func (h *Handler) GetOrgStatus(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) ListProjects(w http.ResponseWriter, r *http.Request) {
 	orgNames := resolveOrgNames(r)
+	if isOrgScopeDenied(orgNames) {
+		writeJSON(w, http.StatusOK, []ProjectResponse{})
+		return
+	}
 	projects, err := h.store.ListProjects(r.Context(), orgNames)
 	if err != nil {
 		log.Error().Err(err).Msg("ListProjects failed")
@@ -286,6 +290,10 @@ func (h *Handler) ListProjects(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) GetProject(w http.ResponseWriter, r *http.Request) {
 	name := chi.URLParam(r, "name")
 	orgNames := resolveOrgNames(r)
+	if isOrgScopeDenied(orgNames) {
+		writeError(w, http.StatusNotFound, "project not found")
+		return
+	}
 
 	p, o, err := h.store.GetProject(r.Context(), name, orgNames)
 	if ent.IsNotFound(err) {
@@ -313,6 +321,10 @@ func (h *Handler) GetProject(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) CreateOrUpdateProject(w http.ResponseWriter, r *http.Request) {
 	name := chi.URLParam(r, "name")
 	orgNames := resolveOrgNamesWithDefault(r, h.cfg.DefaultOrgName)
+	if isOrgScopeDenied(orgNames) {
+		writeError(w, http.StatusNotFound, "project not found")
+		return
+	}
 
 	var body struct {
 		Description string `json:"description"`
@@ -388,6 +400,10 @@ func (h *Handler) CreateOrUpdateProject(w http.ResponseWriter, r *http.Request) 
 func (h *Handler) DeleteProject(w http.ResponseWriter, r *http.Request) {
 	name := chi.URLParam(r, "name")
 	orgNames := resolveOrgNamesWithDefault(r, h.cfg.DefaultOrgName)
+	if isOrgScopeDenied(orgNames) {
+		writeError(w, http.StatusNotFound, "project not found")
+		return
+	}
 
 	if err := h.store.DeleteProject(r.Context(), name, orgNames); err != nil {
 		if ent.IsNotFound(err) {
@@ -408,6 +424,10 @@ func (h *Handler) DeleteProject(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) GetProjectStatus(w http.ResponseWriter, r *http.Request) {
 	name := chi.URLParam(r, "name")
 	orgNames := resolveOrgNames(r)
+	if isOrgScopeDenied(orgNames) {
+		writeError(w, http.StatusNotFound, "project not found")
+		return
+	}
 
 	p, o, err := h.store.GetProjectIncludingDeleted(r.Context(), name, orgNames)
 	if ent.IsNotFound(err) {
@@ -659,6 +679,15 @@ func resolveOrgNamesWithDefault(r *http.Request, defaultOrg string) []string {
 
 func isAmbiguous(err error) bool {
 	return err != nil && strings.Contains(strings.ToLower(err.Error()), "ambiguous")
+}
+
+// isOrgScopeDenied reports whether resolveOrgNames returned an explicit
+// "no valid org" result — a non-nil, empty slice — indicating the caller
+// asked for an org they do not have access to.  Handlers MUST short-circuit
+// before reaching the store, because the store interprets an empty slice
+// as "search all orgs" (unscoped).
+func isOrgScopeDenied(orgNames []string) bool {
+	return orgNames != nil && len(orgNames) == 0
 }
 
 func writeJSON(w http.ResponseWriter, status int, v interface{}) {
