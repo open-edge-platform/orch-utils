@@ -374,8 +374,8 @@ install_lms_rpc(){
 
         #Download RPC binary
         echo "Download RPC binary"
-        expected_checksum="609b3a69f6534005ca0bf62b12b04c1d18cbc28decc6cf2d5d03d0bc521d9de8"
-        curl -LO "https://github.com/device-management-toolkit/rpc-go/releases/download/v2.48.2/rpc_linux_x64.tar.gz"
+        expected_checksum="548fa4eef69dfc09a1c053833b4a7bb6b904d42d27ea34cf37e240cc83bcca22"
+        curl -LO "https://github.com/device-management-toolkit/rpc-go/releases/download/v2.50.4/rpc_linux_x64.tar.gz"
 
         if [ -f "rpc_linux_x64.tar.gz" ]; then
             actual_checksum=$(sha256sum "rpc_linux_x64.tar.gz" | cut -d' ' -f1)
