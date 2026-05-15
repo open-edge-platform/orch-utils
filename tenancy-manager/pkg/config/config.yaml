@@ -1,9 +1,0 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
-#
-# SPDX-License-Identifier: Apache-2.0
-
----
-OrgCreateTimeoutInSecs: 30
-OrgDeleteTimeoutInSecs: 30
-ProjectCreateTimeoutInSecs: 30
-ProjectDeleteTimeoutInSecs: 30

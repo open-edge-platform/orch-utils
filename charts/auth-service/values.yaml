@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-FileCopyrightText: 2026 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
 ---
@@ -23,6 +23,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 jwksURL: "http://platform-keycloak.orch-platform.svc:8080/realms/master/protocol/openid-connect/certs"
+tenancyManagerURL: "http://tenancy-manager.orch-iam.svc:8080"
 
 # serviceAccount:
 #   # Specifies whether a service account should be created

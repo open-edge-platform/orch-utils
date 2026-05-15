@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-FileCopyrightText: 2026 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
 ---
@@ -48,6 +48,7 @@ spec:
           args:
             - -jwksURL={{ required "A valid jwksURL entry required!" .Values.jwksURL }}
             - -rolesFile=/config/roles.txt
+            - -tenancy-manager-url={{ .Values.tenancyManagerURL }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
