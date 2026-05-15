@@ -56,19 +56,3 @@ func pushImage(imageName string, chartName string) error {
 	}
 	return inspectAndPushImage(OpenEdgePlatformContainerRegistry, imageName, appVersion)
 }
-
-func pushNexusCompilerImage() error {
-	appVersion := getNexusVersion()
-	imageName := "nexus/compiler/amd64"
-	registry := OpenEdgePlatformContainerRegistry
-
-	return inspectAndPushImage(registry, imageName, appVersion)
-}
-
-func pushOpenAPIGeneratorImage() error {
-	appVersion := getNexusVersion()
-	imageName := "nexus/openapi-generator"
-	registry := OpenEdgePlatformContainerRegistry
-
-	return inspectAndPushImage(registry, imageName, appVersion)
-}

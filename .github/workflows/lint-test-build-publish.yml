@@ -324,14 +324,8 @@ jobs:
             secretsConfig,
             squidProxy,
             tokenFS,
-            tenancyAPIMapping,
-            tenancyInit,
             tenancyManager,
-            tenancyDatamodel,
-            nexusAPIGateway,
             keycloakTenantController,
-            nexusCompiler,
-            openAPIGenerator,
           ]
     needs:
       - lint-yaml

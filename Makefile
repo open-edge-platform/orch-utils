@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: (C) 2025 Intel Corporation
+# SPDX-FileCopyrightText: (C) 2026 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
 SHELL	:= bash -eu -o pipefail
@@ -39,29 +39,11 @@ docker-build-component-status:
 docker-build-keycloak-tenant-controller:
 	mage build:keycloakTenantController
 
-docker-build-nexus-api-gw:
-	mage build:nexusAPIGateway
-
-docker-build-nexus/compiler:
-	mage build:nexusCompiler
-
-docker-build-nexus/openapi-generator:
-	mage build:openAPIGenerator
-
 docker-build-secrets-config:
 	mage build:secretsConfig
 
 docker-build-squid-proxy:
 	mage build:squidProxy
-
-docker-build-tenancy-api-mapping:
-	mage build:tenancyAPIMapping
-
-docker-build-tenancy-init:
-	mage build:tenancyInit
-
-docker-build-tenancy-datamodel:
-	mage build:tenancyDatamodel
 
 docker-build-tenancy-manager:
 	mage build:tenancyManager
@@ -74,11 +56,8 @@ ginkgo: ## Run all ginkgo tests in sub-projects
 	make -C aws-sm-proxy        ginkgo
 	make -C component-status    ginkgo
 	make -C internal            ginkgo
-	make -C nexus-api-gw        ginkgo
-	make -C nexus               ginkgo
 	make -C secrets             ginkgo
-	make -C tenancy-manager     ginkgo
-	# make -C tenancy-api-mapping ginkgo  # needs to be fixed
+	cd tenancy-manager && mage test:unit
 
 #### Help Target ####
 help: ## print help for each target

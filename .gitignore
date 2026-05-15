@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-FileCopyrightText: 2026 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
 
@@ -12,40 +12,6 @@ keycloak-tenant-controller/bin/
 *.netrc
 .history
 
-# tenancy-api-mapping
-tenancy-api-mapping/.history/*
-tenancy-api-mapping/.vscode/*
-tenancy-api-mapping/.idea/*
-tenancy-api-mapping/*.out
-tenancy-api-mapping/*.log
-tenancy-api-mapping/*/coverage.html
-tenancy-api-mapping/.gitconfig
-tenancy-api-mapping/.netrc
-tenancy-api-mapping/.ssh
-tenancy-api-mapping/.gitmodules
-.gitmodules
-tenancy-api-mapping/gitsubmodules/*
-gitsubmodules/*
-tenancy-api-mapping/tests/gitsubmodules/*
-tenancy-api-mapping/tests/openapispecs/*
-tenancy-api-mapping/node_modules/*
-tenancy-api-mapping/venv_apimapping/*
-tenancy-api-mapping/build/*
-tenancy-api-mapping/vendor/
-
-# tenancy-datamodel
-tenancy-datamodel/build/install-validator/
-tenancy-datamodel/build/nexus-gql/
-tenancy-datamodel/build/tsm-nexus-gql
-tenancy-datamodel/build/golangci-lint_report.html
-# Ignore the symlink to build directory used in helm workflow
-tenancy-datamodel/helm-chart/crds
-tenancy-datamodel/venv*
-tenancy-datamodel/.history/*
-tenancy-datamodel/IMAGE
-tenancy-datamodel/NAME
-tenancy-datamodel/vendor/
-
 # tenancy-manager
 tenancy-manager/bin/
 tenancy-manager/.gitconfig
@@ -58,31 +24,12 @@ tenancy-manager/.idea/
 tenancy-manager/build/
 tenancy-manager/venv*
 
-# nexus-api-gw
-nexus-api-gw/build/
-nexus-api-gw/.gitconfig
-nexus-api-gw/.netrc
-nexus-api-gw/.ssh
-nexus-api-gw/api/
-nexus-api-gw/coverage.out
-nexus-api-gw/report.json
-nexus-api-gw/vendor/
-nexus-api-gw/.idea/
-nexus-api-gw/.idea
-nexus-api-gw/.vscode
-nexus-api-gw/.vscode/*
-# Ignore the symlink to build directory used in helm workflow
-nexus-api-gw/helm-chart/crds
-nexus-api-gw/.history/
-nexus-api-gw/.gitignore
-nexus-api-gw/venv_*
-nexus-api-gw/.vscode/settings.json
-nexus-api-gw/bin/api-gw
-nexus-api-gw/applications.development.nexus.api-gw
-nexus-api-gw/*.coverprofile
-nexus-api-gw/pkg/openapi/api/api.coverprofile
-nexus-api-gw/*venv
-
 *.test
 
 vendor/
+# go workspace files (local dev only)
+go.work
+go.work.sum
+cluster-manager/
+orch-cli/
+orch-library/

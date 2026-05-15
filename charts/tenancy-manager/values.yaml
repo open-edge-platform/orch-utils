@@ -1,10 +1,12 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-FileCopyrightText: 2026 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
 ---
 global:
   tainted: false
   name: tenancy-manager
+  postgresql:
+    host: ""
 
 replicaCount: 1
 
@@ -82,3 +84,83 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+service:
+  type: ClusterIP
+  port: 8080
+  annotations: {}
+
+ingress:
+  enabled: true
+  annotations: {}
+  # Path match for tenancy API endpoints
+  pathMatch: "PathRegexp(`^/v1/(orgs|projects)`)"
+  entryPoints:
+    - web
+  middlewares:
+    - name: validate-jwt
+      namespace: orch-iam
+
+# PostgreSQL configuration
+postgresql:
+  enabled: true
+  # Host can be overridden via global.postgresql.host or postgresql.host
+  host: ""
+  port: 5432
+  database: tenancy
+  username: postgres
+  # Password should be provided via existingSecret or set explicitly
+  existingSecret: ""
+  existingSecretPasswordKey: "postgresql-password"
+
+# Tenancy Manager specific configuration
+tenancyManager:
+  # Default org and project for bootstrap (leave empty to skip bootstrap)
+  # Disabled: org/project setup is handled by the deploy script / mage tenantUtils:createDefaultMtSetup
+  defaultOrgName: ""
+  defaultProjectName: ""
+
+  # Tenant-admin bootstrap. When enabled (typically driven by
+  # EMF_DEFAULT_TENANCY=true), the tenancy-manager Pod creates a Keycloak
+  # `tenant-admin` user, stores its password in a Secret, and adds the user
+  # to the org-level admin group and the project-level edge groups for the
+  # default org/project created by store.Bootstrap.
+  bootstrapTenantAdmin:
+    enabled: false
+    keycloakService: platform-keycloak
+    keycloakNamespace: orch-platform
+    keycloakPort: "8080"
+    keycloakRealm: master
+    keycloakAdminUser: admin
+    tenantAdminUser: tenant-admin
+    # Namespace where the generated password Secret is stored.
+    # Defaults to the pod's own namespace (empty string).
+    secretNamespace: ""
+    secretName: tenant-admin-password
+    projectAdminGroups: Project-Manager-Group
+    projectEdgeGroups: Edge-Manager-Group,Edge-Onboarding-Group,Edge-Operator-Group,Host-Manager-Group
+
+  # OIDC configuration for JWT validation
+  oidcServerURL: ""
+
+  # Internal auth token for controller endpoints
+  # Should be provided via existingSecret in production
+  internalAuthToken: ""
+  internalAuthTokenSecret: ""
+  internalAuthTokenSecretKey: "internal-auth-token"
+
+  # Registered controllers that will be tracked.
+  # Note: keycloak-tenant-controller handles BOTH org and project events
+  # (creates Keycloak realm groups/roles for orgs AND projects), so it is
+  # listed under both `org` and `project`.
+  controllers:
+    org:
+      - keycloak-tenant-controller
+    project:
+      - app-orch-tenant-controller
+      - app-deployment-manager
+      - keycloak-tenant-controller
+      - infra-tenant-controller
+      - cluster-manager
+      - observability-tenant-controller
+      - metadata-broker
