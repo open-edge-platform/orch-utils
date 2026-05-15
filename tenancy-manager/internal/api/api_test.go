@@ -33,12 +33,15 @@ type mockStore struct {
 	deleteOrgF func(name string) error
 
 	// Project
-	projects       []*ent.Project
-	projectByName  map[string]*ent.Project
-	projectByID    map[uuid.UUID]*ent.Project
-	createProjectF func(org, name, desc string) (*ent.Project, *ent.Org, error)
-	updateProjectF func(name string, orgs []string, desc string) (*ent.Project, *ent.Org, error)
-	deleteProjectF func(name string, orgs []string) error
+	projects                    []*ent.Project
+	projectByName               map[string]*ent.Project
+	projectByID                 map[uuid.UUID]*ent.Project
+	getProjectF                 func(name string, orgs []string) (*ent.Project, *ent.Org, error)
+	listProjectsF               func(orgs []string) ([]*ent.Project, error)
+	getProjectIncludingDeletedF func(name string, orgs []string) (*ent.Project, *ent.Org, error)
+	createProjectF              func(org, name, desc string) (*ent.Project, *ent.Org, error)
+	updateProjectF              func(name string, orgs []string, desc string) (*ent.Project, *ent.Org, error)
+	deleteProjectF              func(name string, orgs []string) error
 
 	// Events
 	eventsAfter     []*ent.TenancyEvent
@@ -66,7 +69,10 @@ func (m *mockStore) GetOrgIncludingDeleted(_ context.Context, name string) (*ent
 	return nil, &ent.NotFoundError{}
 }
 
-func (m *mockStore) GetProjectIncludingDeleted(_ context.Context, name string, _ []string) (*ent.Project, *ent.Org, error) {
+func (m *mockStore) GetProjectIncludingDeleted(_ context.Context, name string, orgs []string) (*ent.Project, *ent.Org, error) {
+	if m.getProjectIncludingDeletedF != nil {
+		return m.getProjectIncludingDeletedF(name, orgs)
+	}
 	if p, ok := m.projectByName[name]; ok {
 		return p, nil, nil
 	}
@@ -107,11 +113,17 @@ func (m *mockStore) DeleteOrg(_ context.Context, name string) error {
 	return nil
 }
 
-func (m *mockStore) ListProjects(_ context.Context, _ []string) ([]*ent.Project, error) {
+func (m *mockStore) ListProjects(_ context.Context, orgs []string) ([]*ent.Project, error) {
+	if m.listProjectsF != nil {
+		return m.listProjectsF(orgs)
+	}
 	return m.projects, nil
 }
 
-func (m *mockStore) GetProject(_ context.Context, name string, _ []string) (*ent.Project, *ent.Org, error) {
+func (m *mockStore) GetProject(_ context.Context, name string, orgs []string) (*ent.Project, *ent.Org, error) {
+	if m.getProjectF != nil {
+		return m.getProjectF(name, orgs)
+	}
 	if p, ok := m.projectByName[name]; ok {
 		return p, nil, nil
 	}
@@ -176,19 +188,34 @@ func newTestHandler(ms *mockStore) *Handler {
 
 // do fires a request against the handler's router and returns the response recorder.
 func do(h *Handler, method, path string, body string) *httptest.ResponseRecorder {
+	return doWithContext(h, method, path, body, context.Background())
+}
+
+// doWithContext fires a request with a caller-supplied context, allowing tests
+// to inject an AuthContext (and thus simulate authenticated callers).
+func doWithContext(h *Handler, method, path, body string, ctx context.Context) *httptest.ResponseRecorder {
 	var reqBody *strings.Reader
 	if body != "" {
 		reqBody = strings.NewReader(body)
 	} else {
 		reqBody = strings.NewReader("")
 	}
-	req := httptest.NewRequest(method, path, reqBody)
+	req := httptest.NewRequest(method, path, reqBody).WithContext(ctx)
 	if body != "" {
 		req.Header.Set("Content-Type", "application/json")
 	}
 	w := httptest.NewRecorder()
 	h.Router().ServeHTTP(w, req)
 	return w
+}
+
+// deniedOrgContext returns a context carrying an AuthContext whose OrgNames
+// list does NOT include the org the test will request via ?org=.
+func deniedOrgContext() context.Context {
+	return context.WithValue(context.Background(), authContextKey, &AuthContext{
+		Username: "user",
+		OrgNames: []string{"allowed-org"},
+	})
 }
 
 // ── Healthz ───────────────────────────────────────────────────────────────────
@@ -581,3 +608,112 @@ func TestErrorResponseShape(t *testing.T) {
 
 // Ensure mockStore satisfies the interface (compile-time check).
 var _ storeBackend = (*mockStore)(nil)
+
+// ── Regression tests for the resolveOrgNames empty-slice auth-bypass ──────────
+//
+// When an authenticated caller requests ?org=<an-org-they-do-not-belong-to>,
+// resolveOrgNames returns a non-nil empty slice (denied). The store treats
+// empty slices as "search all orgs", so without an explicit guard the request
+// would silently fall through to an unscoped query and leak data across org
+// boundaries. The handlers MUST short-circuit before reaching the store.
+
+// TestGetProject_ForbiddenExplicitOrg_DoesNotFallBackToUnscopedLookup is
+// palade's verbatim reproduction from PR #726.
+func TestGetProject_ForbiddenExplicitOrg_DoesNotFallBackToUnscopedLookup(t *testing.T) {
+	ms := &mockStore{
+		getProjectF: func(name string, orgs []string) (*ent.Project, *ent.Org, error) {
+			if len(orgs) == 0 {
+				return &ent.Project{Name: name}, &ent.Org{Name: "forbidden-org"}, nil
+			}
+			return nil, nil, &ent.NotFoundError{}
+		},
+	}
+	h := newTestHandler(ms)
+	ctx := context.WithValue(context.Background(), authContextKey, &AuthContext{OrgNames: []string{"allowed-org"}})
+	w := doWithContext(h, http.MethodGet, "/v1/projects/secret-proj?org=forbidden-org", "", ctx)
+	if w.Code != http.StatusNotFound {
+		t.Fatalf("GET /v1/projects/secret-proj?org=forbidden-org = %d, want 404", w.Code)
+	}
+}
+
+func TestListProjects_ForbiddenExplicitOrg_ReturnsEmpty(t *testing.T) {
+	ms := &mockStore{
+		listProjectsF: func(orgs []string) ([]*ent.Project, error) {
+			if len(orgs) == 0 {
+				// Unscoped query would return every project in the system.
+				return []*ent.Project{{Name: "leaked-from-other-org"}}, nil
+			}
+			return []*ent.Project{}, nil
+		},
+	}
+	h := newTestHandler(ms)
+	w := doWithContext(h, http.MethodGet, "/v1/projects?org=forbidden-org", "", deniedOrgContext())
+	if w.Code != http.StatusOK {
+		t.Fatalf("GET /v1/projects?org=forbidden-org = %d, want 200", w.Code)
+	}
+	if strings.Contains(w.Body.String(), "leaked-from-other-org") {
+		t.Fatalf("unscoped project leaked across orgs: %s", w.Body.String())
+	}
+}
+
+func TestDeleteProject_ForbiddenExplicitOrg_DoesNotDeleteCrossOrg(t *testing.T) {
+	called := false
+	ms := &mockStore{
+		deleteProjectF: func(name string, orgs []string) error {
+			called = true
+			if len(orgs) == 0 {
+				// Unscoped delete would succeed and remove a foreign project.
+				return nil
+			}
+			return &ent.NotFoundError{}
+		},
+	}
+	h := newTestHandler(ms)
+	w := doWithContext(h, http.MethodDelete, "/v1/projects/victim?org=forbidden-org", "", deniedOrgContext())
+	if w.Code != http.StatusNotFound {
+		t.Fatalf("DELETE /v1/projects/victim?org=forbidden-org = %d, want 404", w.Code)
+	}
+	if called {
+		t.Fatalf("store.DeleteProject must not be reached for denied org scope")
+	}
+}
+
+func TestPutProject_ForbiddenExplicitOrg_DoesNotUpdateCrossOrg(t *testing.T) {
+	updateCalled := false
+	ms := &mockStore{
+		getProjectF: func(name string, orgs []string) (*ent.Project, *ent.Org, error) {
+			if len(orgs) == 0 {
+				return &ent.Project{Name: name}, &ent.Org{Name: "forbidden-org"}, nil
+			}
+			return nil, nil, &ent.NotFoundError{}
+		},
+		updateProjectF: func(name string, orgs []string, desc string) (*ent.Project, *ent.Org, error) {
+			updateCalled = true
+			return &ent.Project{Name: name}, &ent.Org{Name: "forbidden-org"}, nil
+		},
+	}
+	h := newTestHandler(ms)
+	w := doWithContext(h, http.MethodPut, "/v1/projects/victim?org=forbidden-org", `{"description":"pwn"}`, deniedOrgContext())
+	if w.Code != http.StatusNotFound {
+		t.Fatalf("PUT /v1/projects/victim?org=forbidden-org = %d, want 404", w.Code)
+	}
+	if updateCalled {
+		t.Fatalf("store.UpdateProject must not be reached for denied org scope")
+	}
+}
+
+func TestGetProjectStatus_ForbiddenExplicitOrg_NotFound(t *testing.T) {
+	ms := &mockStore{
+		getProjectIncludingDeletedF: func(name string, orgs []string) (*ent.Project, *ent.Org, error) {
+			if len(orgs) == 0 {
+				return &ent.Project{Name: name}, &ent.Org{Name: "forbidden-org"}, nil
+			}
+			return nil, nil, &ent.NotFoundError{}
+		},
+	}
+	h := newTestHandler(ms)
+	w := doWithContext(h, http.MethodGet, "/v1/projects/secret-proj/status?org=forbidden-org", "", deniedOrgContext())
+	if w.Code != http.StatusNotFound {
+		t.Fatalf("GET /v1/projects/secret-proj/status?org=forbidden-org = %d, want 404", w.Code)
+	}
+}
