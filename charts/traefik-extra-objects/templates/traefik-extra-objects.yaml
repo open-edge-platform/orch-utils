@@ -634,8 +634,6 @@ spec:
       name: {{ .Values.tlsOption }}
       namespace: orch-gateway
 {{- end }}
-{{- end }}
-{{- if .Values.routes.fleet.enabled }}
 ---
 apiVersion: {{ .Values.traefikApiGroup }}
 kind: IngressRoute
@@ -663,6 +661,8 @@ spec:
       name: {{ .Values.tlsOption }}
       namespace: orch-gateway
 {{- end }}
+{{- end }}
+{{- if .Values.routes.fleet.enabled }}
 ---
 apiVersion: {{ .Values.traefikApiGroup }}
 kind: ServersTransport
