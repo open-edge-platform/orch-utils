@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-FileCopyrightText: 2026 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
 ---
@@ -36,6 +36,7 @@ keycloakAdmin:
   passwordSecret:
     name: platform-keycloak  # name of the secret
     key: admin-password  # key of the secret
+tenantManagerURL: "http://tenancy-manager.orch-iam:8080"
 keycloak_realm: "master"
 keycloak_si_groups: |-
   {

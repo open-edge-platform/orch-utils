@@ -1,4 +1,0 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
-# SPDX-License-Identifier: Apache-2.0
-groupName: "tsm.tanzu.vmware.com"
-crdModulePath: "github.com/vmware-tanzu/graph-framework-for-microservices/compiler/example/output/crd/"

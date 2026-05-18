@@ -20,10 +20,10 @@ spec:
       labels:
         app: keycloak-tenant-controller-pod
     spec:
-        {{- with .Values.imagePullSecrets }}
+      {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
-        {{- end }}
+      {{- end }}
       serviceAccountName: {{ .Values.serviceAccount.name }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
@@ -53,20 +53,6 @@ spec:
             - mountPath: /ktc-credentials.sh
               subPath: ktc-credentials.sh
               name: ktc-credentials
-        - name: wait-for-crd
-          image: alpine/kubectl:1.35.2
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          command: ["/bin/sh", "-c"]
-          args:
-          - |
-            set -e
-            echo "edge-orchestrator.intel.com, waiting for CR..."
-            echo "Waiting for CR 'orgs.org.infra-host.com' to be available..."
-            until kubectl get orgs.org.edge-orchestrator.intel.com; do
-              echo "orgs.org.edge-orchestrator.intel.com CR not found, waiting..."
-              sleep 10
-            done
       volumes:
         - name: ktc-credentials
           configMap:
@@ -92,6 +78,8 @@ spec:
               value: "{{ .Values.keycloakAdmin.url }}"
             - name: KTC_SERVER_LOG_LEVEL
               value: "info"
+            - name: TENANT_MANAGER_URL
+              value: "{{ .Values.tenantManagerURL }}"
             - name: KEYCLOAK_REALM
               value: {{ .Values.keycloak_realm | default "master" }}
             - name: KEYCLOAK_SI_GROUPS

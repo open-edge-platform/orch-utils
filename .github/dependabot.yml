@@ -20,21 +20,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/tenancy-api-mapping"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/traefik-plugins/jwt-plugin"
@@ -50,6 +37,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/auth-service"
@@ -65,396 +54,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/gqlgen"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/openapi-generator"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/install-validator"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/compiler"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/compiler/example/test-utils/invalid-singleton-child"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/compiler/example/test-utils/global-package"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/compiler/example/test-utils/pointer-type-datamodel"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/compiler/example/test-utils/duplicated-uris-datamodel"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/compiler/example/test-utils/invalid-type-name-datamodel"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/compiler/example/test-utils/group-name-with-hyphen-datamodel"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/compiler/example/test-utils/map-type-child"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/compiler/example/test-utils/output-group-name-with-hyphen-datamodel"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/compiler/example/test-utils/array-type-child"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/compiler/example/test-utils/invalid-pkg-name-datamodel"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/compiler/example/test-utils/nexus-rest-api-gen-wrong-name"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/compiler/example/test-utils/non-singleton-root"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/compiler/example/output/generated"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/compiler/example/output/generated/nexus-gql"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/compiler/example/tests"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/compiler/example/tests/custom_query_grpc_server"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/compiler/example/datamodel/build/nexus-gql"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/compiler/example/datamodel"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/common-library"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/nexus"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus/kube-openapi"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/nexus-api-gw"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/cert-synchronizer"
@@ -470,6 +71,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/keycloak-tenant-controller"
@@ -485,6 +88,8 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "gomod"
     directory: "/tenancy-manager"
@@ -500,38 +105,9 @@ updates:
       prefix: "go.mod"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
-  - package-ecosystem: "gomod"
-    directory: "/tenancy-datamodel/test"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "gomod"
-    directory: "/tenancy-datamodel"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "go.mod"
-    reviewers:
-      - "dmytroye"
-
-  # Helm charts - separate block for each directory
   - package-ecosystem: "helm"
     directory: "/charts/secrets-config"
     ignore:
@@ -546,6 +122,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/kyverno-traefik-policy"
@@ -561,6 +139,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/traefik-pre"
@@ -576,6 +156,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/token-refresh"
@@ -591,6 +173,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/job-wait"
@@ -606,6 +190,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/statefulset-wait"
@@ -621,6 +207,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/postgresql-secrets"
@@ -636,6 +224,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/kyverno-extra-policies"
@@ -651,6 +241,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/rs-proxy"
@@ -666,6 +258,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/rs-image-pull-secrets"
@@ -681,6 +275,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/auth-service"
@@ -696,6 +292,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/secret-wait"
@@ -711,6 +309,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/aws-sm-proxy"
@@ -726,6 +326,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/certificate-file-server"
@@ -741,6 +343,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/namespace-label"
@@ -756,21 +360,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
-
-  - package-ecosystem: "helm"
-    directory: "/charts/tenancy-api-mapping"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "Helm charts"
-    reviewers:
-      - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/fleet-rs-secret"
@@ -786,6 +377,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/aws-lb-tgb"
@@ -801,6 +394,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/self-signed-cert"
@@ -816,21 +411,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
-
-  - package-ecosystem: "helm"
-    directory: "/charts/tenancy-datamodel"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "Helm charts"
-    reviewers:
-      - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/kyverno-istio-policy"
@@ -846,21 +428,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
-
-  - package-ecosystem: "helm"
-    directory: "/charts/nexus-api-gw"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "Helm charts"
-    reviewers:
-      - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/k8s-metrics-server"
@@ -876,6 +445,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/metallb-config"
@@ -891,6 +462,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/platform-autocert"
@@ -906,6 +479,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/capi-operator-pre"
@@ -921,6 +496,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/adm-secret"
@@ -936,6 +513,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/aws-sm-get-rs-token"
@@ -951,6 +530,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/vertical-pod-autoscaler"
@@ -966,6 +547,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/cert-synchronizer"
@@ -981,6 +564,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/nginx-ingress-pxe-boots"
@@ -996,6 +581,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/keycloak-tenant-controller"
@@ -1011,6 +598,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/istio-policy"
@@ -1026,6 +615,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/token-file-server"
@@ -1041,6 +632,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/tenancy-manager"
@@ -1056,6 +649,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/traefik-extra-objects"
@@ -1071,6 +666,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/deployment-wait"
@@ -1086,6 +683,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/copy-secret"
@@ -1101,6 +700,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/squid-proxy"
@@ -1116,6 +717,8 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "helm"
     directory: "/charts/oci-secret"
@@ -1131,23 +734,10 @@ updates:
       prefix: "Helm charts"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   # Docker - separate block for each directory
-  - package-ecosystem: "docker"
-    directory: "/tenancy-api-mapping"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "Dockerfile"
-    reviewers:
-      - "dmytroye"
-
   - package-ecosystem: "docker"
     directory: "/auth-service"
     ignore:
@@ -1162,6 +752,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/aws-sm-proxy"
@@ -1177,51 +769,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
-
-  - package-ecosystem: "docker"
-    directory: "/nexus/openapi-generator"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "Dockerfile"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "docker"
-    directory: "/nexus/compiler/builder"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "Dockerfile"
-    reviewers:
-      - "dmytroye"
-
-  - package-ecosystem: "docker"
-    directory: "/nexus/compiler"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "Dockerfile"
-    reviewers:
-      - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/token-fs"
@@ -1237,21 +786,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
-
-  - package-ecosystem: "docker"
-    directory: "/nexus-api-gw"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "Dockerfile"
-    reviewers:
-      - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/secrets"
@@ -1267,6 +803,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/cert-synchronizer"
@@ -1282,6 +820,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/keycloak-tenant-controller/images"
@@ -1297,6 +837,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/tenancy-manager"
@@ -1312,21 +854,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
-
-  - package-ecosystem: "docker"
-    directory: "/tenancy-datamodel"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-          - "version-update:semver-minor"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "Dockerfile"
-    reviewers:
-      - "dmytroye"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "docker"
     directory: "/squid-proxy"
@@ -1342,6 +871,8 @@ updates:
       prefix: "Dockerfile"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
@@ -1358,3 +889,5 @@ updates:
       prefix: "Github Actions"
     reviewers:
       - "dmytroye"
+    cooldown:
+      default-days: 7

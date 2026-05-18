@@ -1,4 +1,4 @@
-// Copyright (C) 2025 Intel Corporation
+// Copyright (C) 2026 Intel Corporation
 // SPDX-FileCopyrightText: 2026 Intel Corporation
 //
 // SPDX-License-Identifier: Apache-2.0
@@ -275,110 +275,6 @@ func keycloakTenantControllerBuild() error {
 	)
 }
 
-// Builds the Nexus compiler container image.
-func datamodelCompilerBuild() error {
-	// build compiler builder
-	cmdBuilderBuild := fmt.Sprintf("cd nexus/compiler; DOCKER_REGISTRY=%s make docker.builder",
-		OpenEdgePlatformContainerRegistry)
-
-	if err := runCommand(cmdBuilderBuild); err != nil {
-		return err
-	}
-	// build compiler
-	cmdCompilerBuild := fmt.Sprintf("cd nexus/compiler; DOCKER_REGISTRY=%s make docker",
-		OpenEdgePlatformContainerRegistry)
-	return runCommand(cmdCompilerBuild)
-}
-
-// Builds the Tenancy Datamodel container image.
-func tenancyDatamodelBuild() error {
-	projectDir := "tenancy-datamodel"
-	nexusFile := "nexus.yaml"
-	baseImage := "alpine/kubectl:1.35.2"
-
-	nexusConf := struct {
-		GroupName string `yaml:"groupName"`
-	}{}
-
-	yamlFile, err := os.ReadFile(filepath.Join(projectDir, nexusFile))
-	if err != nil {
-		return err
-	}
-
-	if err := yaml.Unmarshal(yamlFile, &nexusConf); err != nil {
-		return err
-	}
-
-	appVersion, err := getChartAppVersion(projectDir)
-	if err != nil {
-		return err
-	}
-
-	return sh.RunV(
-		"docker",
-		"build",
-		"--load",
-		"--build-arg", "DOCKER_BASE_IMAGE="+baseImage,
-		"--build-arg", "IMAGE_NAME="+OpenEdgePlatformContainerRegistry+"/tenancy-datamodel:"+appVersion,
-		"--build-arg", "NAME="+nexusConf.GroupName,
-		"--tag", OpenEdgePlatformContainerRegistry+"/tenancy-datamodel:"+appVersion,
-		"--file", filepath.Join(projectDir, "Dockerfile"),
-		projectDir,
-	)
-}
-
-// Builds the Tenancy API Mapping container image.
-func tenancyAPIMappingBuild() error {
-	// some errors below are deliberately ignored to suppress “file already/doesn’t” exist errors
-	// Mage uses %v when formatting errors, so they cannot be unwrapped and handled on a case by case
-	projectDir := "tenancy-api-mapping"
-
-	appVersion, err := getChartAppVersion(projectDir)
-	if err != nil {
-		return err
-	}
-
-	// run go mod vendor in project directory
-	if err := sh.RunV("sh", "-c", fmt.Sprintf("cd %s && go mod vendor", projectDir)); err != nil {
-		return err
-	}
-
-	return sh.RunV(
-		"docker",
-		"build",
-		"--load",
-		"--tag", OpenEdgePlatformContainerRegistry+"/tenancy-api-mapping:"+appVersion,
-		"--file", filepath.Join(projectDir, "Dockerfile"),
-		projectDir,
-	)
-}
-
-// Builds the Tenancy Init container image.
-func tenancyInitBuild() error {
-	// some errors below are deliberately ignored to suppress “file already/doesn’t” exist errors
-	// Mage uses %v when formatting errors, so they cannot be unwrapped and handled on a case by case
-	projectDir := "tenancy-init"
-
-	appVersion, err := getChartAppVersion(projectDir)
-	if err != nil {
-		return err
-	}
-
-	// run go mod vendor in project directory
-	if err := sh.RunV("sh", "-c", fmt.Sprintf("cd %s && go mod vendor", projectDir)); err != nil {
-		return err
-	}
-
-	return sh.RunV(
-		"docker",
-		"build",
-		"--load",
-		"--tag", OpenEdgePlatformContainerRegistry+"/tenancy-init:"+appVersion,
-		"--file", filepath.Join(projectDir, "Dockerfile"),
-		projectDir,
-	)
-}
-
 // Builds the Tenancy Manager container image.
 func tenancyManagerBuild() error {
 	// some errors below are deliberately ignored to suppress “file already/doesn’t” exist errors
@@ -408,51 +304,8 @@ func tenancyManagerBuild() error {
 	)
 }
 
-// Builds the Nexus API Gateway container image.
-func nexusAPIGatewayBuild() error {
-	// some errors below are deliberately ignored to suppress “file already/doesn’t” exist errors
-	// Mage uses %v when formatting errors, so they cannot be unwrapped and handled on a case by case
-
-	projectDir := "nexus-api-gw"
-	componentName := "api-gw"
-
-	appVersion, err := getChartAppVersion(projectDir)
-	if err != nil {
-		return err
-	}
-
-	// run go mod vendor in project directory
-	if err := sh.RunV("sh", "-c", fmt.Sprintf("cd %s && go mod vendor", projectDir)); err != nil {
-		return err
-	}
-
-	return sh.RunV(
-		"docker",
-		"build",
-		"--load",
-		"--build-arg", "API_GW_COMPONENT_NAME="+componentName,
-		"--tag", OpenEdgePlatformContainerRegistry+"/nexus-api-gw:"+appVersion,
-		"--file", filepath.Join(projectDir, "Dockerfile"),
-		projectDir,
-	)
-}
-
-// Builds the openapi-generator container image.
-func openAPIGeneratorBuild() error {
-	// build compiler
-	openAPIGenBuild := fmt.Sprintf("cd nexus; DOCKER_REGISTRY=%s/ make openapi.generator.docker",
-		OpenEdgePlatformContainerRegistry)
-	return runCommand(openAPIGenBuild)
-}
-
 func listContainers() error {
-	if err := listTaggedContainers(); err != nil {
-		return err
-	}
-	if err := listNexusContainers(); err != nil {
-		return err
-	}
-	return nil
+	return listTaggedContainers()
 }
 
 func listTaggedContainers() error {
@@ -463,11 +316,8 @@ func listTaggedContainers() error {
 		"aws-sm-proxy",
 		"cert-synchronizer",
 		"keycloak-tenant-controller",
-		"nexus-api-gw",
 		"secrets-config",
 		"squid-proxy",
-		"tenancy-api-mapping",
-		"tenancy-datamodel",
 		"tenancy-manager",
 		"token-fs",
 	}
@@ -486,18 +336,4 @@ func listTaggedContainers() error {
 	}
 
 	return nil
-}
-
-func listNexusContainers() error {
-	env := map[string]string{
-		"DOCKER_REGISTRY": OpenEdgePlatformContainerRegistry,
-	}
-
-	return sh.RunWithV(
-		env,
-		"make",
-		"-C",
-		"nexus",
-		"docker-list",
-	)
 }

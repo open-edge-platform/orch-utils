@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-FROM golang:1.26.3@sha256:2981696eed011d747340d7252620932677929cce7d2d539602f56a8d7e9b660b AS builder
+FROM golang:1.26.3@sha256:313faae491b410a35402c05d35e7518ae99103d957308e940e1ae2cfa0aac29b AS builder
 ARG KTC_GIT_COMMIT
 
 # Set proxy environment variables using build arguments
@@ -22,11 +22,11 @@ COPY . /usr/src/keycloak-tenant-controller/
 WORKDIR /usr/src/keycloak-tenant-controller/
 
 RUN echo "Using commit ID $KTC_GIT_COMMIT"
-RUN	apt-get update && apt-get -y install --no-install-recommends -o APT::Keep-Downloaded-Packages=false build-essential=12.12 sudo=1.9.16p2-3+deb13u1 \
-	&& apt-get clean \
-	&& rm -rf /var/lib/apt/lists/* \
-	&& go install github.com/magefile/mage@v1.15.0 \
-	&& mage binary:build
+RUN go mod vendor
+RUN mkdir -p ./bin \
+    && CGO_ENABLED=0 go build -mod=vendor -trimpath \
+    -ldflags="-w -s -buildid= -X 'main.Commit=${KTC_GIT_COMMIT}'" \
+    -o ./bin/ktc ./cmd/
 
 FROM gcr.io/distroless/base:nonroot@sha256:fb282f8ed3057f71dbfe3ea0f5fa7e961415dafe4761c23948a9d4628c6166fe
 
