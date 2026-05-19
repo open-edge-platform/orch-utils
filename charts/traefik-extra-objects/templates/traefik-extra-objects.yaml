@@ -644,7 +644,7 @@ spec:
   entryPoints: # We listen to requests coming from ports 443
     - websecure
   routes:
-    - match: {{ required "A valid metricsNodeCliMatchHost entry required!" .Values.metricsNodeCliMatchHost }} && (PathPrefix(`/prometheus/api/v1/query`) || PathPrefix(`/prometheus/api/v1/query_range`))
+    - match: {{ required "A valid metricsNodeCliMatchHost entry required!" .Values.metricsNodeCliMatchHost }} && (PathPrefix(`/prometheus/api/v1/query`) || PathPrefix(`/prometheus/api/v1/query_range`) || PathPrefix(`/prometheus/api/v1/label/__name__/values`))
       kind: Rule
       middlewares:
         - name: validate-jwt
