@@ -172,6 +172,7 @@ data:
     - infra-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - logs-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - metrics-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
+    - metrics-node-cli.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - update-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - attest-node.{{ required "A valid certDomain entry required!" .Values.certDomain }}
     - app-orch.{{ required "A valid certDomain entry required!" .Values.certDomain }}

@@ -634,6 +634,33 @@ spec:
       name: {{ .Values.tlsOption }}
       namespace: orch-gateway
 {{- end }}
+---
+apiVersion: {{ .Values.traefikApiGroup }}
+kind: IngressRoute
+metadata:
+  name: orch-platform-metrics-node-cli
+  namespace: orch-gateway
+spec:
+  entryPoints: # We listen to requests coming from ports 443
+    - websecure
+  routes:
+    - match: {{ required "A valid metricsNodeCliMatchHost entry required!" .Values.metricsNodeCliMatchHost }} && (PathPrefix(`/prometheus/api/v1/query`) || PathPrefix(`/prometheus/api/v1/query_range`))
+      kind: Rule
+      middlewares:
+        - name: validate-jwt
+        - name: svc-observability-mimir-gateway-hostname
+      services:
+      - name: edgenode-observability-mimir-gateway
+        namespace: orch-infra
+        port: 8181
+        scheme: http
+  tls:
+    secretName: {{ required "A valid orchSecretName entry required!" .Values.orchSecretName }}
+{{- if .Values.tlsOption }}
+    options:
+      name: {{ .Values.tlsOption }}
+      namespace: orch-gateway
+{{- end }}
 {{- end }}
 {{- if .Values.routes.fleet.enabled }}
 ---
