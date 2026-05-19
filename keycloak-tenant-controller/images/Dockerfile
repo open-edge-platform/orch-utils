@@ -28,7 +28,7 @@ RUN mkdir -p ./bin \
     -ldflags="-w -s -buildid= -X 'main.Commit=${KTC_GIT_COMMIT}'" \
     -o ./bin/ktc ./cmd/
 
-FROM gcr.io/distroless/base:nonroot@sha256:fb282f8ed3057f71dbfe3ea0f5fa7e961415dafe4761c23948a9d4628c6166fe
+FROM gcr.io/distroless/base:nonroot@sha256:a557d784ac275c287d2bdf3172f47bece8d2a0ef3c0fdefb712e95084a04a562
 
 COPY --from=builder /usr/src/keycloak-tenant-controller/bin/* /bin/
 COPY ./images/entrypoint.sh /oep/keycloak-tenant-controller/
