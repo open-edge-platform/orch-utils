@@ -10,6 +10,7 @@ import (
 	b64 "encoding/base64"
 	"encoding/json"
 	"fmt"
+	"html"
 	"io"
 	"net/http"
 	"net/url"
@@ -2987,7 +2988,7 @@ func (r httpResponse) write(writer http.ResponseWriter) {
 	log.Infof("apiserver->httpResponse write()->start")
 	log.Infof("Writing HTTP response")
 	var (
-		body        = []byte(r.message)
+		body        = []byte(html.EscapeString(r.message))
 		contentType = PLAIN_CONTENT
 		err         error
 	)
