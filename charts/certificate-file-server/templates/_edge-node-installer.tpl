@@ -90,6 +90,11 @@ CADDY_REGISTRY_PROXY_PORT=$(echo "{{ index $config "orchRegistry" }}" | cut -d: 
 RPS_ADDRESS=$(echo "{{ index $config "orchRPSHost" }}" | cut -d: -f1)
 KEYCLOAK_FQDN=$(echo "{{ index $config "orchKeycloak" }}" | cut -d: -f1)
 RELEASE_FQDN=$(echo "{{ index $config "orchRelease" }}" | cut -d: -f1)
+# Observability endpoints for logs and metrics, used if observability enabled.
+OBSERVABILITY_LOGGING_URL=$(echo "{{ index $config "orchPlatformObsLogs" }}" | cut -d: -f1)
+OBSERVABILITY_LOGGING_PORT=$(echo "{{ index $config "orchPlatformObsLogs" }}" | cut -d: -f2)
+OBSERVABILITY_METRICS_URL=$(echo "{{ index $config "orchPlatformObsMetrics" }}" | cut -d: -f1)
+OBSERVABILITY_METRICS_PORT=$(echo "{{ index $config "orchPlatformObsMetrics" }}" | cut -d: -f2)
 EOF
 . /etc/edge-node/node/agent_variables
 
