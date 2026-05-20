@@ -553,6 +553,24 @@ install_PMA() {
   fi
 }
 
+install_POA() {
+    if grep -q "install_POA done" "$SCRIPT_DIR"/$STATUS_FILENAME; then
+        echo "Skipping install_POA"
+    else
+        if [ "${NODE_METRICS_ENABLED}" == "true" ]; then
+            echo "Install POA..."
+            echo "platform-observability-agent platform-observability-agent/host string ${OBSERVABILITY_LOGGING_URL}" | debconf-set-selections
+            echo "platform-observability-agent platform-observability-agent/port string $OBSERVABILITY_LOGGING_PORT}" | debconf-set-selections
+            echo "platform-observability-agent platform-observability-agent/metrics-host string ${OBSERVABILITY_METRICS_URL}" | debconf-set-selections
+            echo "platform-observability-agent platform-observability-agent/metrics-port string ${OBSERVABILITY_METRICS_PORT}" | debconf-set-selections
+            apt-get install -y -o Dpkg::Options="--force-confnew" platform-observability-agent={{ index . "platform-observability-agent-VERSION" }}
+        else
+            echo "Observability is disabled, skipping POA installation."
+        fi
+        echo "install_POA done" | tee -a "$SCRIPT_DIR"/$STATUS_FILENAME
+    fi
+}
+
 install_syslogrotate_ufw(){
 if grep -q "install_syslogrotate_ufw done" "$SCRIPT_DIR"/$STATUS_FILENAME; then
     echo "Skipping install_syslogrotate_ufw"
@@ -623,6 +641,7 @@ install_device_discovery 2>&1 | tee -a "$SCRIPT_DIR"/$SETUP_STATUS_FILENAME
 install_lms_rpc 2>&1 | tee -a "$SCRIPT_DIR"/$SETUP_STATUS_FILENAME
 install_node_agent 2>&1 | tee -a "$SCRIPT_DIR"/$SETUP_STATUS_FILENAME
 install_PMA 2>&1 | tee -a "$SCRIPT_DIR"/$SETUP_STATUS_FILENAME
+install_POA 2>&1 | tee -a "$SCRIPT_DIR"/$SETUP_STATUS_FILENAME
 install_syslogrotate_ufw 2>&1 | tee -a "$SCRIPT_DIR"/$SETUP_STATUS_FILENAME
 disable_unattended_upgrade 2>&1 | tee -a "$SCRIPT_DIR"/$SETUP_STATUS_FILENAME
 echo "Installation completed Successfuly on EdgeNode!!!!"
