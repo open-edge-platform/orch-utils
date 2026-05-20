@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # Use a full-featured base image to build Squid
-FROM debian:trixie@sha256:e2d08da6f42ef4b09b165d55528a12727aeed8240dc9edf888e3ec07e10ef9da as build-stage
+FROM debian:trixie@sha256:4ae67669760b807c19f23902a3fd7c121a6a70cf2ae709035674b23e712e4d62 as build-stage
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y --fix-missing --no-install-recommends \
