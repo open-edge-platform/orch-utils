@@ -557,12 +557,12 @@ install_POA() {
     if grep -q "install_POA done" "$SCRIPT_DIR"/$STATUS_FILENAME; then
         echo "Skipping install_POA"
     else
-        if [ "{{ .METRICS_ENABLED }}" == "true" ]; then
+        if [ "${NODE_METRICS_ENABLED}" == "true" ]; then
             echo "Install POA..."
-            echo "platform-observability-agent platform-observability-agent/host string {{ .ORCH_PLATFORM_OBS_HOST }}" | debconf-set-selections
-            echo "platform-observability-agent platform-observability-agent/port string {{ .ORCH_PLATFORM_OBS_PORT }}" | debconf-set-selections
-            echo "platform-observability-agent platform-observability-agent/metrics-host string {{ .ORCH_PLATFORM_OBS_METRICS_HOST }}" | debconf-set-selections
-            echo "platform-observability-agent platform-observability-agent/metrics-port string {{ .ORCH_PLATFORM_OBS_METRICS_PORT }}" | debconf-set-selections
+            echo "platform-observability-agent platform-observability-agent/host string ${OBSERVABILITY_LOGGING_URL}" | debconf-set-selections
+            echo "platform-observability-agent platform-observability-agent/port string $OBSERVABILITY_LOGGING_PORT}" | debconf-set-selections
+            echo "platform-observability-agent platform-observability-agent/metrics-host string ${OBSERVABILITY_METRICS_URL}" | debconf-set-selections
+            echo "platform-observability-agent platform-observability-agent/metrics-port string ${OBSERVABILITY_METRICS_PORT}" | debconf-set-selections
             apt-get install -y -o Dpkg::Options="--force-confnew" platform-observability-agent={{ index . "platform-observability-agent-VERSION" }}
         else
             echo "Observability is disabled, skipping POA installation."
