@@ -91,8 +91,8 @@ github.com/mitchellh/go-wordwrap v1.0.0/go.mod h1:ZXFpozHsX6DPmq2I0TCekCxypsnAUb
 github.com/mitchellh/mapstructure v1.4.1/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
 github.com/mitchellh/mapstructure v1.5.1-0.20231216201459-8508981c8b6c h1:cqn374mizHuIWj+OSJCajGr/phAmuMug9qIX3l9CflE=
 github.com/mitchellh/mapstructure v1.5.1-0.20231216201459-8508981c8b6c/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
-github.com/open-edge-platform/orch-library/go v0.6.4 h1:LRK01REF9S+M+Rowm7OLln9iOIMO/zAfzXCQVsP+awE=
-github.com/open-edge-platform/orch-library/go v0.6.4/go.mod h1:m8uUv9rr3vuJ69rVBvn9FWfe8K4m6zS9XGMxnEOBT7M=
+github.com/open-edge-platform/orch-library/go v0.6.5 h1:aaaA9KWf6C+VEIBJA5LGRnjHkMUMpDFElzRHfy64FBI=
+github.com/open-edge-platform/orch-library/go v0.6.5/go.mod h1:X7m0qdQX+l99VHX1nletuBZnDtlfajgORRzVXvL9y9A=
 github.com/open-edge-platform/orch-library/go/dazl v0.5.4 h1:Rx/bSAZiLjEEBjUiJEzBvT0fQv5huT5FQ2Ke3IMUhiE=
 github.com/open-edge-platform/orch-library/go/dazl v0.5.4/go.mod h1:UiO3TOEqEuRT81OtgPsqR9LpB1887i5nk2TelhJksMY=
 github.com/opentracing/opentracing-go v1.2.0 h1:uEJPy/1a5RIPAJ0Ov+OIO8OxWu77jEv+1B0VhjKrZUs=
