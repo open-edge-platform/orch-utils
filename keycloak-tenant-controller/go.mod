@@ -14,7 +14,7 @@ require (
 	github.com/hashicorp/vault/api v1.15.0
 	github.com/hashicorp/vault/api/auth/kubernetes v0.8.0
 	github.com/magefile/mage v1.15.0
-	github.com/open-edge-platform/orch-library/go v0.6.4
+	github.com/open-edge-platform/orch-library/go v0.6.5
 	github.com/sirupsen/logrus v1.9.4
 	github.com/stretchr/testify v1.10.0
 )
