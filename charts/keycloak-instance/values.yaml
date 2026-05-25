@@ -15,8 +15,7 @@
 # Namespace configuration
 # This namespace is where the Keycloak instance resources are deployed
 namespace: orch-platform
-imagePullSecrets:
-  - name: ""
+imagePullSecrets: []
 
 # ============================================================================
 # KEYCLOAK INSTANCE CONFIGURATION
