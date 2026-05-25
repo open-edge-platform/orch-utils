@@ -13,7 +13,11 @@ metadata:
 spec:
   image: {{ tpl .Values.keycloak.image . }}
   startOptimized: {{ .Values.keycloak.startOptimized }}
-  
+  {{- with $.Values.imagePullSecrets }}
+  imagePullSecrets:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
   bootstrapAdmin:
     user:
       secret: {{ .Values.keycloak.bootstrapAdmin.secret }}
@@ -66,6 +70,10 @@ spec:
           - name: {{ .name }}
             image: {{ tpl .image $ }}
             imagePullPolicy: {{ .imagePullPolicy }}
+            {{- with $.Values.imagePullSecrets }}
+            imagePullSecrets:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
             command:
               {{- toYaml .command | nindent 14 }}
             args:
@@ -83,6 +91,10 @@ spec:
         
         containers:
           - name: keycloak
+            {{- with $.Values.imagePullSecrets }}
+            imagePullSecrets:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
             imagePullPolicy: {{ .Values.keycloak.imagePullPolicy }}
             securityContext:
               {{- toYaml .Values.keycloak.podTemplate.containerSecurityContext | nindent 14 }}
