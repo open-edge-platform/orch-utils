@@ -13,9 +13,9 @@ metadata:
 spec:
   image: {{ tpl .Values.keycloak.image . }}
   startOptimized: {{ .Values.keycloak.startOptimized }}
-  {{- if .Values.imagePullSecrets.name }}
+  {{- with .Values.imagePullSecrets }}
   imagePullSecrets:
-    - name: {{ .Values.imagePullSecrets.name }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
 
   bootstrapAdmin:
@@ -70,9 +70,9 @@ spec:
           - name: {{ .name }}
             image: {{ tpl .image $ }}
             imagePullPolicy: {{ .imagePullPolicy }}
-            {{- if .Values.imagePullSecrets.name }}
+            {{- with .Values.imagePullSecrets }}
             imagePullSecrets:
-              - name: {{ .Values.imagePullSecrets.name }}
+              {{- toYaml . | nindent 14 }}
             {{- end }}
             command:
               {{- toYaml .command | nindent 14 }}
@@ -91,9 +91,9 @@ spec:
         
         containers:
           - name: keycloak
-            {{- if .Values.imagePullSecrets.name }}
+            {{- with .Values.imagePullSecrets }}
             imagePullSecrets:
-              - name: {{ .Values.imagePullSecrets.name }}
+              {{- toYaml . | nindent 14 }}
             {{- end }}
             imagePullPolicy: {{ .Values.keycloak.imagePullPolicy }}
             securityContext:
