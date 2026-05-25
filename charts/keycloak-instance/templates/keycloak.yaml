@@ -13,7 +13,7 @@ metadata:
 spec:
   image: {{ tpl .Values.keycloak.image . }}
   startOptimized: {{ .Values.keycloak.startOptimized }}
-  {{- with .Values.imagePullSecrets }}
+  {{- with $.Values.imagePullSecrets }}
   imagePullSecrets:
     {{- toYaml . | nindent 4 }}
   {{- end }}
@@ -70,7 +70,7 @@ spec:
           - name: {{ .name }}
             image: {{ tpl .image $ }}
             imagePullPolicy: {{ .imagePullPolicy }}
-            {{- with .Values.imagePullSecrets }}
+            {{- with $.Values.imagePullSecrets }}
             imagePullSecrets:
               {{- toYaml . | nindent 14 }}
             {{- end }}
@@ -91,7 +91,7 @@ spec:
         
         containers:
           - name: keycloak
-            {{- with .Values.imagePullSecrets }}
+            {{- with $.Values.imagePullSecrets }}
             imagePullSecrets:
               {{- toYaml . | nindent 14 }}
             {{- end }}
