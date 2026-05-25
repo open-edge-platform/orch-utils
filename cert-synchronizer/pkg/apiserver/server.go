@@ -10,6 +10,7 @@ import (
 	b64 "encoding/base64"
 	"encoding/json"
 	"fmt"
+	"html"
 	"io"
 	"net/http"
 	"net/url"
@@ -1222,7 +1223,8 @@ func createSingleDNSRecord(svc *route53.Client, w http.ResponseWriter, accConten
 	// Check if the hosted zone exists, if not create it
 	hostedZoneID, err := getOrCreateHostedZone(svc, params.Domain, vpc, region, params.IsPrivate, true)
 	if err != nil {
-		msg := "Failed to get or create Route53 hosted zone for domain : " + params.Domain
+		safeDomain := html.EscapeString(params.Domain)
+		msg := "Failed to get or create Route53 hosted zone for domain : " + safeDomain
 		log.Errorf(msg+", err: %v", err)
 		httpResponse{acceptedContent: accContent, status: http.StatusInternalServerError, message: msg}.write(w)
 		return
@@ -2987,7 +2989,7 @@ func (r httpResponse) write(writer http.ResponseWriter) {
 	log.Infof("apiserver->httpResponse write()->start")
 	log.Infof("Writing HTTP response")
 	var (
-		body        = []byte(r.message)
+		body        = []byte(html.EscapeString(r.message))
 		contentType = PLAIN_CONTENT
 		err         error
 	)
@@ -3009,7 +3011,7 @@ func (r httpResponse) write(writer http.ResponseWriter) {
 		if body, err = json.Marshal(jsonResponse); err != nil {
 			log.Errorf("Error marshalling JSON response: %v", err)
 			log.Errorf("Attempting plain text response")
-			body = []byte(r.message)
+			body = []byte(html.EscapeString(r.message))
 		} else {
 			contentType = strings.ToLower(JSON_CONTENT)
 		}

@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-FROM golang:1.26.3@sha256:313faae491b410a35402c05d35e7518ae99103d957308e940e1ae2cfa0aac29b AS builder
+FROM golang:1.26.3@sha256:6df14f4a4bc9d979a3721f488981e0d1b318006377e473ed23d026796f5f4c0a AS builder
 ARG KTC_GIT_COMMIT
 
 # Set proxy environment variables using build arguments
@@ -28,7 +28,7 @@ RUN mkdir -p ./bin \
     -ldflags="-w -s -buildid= -X 'main.Commit=${KTC_GIT_COMMIT}'" \
     -o ./bin/ktc ./cmd/
 
-FROM gcr.io/distroless/base:nonroot@sha256:fb282f8ed3057f71dbfe3ea0f5fa7e961415dafe4761c23948a9d4628c6166fe
+FROM gcr.io/distroless/base:nonroot@sha256:a557d784ac275c287d2bdf3172f47bece8d2a0ef3c0fdefb712e95084a04a562
 
 COPY --from=builder /usr/src/keycloak-tenant-controller/bin/* /bin/
 COPY ./images/entrypoint.sh /oep/keycloak-tenant-controller/
