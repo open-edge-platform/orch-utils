@@ -3022,7 +3022,7 @@ func (r httpResponse) write(writer http.ResponseWriter) {
 		if body, err = os.ReadFile(r.errWebpagePath); err != nil {
 			log.Errorf("Error reading HTML file: %v", err)
 			log.Errorf("Attempting plain text response")
-			body = []byte(r.message)
+			body = []byte(html.EscapeString(r.message))
 		} else {
 			contentType = HTML_CONTENT
 
