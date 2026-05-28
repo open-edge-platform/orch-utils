@@ -272,7 +272,7 @@ spec:
             namespace: {{ required "A valid keycloakServiceNamespace required!" .Values.keycloakServiceNamespace }}
         middlewares:
           - name: secure-headers-keycloak
-      - match: {{ required "A valid keycloakMatchHost entry required!" .Values.keycloakMatchHost }}  && PathPrefix(`/auth`)
+      - match: {{ required "A valid keycloakMatchHost entry required!" .Values.rootMatchHost }}  && PathPrefix(`/auth`)
         kind: Rule
         services:
           - name: {{ required "A valid keycloakServiceName required!" .Values.keycloakServiceName }}
