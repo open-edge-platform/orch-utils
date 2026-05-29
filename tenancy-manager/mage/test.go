@@ -5,6 +5,7 @@
 package mage
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -27,4 +28,32 @@ func runIntegrationTests() error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
+}
+
+// runFuzzTests runs the fuzzing engine against every Fuzz* target in
+// internal/api for the given number of minutes per target.
+func runFuzzTests(minutes int) error {
+	fuzzTime := fmt.Sprintf("%dm", minutes)
+
+	targets := []string{
+		"FuzzDecodeBody",
+		"FuzzEventQueryParams",
+		"FuzzOrgRouting",
+		"FuzzProjectRouting",
+	}
+
+	for _, target := range targets {
+		fmt.Printf("fuzzing %s for %s...\n", target, fuzzTime)
+		cmd := exec.Command("go", "test",
+			"-fuzz="+target,
+			"-fuzztime="+fuzzTime,
+			"./internal/api/...",
+		)
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		if err := cmd.Run(); err != nil {
+			return fmt.Errorf("%s: %w", target, err)
+		}
+	}
+	return nil
 }

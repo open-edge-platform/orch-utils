@@ -12,4 +12,4 @@ import (
 )
 
 // Silence the compiler's unused-import error for the dot import.
-var _ = Binary{}
+var _ = Build{}

@@ -132,7 +132,7 @@ if [[ "${SKIP_BUILD}" == true ]] && [[ -x "${TM_BIN}" ]]; then
     warn "Skipping build (--skip-build), using existing binary"
 else
     log "Building tenancy-manager..."
-    ( cd "${REPO_DIR}" && mage Binary:Build )
+    ( cd "${REPO_DIR}" && mage Build:Binary )
     log "Build OK → ${TM_BIN}"
 fi
 

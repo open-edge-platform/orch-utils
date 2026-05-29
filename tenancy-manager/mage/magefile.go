@@ -6,16 +6,13 @@ package mage
 
 import "github.com/magefile/mage/mg"
 
-// Binary targets build the Go binary locally.
-type Binary mg.Namespace
+// Build targets build artefacts — the local binary and the container image.
+type Build mg.Namespace
 
-// Build compiles the tenancy-manager binary to ./bin/tenancy-manager.
-func (Binary) Build() error {
+// Binary compiles the tenancy-manager binary to ./bin/tenancy-manager.
+func (Build) Binary() error {
 	return goBuild()
 }
-
-// Build targets build container images.
-type Build mg.Namespace
 
 // Docker builds the tenancy-manager Docker image, versioned from the Helm chart appVersion.
 func (Build) Docker() error {
@@ -30,8 +27,14 @@ func (Test) Unit() error {
 	return runUnitTests()
 }
 
+// Fuzz runs the fuzzing engine against every Fuzz* target in internal/api
+// for the given number of minutes per target. Example: mage test:fuzz 5
+func (Test) Fuzz(minutes int) error {
+	return runFuzzTests(minutes)
+}
+
 // Integration runs the functional integration tests (requires docker).
 func (Test) Integration() error {
-	mg.Deps(Binary.Build)
+	mg.Deps(Build.Binary)
 	return runIntegrationTests()
 }
