@@ -560,10 +560,10 @@ install_POA() {
         if [ "${NODE_METRICS_ENABLED}" == "true" ]; then
             echo "Install POA..."
             echo "platform-observability-agent platform-observability-agent/host string ${OBSERVABILITY_LOGGING_URL}" | debconf-set-selections
-            echo "platform-observability-agent platform-observability-agent/port string $OBSERVABILITY_LOGGING_PORT}" | debconf-set-selections
+            echo "platform-observability-agent platform-observability-agent/port string ${OBSERVABILITY_LOGGING_PORT}" | debconf-set-selections
             echo "platform-observability-agent platform-observability-agent/metrics-host string ${OBSERVABILITY_METRICS_URL}" | debconf-set-selections
             echo "platform-observability-agent platform-observability-agent/metrics-port string ${OBSERVABILITY_METRICS_PORT}" | debconf-set-selections
-            apt-get install -y -o Dpkg::Options="--force-confnew" platform-observability-agent={{ index . "platform-observability-agent-VERSION" }}
+            apt-get install -y -o Dpkg::Options::="--force-confnew" platform-observability-agent=${PLATFORM_OBSERVABILITY_VERSION}
         else
             echo "Observability is disabled, skipping POA installation."
         fi
@@ -681,6 +681,7 @@ if [ -f "$SCRIPT_DIR/$MANIFEST_FILE" ]; then
     DEVICE_DISCOVERY_VERSION=$(get_version_from_manifest "device-discovery-agent" "$SCRIPT_DIR/$MANIFEST_FILE")
     NODE_AGENT_VERSION=$(get_version_from_manifest "node-agent" "$SCRIPT_DIR/$MANIFEST_FILE")
     PLATFORM_MANAGEABILITY_VERSION=$(get_version_from_manifest "platform-manageability-agent" "$SCRIPT_DIR/$MANIFEST_FILE")
+    PLATFORM_OBSERVABILITY_VERSION=$(get_version_from_manifest "platform-observability-agent" "$SCRIPT_DIR/$MANIFEST_FILE")
     PLATFORM_TELEMETRY_VERSION=$(get_version_from_manifest "platform-telemetry-agent" "$SCRIPT_DIR/$MANIFEST_FILE")
     CADDY_VERSION=$(get_version_from_manifest "caddy" "$SCRIPT_DIR/$MANIFEST_FILE")
     APT_DISTRO=$(get_codename_from_manifest "$SCRIPT_DIR/$MANIFEST_FILE")
