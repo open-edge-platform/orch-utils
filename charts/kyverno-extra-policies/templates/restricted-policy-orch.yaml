@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2025 Intel Corporation
+# SPDX-FileCopyrightText: 2026 Intel Corporation
 #
 # SPDX-License-Identifier: Apache-2.0
 ---
@@ -65,7 +65,7 @@ spec:
 ---
 # orchestrator restricted pod security policy exception template
 {{- range .Values.restrictedPolicyOrch }}
-apiVersion: kyverno.io/v2beta1
+apiVersion: kyverno.io/v2
 kind: PolicyException
 metadata:
   name: restricted-policy-orch-exception-{{ .namespace }}
