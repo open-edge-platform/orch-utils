@@ -845,6 +845,61 @@ func (s *Store) CleanupOldEvents(ctx context.Context, retention time.Duration) (
 		Exec(ctx)
 }
 
+// CleanupStaleControllerStatuses removes controller_status entries for
+// deleted projects/orgs that are stuck (in_progress or completed status
+// persisting after deletion event was processed). This fixes the bug where
+// status deletion failures leave stale entries that prevent new project creation.
+func (s *Store) CleanupStaleControllerStatuses(ctx context.Context) error {
+	// Find deleted projects with lingering controller_status entries
+	deletedProjects, err := s.client.Project.Query().
+		Where(project.DeletedAtNotNil()).
+		All(ctx)
+	if err != nil {
+		return err
+	}
+
+	for _, p := range deletedProjects {
+		// Delete ALL controller_status entries for deleted projects
+		// Controllers should have removed these when processing the deletion event,
+		// but if they failed (network/DB glitch), we clean them up here
+		n, err := s.client.ControllerStatus.Delete().
+			Where(
+				controllerstatus.ResourceType("project"),
+				controllerstatus.ResourceID(p.ID),
+			).
+			Exec(ctx)
+		if err != nil {
+			log.Warn().Err(err).Str("project", p.Name).Msg("failed to cleanup stale controller statuses")
+		} else if n > 0 {
+			log.Info().Str("project", p.Name).Int("count", n).Msg("cleaned up stale controller statuses for deleted project")
+		}
+	}
+
+	// Find deleted orgs with lingering controller_status entries
+	deletedOrgs, err := s.client.Org.Query().
+		Where(org.DeletedAtNotNil()).
+		All(ctx)
+	if err != nil {
+		return err
+	}
+
+	for _, o := range deletedOrgs {
+		n, err := s.client.ControllerStatus.Delete().
+			Where(
+				controllerstatus.ResourceType("org"),
+				controllerstatus.ResourceID(o.ID),
+			).
+			Exec(ctx)
+		if err != nil {
+			log.Warn().Err(err).Str("org", o.Name).Msg("failed to cleanup stale controller statuses")
+		} else if n > 0 {
+			log.Info().Str("org", o.Name).Int("count", n).Msg("cleaned up stale controller statuses for deleted org")
+		}
+	}
+
+	return nil
+}
+
 // CleanupHardDelete hard-deletes soft-deleted resources that have no
 // controller_statuses rows from registered controllers.
 func (s *Store) CleanupHardDelete(ctx context.Context, cfg *config.Config) error {

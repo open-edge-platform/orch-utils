@@ -167,6 +167,13 @@ func runCleanup(ctx context.Context, s *store.Store, cfg *config.Config) {
 				log.Info().Int("count", n).Msg("cleaned up old events")
 			}
 
+			// Clean up stale controller_status entries for deleted resources
+			// This fixes the bug where status deletion failures leave entries that
+			// prevent new project creation
+			if err := s.CleanupStaleControllerStatuses(ctx); err != nil {
+				log.Warn().Err(err).Msg("stale status cleanup failed")
+			}
+
 			if err := s.CleanupHardDelete(ctx, cfg); err != nil {
 				log.Warn().Err(err).Msg("hard-delete cleanup failed")
 			}
