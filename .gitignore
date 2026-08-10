@@ -33,3 +33,4 @@ go.work.sum
 cluster-manager/
 orch-cli/
 orch-library/
+tenancy-manager/internal/api/testdata/fuzz/
